@@ -1,0 +1,13 @@
+Spotlight Key Relationships
+============================
+
+movie->title:           kMDItemDisplayName
+                        kMDItemTitle
+movie->releaseddate:    kMDItemContentCreationDate
+movie->publishers:      kMDItemPublishers
+movie->actors:          kMDItemContributors
+movie->rating:          kMDItemAudiences
+movie->runtime:         kMDItemDurationSeconds
+
+applications:           kMDItemEncodingApplications
+

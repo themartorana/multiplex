@@ -10,6 +10,7 @@ extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
 @implementation Item
 
 @synthesize movie;
+@synthesize isPhysicalMedia;
 
 static NSArray* allKeys;
 
@@ -29,8 +30,24 @@ static NSArray* allKeys;
 	if (self = [super init]) {
 		itemRef = (MDItemRef)CFRetain(_itemRef);
 		[self reload];
+        
+        isPhysicalMedia = NO;
 	}
 	return self;
+}
+
+- (id) initWithPhysicalMedia:(NSString*)fingerprint atPath:(NSString*)pathToMedia
+{
+    if (self = [super init]) {
+        [info autorelease];
+        info = [NSDictionary dictionaryWithObjectsAndKeys:
+                @"public.dvdmedia", (id)kMDItemContentType,
+                fingerprint, (id)kMDItemDiscIdentFingerprint,
+                pathToMedia, (id)kMDItemPath, nil];
+        
+        isPhysicalMedia = YES;
+    }
+    return self;
 }
 
 - (void) dealloc

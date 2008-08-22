@@ -97,12 +97,12 @@
             // If this is a disc, we have to just send one update.  If this is 
             // a movie, we have to apply it to all the discs in that movie
             if ([entityName isEqualToString:@"Disc"]) {
-                [messageDict setValue:[discMO valueForKey:@"fingerprint"] forKey:@"com_discident_fingerprint"];
+                [messageDict setValue:[discMO valueForKey:@"com_discident_fingerprint"] forKey:@"com_discident_fingerprint"];
                 [messageDict setValue:[discMO valueForKey:@"url"] forKey:@"url"];
                 
                 // Now set any changes to the disc
                 for (NSString* changeKey in [discMO changedValues]) {
-                    if (![changeKey isEqualToString:@"discMovie"]){
+                    if (![changeKey isEqualToString:@"discMovie"]) {
                         [messageDict setValue:[discMO valueForKey:changeKey] forKey:changeKey];
                     }
                 }
@@ -118,7 +118,7 @@
                     
                     // The disc
                     discMO = disc;
-                    [messageDict setValue:[discMO valueForKey:@"fingerprint"] forKey:@"com_discident_fingerprint"];
+                    [messageDict setValue:[discMO valueForKey:@"com_discident_fingerprint"] forKey:@"com_discident_fingerprint"];
                     [messageDict setValue:[discMO valueForKey:@"url"] forKey:@"url"];
                     
                     // Now apply the movie changes

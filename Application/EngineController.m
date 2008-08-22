@@ -263,7 +263,7 @@
 {
     NSFetchRequest* fingerprintFR = [[NSFetchRequest alloc] init];
     [fingerprintFR setEntity:[NSEntityDescription entityForName:@"Disc" inManagedObjectContext:_nsmoc]];
-    [fingerprintFR setPredicate:[NSPredicate predicateWithFormat:@"fingerprint == %@", fingerprint]];
+    [fingerprintFR setPredicate:[NSPredicate predicateWithFormat:@"com_discident_fingerprint == %@", fingerprint]];
     
     // Perform the fetch request
     NSError* error;
@@ -292,7 +292,7 @@
 - (void) _saveEntityData:(NSDictionary*)messageDict toDiscEntity:(NSManagedObject*)discMO
 {
     
-    [discMO setValue:[messageDict valueForKey:@"com_discident_fingerprint"] forKey:@"fingerprint"];
+    [discMO setValue:[messageDict valueForKey:@"com_discident_fingerprint"] forKey:@"com_discident_fingerprint"];
     [discMO setValue:[NSNumber numberWithInt:1] forKey:@"discNumber"];
 
     [discMO setValue:[messageDict objectForKey:@"url"] forKey:@"url"];

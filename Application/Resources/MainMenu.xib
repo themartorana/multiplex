@@ -8,7 +8,6 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="735"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1086,7 +1085,7 @@
 				<nil key="NSViewClass"/>
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<object class="NSView" key="NSWindowView" id="822499592">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1360,7 +1359,6 @@
 													</object>
 													<string key="NSFrame">{{1, 17}, {709, 87}}</string>
 													<reference key="NSSuperview" ref="973509113"/>
-													<reference key="NSNextKeyView" ref="205564766"/>
 													<reference key="NSDocView" ref="205564766"/>
 													<reference key="NSBGColor" ref="387929333"/>
 													<int key="NScvFlags">4</int>
@@ -1393,7 +1391,6 @@
 													</object>
 													<string key="NSFrame">{{1, 0}, {709, 17}}</string>
 													<reference key="NSSuperview" ref="973509113"/>
-													<reference key="NSNextKeyView" ref="714204533"/>
 													<reference key="NSDocView" ref="714204533"/>
 													<reference key="NSBGColor" ref="387929333"/>
 													<int key="NScvFlags">4</int>
@@ -1402,7 +1399,6 @@
 											</object>
 											<string key="NSFrame">{{14, 74}, {726, 120}}</string>
 											<reference key="NSSuperview" ref="515312237"/>
-											<reference key="NSNextKeyView" ref="856415828"/>
 											<int key="NSsFlags">50</int>
 											<reference key="NSVScroller" ref="623163960"/>
 											<reference key="NSHScroller" ref="60512352"/>
@@ -1690,7 +1686,6 @@
 													</object>
 													<string key="NSFrame">{{1, 17}, {709, 87}}</string>
 													<reference key="NSSuperview" ref="573154865"/>
-													<reference key="NSNextKeyView" ref="1064805056"/>
 													<reference key="NSDocView" ref="1064805056"/>
 													<reference key="NSBGColor" ref="387929333"/>
 													<int key="NScvFlags">4</int>
@@ -1722,7 +1717,6 @@
 													</object>
 													<string key="NSFrame">{{1, 0}, {709, 17}}</string>
 													<reference key="NSSuperview" ref="573154865"/>
-													<reference key="NSNextKeyView" ref="818594362"/>
 													<reference key="NSDocView" ref="818594362"/>
 													<reference key="NSBGColor" ref="387929333"/>
 													<int key="NScvFlags">4</int>
@@ -1731,7 +1725,6 @@
 											</object>
 											<string key="NSFrame">{{14, 74}, {726, 120}}</string>
 											<reference key="NSSuperview" ref="527750959"/>
-											<reference key="NSNextKeyView" ref="189641856"/>
 											<int key="NSsFlags">50</int>
 											<reference key="NSVScroller" ref="880785299"/>
 											<reference key="NSHScroller" ref="853341212"/>
@@ -2201,7 +2194,6 @@
 													</object>
 													<string key="NSFrame">{{1, 17}, {709, 87}}</string>
 													<reference key="NSSuperview" ref="662262749"/>
-													<reference key="NSNextKeyView" ref="278933644"/>
 													<reference key="NSDocView" ref="278933644"/>
 													<reference key="NSBGColor" ref="387929333"/>
 													<int key="NScvFlags">4</int>
@@ -2233,7 +2225,6 @@
 													</object>
 													<string key="NSFrame">{{1, 0}, {709, 17}}</string>
 													<reference key="NSSuperview" ref="662262749"/>
-													<reference key="NSNextKeyView" ref="94196050"/>
 													<reference key="NSDocView" ref="94196050"/>
 													<reference key="NSBGColor" ref="387929333"/>
 													<int key="NScvFlags">4</int>
@@ -2242,7 +2233,6 @@
 											</object>
 											<string key="NSFrame">{{14, 104}, {726, 120}}</string>
 											<reference key="NSSuperview" ref="898403488"/>
-											<reference key="NSNextKeyView" ref="640188914"/>
 											<int key="NSsFlags">50</int>
 											<reference key="NSVScroller" ref="448068975"/>
 											<reference key="NSHScroller" ref="124361342"/>
@@ -2358,7 +2348,6 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{799, 818}</string>
-					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1600, 1178}}</string>
 				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
@@ -2408,6 +2397,7 @@
 					<string>url</string>
 					<string>discNumber</string>
 					<string>fingerprint</string>
+					<string>com_discident_fingerprint</string>
 				</object>
 				<bool key="NSEditable">YES</bool>
 				<bool key="NSAutomaticallyPreparesContent">YES</bool>
@@ -3359,22 +3349,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: selection.fingerprint</string>
-						<reference key="source" ref="593100042"/>
-						<reference key="destination" ref="246487771"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="593100042"/>
-							<reference key="NSDestination" ref="246487771"/>
-							<string key="NSLabel">value: selection.fingerprint</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">selection.fingerprint</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">797</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
 						<string key="label">displayPatternValue1: selection.@count</string>
 						<reference key="source" ref="553152681"/>
 						<reference key="destination" ref="246487771"/>
@@ -3445,22 +3419,6 @@
 						</object>
 					</object>
 					<int key="connectionID">813</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: arrangedObjects.fingerprint</string>
-						<reference key="source" ref="914130965"/>
-						<reference key="destination" ref="246487771"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="914130965"/>
-							<reference key="NSDestination" ref="246487771"/>
-							<string key="NSLabel">value: arrangedObjects.fingerprint</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">arrangedObjects.fingerprint</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">816</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -3676,6 +3634,38 @@
 						</object>
 					</object>
 					<int key="connectionID">847</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: arrangedObjects.com_discident_fingerprint</string>
+						<reference key="source" ref="914130965"/>
+						<reference key="destination" ref="246487771"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="914130965"/>
+							<reference key="NSDestination" ref="246487771"/>
+							<string key="NSLabel">value: arrangedObjects.com_discident_fingerprint</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">arrangedObjects.com_discident_fingerprint</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">848</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: selection.com_discident_fingerprint</string>
+						<reference key="source" ref="593100042"/>
+						<reference key="destination" ref="246487771"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="593100042"/>
+							<reference key="NSDestination" ref="246487771"/>
+							<string key="NSLabel">value: selection.com_discident_fingerprint</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">selection.com_discident_fingerprint</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">849</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -5676,7 +5666,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">847</int>
+			<int key="maxID">849</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -5694,7 +5684,7 @@
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Library/MainController.h</string>
+						<string key="minorKey">Application/MainController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -5724,7 +5714,7 @@
 					<string key="className">NSObject</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">LibraryComProtocol.h</string>
+						<string key="minorKey">Libraries/Unsorted/LibraryComProtocol.h</string>
 					</object>
 				</object>
 			</object>

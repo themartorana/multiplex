@@ -12,5 +12,7 @@
 #pragma mark LibraryComProtocol delegate methods
 
 - (void) engineMessageWasReceived:(NSDictionary*)messageDict;
+- (void) volumeDidMount:(NSNotification*)notification;
+- (void) volumeWillUnmount:(NSNotification*)notification;
 
 @end

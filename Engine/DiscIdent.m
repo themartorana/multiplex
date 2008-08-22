@@ -8,6 +8,7 @@
 
 #import "DiscIdent.h"
 #import "JSONKit/JSONKit.h"
+#import "Movie.h"
 
 NSString* const kDISC_IDENT_VERSION = @"v1";
 

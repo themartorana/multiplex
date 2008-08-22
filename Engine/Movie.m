@@ -4,12 +4,16 @@
 #pragma mark -
 @implementation Movie
 
+@synthesize listenForLoopback;
+
 - (id) initWithItem:(Item*)_item
 {
 	if (self = [super init]) {
 		items = [[NSMutableArray alloc] initWithObjects:_item, nil];
 		fingerprint = [[_item fingerprint] retain];
         [_item setMovie:self];
+        
+        listenForLoopback = NO;
 	}
 	return self;
 }
@@ -45,6 +49,11 @@
 - (NSString*) pathToFile
 {
 	return [[items objectAtIndex:0] pathToFile];
+}
+
+- (BOOL) isPhysicalMedia
+{
+    return [[items objectAtIndex:0] isPhysicalMedia];
 }
 
 - (void) removeItem:(Item*)item

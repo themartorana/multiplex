@@ -4,6 +4,15 @@
 #import "JSONKit/JSONKit.h"
 #import "DiscIdent.h"
 #import "LibraryComProtocol.h"
+#import "NSString+DiscIdent.h"
+
+#import <IOKit/IOKitLib.h>
+#import <IOKit/storage/IOMedia.h>
+#import <IOKit/storage/IODVDMedia.h>
+#import <sys/mount.h>
+
+
+#define kIODVDMediaClass "IODVDMedia"
 
 @interface Engine (Private)
 
@@ -14,6 +23,9 @@
 - (void) _sendMovieUpdates:(NSArray*)updateMovies additions:(NSArray*)addMovies andDeletions:(NSArray*)deleteMovies;
 - (NSArray*) _prepareMoviesForAddOrUpdate:(NSArray*)movies;
 - (NSArray*) _prepareMoviesForDelete:(NSArray*)movies;
+
+- (NSString*) _deviceNameForMountPoint:(NSString*)mountPoint;
+- (BOOL) _isNamedDeviceDVD:(NSString*)deviceName;
 
 @end
 
@@ -30,12 +42,36 @@
         [protocol setFileHandleForReading:[NSFileHandle fileHandleWithStandardInput]];
         [protocol setFileHandleForWriting:[NSFileHandle fileHandleWithStandardOutput]];
         [protocol setDelegate:self];
+        
+        // Listen for mount and unmount operations
+        [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver:self
+                                                               selector:@selector(volumeDidMount:) 
+                                                                   name:NSWorkspaceDidMountNotification 
+                                                                 object:nil];
+
+        [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver:self 
+                                                               selector:@selector(volumeWillUnmount:) 
+                                                                   name:NSWorkspaceWillUnmountNotification
+                                                                 object:nil];
     }
     return self;
 }
 
+
+///
+/// Close down the engine 
+///
 - (void) dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:[NSWorkspace sharedWorkspace] 
+                                                    name:NSWorkspaceDidMountNotification 
+                                                  object:self];
+
+    [[NSNotificationCenter defaultCenter] removeObserver:[NSWorkspace sharedWorkspace] 
+                                                    name:NSWorkspaceWillUnmountNotification 
+                                                  object:self];
+    
+    [protocol release];
     [moviesByFingerprint release];
     [super dealloc];
 }
@@ -173,6 +209,12 @@ static Item* newItem(MDQueryRef query, MDItemRef item, Engine* engine)
 {
     [item reload];
     Movie* movie = [item movie];
+    
+    if (movie.listenForLoopback) {
+        movie.listenForLoopback = NO;
+        return;
+    }
+    
     NSString* fingerprint = [item fingerprint];
     if (fingerprint) {
         if (movie && ![fingerprint isEqual:[movie fingerprint]]) {
@@ -222,21 +264,27 @@ static Item* newItem(MDQueryRef query, MDItemRef item, Engine* engine)
     if (!movies || 0 == [movies count])
         return nil;
     
-    NSMutableArray* updatesArray = [NSMutableArray arrayWithCapacity:[movies count]];
+    NSMutableArray* addUpdatesArray = [NSMutableArray arrayWithCapacity:[movies count]];
     
-    for (int i = 0; i < [movies count]; i++) {
-        Movie* movie = [movies objectAtIndex:i];
-        
+    for (Movie* movie in movies) {
         // Generate message
-        NSString* pathToJSONFile = [[movie pathToFile] stringByAppendingPathComponent:@"_Info.json"];
         
-        if (![[NSFileManager defaultManager] fileExistsAtPath:pathToJSONFile]) {
-            //NSLog(@"Sent movie without _Info.json file!\nPath is: %@", pathToJSONFile);
-            continue;
+        NSMutableDictionary* movieDict;
+        
+        if (![movie isPhysicalMedia]) {
+            NSString* pathToJSONFile = [[movie pathToFile] stringByAppendingPathComponent:@"_Info.json"];
+            
+            if (![[NSFileManager defaultManager] fileExistsAtPath:pathToJSONFile]) {
+                //NSLog(@"Sent movie without _Info.json file!\nPath is: %@", pathToJSONFile);
+                continue;
+            }
+            
+            // Create the initial dictionary and values from the .json file
+            movieDict = [NSMutableDictionary dictionaryWithDictionary:[NSDictionary dictionaryWithJSON:[NSString stringWithContentsOfFile:pathToJSONFile]]];
         }
-        
-        // Create the initial dictionary and values from the .json file
-        NSMutableDictionary* movieDict = [NSMutableDictionary dictionaryWithDictionary:[NSDictionary dictionaryWithJSON:[NSString stringWithContentsOfFile:pathToJSONFile]]];
+        else {
+            movieDict = [NSMutableDictionary dictionaryWithObject:[movie fingerprint] forKey:@"com_discident_fingerprint"];
+        }
         
         // Eventually this can be changed depending on whether this is a bonjour setting or not
         [movieDict setObject:[[NSURL fileURLWithPath:[movie pathToFile] isDirectory:YES] absoluteString] forKey:@"url"];
@@ -254,11 +302,11 @@ static Item* newItem(MDQueryRef query, MDItemRef item, Engine* engine)
         }
         
         // Send
-        [updatesArray addObject:[NSDictionary dictionaryWithDictionary:movieDict]];
+        [addUpdatesArray addObject:[NSDictionary dictionaryWithDictionary:movieDict]];
     }
     
     // Return the array of dictionaries
-    return [NSArray arrayWithArray:updatesArray];
+    return [NSArray arrayWithArray:addUpdatesArray];
 }
 
 
@@ -272,8 +320,7 @@ static Item* newItem(MDQueryRef query, MDItemRef item, Engine* engine)
     
     NSMutableArray* deletesArray = [NSMutableArray arrayWithCapacity:[movies count]];
     
-    for (int i = 0; i < [movies count]; i++) {
-        Movie* movie = [movies objectAtIndex:i];
+    for (Movie* movie in movies) {
         NSDictionary* dict = [NSDictionary dictionaryWithObject:[movie fingerprint] forKey:@"com_discident_fingerprint"];
         [deletesArray addObject:dict];
     }
@@ -311,14 +358,129 @@ static Item* newItem(MDQueryRef query, MDItemRef item, Engine* engine)
 }
 
 
+#pragma mark "LibraryComProtocol" delegate methods
+
 ///
 /// When the engine receives a message, get it ready
 ///
 - (void) engineMessageWasReceived:(NSDictionary*)messageDict
 {
     // Save this dict back out to the file
+    NSString* fingerprint = [messageDict objectForKey:@"com_discident_fingerprint"];
     
+    if (!fingerprint)
+        return;
+    
+    Movie* movie = [moviesByFingerprint objectForKey:fingerprint];
+    movie.listenForLoopback = YES;
+    
+    // Get the info as JSON
+    NSMutableDictionary* movieDict = [NSMutableDictionary dictionaryWithDictionary:[NSDictionary dictionaryWithJSON:[NSString stringWithContentsOfFile:[[movie pathToFile] stringByAppendingPathComponent:@"_Info.json"]]]];
+    
+    // Combine the two
+    [movieDict addEntriesFromDictionary:messageDict];
+    
+    // Save back out the JSON file
+    NSString* outJson = [NSString stringWithObjectAsJSON:movieDict];
+    [outJson writeToFile:[[movie pathToFile] stringByAppendingPathComponent:@"_Info.json"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    
+    NSLog(@"Engine wrote to file %@, contents:\n%@", [[movie pathToFile] stringByAppendingPathComponent:@"_Info.json"], outJson);
 }
+
+
+#pragma mark Mount and Unmout listeners
+
+- (void) volumeDidMount:(NSNotification*)notification
+{
+    NSString* mountPoint = [[notification userInfo] objectForKey:@"NSDevicePath"];
+    NSString* deviceName = [self _deviceNameForMountPoint:mountPoint];
+    BOOL isDVD = [self _isNamedDeviceDVD:deviceName];
+    
+    if (!isDVD)
+        return;
+    
+    // We need to calculate the fingerprint
+
+     // Don't register the movie in the array, because it won't be able to 
+    // receive updates until it's ripped.  At least, for now
+    NSString* fingerprint = [mountPoint discidentFingerprintForPath];
+    Item* item = [[Item alloc] initWithPhysicalMedia:fingerprint atPath:mountPoint];
+    Movie* movie = [[Movie alloc] initWithItem:item];
+    
+    [moviesByFingerprint setObject:movie forKey:fingerprint];
+    
+    [self _sendMovieUpdates:nil additions:[NSArray arrayWithObject:movie] andDeletions:nil];
+}
+
+
+
+- (void) volumeWillUnmount:(NSNotification*)notification
+{
+    NSString* mountPoint = [[notification userInfo] objectForKey:@"NSDevicePath"];
+    NSString* deviceName = [self _deviceNameForMountPoint:mountPoint];
+    BOOL isDVD = [self _isNamedDeviceDVD:deviceName];
+    
+    if (!isDVD)
+        return;
+    
+    NSString* fingerprint = [mountPoint discidentFingerprintForPath];
+    Item* item = [[Item alloc] initWithPhysicalMedia:fingerprint atPath:mountPoint];
+    Movie* movie = [[Movie alloc] initWithItem:item];
+
+    [moviesByFingerprint removeObjectForKey:fingerprint];
+    
+    [self _sendMovieUpdates:nil additions:nil andDeletions:[NSArray arrayWithObject:movie]];
+}
+
+        
+///
+/// Get the actual mount point for the device path
+///
+- (NSString*) _deviceNameForMountPoint:(NSString*)mountPoint
+{
+	struct statfs s;
+	if (0 != statfs([mountPoint fileSystemRepresentation], &s)) {
+		return nil;
+	}
+	NSString* name = [[[NSString alloc] initWithUTF8String:s.f_mntfromname] autorelease];
+	if ([name hasPrefix:@"/dev/"]) {
+		name = [name substringFromIndex:5];
+	}
+	return name;
+}
+
+///
+///  Figure out whether or not the mount was a DVD
+///
+- (BOOL) _isNamedDeviceDVD:(NSString*)deviceName
+{
+	BOOL result = NO;
+	CFMutableDictionaryRef m;
+	if (m = IOBSDNameMatching(kIOMasterPortDefault, 0, [deviceName UTF8String])) {
+		io_service_t service = IOServiceGetMatchingService(kIOMasterPortDefault, m);   
+		if (service) {
+			io_iterator_t iterator;
+			if (KERN_SUCCESS == IORegistryEntryCreateIterator( 
+                                                              service,
+                                                              kIOServicePlane,
+                                                              kIORegistryIterateRecursively | kIORegistryIterateParents,
+                                                              &iterator 
+                                                              )) {
+				if (iterator) {
+					IOObjectRetain(service);
+					do {
+						result = IOObjectConformsTo(service, kIODVDMediaClass);
+						IOObjectRelease(service);
+					} while (!result && (service = IOIteratorNext(iterator)));
+					IOObjectRelease(iterator);
+				}
+			}
+			IOObjectRelease(service);
+		}
+	}
+	return result;
+}
+
 
 
 @end

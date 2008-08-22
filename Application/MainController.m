@@ -111,17 +111,17 @@
                 [ec sendAMessage:[NSDictionary dictionaryWithDictionary:messageDict]];
             }
             else if ([entityName isEqualToString:@"Movie"]) {
-                for (NSManagedObject* disc in [movieMO valueForKey:@"movieDiscs"]) {
-                    NSMutableDictionary* newMessage = nil;
-                    for (NSString* changeKey in [movieMO changedValues]) {
-                        if (![changeKey isEqualToString:@"movieEngine"] && ![changeKey isEqualToString:@"movieDiscs"]) {
-                            if (!newMessage) {
-                                newMessage = [NSMutableDictionary dictionary];
-                            } 
-                            [newMessage setValue:[movieMO valueForKey:changeKey] forKey:changeKey];   
-                        }
+                NSMutableDictionary* newMessage = nil;
+                for (NSString* changeKey in [movieMO changedValues]) {
+                    if (![changeKey isEqualToString:@"movieEngine"] && ![changeKey isEqualToString:@"movieDiscs"]) {
+                        if (!newMessage) {
+                            newMessage = [NSMutableDictionary dictionary];
+                        } 
+                        [newMessage setValue:[movieMO valueForKey:changeKey] forKey:changeKey];   
                     }
-                    if (newMessage) {
+                }
+                if (newMessage) {
+                    for (NSManagedObject* disc in [movieMO valueForKey:@"movieDiscs"]) {
                         [newMessage setValue:[disc valueForKey:@"com_discident_fingerprint"] forKey:@"com_discident_fingerprint"];
                         [ec sendAMessage:newMessage];
                     }

@@ -188,14 +188,17 @@
         
         if (!movieFound) {
             movieMO = [[NSManagedObject alloc] initWithEntity:movieDesc insertIntoManagedObjectContext:_nsmoc];
+            [movieMO setValue:_engineManagedObject forKey:@"movieEngine"];
         }
         
         NSManagedObject* discMO = [[NSManagedObject alloc] initWithEntity:discDesc insertIntoManagedObjectContext:_nsmoc];  
         
-        [movieMO setValue:_engineManagedObject forKey:@"movieEngine"];
         [discMO setValue:movieMO forKey:@"discMovie"];
         
-        [self _saveEntityData:messageDict toDiscEntity:discMO];
+        if (movieFound)
+            [self _saveEntityData:messageDict toDiscEntity:discMO andMovieEntity:nil];
+        else
+            [self _saveEntityData:messageDict toDiscEntity:discMO andMovieEntity:movieMO];
     }
 }
 
@@ -213,7 +216,7 @@
         NSManagedObject* discMO = [self _getDiscByFingerprint:[message objectForKey:@"com_discident_fingerprint"]];
         if (discMO) {
             // Update the data
-            [self _saveEntityData:message toDiscEntity:discMO];
+            [self _saveEntityData:message toDiscEntity:discMO andMovieEntity:[discMO valueForKey:@"discMovie"]];
         }
     }
 }
@@ -289,18 +292,18 @@
 }
 
 
-- (void) _saveEntityData:(NSDictionary*)messageDict toDiscEntity:(NSManagedObject*)discMO
+- (void) _saveEntityData:(NSDictionary*)messageDict toDiscEntity:(NSManagedObject*)discMO andMovieEntity:(NSManagedObject)movieMO
 {
-    
     [discMO setValue:[messageDict valueForKey:@"com_discident_fingerprint"] forKey:@"com_discident_fingerprint"];
     [discMO setValue:[NSNumber numberWithInt:1] forKey:@"discNumber"];
 
     [discMO setValue:[messageDict objectForKey:@"url"] forKey:@"url"];
     
-    NSManagedObject* movieMO = [discMO valueForKey:@"discMovie"];               
-    [movieMO setValue:_engineManagedObject forKey:@"movieEngine"];
-    [movieMO setValue:[messageDict objectForKey:@"title"] forKey:@"title"];
-    [movieMO setValue:[messageDict objectForKey:@"gtin"] forKey:@"gtin"];
+    if (movieMO) {
+        [movieMO setValue:_engineManagedObject forKey:@"movieEngine"];
+        [movieMO setValue:[messageDict objectForKey:@"title"] forKey:@"title"];
+        [movieMO setValue:[messageDict objectForKey:@"gtin"] forKey:@"gtin"];
+    }
 }
 
 

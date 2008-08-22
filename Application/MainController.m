@@ -112,24 +112,19 @@
             }
             else if ([entityName isEqualToString:@"Movie"]) {
                 for (NSManagedObject* disc in [movieMO valueForKey:@"movieDiscs"]) {
-                    
-                    // Start fresh with the dictionary
-                    [messageDict removeAllObjects];
-                    
-                    // The disc
-                    discMO = disc;
-                    [messageDict setValue:[discMO valueForKey:@"com_discident_fingerprint"] forKey:@"com_discident_fingerprint"];
-                    [messageDict setValue:[discMO valueForKey:@"url"] forKey:@"url"];
-                    
-                    // Now apply the movie changes
+                    NSMutableDictionary* newMessage = nil;
                     for (NSString* changeKey in [movieMO changedValues]) {
                         if (![changeKey isEqualToString:@"movieEngine"] && ![changeKey isEqualToString:@"movieDiscs"]) {
-                            [messageDict setValue:[movieMO valueForKey:changeKey] forKey:changeKey];   
+                            if (!newMessage) {
+                                newMessage = [NSMutableDictionary dictionary];
+                            } 
+                            [newMessage setValue:[movieMO valueForKey:changeKey] forKey:changeKey];   
                         }
                     }
-                    
-                    // Sent the message
-                    [ec sendAMessage:[NSDictionary dictionaryWithDictionary:messageDict]];
+                    if (newMessage) {
+                        [newMessage setValue:[disc valueForKey:@"com_discident_fingerprint"] forKey:@"com_discident_fingerprint"];
+                        [ec sendAMessage:newMessage];
+                    }
                 }
             }
         }

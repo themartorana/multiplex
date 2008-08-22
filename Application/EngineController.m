@@ -11,7 +11,7 @@
 
 @interface EngineController (Private)
 
-- (void) _saveEntityData:(NSDictionary*)messageDict toDiscEntity:(NSManagedObject*)movieMO;
+- (void) _saveEntityData:(NSDictionary*)messageDict toDiscEntity:(NSManagedObject*)discMO andMovieEntity:(NSManagedObject*)movieMO;
 - (void) _addMoviesData:(NSArray*)messagesArray;
 - (void) _updateMoviesData:(NSArray*)messagesArray;
 - (void) _deleteMoviesData:(NSArray*)messagesArray;
@@ -292,7 +292,7 @@
 }
 
 
-- (void) _saveEntityData:(NSDictionary*)messageDict toDiscEntity:(NSManagedObject*)discMO andMovieEntity:(NSManagedObject)movieMO
+- (void) _saveEntityData:(NSDictionary*)messageDict toDiscEntity:(NSManagedObject*)discMO andMovieEntity:(NSManagedObject*)movieMO
 {
     [discMO setValue:[messageDict valueForKey:@"com_discident_fingerprint"] forKey:@"com_discident_fingerprint"];
     [discMO setValue:[NSNumber numberWithInt:1] forKey:@"discNumber"];
@@ -304,6 +304,8 @@
         [movieMO setValue:[messageDict objectForKey:@"title"] forKey:@"title"];
         [movieMO setValue:[messageDict objectForKey:@"gtin"] forKey:@"gtin"];
     }
+    
+    [_nsmoc save:nil];
 }
 
 

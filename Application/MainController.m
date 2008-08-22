@@ -15,6 +15,13 @@
     if (self == [super init]) {
         _nsmom = [NSManagedObjectModel mergedModelFromBundles:nil];
         _nspsc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:_nsmom];
+        
+        [_nspsc addPersistentStoreWithType:NSInMemoryStoreType 
+                             configuration:nil 
+                                       URL:nil 
+                                   options:nil 
+                                     error:nil];
+        
         _nsmoc = [[NSManagedObjectContext alloc] init];
         [_nsmoc setPersistentStoreCoordinator:_nspsc];
 
@@ -111,6 +118,7 @@
                 [ec sendAMessage:[NSDictionary dictionaryWithDictionary:messageDict]];
             }
             else if ([entityName isEqualToString:@"Movie"]) {
+                
                 NSMutableDictionary* newMessage = nil;
                 for (NSString* changeKey in [movieMO changedValues]) {
                     if (![changeKey isEqualToString:@"movieEngine"] && ![changeKey isEqualToString:@"movieDiscs"]) {

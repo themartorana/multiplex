@@ -10,139 +10,140 @@
 #import "EngineController.h" 
 
 @implementation MainController
+@synthesize managedObjectContext;
 
-- (id) init {
+- (id) init 
+{
     if (self == [super init]) {
-        _nsmom = [NSManagedObjectModel mergedModelFromBundles:nil];
-        _nspsc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:_nsmom];
-        
-        [_nspsc addPersistentStoreWithType:NSInMemoryStoreType 
-                             configuration:nil 
-                                       URL:nil 
-                                   options:nil 
-                                     error:nil];
-        
-        _nsmoc = [[NSManagedObjectContext alloc] init];
-        [_nsmoc setPersistentStoreCoordinator:_nspsc];
+        managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
 
-        [[NSNotificationCenter defaultCenter] addObserver:self 
-                                                 selector:@selector(coreDataChangeNotification:) 
-                                                     name:NSManagedObjectContextObjectsDidChangeNotification 
-                                                   object:_nsmoc];
+        persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
+        [persistentStoreCoordinator addPersistentStoreWithType:NSInMemoryStoreType configuration:nil URL:nil options:nil error:nil];
+
+        managedObjectContext = [[NSManagedObjectContext alloc] init];
+        [managedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_coreDataChangeNotification:) name:NSManagedObjectContextObjectsDidChangeNotification object:managedObjectContext];
         
-        _enginesManager = [[[EnginesManager alloc] initWithManagedObjectContext:_nsmoc] retain];
+        enginesManager = [[EnginesManager alloc] initWithManagedObjectContext:managedObjectContext];
     }
-    
     return self;
 }
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+- (void) dealloc 
+{
+    [managedObjectModel release];
+    [persistentStoreCoordinator release];
+    [managedObjectContext release];
+    [enginesManager release];
+    [super dealloc];
+}
+
+- (void) applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     [self.window makeKeyAndOrderFront:nil];
 }
 
-- (void)applicationWillTerminate:(NSNotification *)aNotification
+- (void) applicationWillTerminate:(NSNotification *)aNotification
 {
-    [_enginesManager closeAllEngines];
-}
-
-
-// Return the managed object context
-- (NSManagedObjectContext *) managedObjectContext {
-    return _nsmoc;
+    [enginesManager closeAllEngines];
 }
 
 
 ///
 /// Launch the selected movie
 /// 
-- (IBAction) launchMovie:(id)sender {
-    NSManagedObject* discMO = [[_discsController selectedObjects] objectAtIndex:0];
-    NSURL* url = [NSURL URLWithString:[discMO valueForKey:@"url"]];
-    [[NSWorkspace sharedWorkspace] openURL:url];
-    
-    return;
+- (IBAction) launchMovie:(id)sender 
+{
+    NSManagedObject* disc = [[discsController selectedObjects] objectAtIndex:0];
+    if (disc) {
+        [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[disc valueForKey:@"url"]]];
+    }
 }
 
+@end
+
+@implementation MainController (Private)
 
 ///
 /// When an object in Core Data changes, send it along its way
 ///
-- (void) coreDataChangeNotification:(NSNotification*)notification
+- (void) _coreDataChangeNotification:(NSNotification*)notification
 {
-    // We're only interested in the changes for now
-    NSSet* set = [[notification userInfo] objectForKey:NSUpdatedObjectsKey];
-    
-    if (set) {
-        for (NSManagedObject* mo in set) {
-            NSString* entityName = [[mo entity] name];
-            
-            NSManagedObject* discMO;
-            NSManagedObject* movieMO;
-            NSManagedObject* engineMO;
-            
-            if ([@"Disc" isEqualToString:entityName]) {
-                discMO = mo;
-                movieMO = [discMO valueForKey:@"discMovie"];
-            }
-            else if ([@"Movie" isEqualToString:entityName]) {
-                movieMO = mo;
-            }
-            else
-                return;
-            
-            // Get the engine MO
-            engineMO = [movieMO valueForKey:@"movieEngine"];
-            
-            // Set up our message dictionary
-            NSMutableDictionary* messageDict = [NSMutableDictionary dictionary];
-            
-            // Get the engine to send the updates to
-            NSString* engineUUID = [engineMO valueForKey:@"UUID"];
-            EngineController* ec = [_enginesManager engineByUUIDKey:engineUUID];
-            
-            // If this is a disc, we have to just send one update.  If this is 
-            // a movie, we have to apply it to all the discs in that movie
-            if ([entityName isEqualToString:@"Disc"]) {
-                [messageDict setValue:[discMO valueForKey:@"com_discident_fingerprint"] forKey:@"com_discident_fingerprint"];
-                [messageDict setValue:[discMO valueForKey:@"url"] forKey:@"url"];
-                
-                // Now set any changes to the disc
-                for (NSString* changeKey in [discMO changedValues]) {
-                    if (![changeKey isEqualToString:@"discMovie"]) {
-                        [messageDict setValue:[discMO valueForKey:changeKey] forKey:changeKey];
+    NSMutableDictionary* setsOfFingerprintsForEngineControllerByUUID = [NSMutableDictionary dictionary];
+    NSMutableDictionary* updatesByFingerprint = [NSMutableDictionary dictionary];
+    for (NSManagedObject* mo in [[notification userInfo] objectForKey:NSUpdatedObjectsKey]) {
+        NSString* entityName = [[mo entity] name];
+        if ([@"Disc" isEqualToString:entityName]) {
+            NSMutableDictionary* update = nil;
+            for (NSString* key in [mo changedValues]) {
+                if (![key isEqualToString:@"discMovie"]) {
+                    if (!update) {
+                        update = [NSMutableDictionary dictionaryWithObject:[mo valueForKey:key] forKey:key];
+                    } else {
+                        [update setValue:[mo valueForKey:key] forKey:key];
                     }
                 }
-                
-                // Send the message
-                [ec sendAMessage:[NSDictionary dictionaryWithDictionary:messageDict]];
             }
-            else if ([entityName isEqualToString:@"Movie"]) {
+            if (update) {
+                NSString* fingerprint = [mo valueForKey:@"com_discident_fingerprint"];
+                NSString* uuid = [[mo valueForKey:@"movieEngine"] valueForKey:@"UUID"];
                 
-                NSMutableDictionary* newMessage = nil;
-                for (NSString* changeKey in [movieMO changedValues]) {
-                    if (![changeKey isEqualToString:@"movieEngine"] && ![changeKey isEqualToString:@"movieDiscs"]) {
-                        if (!newMessage) {
-                            newMessage = [NSMutableDictionary dictionary];
-                        } 
-                        [newMessage setValue:[movieMO valueForKey:changeKey] forKey:changeKey];   
+                NSMutableDictionary* existingUpdates = [updatesByFingerprint objectForKey:fingerprint];
+                if (!existingUpdates) {
+                    [update setObject:fingerprint forKey:@"com_discident_fingerprint"];
+                    [updatesByFingerprint setObject:update forKey:fingerprint];
+                } else {
+                    [existingUpdates addEntriesFromDictionary:update];
+                }
+                
+                NSMutableSet* setOfFingerprints = [setsOfFingerprintsForEngineControllerByUUID objectForKey:uuid];
+                if (!setOfFingerprints) {
+                    [setsOfFingerprintsForEngineControllerByUUID setObject:[NSMutableSet setWithObject:fingerprint] forKey:uuid];
+                } else {
+                    [setOfFingerprints addObject:fingerprint];
+                }
+            }
+        } else if ([@"Movie" isEqualToString:entityName]) {
+            NSMutableDictionary* update = nil;
+            for (NSString* key in [mo changedValues]) {
+                if (![key isEqualToString:@"movieEngine"] && ![key isEqualToString:@"movieDiscs"]) {
+                    if (!update) {
+                        update = [NSMutableDictionary dictionaryWithObject:[mo valueForKey:key] forKey:key];
+                    } else {
+                        [update setValue:[mo valueForKey:key] forKey:key];   
                     }
                 }
-                if (newMessage) {
-                    for (NSManagedObject* disc in [movieMO valueForKey:@"movieDiscs"]) {
-                        [newMessage setValue:[disc valueForKey:@"com_discident_fingerprint"] forKey:@"com_discident_fingerprint"];
-                        [ec sendAMessage:newMessage];
+            }
+            if (update) {
+                for (NSManagedObject* disc in [mo valueForKey:@"movieDiscs"]) {
+                    NSString* fingerprint = [disc valueForKey:@"com_discident_fingerprint"];
+                    NSString* uuid = [[mo valueForKey:@"movieEngine"] valueForKey:@"UUID"];
+
+                    NSMutableDictionary* existingUpdates = [updatesByFingerprint objectForKey:fingerprint];
+                    if (!existingUpdates) {
+                        [update setObject:fingerprint forKey:@"com_discident_fingerprint"];
+                        [updatesByFingerprint setObject:update forKey:fingerprint];
+                    } else {
+                        [existingUpdates addEntriesFromDictionary:update];
+                    }
+
+                    NSMutableSet* setOfFingerprints = [setsOfFingerprintsForEngineControllerByUUID objectForKey:uuid];
+                    if (!setOfFingerprints) {
+                        [setsOfFingerprintsForEngineControllerByUUID setObject:[NSMutableSet setWithObject:fingerprint] forKey:uuid];
+                    } else {
+                        [setOfFingerprints addObject:fingerprint];
                     }
                 }
             }
         }
     }
-}
 
-
-- (void) dealloc {
-    [_enginesManager release];
-    [super dealloc];
+    //  Coalesce all of the updates for each engine controller and send them.
+    //
+    for (NSString* uuid in setsOfFingerprintsForEngineControllerByUUID) {
+        [[enginesManager engineByUUIDKey:uuid] sendAMessage:[NSDictionary dictionaryWithObject:[updatesByFingerprint objectsForKeys:[[setsOfFingerprintsForEngineControllerByUUID objectForKey:uuid] allObjects] notFoundMarker:[NSNull null]] forKey:@"update"]];
+    }
 }
 
 @end

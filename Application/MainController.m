@@ -72,22 +72,26 @@
 {
     NSMutableDictionary* setsOfFingerprintsForEngineControllerByUUID = [NSMutableDictionary dictionary];
     NSMutableDictionary* updatesByFingerprint = [NSMutableDictionary dictionary];
-    for (NSManagedObject* mo in [[notification userInfo] objectForKey:NSUpdatedObjectsKey]) {
-        NSString* entityName = [[mo entity] name];
+    for (NSManagedObject* managedObject in [[notification userInfo] objectForKey:NSUpdatedObjectsKey]) {
+        NSString* entityName = [[managedObject entity] name];
         if ([@"Disc" isEqualToString:entityName]) {
             NSMutableDictionary* update = nil;
-            for (NSString* key in [mo changedValues]) {
+            for (NSString* key in [managedObject changedValues]) {
                 if (![key isEqualToString:@"discMovie"]) {
+                    id value = [managedObject valueForKey:key];
+                    if (!value) {
+                        value = [NSNull null];
+                    }
                     if (!update) {
-                        update = [NSMutableDictionary dictionaryWithObject:[mo valueForKey:key] forKey:key];
+                        update = [NSMutableDictionary dictionaryWithObject:value forKey:key];
                     } else {
-                        [update setValue:[mo valueForKey:key] forKey:key];
+                        [update setValue:value forKey:key];
                     }
                 }
             }
             if (update) {
-                NSString* fingerprint = [mo valueForKey:@"com_discident_fingerprint"];
-                NSString* uuid = [[mo valueForKey:@"movieEngine"] valueForKey:@"UUID"];
+                NSString* fingerprint = [managedObject valueForKey:@"com_discident_fingerprint"];
+                NSString* uuid = [[managedObject valueForKey:@"movieEngine"] valueForKey:@"UUID"];
                 
                 NSMutableDictionary* existingUpdates = [updatesByFingerprint objectForKey:fingerprint];
                 if (!existingUpdates) {
@@ -106,19 +110,23 @@
             }
         } else if ([@"Movie" isEqualToString:entityName]) {
             NSMutableDictionary* update = nil;
-            for (NSString* key in [mo changedValues]) {
+            for (NSString* key in [managedObject changedValues]) {
                 if (![key isEqualToString:@"movieEngine"] && ![key isEqualToString:@"movieDiscs"]) {
+                    id value = [managedObject valueForKey:key];
+                    if (!value) {
+                        value = [NSNull null];
+                    }
                     if (!update) {
-                        update = [NSMutableDictionary dictionaryWithObject:[mo valueForKey:key] forKey:key];
+                        update = [NSMutableDictionary dictionaryWithObject:value forKey:key];
                     } else {
-                        [update setValue:[mo valueForKey:key] forKey:key];   
+                        [update setValue:value forKey:key];   
                     }
                 }
             }
             if (update) {
-                for (NSManagedObject* disc in [mo valueForKey:@"movieDiscs"]) {
+                for (NSManagedObject* disc in [managedObject valueForKey:@"movieDiscs"]) {
                     NSString* fingerprint = [disc valueForKey:@"com_discident_fingerprint"];
-                    NSString* uuid = [[mo valueForKey:@"movieEngine"] valueForKey:@"UUID"];
+                    NSString* uuid = [[managedObject valueForKey:@"movieEngine"] valueForKey:@"UUID"];
 
                     NSMutableDictionary* existingUpdates = [updatesByFingerprint objectForKey:fingerprint];
                     if (!existingUpdates) {

@@ -5,11 +5,7 @@
 @interface Movie : NSObject {
 	NSString* fingerprint;
     NSMutableArray* items;
-    
-    BOOL listenForLoopback;
 }
-
-@property (readwrite) BOOL listenForLoopback;
 
 - (id) initWithItem:(Item*)item;
 

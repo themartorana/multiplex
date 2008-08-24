@@ -3,10 +3,8 @@
 #import "MediaSource.h"
 
 @interface Engine : NSApplication <MediaSourceDelegate> {
-	MDQueryRef query;
-    int itemsProcessed;
+    NSMutableDictionary* infoDictionariesByFingerprint;
     NSMutableDictionary* moviesByFingerprint;
-    
     LibraryComProtocol* protocol; 
 }
 

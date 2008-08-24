@@ -4,16 +4,12 @@
 #pragma mark -
 @implementation Movie
 
-@synthesize listenForLoopback;
-
 - (id) initWithItem:(Item*)_item
 {
 	if (self = [super init]) {
 		items = [[NSMutableArray alloc] initWithObjects:_item, nil];
 		fingerprint = [[_item fingerprint] retain];
         [_item setMovie:self];
-        
-        listenForLoopback = NO;
 	}
 	return self;
 }
@@ -43,7 +39,7 @@
 
 - (BOOL) hasItem
 {
-	return items != nil;
+	return [items count] > 0;
 }
 
 - (NSString*) pathToFile

@@ -226,10 +226,10 @@
 - (void) _deleteMoviesData:(NSArray*)messagesArray 
 {
     // First get the disc
-    for (NSDictionary* message in messagesArray) {
+    for (NSString* fingerprint in messagesArray) {
                 
         // Get the disc
-        NSManagedObject* discMO = [self _getDiscByFingerprint:[message objectForKey:@"com_discident_fingerprint"]];
+        NSManagedObject* discMO = [self _getDiscByFingerprint:fingerprint];
         
         if (discMO) {
             // Get the movie above

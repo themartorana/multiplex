@@ -9,25 +9,9 @@
 #import "NSString+DiscIdent.h"
 
 @interface Engine (Private)
-- (void) _sendMovieUpdates:(NSArray*)updateMovies additions:(NSArray*)addMovies andDeletions:(NSArray*)deleteMovies;
-@end
-
-@interface Engine (Spotlight)
-- (void) _setupSpotlightListener;
-- (void) _queryDidUpdate:(NSNotification*)notification;
-- (void) _startTracking:(Item*)item;
-- (void) _restartTracking:(Item*)item;
-- (void) _stopTracking:(Item*)item;
 - (NSArray*) _prepareMoviesForAddOrUpdate:(NSArray*)movies;
 - (NSArray*) _prepareMoviesForDelete:(NSArray*)movies;
-@end
-
-@interface Engine (DVD)
-- (void) _setupDVDListener;
-- (void) _volumeDidMount:(NSNotification*)notification;
-- (void) _volumeWillUnmount:(NSNotification*)notification;
-- (NSString*) _deviceNameForMountPoint:(NSString*)mountPoint;
-- (BOOL) _isNamedDeviceDVD:(NSString*)deviceName;
+- (void) _sendMovieUpdates:(NSArray*)updateMovies additions:(NSArray*)addMovies andDeletions:(NSArray*)deleteMovies;
 @end
 
 @implementation Engine
@@ -150,70 +134,7 @@
     }
 }
 
-
-
-///
-/// Take any updates that come in, prepare them, and send them out
-/// 
-- (void) _sendMovieUpdates:(NSArray*)updateMovies additions:(NSArray*)addMovies andDeletions:(NSArray*)deleteMovies
-{
-    NSArray* _addMovies = [self _prepareMoviesForAddOrUpdate:addMovies];
-    NSArray* _updateMovies = [self _prepareMoviesForAddOrUpdate:updateMovies];
-    NSArray* _deleteMovies = [self _prepareMoviesForDelete:deleteMovies];
-    
-    NSMutableDictionary* dictToSend = [NSMutableDictionary dictionaryWithCapacity:3];
-    if (_addMovies) {
-        [dictToSend setObject:_addMovies forKey:@"add"];
-    }
-    if (_updateMovies) {
-        [dictToSend setObject:_updateMovies forKey:@"update"];
-    }
-    if (_deleteMovies) {
-        [dictToSend setObject:_deleteMovies forKey:@"delete"];
-    }
-    
-    //NSString* jsonString = [NSString stringWithObjectAsJSON:dictToSend];
-    //NSLog(@"%@", jsonString);
-    //const char* s = [stringToSend cStringUsingEncoding:NSUTF8StringEncoding];
-    //printf("%d\n%s\n", strlen(s) + 1, s);
-    
-    [protocol sendMessage:dictToSend];
-}
-
-
-#pragma mark "LibraryComProtocol" delegate methods
-
-///
-/// When the engine receives a message, get it ready
-///
-- (void) engineMessageWasReceived:(NSDictionary*)messageDict
-{
-    // Save this dict back out to the file
-    NSString* fingerprint = [messageDict objectForKey:@"com_discident_fingerprint"];
-    
-    if (!fingerprint)
-        return;
-    
-    Movie* movie = [moviesByFingerprint objectForKey:fingerprint];
-    movie.listenForLoopback = YES;
-    
-    // Get the info as JSON
-    NSMutableDictionary* movieDict = [NSMutableDictionary dictionaryWithDictionary:[NSDictionary dictionaryWithJSON:[NSString stringWithContentsOfFile:[[movie pathToFile] stringByAppendingPathComponent:@"_Info.json"]]]];
-    
-    // Combine the two
-    [movieDict addEntriesFromDictionary:messageDict];
-    
-    // Save back out the JSON file
-    NSString* outJson = [NSString stringWithObjectAsJSON:movieDict];
-    [outJson writeToFile:[[movie pathToFile] stringByAppendingPathComponent:@"_Info.json"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
-    
-    NSLog(@"Engine wrote to file %@, contents:\n%@", [[movie pathToFile] stringByAppendingPathComponent:@"_Info.json"], outJson);
-}
-
-@end
-
-@implementation Engine (Spotlight)
-
+#pragma mark To Be Refactored
 
 ///
 /// Prepare the movies sent as additions or updates
@@ -285,6 +206,64 @@
     }
     
     return [NSArray arrayWithArray:deletesArray];
+}
+
+///
+/// Take any updates that come in, prepare them, and send them out
+/// 
+- (void) _sendMovieUpdates:(NSArray*)updateMovies additions:(NSArray*)addMovies andDeletions:(NSArray*)deleteMovies
+{
+    NSArray* _addMovies = [self _prepareMoviesForAddOrUpdate:addMovies];
+    NSArray* _updateMovies = [self _prepareMoviesForAddOrUpdate:updateMovies];
+    NSArray* _deleteMovies = [self _prepareMoviesForDelete:deleteMovies];
+    
+    NSMutableDictionary* dictToSend = [NSMutableDictionary dictionaryWithCapacity:3];
+    if (_addMovies) {
+        [dictToSend setObject:_addMovies forKey:@"add"];
+    }
+    if (_updateMovies) {
+        [dictToSend setObject:_updateMovies forKey:@"update"];
+    }
+    if (_deleteMovies) {
+        [dictToSend setObject:_deleteMovies forKey:@"delete"];
+    }
+    
+    //NSString* jsonString = [NSString stringWithObjectAsJSON:dictToSend];
+    //NSLog(@"%@", jsonString);
+    //const char* s = [stringToSend cStringUsingEncoding:NSUTF8StringEncoding];
+    //printf("%d\n%s\n", strlen(s) + 1, s);
+    
+    [protocol sendMessage:dictToSend];
+}
+
+
+#pragma mark "LibraryComProtocol" delegate methods
+
+///
+/// When the engine receives a message, get it ready
+///
+- (void) engineMessageWasReceived:(NSDictionary*)messageDict
+{
+    // Save this dict back out to the file
+    NSString* fingerprint = [messageDict objectForKey:@"com_discident_fingerprint"];
+    
+    if (!fingerprint)
+        return;
+    
+    Movie* movie = [moviesByFingerprint objectForKey:fingerprint];
+    movie.listenForLoopback = YES;
+    
+    // Get the info as JSON
+    NSMutableDictionary* movieDict = [NSMutableDictionary dictionaryWithDictionary:[NSDictionary dictionaryWithJSON:[NSString stringWithContentsOfFile:[[movie pathToFile] stringByAppendingPathComponent:@"_Info.json"]]]];
+    
+    // Combine the two
+    [movieDict addEntriesFromDictionary:messageDict];
+    
+    // Save back out the JSON file
+    NSString* outJson = [NSString stringWithObjectAsJSON:movieDict];
+    [outJson writeToFile:[[movie pathToFile] stringByAppendingPathComponent:@"_Info.json"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    
+    NSLog(@"Engine wrote to file %@, contents:\n%@", [[movie pathToFile] stringByAppendingPathComponent:@"_Info.json"], outJson);
 }
 
 @end

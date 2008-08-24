@@ -50,6 +50,8 @@
 		F9A3A73D0E579E770087B159 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A3A73C0E579E770087B159 /* Foundation.framework */; };
 		F9A3A7410E579E810087B159 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A3A7400E579E810087B159 /* AppKit.framework */; };
 		F9AFE3E50B65CC6D0035DA65 /* ScratchPad in Resources */ = {isa = PBXBuildFile; fileRef = F9AFE3E40B65CC6D0035DA65 /* ScratchPad */; };
+		F9DA5B4A0E61C1BC00E96C0D /* DVDMediaSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F9DA5B490E61C1BC00E96C0D /* DVDMediaSource.m */; };
+		F9DA5B4D0E61C1C900E96C0D /* PhysicalMediaSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F9DA5B4C0E61C1C900E96C0D /* PhysicalMediaSource.m */; };
 		F9E935B10B62F88D007E9ACB /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E935B00B62F88D007E9ACB /* ApplicationServices.framework */; };
 		F9E935B30B62F89C007E9ACB /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E935B20B62F89C007E9ACB /* WebKit.framework */; };
 		F9ECE4330B654EED00253AA3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9ECE4320B654EED00253AA3 /* QuartzCore.framework */; };
@@ -202,6 +204,11 @@
 		F9A3A73C0E579E770087B159 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F9A3A7400E579E810087B159 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		F9AFE3E40B65CC6D0035DA65 /* ScratchPad */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ScratchPad; sourceTree = "<group>"; };
+		F9DA5B480E61C1BC00E96C0D /* DVDMediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVDMediaSource.h; sourceTree = "<group>"; };
+		F9DA5B490E61C1BC00E96C0D /* DVDMediaSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVDMediaSource.m; sourceTree = "<group>"; };
+		F9DA5B4B0E61C1C900E96C0D /* PhysicalMediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicalMediaSource.h; sourceTree = "<group>"; };
+		F9DA5B4C0E61C1C900E96C0D /* PhysicalMediaSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhysicalMediaSource.m; sourceTree = "<group>"; };
+		F9DA5B6F0E61C67400E96C0D /* MediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaSource.h; sourceTree = "<group>"; };
 		F9E934010B62F801007E9ACB /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		F9E935B00B62F88D007E9ACB /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
 		F9E935B20B62F89C007E9ACB /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
@@ -371,6 +378,7 @@
 		557B668B0E4A2DD70009919E /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				F9DA5B700E61C67B00E96C0D /* Media Sources */,
 				F94EA2CF0E4C9ECA00438E14 /* Engine.h */,
 				F94EA2D00E4C9ECA00438E14 /* Engine.m */,
 				F94EA3760E4CA58D00438E14 /* Item.h */,
@@ -460,6 +468,18 @@
 				F9A3A4B20E5788ED0087B159 /* JSONKit.m */,
 			);
 			path = JSONKit;
+			sourceTree = "<group>";
+		};
+		F9DA5B700E61C67B00E96C0D /* Media Sources */ = {
+			isa = PBXGroup;
+			children = (
+				F9DA5B6F0E61C67400E96C0D /* MediaSource.h */,
+				F9DA5B480E61C1BC00E96C0D /* DVDMediaSource.h */,
+				F9DA5B490E61C1BC00E96C0D /* DVDMediaSource.m */,
+				F9DA5B4B0E61C1C900E96C0D /* PhysicalMediaSource.h */,
+				F9DA5B4C0E61C1C900E96C0D /* PhysicalMediaSource.m */,
+			);
+			name = "Media Sources";
 			sourceTree = "<group>";
 		};
 		F9E932820B62F183007E9ACB /* Libraries */ = {
@@ -662,6 +682,8 @@
 				557AC76E0E5B1E1A00271113 /* LibraryComProtocol.m in Sources */,
 				557AC7710E5B1E3600271113 /* DiscIdent.m in Sources */,
 				55DDB7F30E5F56310008C7CA /* NSString+DiscIdent.m in Sources */,
+				F9DA5B4A0E61C1BC00E96C0D /* DVDMediaSource.m in Sources */,
+				F9DA5B4D0E61C1C900E96C0D /* PhysicalMediaSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

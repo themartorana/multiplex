@@ -91,7 +91,7 @@
             }
             if (update) {
                 NSString* fingerprint = [managedObject valueForKey:@"com_discident_fingerprint"];
-                NSString* uuid = [[managedObject valueForKey:@"movieEngine"] valueForKey:@"UUID"];
+                NSString* uuid = [managedObject valueForKeyPath:@"discMovie.movieEngine.UUID"];
                 
                 NSMutableDictionary* existingUpdates = [updatesByFingerprint objectForKey:fingerprint];
                 if (!existingUpdates) {
@@ -126,7 +126,7 @@
             if (update) {
                 for (NSManagedObject* disc in [managedObject valueForKey:@"movieDiscs"]) {
                     NSString* fingerprint = [disc valueForKey:@"com_discident_fingerprint"];
-                    NSString* uuid = [[managedObject valueForKey:@"movieEngine"] valueForKey:@"UUID"];
+                    NSString* uuid = [managedObject valueForKeyPath:@"movieEngine.UUID"];
 
                     NSMutableDictionary* existingUpdates = [updatesByFingerprint objectForKey:fingerprint];
                     if (!existingUpdates) {

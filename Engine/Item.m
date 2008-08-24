@@ -39,12 +39,12 @@ static NSArray* allKeys;
 - (id) initWithPhysicalMedia:(NSString*)fingerprint atPath:(NSString*)pathToMedia
 {
     if (self = [super init]) {
-        [info autorelease];
-        info = [NSDictionary dictionaryWithObjectsAndKeys:
-                @"public.dvdmedia", (id)kMDItemContentType,
-                fingerprint, (id)kMDItemDiscIdentFingerprint,
-                pathToMedia, (id)kMDItemPath, nil];
-        
+        info = [[NSDictionary alloc] initWithObjectsAndKeys:
+            @"public.dvdmedia", (id)kMDItemContentType,
+            fingerprint, (id)kMDItemDiscIdentFingerprint,
+            pathToMedia, (id)kMDItemPath, 
+            nil
+        ];
         isPhysicalMedia = YES;
     }
     return self;
@@ -52,8 +52,10 @@ static NSArray* allKeys;
 
 - (void) dealloc
 {
-	CFRelease(itemRef);
-	[info release];
+    if (itemRef) {
+        CFRelease(itemRef);
+	}
+    [info release];
 	[super dealloc];
 }
 

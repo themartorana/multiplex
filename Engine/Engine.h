@@ -1,7 +1,8 @@
 #import <Cocoa/Cocoa.h>
 #import "LibraryComProtocol.h"
+#import "MediaSource.h"
 
-@interface Engine : NSApplication {
+@interface Engine : NSApplication <MediaSourceDelegate> {
 	MDQueryRef query;
     int itemsProcessed;
     NSMutableDictionary* moviesByFingerprint;
@@ -12,7 +13,5 @@
 #pragma mark LibraryComProtocol delegate methods
 
 - (void) engineMessageWasReceived:(NSDictionary*)messageDict;
-- (void) volumeDidMount:(NSNotification*)notification;
-- (void) volumeWillUnmount:(NSNotification*)notification;
 
 @end

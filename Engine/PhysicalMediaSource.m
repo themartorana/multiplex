@@ -11,7 +11,7 @@
 - (BOOL) _isNamedDeviceDVD:(NSString*)deviceName;
 - (void) _tryToUseMountPoint:(NSString*)mountPoint;
 - (void) _volumeDidMount:(NSNotification*)notification;
-- (void) _volumeWillUnmount:(NSNotification*)notification;
+- (void) _volumeDidUnmount:(NSNotification*)notification;
 @end
 
 #pragma mark -
@@ -48,7 +48,7 @@
      */
     NSNotificationCenter* notificationCenter = [[NSWorkspace sharedWorkspace] notificationCenter];
     [notificationCenter addObserver:self selector:@selector(_volumeDidMount:) name:NSWorkspaceDidMountNotification object:nil];
-    [notificationCenter addObserver:self selector:@selector(_volumeWillUnmount:) name:NSWorkspaceWillUnmountNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(_volumeDidUnmount:) name:NSWorkspaceDidUnmountNotification object:nil];
 }
 
 - (void) stop
@@ -75,7 +75,7 @@
     [self _tryToUseMountPoint:[[notification userInfo] objectForKey:@"NSDevicePath"]];
 }
 
-- (void) _volumeWillUnmount:(NSNotification*)notification
+- (void) _volumeDidUnmount:(NSNotification*)notification
 {
     NSString* deviceName = [self _deviceNameForMountPoint:[[notification userInfo] objectForKey:@"NSDevicePath"]];
     Item* item = [itemsByDeviceName objectForKey:deviceName];

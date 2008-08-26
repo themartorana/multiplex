@@ -88,6 +88,9 @@
                         [update setValue:value forKey:key];
                     }
                 }
+                
+                // Set the value of the URL
+                [update setValue:[managedObject valueForKey:@"url"] forKey:@"url"];
             }
             if (update) {
                 NSString* fingerprint = [managedObject valueForKey:@"com_discident_fingerprint"];
@@ -122,6 +125,9 @@
                         [update setValue:value forKey:key];   
                     }
                 }
+                
+                // Set the value of the URL
+                [update setValue:[managedObject valueForKey:@"url"] forKey:@"url"];
             }
             if (update) {
                 for (NSManagedObject* disc in [managedObject valueForKey:@"movieDiscs"]) {

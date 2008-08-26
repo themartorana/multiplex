@@ -338,7 +338,6 @@
     if ([messageDict objectForKey:@"delete"] && [[messageDict objectForKey:@"delete"] isKindOfClass:[NSArray class]]) {
         [self _deleteMoviesData:[messageDict objectForKey:@"delete"]];
     }
-    
 }
 
 @end

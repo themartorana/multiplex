@@ -19,15 +19,15 @@ NSString* const kDISC_IDENT_VERSION = @"v1";
 /// Check DiscIdent for a UPC code matching the fingerprint.  Also fill in other
 /// DiscIdent information
 ///
-- (BOOL) getMovieInfoFromDiscIdentUsingFingerprint:(NSString*)fingerprint pathToMovie:(NSString*)_pathToMovie
+- (BOOL) getMovieInfoFromDiscIdentUsingFingerprint:(Item*)item
 {
     urlString = [NSMutableString stringWithString:@"http://discident.com/"];
     [urlString appendString:kDISC_IDENT_VERSION];
     [urlString appendString:@"/"];
-    [urlString appendString:fingerprint];
+    [urlString appendString:[item fingerprint]];
     [urlString appendString:@"/"];
     
-    pathToMovie = [_pathToMovie retain];
+    pathToMovie = [[item pathToFile] retain];
     
     receivedData = [[NSMutableData alloc] init];
     
@@ -37,6 +37,14 @@ NSString* const kDISC_IDENT_VERSION = @"v1";
     discIdentConnection = [[NSURLConnection alloc] initWithRequest:discIdentRequest delegate:self startImmediately:YES];
     
     return FALSE;
+}
+
+- (void) dealloc
+{
+    [pathToMovie release];
+    [receivedData release];
+    
+    [super dealloc];
 }
 
 ///
@@ -82,20 +90,33 @@ NSString* const kDISC_IDENT_VERSION = @"v1";
     if ([receivedData length] > 0) {
         NSString* dataAsJSONString = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
         NSDictionary* messageDict = [NSDictionary dictionaryWithJSON:dataAsJSONString];
-        
+                
         // Open up the current information we have
-        NSDictionary* metaDataIn = [NSDictionary dictionaryWithJSON:
+        NSDictionary* jsonFileDict = [NSDictionary dictionaryWithJSON:
                                     [NSString stringWithContentsOfFile:
                                      [pathToMovie stringByAppendingPathComponent:@"_Info.json"]
                                     ]];
         
-        NSMutableDictionary* metaDataWorkable = [NSMutableDictionary dictionaryWithDictionary:metaDataIn];
+        // Get the meta data
+        NSMutableDictionary* metaDataWorkable; //= 
+        id meta = [jsonFileDict objectForKey:@"meta"];
+        
+        if (meta && [meta isKindOfClass:[NSDictionary class]]) {
+            metaDataWorkable = [NSMutableDictionary dictionaryWithDictionary:meta];
+        }
+        else {
+            metaDataWorkable = [NSMutableDictionary dictionary];
+        }
         
         // Add the contents of messageDict to here
-        [metaDataWorkable addEntriesFromDictionary:messageDict];
+        [metaDataWorkable setObject:messageDict forKey:@"com_discident"];
+        
+        // Add the meta data back into the basic dictionary
+        NSMutableDictionary* newJsonFileDict = [NSMutableDictionary dictionaryWithDictionary:jsonFileDict];
+        [newJsonFileDict setObject:[NSDictionary dictionaryWithDictionary:metaDataWorkable] forKey:@"meta"];
         
         // Now write out our changes
-        NSData* toWrite = [NSData dataWithObjectAsJSON:[NSDictionary dictionaryWithDictionary:metaDataWorkable]];
+        NSData* toWrite = [NSData dataWithObjectAsJSON:[NSDictionary dictionaryWithDictionary:newJsonFileDict]];
         [toWrite writeToFile:[pathToMovie stringByAppendingPathComponent:@"_Info.json"] atomically:NO];
         
         [dataAsJSONString release];

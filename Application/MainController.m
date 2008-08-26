@@ -125,9 +125,6 @@
                         [update setValue:value forKey:key];   
                     }
                 }
-                
-                // Set the value of the URL
-                [update setValue:[managedObject valueForKey:@"url"] forKey:@"url"];
             }
             if (update) {
                 for (NSManagedObject* disc in [managedObject valueForKey:@"movieDiscs"]) {
@@ -137,6 +134,7 @@
                     NSMutableDictionary* existingUpdates = [updatesByFingerprint objectForKey:fingerprint];
                     if (!existingUpdates) {
                         [update setObject:fingerprint forKey:@"com_discident_fingerprint"];
+                        [update setValue:[disc valueForKey:@"url"] forKey:@"url"];
                         [updatesByFingerprint setObject:update forKey:fingerprint];
                     } else {
                         [existingUpdates addEntriesFromDictionary:update];

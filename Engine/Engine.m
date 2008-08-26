@@ -263,6 +263,7 @@
 ///
 - (void) engineMessageWasReceived:(NSDictionary*)messageDict
 {
+    return;
     // Save this dict back out to the file
     NSString* fingerprint = [messageDict objectForKey:@"com_discident_fingerprint"];
     

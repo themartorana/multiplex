@@ -1,5 +1,5 @@
 #import "PhysicalMediaSource.h"
-#import "Item.h"
+#import "Disc.h"
 #import "NSString+DiscIdent.h"
 #import <IOKit/IOKitLib.h>
 #import <IOKit/storage/IOMedia.h>
@@ -78,7 +78,7 @@
 - (void) _volumeDidUnmount:(NSNotification*)notification
 {
     NSString* deviceName = [self _deviceNameForMountPoint:[[notification userInfo] objectForKey:@"NSDevicePath"]];
-    Item* item = [itemsByDeviceName objectForKey:deviceName];
+    Disc* item = [itemsByDeviceName objectForKey:deviceName];
     if (item) {
         [delegate mediaSource:self didRemoveItems:[NSArray arrayWithObject:item]];
         [itemsByDeviceName removeObjectForKey:deviceName];
@@ -91,7 +91,7 @@
     if ([self _isNamedDeviceDVD:deviceName]) {
         NSString* fingerprint = [mountPoint discidentFingerprintForPath];
         if (fingerprint) {
-            Item* item = [[Item alloc] initWithPhysicalMedia:fingerprint atPath:mountPoint];
+            Disc* item = [[Disc alloc] initWithPhysicalMedia:fingerprint atPath:mountPoint];
             [delegate mediaSource:self didAddItems:[NSArray arrayWithObject:item]];
             [itemsByDeviceName setObject:item forKey:deviceName];
             [item release];

@@ -19,7 +19,7 @@ NSString* const kDISC_IDENT_VERSION = @"v1";
 /// Check DiscIdent for a UPC code matching the fingerprint.  Also fill in other
 /// DiscIdent information
 ///
-- (BOOL) getMovieInfoFromDiscIdentUsingFingerprint:(Item*)item
+- (BOOL) getMovieInfoFromDiscIdentUsingFingerprint:(Disc*)item
 {
     urlString = [NSMutableString stringWithString:@"http://discident.com/"];
     [urlString appendString:kDISC_IDENT_VERSION];

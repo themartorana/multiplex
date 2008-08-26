@@ -1,13 +1,13 @@
 #import <Cocoa/Cocoa.h>
 
-@class Item;
+@class Disc;
 
 @interface Movie : NSObject {
 	NSString* fingerprint;
     NSMutableArray* items;
 }
 
-- (id) initWithItem:(Item*)item;
+- (id) initWithItem:(Disc*)item;
 
 - (NSString*) contentType;
 - (NSString*) fingerprint;
@@ -15,7 +15,7 @@
 - (NSString*) pathToFile;
 - (BOOL) isPhysicalMedia;
 
-- (void) addItem:(Item*)item;
-- (void) removeItem:(Item*)item;
+- (void) addItem:(Disc*)item;
+- (void) removeItem:(Disc*)item;
 
 @end

@@ -1,5 +1,5 @@
 #import "Engine.h"
-#import "Item.h"
+#import "Disc.h"
 #import "Movie.h"
 #import "DVDMediaSource.h"
 #import "PhysicalMediaSource.h"
@@ -62,7 +62,7 @@
     }
 }
 
-- (NSMutableDictionary*) infoDictionaryForItem:(Item*)item  
+- (NSMutableDictionary*) infoDictionaryForItem:(Disc*)item  
 {
     /*  Attempt to load the Info.json from the filesystem.  If this fails,
      *  we create a new, empty dictionary containing just the fingerprint.
@@ -100,7 +100,7 @@
 {
     NSMutableArray* adds = [NSMutableArray array];
     NSMutableArray* updates = [NSMutableArray array];
-    for (Item* item in items) {
+    for (Disc* item in items) {
         NSString* fingerprint = [item fingerprint];
         if (fingerprint) {
             Movie* movie = [moviesByFingerprint objectForKey:fingerprint];
@@ -155,7 +155,7 @@
     NSMutableArray* adds = [NSMutableArray array];
     NSMutableArray* updates = [NSMutableArray array];
     NSMutableArray* deletes = [NSMutableArray array];
-    for (Item* item in items) {
+    for (Disc* item in items) {
         NSString* oldFingerprint = [item fingerprint];
         [item reload];
         NSString* fingerprint = [item fingerprint];
@@ -234,7 +234,7 @@
 - (void) mediaSource:(id<MediaSource>)mediaSource didRemoveItems:(NSArray*)items
 {
     NSMutableArray* deletes = [NSMutableArray array];
-    for (Item* item in items) {
+    for (Disc* item in items) {
         Movie* movie = [item movie];
         if (movie) {
             [movie removeItem:item];

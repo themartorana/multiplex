@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "Disc.h"
 
 
 @interface DiscIdent : NSObject {
@@ -19,7 +20,7 @@
     NSURLConnection* discIdentConnection;
 }
 
-- (BOOL) getMovieInfoFromDiscIdentUsingFingerprint:(Item*)item;
+- (BOOL) getMovieInfoFromDiscIdentUsingFingerprint:(Disc*)item;
 
 
 #pragma mark NSURLConnection deletgate methods

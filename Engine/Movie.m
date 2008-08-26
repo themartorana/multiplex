@@ -1,10 +1,10 @@
 #import "Movie.h"
-#import "Item.h"
+#import "Disc.h"
 
 #pragma mark -
 @implementation Movie
 
-- (id) initWithItem:(Item*)_item
+- (id) initWithItem:(Disc*)_item
 {
 	if (self = [super init]) {
 		items = [[NSMutableArray alloc] initWithObjects:_item, nil];
@@ -21,7 +21,7 @@
 	[super dealloc];
 }
 
-- (void) addItem:(Item*)item
+- (void) addItem:(Disc*)item
 {
     [items addObject:item];
     [item setMovie:self];
@@ -52,7 +52,7 @@
     return [[items objectAtIndex:0] isPhysicalMedia];
 }
 
-- (void) removeItem:(Item*)item
+- (void) removeItem:(Disc*)item
 {
     NSAssert([item movie] == self, @"");
     [item setMovie:nil];

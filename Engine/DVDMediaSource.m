@@ -1,9 +1,9 @@
 #import "DVDMediaSource.h"
-#import "Item.h"
+#import "Disc.h"
 
-static Item* newSpotlightItem(MDQueryRef query, MDItemRef item, void* info)
+static Disc* newSpotlightItem(MDQueryRef query, MDItemRef item, void* info)
 {
-	return [[Item alloc] initWithMDItemRef:item];
+	return [[Disc alloc] initWithMDItemRef:item];
 }
 
 @implementation DVDMediaSource
@@ -75,7 +75,7 @@ static Item* newSpotlightItem(MDQueryRef query, MDItemRef item, void* info)
     if (count) {
         NSMutableArray* removedItems = [NSMutableArray arrayWithCapacity:count];
         while (count-- > 0) {
-            [removedItems addObject:(Item*)MDQueryGetResultAtIndex(query, count)];
+            [removedItems addObject:(Disc*)MDQueryGetResultAtIndex(query, count)];
         }
         [delegate mediaSource:self didRemoveItems:removedItems];
     }
@@ -106,7 +106,7 @@ static Item* newSpotlightItem(MDQueryRef query, MDItemRef item, void* info)
 		int imax = MDQueryGetResultCount(query);
         NSMutableArray* addedItems = [NSMutableArray array];
         for (int i = itemsProcessed; i < imax; i++) {
-            [addedItems addObject:(Item*)MDQueryGetResultAtIndex(query, i)];
+            [addedItems addObject:(Disc*)MDQueryGetResultAtIndex(query, i)];
 		}
         [delegate mediaSource:self didAddItems:addedItems];
         itemsProcessed = imax;

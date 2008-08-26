@@ -31,7 +31,7 @@
 		F94EA2030E4C94F400438E14 /* NSString+CarbonFSRefCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA2010E4C94F400438E14 /* NSString+CarbonFSRefCreation.m */; };
 		F94EA22E0E4C978700438E14 /* +DmgCtrl.h in Headers */ = {isa = PBXBuildFile; fileRef = F94EA22D0E4C978700438E14 /* +DmgCtrl.h */; };
 		F94EA2D10E4C9ECA00438E14 /* Engine.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA2D00E4C9ECA00438E14 /* Engine.m */; };
-		F94EA3780E4CA58D00438E14 /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA3770E4CA58D00438E14 /* Item.m */; };
+		F94EA3780E4CA58D00438E14 /* Disc.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA3770E4CA58D00438E14 /* Disc.m */; };
 		F94EA6FC0E4E290B00438E14 /* Movie.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA6FB0E4E290B00438E14 /* Movie.m */; };
 		F98DC70E0B63013B00371A83 /* GetMetadataForFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F98DC70A0B63013B00371A83 /* GetMetadataForFile.m */; };
 		F98DC7100B63013B00371A83 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = F98DC70C0B63013B00371A83 /* main.c */; };
@@ -187,8 +187,8 @@
 		F94EA2BF0E4C9DBF00438E14 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F94EA2CF0E4C9ECA00438E14 /* Engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Engine.h; sourceTree = "<group>"; };
 		F94EA2D00E4C9ECA00438E14 /* Engine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Engine.m; sourceTree = "<group>"; };
-		F94EA3760E4CA58D00438E14 /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
-		F94EA3770E4CA58D00438E14 /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
+		F94EA3760E4CA58D00438E14 /* Disc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Disc.h; sourceTree = "<group>"; };
+		F94EA3770E4CA58D00438E14 /* Disc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Disc.m; sourceTree = "<group>"; };
 		F94EA6FA0E4E290B00438E14 /* Movie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Movie.h; sourceTree = "<group>"; };
 		F94EA6FB0E4E290B00438E14 /* Movie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Movie.m; sourceTree = "<group>"; };
 		F98DC6B60B63008700371A83 /* DVD.mdimporter */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DVD.mdimporter; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -381,8 +381,8 @@
 				F9DA5B700E61C67B00E96C0D /* Media Sources */,
 				F94EA2CF0E4C9ECA00438E14 /* Engine.h */,
 				F94EA2D00E4C9ECA00438E14 /* Engine.m */,
-				F94EA3760E4CA58D00438E14 /* Item.h */,
-				F94EA3770E4CA58D00438E14 /* Item.m */,
+				F94EA3760E4CA58D00438E14 /* Disc.h */,
+				F94EA3770E4CA58D00438E14 /* Disc.m */,
 				F94EA6FA0E4E290B00438E14 /* Movie.h */,
 				F94EA6FB0E4E290B00438E14 /* Movie.m */,
 				557AC76F0E5B1E3600271113 /* DiscIdent.h */,
@@ -677,7 +677,7 @@
 			files = (
 				557B66A30E4A2F4D0009919E /* main.m in Sources */,
 				F94EA2D10E4C9ECA00438E14 /* Engine.m in Sources */,
-				F94EA3780E4CA58D00438E14 /* Item.m in Sources */,
+				F94EA3780E4CA58D00438E14 /* Disc.m in Sources */,
 				F94EA6FC0E4E290B00438E14 /* Movie.m in Sources */,
 				557AC76E0E5B1E1A00271113 /* LibraryComProtocol.m in Sources */,
 				557AC7710E5B1E3600271113 /* DiscIdent.m in Sources */,

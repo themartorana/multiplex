@@ -2,7 +2,7 @@
 #import "JSONKit/JSONKit.h"
 #import "MediaSource.h"
 
-const CFStringRef kMDDiscDiscIdentFingerprint	= (CFStringRef)@"com_discident_fingerprint";
+const CFStringRef kMDDiscDiscIdentFingerprint = CFSTR("com_discident_fingerprint");
 
 extern void MDItemSetAttribute(MDItemRef, CFStringRef, CFTypeRef);
 extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);

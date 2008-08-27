@@ -6,7 +6,7 @@
 //  Copyright 2008 __MyCompanyName__. All rights reserved.
 //
 
-#import "LibraryComProtocol.h"
+#import "MessageProtocol.h"
 #import "EngineController.h"
 
 @interface EngineController (Private)
@@ -42,7 +42,7 @@
     engineAddress = @"localhost";
     
     // Create the LibraryComProtocol to communicate over
-    _protocol = [[LibraryComProtocol alloc] init];
+    _protocol = [[MessageProtocol alloc] init];
     [_protocol setDelegate:self];
     
     // Launch the engine NSTask
@@ -326,7 +326,7 @@
 /// A message was received and passed up here.  Do
 /// something with it (probably send to the data store
 ///
-- (void) engineMessageWasReceived:(NSDictionary*)messageDict 
+- (void) protocol:(MessageProtocol*)protocol didReceiveMessage:(NSDictionary*)messageDict 
 {
     // Check for all three keys
     if ([messageDict objectForKey:@"add"] && [[messageDict objectForKey:@"add"] isKindOfClass:[NSArray class]]) {

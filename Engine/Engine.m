@@ -4,7 +4,7 @@
 #import "PhysicalMediaSource.h"
 #import "JSONKit/JSONKit.h"
 #import "DiscIdentQuery.h"
-#import "LibraryComProtocol.h"
+#import "MessageProtocol.h"
 #import "NSString+DiscIdent.h"
 
 @implementation Engine
@@ -16,10 +16,7 @@
         infoDictionariesByFingerprint = [[NSMutableDictionary alloc] init];
         
         // Set up the protocol
-        protocol = [[LibraryComProtocol alloc] init];
-        //[protocol setFileHandleForReading:[NSFileHandle fileHandleWithStandardInput]];
-        [protocol setFileHandleForWriting:[NSFileHandle fileHandleWithStandardOutput]];
-        [protocol setDelegate:self];
+        protocol = [[MessageProtocol protocolWithDelegate:self fileHandleForReading:[NSFileHandle fileHandleWithStandardInput] fileHandleForWriting:[NSFileHandle fileHandleWithStandardOutput]] retain];
     }
     return self;
 }
@@ -263,7 +260,7 @@
 ///
 /// When the engine receives a message, get it ready
 ///
-- (void) engineMessageWasReceived:(NSDictionary*)messageDict
+- (void) protocol:(MessageProtocol*)protocol didReceiveMessage:(NSDictionary*)messageDict
 {
     return;
     // Save this dict back out to the file

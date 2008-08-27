@@ -10,8 +10,8 @@
 		5535D98F0E4E3F5400A45761 /* EnginesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5535D98E0E4E3F5400A45761 /* EnginesManager.m */; };
 		5535DD6A0E4FF80B00A45761 /* lib+DmgCtrl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F94EA1ED0E4C93F800438E14 /* lib+DmgCtrl.a */; };
 		553FBB4D0E56245C0020A890 /* Engine in CopyFiles */ = {isa = PBXBuildFile; fileRef = 557B667E0E4A2D790009919E /* Engine */; };
-		557AC76D0E5B1E1A00271113 /* LibraryComProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 557AC76C0E5B1E1A00271113 /* LibraryComProtocol.m */; };
-		557AC76E0E5B1E1A00271113 /* LibraryComProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 557AC76C0E5B1E1A00271113 /* LibraryComProtocol.m */; };
+		557AC76D0E5B1E1A00271113 /* MessageProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 557AC76C0E5B1E1A00271113 /* MessageProtocol.m */; };
+		557AC76E0E5B1E1A00271113 /* MessageProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 557AC76C0E5B1E1A00271113 /* MessageProtocol.m */; };
 		557AC7710E5B1E3600271113 /* DiscIdentQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 557AC7700E5B1E3600271113 /* DiscIdentQuery.m */; };
 		557AC7720E5B1E3600271113 /* DiscIdentQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 557AC7700E5B1E3600271113 /* DiscIdentQuery.m */; };
 		557B66A30E4A2F4D0009919E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B66A20E4A2F4D0009919E /* main.m */; };
@@ -158,8 +158,8 @@
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		5535D98D0E4E3F5400A45761 /* EnginesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnginesManager.h; sourceTree = "<group>"; };
 		5535D98E0E4E3F5400A45761 /* EnginesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnginesManager.m; sourceTree = "<group>"; };
-		557AC76B0E5B1E1A00271113 /* LibraryComProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryComProtocol.h; sourceTree = "<group>"; };
-		557AC76C0E5B1E1A00271113 /* LibraryComProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryComProtocol.m; sourceTree = "<group>"; };
+		557AC76B0E5B1E1A00271113 /* MessageProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageProtocol.h; sourceTree = "<group>"; };
+		557AC76C0E5B1E1A00271113 /* MessageProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageProtocol.m; sourceTree = "<group>"; };
 		557AC76F0E5B1E3600271113 /* DiscIdentQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscIdentQuery.h; sourceTree = "<group>"; };
 		557AC7700E5B1E3600271113 /* DiscIdentQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscIdentQuery.m; sourceTree = "<group>"; };
 		557B667E0E4A2D790009919E /* Engine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Engine; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -396,8 +396,8 @@
 			children = (
 				55DDB7F10E5F56310008C7CA /* NSString+DiscIdent.h */,
 				55DDB7F20E5F56310008C7CA /* NSString+DiscIdent.m */,
-				557AC76B0E5B1E1A00271113 /* LibraryComProtocol.h */,
-				557AC76C0E5B1E1A00271113 /* LibraryComProtocol.m */,
+				557AC76B0E5B1E1A00271113 /* MessageProtocol.h */,
+				557AC76C0E5B1E1A00271113 /* MessageProtocol.m */,
 				557B694C0E4CCD850009919E /* NSDate+Mothership.h */,
 				557B694D0E4CCD850009919E /* NSDate+Mothership.m */,
 			);
@@ -679,7 +679,7 @@
 				F94EA2D10E4C9ECA00438E14 /* Engine.m in Sources */,
 				F94EA3780E4CA58D00438E14 /* Media.m in Sources */,
 				F94EA6FC0E4E290B00438E14 /* Disc.m in Sources */,
-				557AC76E0E5B1E1A00271113 /* LibraryComProtocol.m in Sources */,
+				557AC76E0E5B1E1A00271113 /* MessageProtocol.m in Sources */,
 				557AC7710E5B1E3600271113 /* DiscIdentQuery.m in Sources */,
 				55DDB7F30E5F56310008C7CA /* NSString+DiscIdent.m in Sources */,
 				F9DA5B4A0E61C1BC00E96C0D /* DVDMediaSource.m in Sources */,
@@ -697,7 +697,7 @@
 				557B69FE0E4CF44F0009919E /* EngineController.m in Sources */,
 				5535D98F0E4E3F5400A45761 /* EnginesManager.m in Sources */,
 				5583D1640E51D82700EB7AE6 /* Movies.xcdatamodel in Sources */,
-				557AC76D0E5B1E1A00271113 /* LibraryComProtocol.m in Sources */,
+				557AC76D0E5B1E1A00271113 /* MessageProtocol.m in Sources */,
 				557AC7720E5B1E3600271113 /* DiscIdentQuery.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

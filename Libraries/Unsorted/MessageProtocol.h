@@ -1,0 +1,27 @@
+#import <Cocoa/Cocoa.h>
+
+@interface MessageProtocol : NSObject 
+{
+    NSFileHandle* fileHandleForReading;
+    NSFileHandle* fileHandleForWriting;
+    id delegate;
+    /**/
+    NSMutableData* buffer;
+    BOOL canCallDidReceiveMessage;
+}
+
+@property (retain) NSFileHandle* fileHandleForReading;
+@property (retain) NSFileHandle* fileHandleForWriting;
+@property (assign) id delegate;
+
++ (id) protocolWithDelegate:(id)delegate fileHandleForReading:(NSFileHandle*)fileHandleForReading fileHandleForWriting:(NSFileHandle*)fileHandleForWriting;
+
+- (void) sendMessage:(NSDictionary*)message;
+
+@end
+
+@interface NSObject (LibraryComProtocolDelegate)
+
+- (void) protocol:(MessageProtocol*)protocol didReceiveMessage:(NSDictionary*)message;
+
+@end

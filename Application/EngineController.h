@@ -7,12 +7,12 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "LibraryComProtocol.h"
+#import "MessageProtocol.h"
 
 
 @interface EngineController : NSObject {
     NSTask* _engineTask;
-    LibraryComProtocol* _protocol;
+    MessageProtocol* _protocol;
     NSManagedObjectContext* _nsmoc;
     NSManagedObject* _engineManagedObject;
     

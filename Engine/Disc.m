@@ -2,7 +2,7 @@
 #import "JSONKit/JSONKit.h"
 //#import "Debug.h"
 
-const CFStringRef kMDItemDiscIdentFingerprint	= (CFStringRef)@"com_discident_fingerprint";
+const CFStringRef kMDDiscDiscIdentFingerprint	= (CFStringRef)@"com_discident_fingerprint";
 
 extern void MDItemSetAttribute(MDItemRef, CFStringRef, CFTypeRef);
 extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
@@ -18,7 +18,7 @@ static NSArray* allKeys;
 {
 	allKeys = [[NSArray arrayWithObjects:
 		(id)kMDItemContentType,
-		(id)kMDItemDiscIdentFingerprint,
+		(id)kMDDiscDiscIdentFingerprint,
 		(id)kMDItemFSSize,
 		(id)kMDItemPath,
 		nil
@@ -41,7 +41,7 @@ static NSArray* allKeys;
     if (self = [super init]) {
         info = [[NSDictionary alloc] initWithObjectsAndKeys:
             @"public.dvdmedia", (id)kMDItemContentType,
-            fingerprint, (id)kMDItemDiscIdentFingerprint,
+            fingerprint, (id)kMDDiscDiscIdentFingerprint,
             pathToMedia, (id)kMDItemPath, 
             nil
         ];
@@ -71,7 +71,7 @@ static NSArray* allKeys;
 
 - (NSString*) fingerprint
 {
-	return [info objectForKey:(id)kMDItemDiscIdentFingerprint];
+	return [info objectForKey:(id)kMDDiscDiscIdentFingerprint];
 }
 
 - (NSString*) pathToFile

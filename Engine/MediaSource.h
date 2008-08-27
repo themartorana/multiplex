@@ -12,8 +12,8 @@
 
 @protocol MediaSourceDelegate
 
-- (void) mediaSource:(id<MediaSource>)mediaSource didAddItems:(NSArray*)items;
-- (void) mediaSource:(id<MediaSource>)mediaSource didUpdateItems:(NSArray*)items;
-- (void) mediaSource:(id<MediaSource>)mediaSource didRemoveItems:(NSArray*)items;
+- (void) mediaSource:(id<MediaSource>)mediaSource didAddDiscs:(NSArray*)discs;
+- (void) mediaSource:(id<MediaSource>)mediaSource didUpdateDiscs:(NSArray*)discs;
+- (void) mediaSource:(id<MediaSource>)mediaSource didRemoveDiscs:(NSArray*)discs;
 
 @end

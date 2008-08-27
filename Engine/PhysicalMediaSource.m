@@ -22,14 +22,14 @@
 - (id) init
 {
     if (self = [super init]) {
-        itemsByDeviceName = [[NSMutableDictionary alloc] init];
+        discsByDeviceName = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
 
 - (void) dealloc
 {
-    [itemsByDeviceName release];
+    [discsByDeviceName release];
     [super dealloc];
 }
 
@@ -48,6 +48,7 @@
      */
     NSNotificationCenter* notificationCenter = [[NSWorkspace sharedWorkspace] notificationCenter];
     [notificationCenter addObserver:self selector:@selector(_volumeDidMount:) name:NSWorkspaceDidMountNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(_volumeDidUnmount:) name:NSWorkspaceWillUnmountNotification object:nil];
     [notificationCenter addObserver:self selector:@selector(_volumeDidUnmount:) name:NSWorkspaceDidUnmountNotification object:nil];
 }
 
@@ -59,12 +60,12 @@
     [notificationCenter removeObserver:self];
 
 
-    /*  Notify our delegate that all of the items that we're currently tracking
+    /*  Notify our delegate that all of the discs that we're currently tracking
      *  will no longer be available.
      */
-    if ([itemsByDeviceName count]) {
-        [delegate mediaSource:self didRemoveItems:[itemsByDeviceName allValues]];
-        [itemsByDeviceName removeAllObjects];
+    if ([discsByDeviceName count]) {
+        [delegate mediaSource:self didRemoveDiscs:[discsByDeviceName allValues]];
+        [discsByDeviceName removeAllObjects];
     }
 
     started = NO;
@@ -78,10 +79,10 @@
 - (void) _volumeDidUnmount:(NSNotification*)notification
 {
     NSString* deviceName = [self _deviceNameForMountPoint:[[notification userInfo] objectForKey:@"NSDevicePath"]];
-    Disc* item = [itemsByDeviceName objectForKey:deviceName];
-    if (item) {
-        [delegate mediaSource:self didRemoveItems:[NSArray arrayWithObject:item]];
-        [itemsByDeviceName removeObjectForKey:deviceName];
+    Disc* disc = [discsByDeviceName objectForKey:deviceName];
+    if (disc) {
+        [delegate mediaSource:self didRemoveDiscs:[NSArray arrayWithObject:disc]];
+        [discsByDeviceName removeObjectForKey:deviceName];
     }
 }
 
@@ -91,10 +92,10 @@
     if ([self _isNamedDeviceDVD:deviceName]) {
         NSString* fingerprint = [mountPoint discidentFingerprintForPath];
         if (fingerprint) {
-            Disc* item = [[Disc alloc] initWithPhysicalMedia:fingerprint atPath:mountPoint];
-            [delegate mediaSource:self didAddItems:[NSArray arrayWithObject:item]];
-            [itemsByDeviceName setObject:item forKey:deviceName];
-            [item release];
+            Disc* disc = [[Disc alloc] initWithPhysicalMedia:fingerprint atPath:mountPoint];
+            [delegate mediaSource:self didAddDiscs:[NSArray arrayWithObject:disc]];
+            [discsByDeviceName setObject:disc forKey:deviceName];
+            [disc release];
         }
     }
 }

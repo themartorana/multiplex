@@ -159,7 +159,6 @@
 /// Add a new movie to the Core Data set
 - (void) _addMoviesData:(NSArray*)messagesArray 
 {
-    
     for (NSDictionary* messageDict in messagesArray) {
         NSEntityDescription* movieDesc = [NSEntityDescription entityForName:@"Movie" inManagedObjectContext:_nsmoc];
         NSEntityDescription* discDesc = [NSEntityDescription entityForName:@"Disc" inManagedObjectContext:_nsmoc];
@@ -168,7 +167,8 @@
         BOOL movieFound = NO;
         
         NSString* gtin = [messageDict objectForKey:@"gtin"];
-
+        NSString* fingerprint = [messageDict objectForKey:@"com_discident_fingerprint"];
+        
         if (gtin) {
             NSFetchRequest* fr = [[NSFetchRequest alloc] init];
             [fr setEntity:[NSEntityDescription entityForName:@"Movie" inManagedObjectContext:_nsmoc]];
@@ -262,7 +262,7 @@
 }
 
 
-- (NSManagedObject*) _getDiscByFingerprint:(NSString*)fingerprint
+- (NSManagedObject*) _getDiscByFingerprint:(NSString*)fingerprint       
 {
     NSFetchRequest* fingerprintFR = [[NSFetchRequest alloc] init];
     [fingerprintFR setEntity:[NSEntityDescription entityForName:@"Disc" inManagedObjectContext:_nsmoc]];

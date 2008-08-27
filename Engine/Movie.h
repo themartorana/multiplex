@@ -4,18 +4,18 @@
 
 @interface Movie : NSObject {
 	NSString* fingerprint;
-    NSMutableArray* items;
+    NSMutableArray* discs;
 }
 
-- (id) initWithItem:(Disc*)item;
+- (id) initWithDisc:(Disc*)disc;
 
 - (NSString*) contentType;
 - (NSString*) fingerprint;
-- (BOOL) hasItem;
+- (BOOL) hasDisc;
 - (NSString*) pathToFile;
 - (BOOL) isPhysicalMedia;
 
-- (void) addItem:(Disc*)item;
-- (void) removeItem:(Disc*)item;
+- (void) addDisc:(Disc*)disc;
+- (void) removeDisc:(Disc*)disc;
 
 @end

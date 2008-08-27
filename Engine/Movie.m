@@ -4,32 +4,32 @@
 #pragma mark -
 @implementation Movie
 
-- (id) initWithItem:(Disc*)_item
+- (id) initWithDisc:(Disc*)_disc
 {
 	if (self = [super init]) {
-		items = [[NSMutableArray alloc] initWithObjects:_item, nil];
-		fingerprint = [[_item fingerprint] retain];
-        [_item setMovie:self];
+		discs = [[NSMutableArray alloc] initWithObjects:_disc, nil];
+		fingerprint = [[_disc fingerprint] retain];
+        [_disc setMovie:self];
 	}
 	return self;
 }
 
 - (void) dealloc
 {
-    [items release];
+    [discs release];
 	[fingerprint release];
 	[super dealloc];
 }
 
-- (void) addItem:(Disc*)item
+- (void) addDisc:(Disc*)disc
 {
-    [items addObject:item];
-    [item setMovie:self];
+    [discs addObject:disc];
+    [disc setMovie:self];
 }
 
 - (NSString*) contentType
 {
-	return [[items objectAtIndex:0] contentType];
+	return [[discs objectAtIndex:0] contentType];
 }
 
 - (NSString*) fingerprint
@@ -37,26 +37,26 @@
 	return fingerprint;
 }
 
-- (BOOL) hasItem
+- (BOOL) hasDisc
 {
-	return [items count] > 0;
+	return [discs count] > 0;
 }
 
 - (NSString*) pathToFile
 {
-	return [[items objectAtIndex:0] pathToFile];
+	return [[discs objectAtIndex:0] pathToFile];
 }
 
 - (BOOL) isPhysicalMedia
 {
-    return [[items objectAtIndex:0] isPhysicalMedia];
+    return [[discs objectAtIndex:0] isPhysicalMedia];
 }
 
-- (void) removeItem:(Disc*)item
+- (void) removeDisc:(Disc*)disc
 {
-    NSAssert([item movie] == self, @"");
-    [item setMovie:nil];
-    [items removeObject:item];
+    NSAssert([disc movie] == self, @"");
+    [disc setMovie:nil];
+    [discs removeObject:disc];
 }
 
 @end

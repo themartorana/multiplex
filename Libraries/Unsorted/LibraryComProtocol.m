@@ -65,7 +65,7 @@
     NSString* stringToSend = [NSString stringWithFormat:@"%d\n%@\n", [jsonString length] + 1, jsonString]; 
     
 
-    NSLog(@"Sending: %@", stringToSend);
+    NSLog(@"Sending: %@\n\n\n\n...\n\n\n\n", stringToSend);
     
     NSData* dataToSend = [stringToSend dataUsingEncoding:NSUTF8StringEncoding];
     [fileHandleForWriting writeData:dataToSend];
@@ -126,7 +126,7 @@
             
             NSString* messageText = [[NSString alloc] initWithData:[buffer subdataWithRange:NSMakeRange(bp - bpBase, bytesToRead)] encoding:NSUTF8StringEncoding];
             
-            NSLog(@"Received: %@", messageText);
+            NSLog(@"Received: %@\n\n\n\n...\n\n\n\n", messageText);
             
             NSDictionary* message = [NSDictionary dictionaryWithJSON:messageText];
             //NSLog(@"%@", messageText);

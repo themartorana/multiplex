@@ -8,7 +8,7 @@
 #include "NSDate+Mothership.h"
 #include "JSONKit/JSONKit.h"
 
-const CFStringRef kMDItemDiscIdentFingerprint	= (CFStringRef)@"com_discident_fingerprint";
+const CFStringRef kMDDiscDiscIdentFingerprint	= (CFStringRef)@"com_discident_fingerprint";
 
 NSString* computeDiscIdentFingerprintForPath(NSString* pathToFile) 
 {
@@ -85,8 +85,8 @@ void GetSpotlightInfoFromJSON(NSString* pathToFile, NSMutableDictionary* attribu
         NSDictionary *fromJSON =[NSDictionary dictionaryWithJSON:jsonText];
         md = [[NSMutableDictionary alloc] initWithDictionary:fromJSON];
         
-        if ([md objectForKey:(NSString*)kMDItemDiscIdentFingerprint])
-            [attributes setObject:[md objectForKey:(NSString*)kMDItemDiscIdentFingerprint] forKey:(NSString*)kMDItemDiscIdentFingerprint];
+        if ([md objectForKey:(NSString*)kMDDiscDiscIdentFingerprint])
+            [attributes setObject:[md objectForKey:(NSString*)kMDDiscDiscIdentFingerprint] forKey:(NSString*)kMDDiscDiscIdentFingerprint];
         
         // Make sure our dictionary is cool
         /*if (![md objectForKey:@"movie"]) {
@@ -218,7 +218,7 @@ BOOL GetMetadataForFile(void* thisInterface, NSMutableDictionary* attributes, NS
     @try {
         // Generate the fingerprint
         NSString* fingerprint = computeDiscIdentFingerprintForPath(pathToFile);
-        [attributes setObject:fingerprint forKey:(NSString*)kMDItemDiscIdentFingerprint];
+        [attributes setObject:fingerprint forKey:(NSString*)kMDDiscDiscIdentFingerprint];
         
         // Look for the plist
         NSString* jsonFile = [pathToFile stringByAppendingPathComponent:@"_Info.json"];
@@ -227,7 +227,7 @@ BOOL GetMetadataForFile(void* thisInterface, NSMutableDictionary* attributes, NS
         // Set the fingerprint
         if (fingerprint != nil) {
             if (![manager fileExistsAtPath:jsonFile]) {
-                NSDictionary* dict = [NSDictionary dictionaryWithObject:fingerprint forKey:(NSString*)kMDItemDiscIdentFingerprint];
+                NSDictionary* dict = [NSDictionary dictionaryWithObject:fingerprint forKey:(NSString*)kMDDiscDiscIdentFingerprint];
                 NSData* jsonData = [NSData dataWithObjectAsJSON:dict];
                 [jsonData writeToFile:jsonFile atomically:NO];
             }
@@ -235,9 +235,9 @@ BOOL GetMetadataForFile(void* thisInterface, NSMutableDictionary* attributes, NS
                 // Check to make sure it has our fingerprint
                 NSDictionary* dict = [NSDictionary dictionaryWithJSON:[NSString stringWithContentsOfFile:jsonFile]];
                 
-                if ([dict objectForKey:(NSString*)kMDItemDiscIdentFingerprint] == nil) {
+                if ([dict objectForKey:(NSString*)kMDDiscDiscIdentFingerprint] == nil) {
                     NSMutableDictionary* jsonDict = [NSMutableDictionary dictionaryWithDictionary:dict];
-                    [jsonDict setObject:fingerprint forKey:(NSString*)kMDItemDiscIdentFingerprint];
+                    [jsonDict setObject:fingerprint forKey:(NSString*)kMDDiscDiscIdentFingerprint];
                     
                     // Go ahead and write it back out
                     NSData* jsonData = [NSData dataWithObjectAsJSON:[NSDictionary dictionaryWithDictionary:jsonDict]];
@@ -248,9 +248,6 @@ BOOL GetMetadataForFile(void* thisInterface, NSMutableDictionary* attributes, NS
         }
         
         [manager release];
-        
-        // Set the media type
-        [attributes setObject:@"public.dvdmedia" forKey:(NSString*)kMDItemDiscIdentFingerprint];
         
         // Now get any additional information from an existing Info.plist file, if one exists
         GetSpotlightInfoFromJSON(pathToFile, attributes);

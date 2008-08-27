@@ -20,7 +20,7 @@
     NSURLConnection* discIdentConnection;
 }
 
-- (BOOL) getMovieInfoFromDiscIdentUsingFingerprint:(Disc*)item;
+- (BOOL) getMovieInfoFromDiscIdentUsingFingerprint:(Disc*)disc;
 
 
 #pragma mark NSURLConnection deletgate methods

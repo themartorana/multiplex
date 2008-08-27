@@ -88,8 +88,10 @@ static NSArray* allKeys;
 
 - (void) reload
 {
-	[info autorelease];
-	info = [(NSDictionary*)MDItemCopyAttributes(itemRef, (CFArrayRef)allKeys) retain];
+    if (!isPhysicalMedia) {
+        [info autorelease];
+        info = [(NSDictionary*)MDItemCopyAttributes(itemRef, (CFArrayRef)allKeys) retain];
+    }
 }
 
 @end

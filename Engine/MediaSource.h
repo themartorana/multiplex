@@ -1,4 +1,4 @@
-
+#import "Media.h"
 
 @protocol MediaSourceDelegate;
 
@@ -12,8 +12,8 @@
 
 @protocol MediaSourceDelegate
 
-- (void) mediaSource:(id<MediaSource>)mediaSource didAddDiscs:(NSArray*)discs;
-- (void) mediaSource:(id<MediaSource>)mediaSource didUpdateDiscs:(NSArray*)discs;
-- (void) mediaSource:(id<MediaSource>)mediaSource didRemoveDiscs:(NSArray*)discs;
+- (void) mediaSource:(id<MediaSource>)mediaSource didAddMedia:(NSArray*)media;
+- (void) mediaSource:(id<MediaSource>)mediaSource didUpdateMedia:(NSArray*)media;
+- (void) mediaSource:(id<MediaSource>)mediaSource didRemoveMedia:(NSArray*)media;
 
 @end

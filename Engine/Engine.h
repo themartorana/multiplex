@@ -4,7 +4,7 @@
 
 @interface Engine : NSApplication <MediaSourceDelegate> {
     NSMutableDictionary* infoDictionariesByFingerprint;
-    NSMutableDictionary* moviesByFingerprint;
+    NSMutableDictionary* discsByFingerprint;
     LibraryComProtocol* protocol; 
 }
 

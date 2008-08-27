@@ -1,9 +1,8 @@
 #import "DVDMediaSource.h"
-#import "Disc.h"
 
-static Disc* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSource)
+static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSource)
 {
-	return [[Disc alloc] initWithMediaSource:mediaSource MDItemRef:item];
+	return [[Media alloc] initWithMediaSource:mediaSource MDItemRef:item];
 }
 
 @implementation DVDMediaSource
@@ -75,9 +74,9 @@ static Disc* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSourc
     if (count) {
         NSMutableArray* removedDiscs = [NSMutableArray arrayWithCapacity:count];
         while (count-- > 0) {
-            [removedDiscs addObject:(Disc*)MDQueryGetResultAtIndex(query, count)];
+            [removedDiscs addObject:(Media*)MDQueryGetResultAtIndex(query, count)];
         }
-        [delegate mediaSource:self didRemoveDiscs:removedDiscs];
+        [delegate mediaSource:self didRemoveMedia:removedDiscs];
     }
     
     /*  Shutdown the query.
@@ -85,7 +84,7 @@ static Disc* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSourc
     MDQueryStop(query);
     CFRelease(query);
     query = nil;
-    discsProcessed = 0;
+    mediaProcessed = 0;
 }
 
 - (void) _queryDidUpdate:(NSNotification*)notification
@@ -94,28 +93,28 @@ static Disc* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSourc
 
 	NSArray* removedDiscs = [info objectForKey:(id)kMDQueryUpdateRemovedItems];
 	if (removedDiscs) {
-        [delegate mediaSource:self didRemoveDiscs:removedDiscs];
+        [delegate mediaSource:self didRemoveMedia:removedDiscs];
 	}
 
 	NSArray* changedDiscs = [info objectForKey:(id)kMDQueryUpdateChangedItems];
 	if (changedDiscs) {
-        [delegate mediaSource:self didUpdateDiscs:changedDiscs];
+        [delegate mediaSource:self didUpdateMedia:changedDiscs];
 	}
 
 	if ([[notification name] isEqualTo:(id)kMDQueryProgressNotification]) {
 		int imax = MDQueryGetResultCount(query);
         NSMutableArray* addedDiscs = [NSMutableArray array];
-        for (int i = discsProcessed; i < imax; i++) {
-            [addedDiscs addObject:(Disc*)MDQueryGetResultAtIndex(query, i)];
+        for (int i = mediaProcessed; i < imax; i++) {
+            [addedDiscs addObject:(Media*)MDQueryGetResultAtIndex(query, i)];
 		}
-        [delegate mediaSource:self didAddDiscs:addedDiscs];
-        discsProcessed = imax;
+        [delegate mediaSource:self didAddMedia:addedDiscs];
+        mediaProcessed = imax;
 	} else if ([[notification name] isEqualTo:(id)kMDQueryDidFinishNotification]) {
 		//NSLog(@"finished");
 	} else {
 		NSArray* addedDiscs = [info objectForKey:(id)kMDQueryUpdateAddedItems];
 		if (addedDiscs) {
-            [delegate mediaSource:self didAddDiscs:addedDiscs];
+            [delegate mediaSource:self didAddMedia:addedDiscs];
 		}
 	}
 }

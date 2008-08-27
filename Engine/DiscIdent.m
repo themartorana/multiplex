@@ -8,7 +8,7 @@
 
 #import "DiscIdent.h"
 #import "JSONKit/JSONKit.h"
-#import "Movie.h"
+#import "Disc.h"
 
 NSString* const kDISC_IDENT_VERSION = @"v1";
 
@@ -19,7 +19,7 @@ NSString* const kDISC_IDENT_VERSION = @"v1";
 /// Check DiscIdent for a UPC code matching the fingerprint.  Also fill in other
 /// DiscIdent information
 ///
-- (BOOL) getMovieInfoFromDiscIdentUsingFingerprint:(Disc*)disc
+- (BOOL) getMovieInfoFromDiscIdentUsingFingerprint:(Media*)disc
 {
     urlString = [NSMutableString stringWithString:@"http://discident.com/"];
     [urlString appendString:kDISC_IDENT_VERSION];

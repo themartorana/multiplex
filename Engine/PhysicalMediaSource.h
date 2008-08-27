@@ -3,7 +3,7 @@
 
 @interface PhysicalMediaSource : NSObject <MediaSource> {
     BOOL started;
-    NSMutableDictionary* discsByDeviceName;
+    NSMutableDictionary* mediaByDeviceName;
     id<MediaSourceDelegate> delegate;
 }
 

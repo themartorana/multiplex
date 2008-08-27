@@ -1,26 +1,20 @@
-#import <Foundation/Foundation.h>
-
-@protocol MediaSource;
-@class Movie;
+#import <Cocoa/Cocoa.h>
+#import "Media.h"
 
 @interface Disc : NSObject {
-	MDItemRef itemRef;
-	NSDictionary* info;
-	Movie* movie;
-    BOOL isPhysicalMedia;
-    id<MediaSource> mediaSource;
+	NSString* fingerprint;
+    NSMutableArray* allMedia;
 }
 
-- (id) initWithMediaSource:(id<MediaSource>)mediaSource MDItemRef:(MDItemRef)itemRef;
-- (id) initWithMediaSource:(id<MediaSource>)mediaSource physicalMedia:(NSString*)fingerprint atPath:(NSString*)pathToMedia;
+- (id) initWithMedia:(Media*)media;
 
-@property (retain) Movie* movie;
-@property (readonly) NSString* contentType;
-@property (readonly) NSString* fingerprint;
-@property (readonly) NSString* pathToFile;
-@property (readonly) BOOL isPhysicalMedia;
-@property (readonly) id<MediaSource> mediaSource;
+- (NSString*) contentType;
+- (NSString*) fingerprint;
+- (BOOL) hasDisc;
+- (NSString*) pathToFile;
+- (BOOL) isPhysicalMedia;
 
-- (void) reload;
+- (void) addMedia:(Media*)media;
+- (void) removeMedia:(Media*)media;
 
 @end

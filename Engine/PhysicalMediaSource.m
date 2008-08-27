@@ -1,5 +1,4 @@
 #import "PhysicalMediaSource.h"
-#import "Disc.h"
 #import "NSString+DiscIdent.h"
 #import <IOKit/IOKitLib.h>
 #import <IOKit/storage/IOMedia.h>
@@ -22,14 +21,14 @@
 - (id) init
 {
     if (self = [super init]) {
-        discsByDeviceName = [[NSMutableDictionary alloc] init];
+        mediaByDeviceName = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
 
 - (void) dealloc
 {
-    [discsByDeviceName release];
+    [mediaByDeviceName release];
     [super dealloc];
 }
 
@@ -63,9 +62,9 @@
     /*  Notify our delegate that all of the discs that we're currently tracking
      *  will no longer be available.
      */
-    if ([discsByDeviceName count]) {
-        [delegate mediaSource:self didRemoveDiscs:[discsByDeviceName allValues]];
-        [discsByDeviceName removeAllObjects];
+    if ([mediaByDeviceName count]) {
+        [delegate mediaSource:self didRemoveMedia:[mediaByDeviceName allValues]];
+        [mediaByDeviceName removeAllObjects];
     }
 
     started = NO;
@@ -79,10 +78,10 @@
 - (void) _volumeDidUnmount:(NSNotification*)notification
 {
     NSString* deviceName = [self _deviceNameForMountPoint:[[notification userInfo] objectForKey:@"NSDevicePath"]];
-    Disc* disc = [discsByDeviceName objectForKey:deviceName];
+    Media* disc = [mediaByDeviceName objectForKey:deviceName];
     if (disc) {
-        [delegate mediaSource:self didRemoveDiscs:[NSArray arrayWithObject:disc]];
-        [discsByDeviceName removeObjectForKey:deviceName];
+        [delegate mediaSource:self didRemoveMedia:[NSArray arrayWithObject:disc]];
+        [mediaByDeviceName removeObjectForKey:deviceName];
     }
 }
 
@@ -92,9 +91,9 @@
     if ([self _isNamedDeviceDVD:deviceName]) {
         NSString* fingerprint = [mountPoint discidentFingerprintForPath];
         if (fingerprint) {
-            Disc* disc = [[Disc alloc] initWithMediaSource:self physicalMedia:fingerprint atPath:mountPoint];
-            [delegate mediaSource:self didAddDiscs:[NSArray arrayWithObject:disc]];
-            [discsByDeviceName setObject:disc forKey:deviceName];
+            Media* disc = [[Media alloc] initWithMediaSource:self physicalMedia:fingerprint atPath:mountPoint];
+            [delegate mediaSource:self didAddMedia:[NSArray arrayWithObject:disc]];
+            [mediaByDeviceName setObject:disc forKey:deviceName];
             [disc release];
         }
     }

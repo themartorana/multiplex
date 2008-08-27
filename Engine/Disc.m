@@ -1,95 +1,62 @@
 #import "Disc.h"
-#import "JSONKit/JSONKit.h"
-#import "MediaSource.h"
+#import "Media.h"
 
-const CFStringRef kMDDiscDiscIdentFingerprint	= (CFStringRef)@"com_discident_fingerprint";
-
-extern void MDItemSetAttribute(MDItemRef, CFStringRef, CFTypeRef);
-extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
-
+#pragma mark -
 @implementation Disc
 
-@synthesize movie;
-@synthesize isPhysicalMedia;
-@synthesize mediaSource;
-
-static NSArray* allKeys;
-
-+ (void) initialize
-{
-	allKeys = [[NSArray arrayWithObjects:
-		(id)kMDItemContentType,
-		(id)kMDDiscDiscIdentFingerprint,
-		(id)kMDItemFSSize,
-		(id)kMDItemPath,
-		nil
-	] retain];
-}
-
-- (id) initWithMediaSource:(id<MediaSource>)_mediaSource MDItemRef:(MDItemRef)_itemRef
+- (id) initWithMedia:(Media*)_media
 {
 	if (self = [super init]) {
-        mediaSource = _mediaSource; // NOT RETAINED.
-		itemRef = (MDItemRef)CFRetain(_itemRef);
-		[self reload];
-        isPhysicalMedia = NO;
+		allMedia = [[NSMutableArray alloc] initWithObjects:_media, nil];
+		fingerprint = [[_media fingerprint] retain];
+        [_media setDisc:self];
 	}
 	return self;
 }
 
-- (id) initWithMediaSource:(id<MediaSource>)_mediaSource physicalMedia:(NSString*)fingerprint atPath:(NSString*)pathToMedia
-{
-    if (self = [super init]) {
-        mediaSource = _mediaSource; // NOT RETAINED.
-        info = [[NSDictionary alloc] initWithObjectsAndKeys:
-            @"public.dvdmedia", (id)kMDItemContentType,
-            fingerprint, (id)kMDDiscDiscIdentFingerprint,
-            pathToMedia, (id)kMDItemPath, 
-            nil
-        ];
-        isPhysicalMedia = YES;
-    }
-    return self;
-}
-
 - (void) dealloc
 {
-    if (itemRef) {
-        CFRelease(itemRef);
-	}
-    [info release];
+    [allMedia release];
+	[fingerprint release];
 	[super dealloc];
 }
 
-- (Movie*) movie
+- (void) addMedia:(Media*)media
 {
-	return movie;
+    [allMedia addObject:media];
+    [media setDisc:self];
 }
 
 - (NSString*) contentType
 {
-	return [info objectForKey:(id)kMDItemContentType];
+	return [[allMedia objectAtIndex:0] contentType];
 }
 
 - (NSString*) fingerprint
 {
-	return [info objectForKey:(id)kMDDiscDiscIdentFingerprint];
+	return fingerprint;
+}
+
+- (BOOL) hasDisc
+{
+	return [allMedia count] > 0;
 }
 
 - (NSString*) pathToFile
 {
-	return [info objectForKey:(id)kMDItemPath];
+	return [[allMedia objectAtIndex:0] pathToFile];
 }
 
-- (size_t) size
+- (BOOL) isPhysicalMedia
 {
-	return [[info objectForKey:(id)kMDItemFSSize] intValue];
+    return [[allMedia objectAtIndex:0] isPhysicalMedia];
 }
 
-- (void) reload
+- (void) removeMedia:(Media*)media
 {
-	[info autorelease];
-	info = [(NSDictionary*)MDItemCopyAttributes(itemRef, (CFArrayRef)allKeys) retain];
+    NSAssert([media disc] == self, @"");
+    [media setDisc:nil];
+    [allMedia removeObject:media];
 }
 
 @end

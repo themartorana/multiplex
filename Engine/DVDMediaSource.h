@@ -3,7 +3,7 @@
 
 @interface DVDMediaSource : NSObject <MediaSource> {
 	MDQueryRef query;
-    int discsProcessed;
+    int mediaProcessed;
     id<MediaSourceDelegate> delegate;
 }
 

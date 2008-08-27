@@ -160,22 +160,53 @@
 - (void) _addMoviesData:(NSArray*)messagesArray 
 {
     for (NSDictionary* messageDict in messagesArray) {
-        NSEntityDescription* movieDesc = [NSEntityDescription entityForName:@"Movie" inManagedObjectContext:_nsmoc];
+        NSEntityDescription* mediaDesc = [NSEntityDescription entityForName:@"Media" inManagedObjectContext:_nsmoc];
         NSEntityDescription* discDesc = [NSEntityDescription entityForName:@"Disc" inManagedObjectContext:_nsmoc];
-
-        NSManagedObject* movieMO;
-        BOOL movieFound = NO;
+        NSEntityDescription* movieDesc = [NSEntityDescription entityForName:@"Movie" inManagedObjectContext:_nsmoc];
         
+        NSManagedObject* movieMO;
+        NSManagedObject* discMO;
+        
+        BOOL movieFound = NO;
+        BOOL discFound = NO;
+        
+        NSString* url = [messageDict objectForKey:@"url"];
         NSString* gtin = [messageDict objectForKey:@"gtin"];
         NSString* fingerprint = [messageDict objectForKey:@"com_discident_fingerprint"];
+        
+        // Create the new media entity
+        NSManagedObject* mediaMO = [[NSManagedObject alloc] initWithEntity:mediaDesc insertIntoManagedObjectContext:_nsmoc];
+        [mediaMO setValue:url forKey:@"url"];
+        [mediaMO setValue:_engineManagedObject forKey:@"mediaEngine"];
+        
+        // Check to see if there is an existing disc entity
+        NSFetchRequest* frDisc = [[NSFetchRequest alloc] init];
+        [frDisc setEntity:discDesc];
+        [frDisc setPredicate:[NSPredicate predicateWithFormat:@"fingerprint == %@", fingerprint]];
+        
+        NSError* error;
+        NSArray* results = [_nsmoc executeFetchRequest:frDisc error:&error];
+        
+        if (results && [results count] > 0) {
+            discFound = YES;
+            discMO = [results objectAtIndex:0];
+        }
+        else {
+            discFound = NO;
+            discMO = [[NSManagedObject alloc] initWithEntity:discDesc insertIntoManagedObjectContext:_nsmoc];
+            [discMO setValue:fingerprint forKey:@"com_discident_fingerprint"];
+        }
+        
+        [frDisc release];
+        [mediaMO setValue:discMO forKey:@"mediaDisc"];
         
         if (gtin) {
             NSFetchRequest* fr = [[NSFetchRequest alloc] init];
             [fr setEntity:[NSEntityDescription entityForName:@"Movie" inManagedObjectContext:_nsmoc]];
             [fr setPredicate:[NSPredicate predicateWithFormat:@"gtin == %@", [messageDict objectForKey:@"gtin"]]]; 
             
-            NSError* error;
-            NSArray* results = [_nsmoc executeFetchRequest:fr error:&error];
+            [results release];
+            results = [_nsmoc executeFetchRequest:fr error:&error];
             
             if (results && [results count] > 0) {
                 movieMO = [results objectAtIndex:0];
@@ -184,14 +215,11 @@
             
             [fr release];
         }
-         
         
         if (!movieFound) {
             movieMO = [[NSManagedObject alloc] initWithEntity:movieDesc insertIntoManagedObjectContext:_nsmoc];
             [movieMO setValue:_engineManagedObject forKey:@"movieEngine"];
         }
-        
-        NSManagedObject* discMO = [[NSManagedObject alloc] initWithEntity:discDesc insertIntoManagedObjectContext:_nsmoc];  
         
         [discMO setValue:movieMO forKey:@"discMovie"];
         

@@ -40,6 +40,11 @@
     [super dealloc];
 }
 
+- (void) close
+{
+    // Implement me.
+}
+
 - (void) setDelegate:(id)_delegate
 {
     delegate = _delegate;
@@ -58,10 +63,10 @@
 
         if (_fileHandleForReading) {
             // Set up listener
-            // Set up the standard read notification watcher
             fileHandleForReading = [_fileHandleForReading retain];
             [notificationCenter addObserver:self selector:@selector(_dataCameIn:) name:NSFileHandleReadCompletionNotification object:fileHandleForReading]; 
 
+            // Set up the standard read notification watcher
             [fileHandleForReading readInBackgroundAndNotify];
         }
     }

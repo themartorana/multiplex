@@ -17,6 +17,7 @@
 + (id) protocolWithDelegate:(id)delegate fileHandleForReading:(NSFileHandle*)fileHandleForReading fileHandleForWriting:(NSFileHandle*)fileHandleForWriting;
 
 - (void) sendMessage:(NSDictionary*)message;
+- (void) close;
 
 @end
 

@@ -1,9 +1,9 @@
 #import "DVDMediaSource.h"
 #import "Disc.h"
 
-static Disc* newSpotlightItem(MDQueryRef query, MDItemRef item, void* info)
+static Disc* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSource)
 {
-	return [[Disc alloc] initWithMDItemRef:item];
+	return [[Disc alloc] initWithMediaSource:mediaSource MDItemRef:item];
 }
 
 @implementation DVDMediaSource

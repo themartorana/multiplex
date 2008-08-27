@@ -8,6 +8,7 @@
 }
 
 @property (assign) id<MediaSourceDelegate> delegate;
+
 - (void) start;
 - (void) stop;
 

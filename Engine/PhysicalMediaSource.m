@@ -92,7 +92,7 @@
     if ([self _isNamedDeviceDVD:deviceName]) {
         NSString* fingerprint = [mountPoint discidentFingerprintForPath];
         if (fingerprint) {
-            Disc* disc = [[Disc alloc] initWithPhysicalMedia:fingerprint atPath:mountPoint];
+            Disc* disc = [[Disc alloc] initWithMediaSource:self physicalMedia:fingerprint atPath:mountPoint];
             [delegate mediaSource:self didAddDiscs:[NSArray arrayWithObject:disc]];
             [discsByDeviceName setObject:disc forKey:deviceName];
             [disc release];

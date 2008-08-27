@@ -1,6 +1,6 @@
 #import "Disc.h"
 #import "JSONKit/JSONKit.h"
-//#import "Debug.h"
+#import "MediaSource.h"
 
 const CFStringRef kMDDiscDiscIdentFingerprint	= (CFStringRef)@"com_discident_fingerprint";
 
@@ -11,6 +11,7 @@ extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
 
 @synthesize movie;
 @synthesize isPhysicalMedia;
+@synthesize mediaSource;
 
 static NSArray* allKeys;
 
@@ -25,20 +26,21 @@ static NSArray* allKeys;
 	] retain];
 }
 
-- (id) initWithMDItemRef:(MDItemRef)_itemRef
+- (id) initWithMediaSource:(id<MediaSource>)_mediaSource MDItemRef:(MDItemRef)_itemRef
 {
 	if (self = [super init]) {
+        mediaSource = _mediaSource; // NOT RETAINED.
 		itemRef = (MDItemRef)CFRetain(_itemRef);
 		[self reload];
-        
         isPhysicalMedia = NO;
 	}
 	return self;
 }
 
-- (id) initWithPhysicalMedia:(NSString*)fingerprint atPath:(NSString*)pathToMedia
+- (id) initWithMediaSource:(id<MediaSource>)_mediaSource physicalMedia:(NSString*)fingerprint atPath:(NSString*)pathToMedia
 {
     if (self = [super init]) {
+        mediaSource = _mediaSource; // NOT RETAINED.
         info = [[NSDictionary alloc] initWithObjectsAndKeys:
             @"public.dvdmedia", (id)kMDItemContentType,
             fingerprint, (id)kMDDiscDiscIdentFingerprint,

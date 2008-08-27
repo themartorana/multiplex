@@ -155,7 +155,7 @@
     //  Coalesce all of the updates for each engine controller and send them.
     //
     for (NSString* uuid in setsOfFingerprintsForEngineControllerByUUID) {
-        [[enginesManager engineByUUIDKey:uuid] sendAMessage:[NSDictionary dictionaryWithObject:[updatesByFingerprint objectsForKeys:[[setsOfFingerprintsForEngineControllerByUUID objectForKey:uuid] allObjects] notFoundMarker:[NSNull null]] forKey:@"update"]];
+        [[enginesManager engineByUUIDKey:uuid] sendMessage:[NSDictionary dictionaryWithObject:[updatesByFingerprint objectsForKeys:[[setsOfFingerprintsForEngineControllerByUUID objectForKey:uuid] allObjects] notFoundMarker:[NSNull null]] forKey:@"update"]];
     }
     
     [dirtyObjects removeAllObjects];

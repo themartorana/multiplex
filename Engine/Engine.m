@@ -3,8 +3,8 @@
 #import "DVDMediaSource.h"
 #import "PhysicalMediaSource.h"
 #import "JSONKit/JSONKit.h"
-#import "DiscIdent.h"
-#import "LibraryComProtocol.h"
+#import "DiscIdentQuery.h"
+#import "MessageProtocol.h"
 #import "NSString+DiscIdent.h"
 
 @implementation Engine
@@ -16,10 +16,7 @@
         infoDictionariesByFingerprint = [[NSMutableDictionary alloc] init];
         
         // Set up the protocol
-        protocol = [[LibraryComProtocol alloc] init];
-        //[protocol setFileHandleForReading:[NSFileHandle fileHandleWithStandardInput]];
-        [protocol setFileHandleForWriting:[NSFileHandle fileHandleWithStandardOutput]];
-        [protocol setDelegate:self];
+        protocol = [[MessageProtocol protocolWithDelegate:self fileHandleForReading:[NSFileHandle fileHandleWithStandardInput] fileHandleForWriting:[NSFileHandle fileHandleWithStandardOutput]] retain];
     }
     return self;
 }
@@ -72,9 +69,9 @@
         info = [NSDictionary dictionaryWithJSON:[NSString stringWithContentsOfFile:pathToJSONFile]];
     }
     if (!info) {
-        info = [NSMutableDictionary dictionaryWithObject:[media fingerprint] forKey:@"com_discident_fingerprint"];
-    } else if (![info objectForKey:@"com_discident_fingerprint"]) {
-        [info setObject:[media fingerprint] forKey:@"com_discident_fingerprint"];
+        info = [NSMutableDictionary dictionaryWithObject:[media fingerprint] forKey:(id)kMDDiscDiscIdentFingerprint];
+    } else if (![info objectForKey:(id)kMDDiscDiscIdentFingerprint]) {
+        [info setObject:[media fingerprint] forKey:(id)kMDDiscDiscIdentFingerprint];
     }
 
     /*  All discs should have a title, even if it's just one that's been
@@ -263,11 +260,11 @@
 ///
 /// When the engine receives a message, get it ready
 ///
-- (void) engineMessageWasReceived:(NSDictionary*)messageDict
+- (void) protocol:(MessageProtocol*)protocol didReceiveMessage:(NSDictionary*)messageDict
 {
     return;
     // Save this dict back out to the file
-    NSString* fingerprint = [messageDict objectForKey:@"com_discident_fingerprint"];
+    NSString* fingerprint = [messageDict objectForKey:(id)kMDDiscDiscIdentFingerprint];
     
     if (!fingerprint)
         return;

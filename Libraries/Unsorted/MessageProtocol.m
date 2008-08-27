@@ -1,15 +1,28 @@
-#import "LibraryComProtocol.h"
+#import "MessageProtocol.h"
 #import "JSONKit/JSONKit.h"
 
-@interface LibraryComProtocol (Private)
+@interface MessageProtocol (Private)
+- (void) _fireDidReceiveMessage:(NSDictionary*)message;
 - (void) _dataCameIn:(NSNotification*)notification;
 @end
 
-@implementation LibraryComProtocol
+@implementation MessageProtocol
 
 @synthesize fileHandleForReading;
 @synthesize fileHandleForWriting;
 @synthesize delegate;
+
++ (id) protocolWithDelegate:(id)delegate fileHandleForReading:(NSFileHandle*)fileHandleForReading fileHandleForWriting:(NSFileHandle*)fileHandleForWriting;
+{
+    NSAssert(delegate, @"Delegate must not be nil.");
+    NSAssert(fileHandleForReading, @"fileHandleForReading must not be nil.");
+    NSAssert(fileHandleForWriting, @"fileHandleForWriting must not be nil.");
+    MessageProtocol* protocol = [[[MessageProtocol alloc] init] autorelease];
+    protocol.delegate = delegate;
+    protocol.fileHandleForReading = fileHandleForReading;
+    protocol.fileHandleForWriting = fileHandleForWriting;
+    return protocol;
+}
 
 - (id) init 
 {
@@ -27,11 +40,16 @@
     [super dealloc];
 }
 
+- (void) close
+{
+    // Implement me.
+}
+
 - (void) setDelegate:(id)_delegate
 {
     delegate = _delegate;
-    if ([delegate respondsToSelector:@selector(engineMessageWasReceived:)]) {
-        _canCallEngineMethodWasReceived = YES;
+    if ([delegate respondsToSelector:@selector(protocol:didReceiveMessage:)]) {
+        canCallDidReceiveMessage = YES;
     }
 }
 
@@ -45,70 +63,49 @@
 
         if (_fileHandleForReading) {
             // Set up listener
-            // Set up the standard read notification watcher
             fileHandleForReading = [_fileHandleForReading retain];
             [notificationCenter addObserver:self selector:@selector(_dataCameIn:) name:NSFileHandleReadCompletionNotification object:fileHandleForReading]; 
 
+            // Set up the standard read notification watcher
             [fileHandleForReading readInBackgroundAndNotify];
         }
     }
 }
 
-///
-/// Send a message to the engine across the output side of things
-///
-- (void) sendMessage:(NSDictionary*)dict 
+- (void) sendMessage:(NSDictionary*)message 
 {
-    // JSON data from Jason
-    NSData* jsonData = [NSData dataWithObjectAsJSON:dict];
-    NSString* jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    NSString* stringToSend = [NSString stringWithFormat:@"%d\n%@\n", [jsonString length] + 1, jsonString]; 
-    
-
-    NSLog(@"Sending: %@\n\n\n\n...\n\n\n\n", stringToSend);
-    
-    NSData* dataToSend = [stringToSend dataUsingEncoding:NSUTF8StringEncoding];
-    [fileHandleForWriting writeData:dataToSend];
-    
-    [jsonString release];
-    
-    // Write the data to the output buffer
-    //uint8_t byteBuffer[0x10];
-    //NSData* data = [NSData dataWithBytes:buffer length:sprintf((char*)&byteBuffer, "%d\n", [jsonData length] + 1)];
-    //[fileHandleForWriting writeData:data];
-    //[fileHandleForWriting writeData:jsonData];
-    
+    @synchronized (self) {
+        NSData* jsonData = [NSData dataWithObjectAsJSON:message];
+        [fileHandleForWriting writeData:[[NSString stringWithFormat:@"%d\n", [jsonData length]] dataUsingEncoding:NSUTF8StringEncoding]];
+        [fileHandleForWriting writeData:jsonData];
+    }
 }
 
 @end
 
-@implementation LibraryComProtocol (Private)
+@implementation MessageProtocol (Private)
+
+- (void) _fireDidReceiveMessage:(NSDictionary*)message  
+{
+    @try {
+        if (canCallDidReceiveMessage) {
+            [delegate protocol:self didReceiveMessage:message];
+        }
+    } @catch (id exception) {
+        NSLog(@"MessageProtocol: Exception during protocol:didReceiveMessage: -- %@", exception);
+    }
+}
 
 ///
 /// Handle any incoming data off of the wire
 ///
 - (void) _dataCameIn:(NSNotification*)notification
 {
-    // Get the data in
     NSDictionary *userinfo = [notification userInfo];
     NSData *data = [userinfo objectForKey:NSFileHandleNotificationDataItem]; 
-    
-    // Append it to the back of our buffer
-    if (!data || [data length] == 0) {
-        if (stdin) {
-            NSLog(@"No data: stdin still alive");
-        } else {
-            NSLog(@"No data: stdin dead");
-        }
-        
-        if (stdout) {
-            NSLog(@"No data: stdout still alive");
-        } else {
-            NSLog(@"No data: stdout dead");
-        }
-    } else {
-        [buffer appendData:data];
 
+    if (data && [data length]) {
+        [buffer appendData:data];
         do {
             int bytesToRead = 0;
             const uint8_t* bpBase = [buffer bytes];
@@ -125,20 +122,14 @@
             }
             
             NSString* messageText = [[NSString alloc] initWithData:[buffer subdataWithRange:NSMakeRange(bp - bpBase, bytesToRead)] encoding:NSUTF8StringEncoding];
-            
+            [self _fireDidReceiveMessage:[NSDictionary dictionaryWithJSON:messageText]];
+#ifdef DEBUG            
             NSLog(@"Received: %@\n\n\n\n...\n\n\n\n", messageText);
-            
-            NSDictionary* message = [NSDictionary dictionaryWithJSON:messageText];
-            //NSLog(@"%@", messageText);
-            
+#endif
+
             NSData* oldCurrentBuffer = buffer;
             buffer = [[NSMutableData dataWithData:[buffer subdataWithRange:NSMakeRange((bp + bytesToRead) - bpBase, bpMax - (bp + bytesToRead))]] retain];
             [oldCurrentBuffer release];
-            
-            // Delegate it out
-            if (_canCallEngineMethodWasReceived) {
-                [delegate engineMessageWasReceived:message];
-            }
         } while ([buffer length] > 0);
     }
     

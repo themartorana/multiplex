@@ -1,20 +1,12 @@
-//
-//  EngineController.h
-//  Library
-//
-//  Created by David Martorana on 8/8/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
-//
-
 #import <Cocoa/Cocoa.h>
-#import "LibraryComProtocol.h"
 
+@class MessageProtocol;
 
 @interface EngineController : NSObject {
-    NSTask* _engineTask;
-    LibraryComProtocol* _protocol;
-    NSManagedObjectContext* _nsmoc;
-    NSManagedObject* _engineManagedObject;
+    NSTask* engineTask;
+    MessageProtocol* protocol;
+    NSManagedObjectContext* managedObjectContext;
+    NSManagedObject* engineManagedObject;
     
     NSString* engineName;
     NSString* engineAddress;
@@ -26,9 +18,8 @@
 @property (readonly) NSString* engineAddress;
 
 - (id) initWithLocalEngine:(NSManagedObjectContext*)managedObjectContext;
-- (void) sendAMessage:(NSDictionary*)dict;
+
+- (void) sendMessage:(NSDictionary*)message;
 - (BOOL) close;
-- (void) generateUUID;
-- (void) addEntityDescription;
 
 @end

@@ -2,7 +2,7 @@
 #import "JSONKit/JSONKit.h"
 #import "MediaSource.h"
 
-const CFStringRef kMDDiscDiscIdentFingerprint	= (CFStringRef)@"com_discident_fingerprint";
+const CFStringRef kMDDiscDiscIdentFingerprint = CFSTR("com_discident_fingerprint");
 
 extern void MDItemSetAttribute(MDItemRef, CFStringRef, CFTypeRef);
 extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
@@ -88,8 +88,10 @@ static NSArray* allKeys;
 
 - (void) reload
 {
-	[info autorelease];
-	info = [(NSDictionary*)MDItemCopyAttributes(itemRef, (CFArrayRef)allKeys) retain];
+    if (!isPhysicalMedia) {
+        [info autorelease];
+        info = [(NSDictionary*)MDItemCopyAttributes(itemRef, (CFArrayRef)allKeys) retain];
+    }
 }
 
 @end

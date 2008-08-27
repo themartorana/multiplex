@@ -23,4 +23,6 @@
 
 - (void) reload;
 
+extern const CFStringRef kMDDiscDiscIdentFingerprint;
+
 @end

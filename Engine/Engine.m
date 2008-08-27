@@ -3,7 +3,7 @@
 #import "DVDMediaSource.h"
 #import "PhysicalMediaSource.h"
 #import "JSONKit/JSONKit.h"
-#import "DiscIdent.h"
+#import "DiscIdentQuery.h"
 #import "LibraryComProtocol.h"
 #import "NSString+DiscIdent.h"
 

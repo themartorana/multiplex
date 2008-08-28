@@ -42,6 +42,11 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(localEngineDidTerminate:) name:(NSString*)NSTaskDidTerminateNotification object:engineTask]; 
         [engineTask launch];
         
+        // Create the entity descriptions
+        mediaDesc = [NSEntityDescription entityForName:@"Media" inManagedObjectContext:managedObjectContext];
+        discDesc = [NSEntityDescription entityForName:@"Disc" inManagedObjectContext:managedObjectContext];
+        movieDesc = [NSEntityDescription entityForName:@"Movie" inManagedObjectContext:managedObjectContext];
+        
         //  Add this engine to the Core Data set
         engineName = @"Your computer";
         engineAddress = @"localhost";
@@ -49,6 +54,8 @@
         [engineManagedObject setValue:engineAddress forKey:@"address"];
         [engineManagedObject setValue:engineName forKey:@"niceName"];
         [engineManagedObject setValue:UUID forKey:@"UUID"];
+        
+        [managedObjectContext save:nil];
     }
     return self;
 } 
@@ -111,9 +118,6 @@
 - (void) _addMoviesData:(NSArray*)messagesArray 
 {
     for (NSDictionary* messageDict in messagesArray) {
-        NSEntityDescription* mediaDesc = [NSEntityDescription entityForName:@"Media" inManagedObjectContext:_nsmoc];
-        NSEntityDescription* discDesc = [NSEntityDescription entityForName:@"Disc" inManagedObjectContext:_nsmoc];
-        NSEntityDescription* movieDesc = [NSEntityDescription entityForName:@"Movie" inManagedObjectContext:_nsmoc];
         
         NSManagedObject* movieMO;
         NSManagedObject* discMO;
@@ -126,17 +130,17 @@
         NSString* fingerprint = [messageDict objectForKey:@"com_discident_fingerprint"];
         
         // Create the new media entity
-        NSManagedObject* mediaMO = [[NSManagedObject alloc] initWithEntity:mediaDesc insertIntoManagedObjectContext:_nsmoc];
+        NSManagedObject* mediaMO = [[NSManagedObject alloc] initWithEntity:mediaDesc insertIntoManagedObjectContext:managedObjectContext];
         [mediaMO setValue:url forKey:@"url"];
-        [mediaMO setValue:_engineManagedObject forKey:@"mediaEngine"];
+        [mediaMO setValue:engineManagedObject forKey:@"mediaEngine"];
         
         // Check to see if there is an existing disc entity
         NSFetchRequest* frDisc = [[NSFetchRequest alloc] init];
         [frDisc setEntity:discDesc];
-        [frDisc setPredicate:[NSPredicate predicateWithFormat:@"fingerprint == %@", fingerprint]];
+        [frDisc setPredicate:[NSPredicate predicateWithFormat:@"com_discident_fingerprint == %@", fingerprint]];
         
         NSError* error;
-        NSArray* results = [_nsmoc executeFetchRequest:frDisc error:&error];
+        NSArray* results = [managedObjectContext executeFetchRequest:frDisc error:&error];
         
         if (results && [results count] > 0) {
             discFound = YES;
@@ -144,7 +148,7 @@
         }
         else {
             discFound = NO;
-            discMO = [[NSManagedObject alloc] initWithEntity:discDesc insertIntoManagedObjectContext:_nsmoc];
+            discMO = [[NSManagedObject alloc] initWithEntity:discDesc insertIntoManagedObjectContext:managedObjectContext];
             [discMO setValue:fingerprint forKey:@"com_discident_fingerprint"];
         }
         
@@ -157,7 +161,7 @@
             [fr setPredicate:[NSPredicate predicateWithFormat:@"gtin == %@", [messageDict objectForKey:@"gtin"]]]; 
             
             [results release];
-            results = [_nsmoc executeFetchRequest:fr error:&error];
+            results = [managedObjectContext executeFetchRequest:fr error:&error];
 
             if (results && [results count] > 0) {
                 movieMO = [results objectAtIndex:0];
@@ -169,7 +173,6 @@
         
         if (!movieFound) {
             movieMO = [[NSManagedObject alloc] initWithEntity:movieDesc insertIntoManagedObjectContext:managedObjectContext];
-            [movieMO setValue:engineManagedObject forKey:@"movieEngine"];
         }
         
         [discMO setValue:movieMO forKey:@"discMovie"];
@@ -190,13 +193,58 @@
 {
     // Always check for a movie's existance.  An update on the engine side
     // may actually be an add on the UI side.
-    
     for (NSDictionary* message in messagesArray) {
-        NSManagedObject* discMO = [self _getDiscByFingerprint:[message objectForKey:@"com_discident_fingerprint"]];
-        if (discMO) {
-            // Update the data
+        
+        NSString* fingerprint = [message objectForKey:@"com_discident_fingerprint"];
+        NSString* url = [message objectForKey:@"url"];
+        
+        // We want to see if there is a "disc" with this fingerprint
+        // If there is, this media should just attach to it, and not update
+        // anything.  If there is none, then we have to decide if we should
+        // create anything.  Since the engine SHOULD be intelligent enough
+        // to do this for us, we're going to simply update for right now
+        NSFetchRequest* fr = [[NSFetchRequest alloc] init];
+        [fr setEntity:discDesc];
+        [fr setPredicate:[NSPredicate predicateWithFormat:@"com_discident_fingerprint = %@", fingerprint]];
+        
+        NSError* error;
+        NSArray* results = [managedObjectContext executeFetchRequest:fr error:&error];
+        
+        if (!results || [results count] == 0) {
+            NSLog(@"Update for fingerprint %@ was unable to find any discs with that value.  Disc should already be present for Update messages", 
+                  fingerprint);
+            continue;
+        }
+        
+        NSManagedObject* discMO = [results objectAtIndex:0];
+        
+        // Now check for a media object that actually exists here.  The reason for doing so
+        // is that if this object EXISTS, it's an update from say DiscIdent of Amazon and we're 
+        // going to want to actually display the incoming data.
+        [fr setEntity:mediaDesc];
+        [fr setPredicate:[NSPredicate predicateWithFormat:@"url = %@", url]];
+        
+        results = [[managedObjectContext executeFetchRequest:fr error:&error] retain];
+        
+        NSManagedObject* mediaMO = nil;
+        
+        if (results && [results count] > 0) {
+            // Send the updated results for a save
             [self _saveEntityData:message toDiscEntity:discMO andMovieEntity:[discMO valueForKey:@"discMovie"]];
         }
+        else {
+            // Create the new media object
+            mediaMO = [[NSManagedObject alloc] initWithEntity:mediaDesc insertIntoManagedObjectContext:managedObjectContext];
+            [mediaMO setValue:[message objectForKey:@"url"] forKey:@"url"];
+            [mediaMO setValue:discMO forKey:@"mediaDisc"];
+            [mediaMO release];
+        }
+            
+        [results release];
+        [fr release];
+        [managedObjectContext save:nil];
+        
+        //id object = [engineManagedObject valueForKeyPath:@"engineMedia.mediaDisc.discMovie"];
     }
 }
 
@@ -204,39 +252,58 @@
 
 - (void) _deleteMoviesData:(NSArray*)messagesArray 
 {
-    // First get the disc
-    for (NSString* fingerprint in messagesArray) {
-                
-        // Get the disc
-        NSManagedObject* discMO = [self _getDiscByFingerprint:fingerprint];
+    for (NSDictionary* message in messagesArray) {
+
+        // We want to delete only media objects unless this leaves
+        // empty disc and/or movie objects.
         
-        if (discMO) {
-            // Get the movie above
-            NSManagedObject* movieMO = [discMO valueForKey:@"discMovie"];
-            //NSManagedObjectID* movieID = [movieMO objectID];
-            //[movieMO release];
+        // Find the entity we want to delete by URL.  Then get its 
+        // movie and disc objects first and take counts.  Finally, 
+        // execute the actual deletions if necessary.
+        
+        NSManagedObject* mediaMO;
+        NSManagedObject* discMO; 
+        NSManagedObject* movieMO;
+        
+        NSFetchRequest* fr = [[NSFetchRequest alloc] init];
+        [fr setEntity:mediaDesc];
+        [fr setPredicate:[NSPredicate predicateWithFormat:@"url = %@", [message objectForKey:@"url"]]];
+        
+        NSError* error;
+        NSArray* results = [managedObjectContext executeFetchRequest:fr error:&error];
+        
+        if (!results || [results count] == 0) {
+            NSLog(@"Trying to delete fingerprint\n%@\nfor url\n%@\nand can't find matching Media object", 
+                  [message objectForKey:@"com_discident_fingerprint"], 
+                  [message objectForKey:@"url"]);
             
-            // Remove the disc
-            [managedObjectContext deleteObject:discMO];
-            
-            // Check to see if the movie has any more relationships
-            //NSManagedObject* relookMO = [_nsmoc objectWithID:movieID]; 
-            [managedObjectContext commitEditing];
-            [managedObjectContext refreshObject:movieMO mergeChanges:YES];
-            
-            NSArray* s = [[movieMO valueForKey:@"movieDiscs"] allObjects];
-            BOOL shouldDelete = YES;
-            for (int j = 0; j < [s count]; j++) {
-                if (![[s objectAtIndex:j] isDeleted]) {
-                    shouldDelete = NO;
-                    break;
-                }
-            }
-            
-            if (shouldDelete) {
+            continue;
+        }
+        
+        mediaMO = [results objectAtIndex:0];
+        discMO = [mediaMO valueForKey:@"mediaDisc"];
+        movieMO = [discMO valueForKey:@"discMovie"];
+        
+        int discMediaCount;
+        
+        // Figure out which object to delete, as deletions will 
+        // cascade
+        discMediaCount = [[discMO valueForKey:@"discMedia"] count] - 1;
+        
+        if (0 == discMediaCount) {
+            int movieDiscsCount = [[movieMO valueForKey:@"movieDiscs"] count] - 1;
+            if (0 == movieDiscsCount) {
                 [managedObjectContext deleteObject:movieMO];
             }
+            else {
+                [managedObjectContext deleteObject:discMO];
+            }
         }
+        else {
+            [managedObjectContext deleteObject:mediaMO];
+        }
+        
+        [managedObjectContext save:nil];
     }
 }
 
@@ -276,10 +343,9 @@
     [discMO setValue:[messageDict valueForKey:@"com_discident_fingerprint"] forKey:@"com_discident_fingerprint"];
     [discMO setValue:[NSNumber numberWithInt:1] forKey:@"discNumber"];
 
-    [discMO setValue:[messageDict objectForKey:@"url"] forKey:@"url"];
+    //[discMO setValue:[messageDict objectForKey:@"url"] forKey:@"url"];
     
     if (movieMO) {
-        [movieMO setValue:engineManagedObject forKey:@"movieEngine"];
         [movieMO setValue:[messageDict objectForKey:@"title"] forKey:@"title"];
         [movieMO setValue:[messageDict objectForKey:@"gtin"] forKey:@"gtin"];
     }

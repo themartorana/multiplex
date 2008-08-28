@@ -11,6 +11,12 @@
     NSString* engineName;
     NSString* engineAddress;
     NSString* UUID;
+
+    @private
+    NSEntityDescription* mediaDesc;
+    NSEntityDescription* discDesc;
+    NSEntityDescription* movieDesc;
+    
 }
 
 @property (readwrite, retain) NSString* engineName;

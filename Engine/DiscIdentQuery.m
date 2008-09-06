@@ -17,6 +17,7 @@ NSString* const kDISC_IDENT_VERSION = @"v1";
 
 @implementation DiscIdentQuery
 @synthesize delegate;
+@synthesize fingerprint;
 
 + (id) queryWithFingerprint:(NSString*)fingerprint
 {
@@ -34,16 +35,18 @@ NSString* const kDISC_IDENT_VERSION = @"v1";
     return query;
 }
 
-- (id) initWithFingerprint:(NSString*)fingerprint
+- (id) initWithFingerprint:(NSString*)_fingerprint
 {
     if (self = [super init]) {
-        request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://discident.com/%@/%@/", kDISC_IDENT_VERSION, fingerprint]]];
+        fingerprint = [_fingerprint retain];
+        request = [[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://discident.com/%@/%@/", kDISC_IDENT_VERSION, _fingerprint]]] retain];
     }
     return self;
 }
 
 - (void) dealloc
 {
+    [fingerprint release];
     [connection release];
     [request release];
     [receivedData release];
@@ -79,9 +82,7 @@ NSString* const kDISC_IDENT_VERSION = @"v1";
 {
     [receivedData release];
     receivedData = nil;
-    if ([delegate respondsToSelector:@selector(discIdentQuery:didFailWithError:)]) {
-        [delegate discIdentQuery:self didFailWithError:error];
-    }
+    [self _fireDidFailWithError:error];
 }
 
 - (void) connectionDidFinishLoading:(NSURLConnection *)connection 

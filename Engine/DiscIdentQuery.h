@@ -6,12 +6,16 @@
     NSURLRequest* request;
     NSURLConnection* connection;
     /**/
+    NSString* fingerprint;
     id delegate;
 }
 
 @property (assign) id delegate;
 
+@property (readonly) NSString* fingerprint;
+
 + (id) queryWithFingerprint:(NSString*)fingerprint;
++ (id) queryWithFingerprint:(NSString*)fingerprint delegate:(id)delegate startImmediately:(BOOL)startImmediately;
 
 - (id) initWithFingerprint:(NSString*)fingerprint;
 

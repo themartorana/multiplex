@@ -1,0 +1,267 @@
+#import "Amazon.h"
+
+#pragma mark -
+@interface AmazonQuery (Private)
+- (void) _fireDidFailWithError:(NSError*)error;
+- (void) _fireDidReceiveResponse:(NSDictionary*)response;
+@end
+
+#pragma mark -
+@implementation AmazonQuery
+@synthesize delegate;
+@synthesize ean;
+@synthesize userInfo;
+
++ (id) queryWithAccessKey:(NSString*)accessKey ean:(NSString*)ean
+{
+    return [[[AmazonQuery alloc] initWithAccessKey:accessKey ean:ean] autorelease];
+}
+
++ (id) queryWithAccessKey:(NSString*)accessKey ean:(NSString*)ean delegate:(id)delegate userInfo:(void*)userInfo startImmediately:(BOOL)startImmediately
+{
+    NSAssert(delegate, @"The delegate must not be nil.");
+    AmazonQuery* query = [AmazonQuery queryWithAccessKey:accessKey ean:ean];
+    query.delegate = delegate;
+    query.userInfo = userInfo;
+    if (startImmediately) {
+        [query start];
+    }
+    return query;
+}
+
+- (id) initWithAccessKey:(NSString*)_accessKey ean:(NSString*)_ean
+{
+    NSAssert(_accessKey, @"accessKey must not be nil.");
+    NSAssert(_ean, @"ean must not be nil.");
+    NSAssert([_ean length] == 13, @"ean must not be exactly 13 digits long.");
+    if (self = [super init]) {
+        accessKey = [_accessKey retain];
+        ean = [_ean retain];
+    }
+    return self;
+}
+
+- (void) dealloc
+{
+    [accessKey release];
+    [ean release];
+    [connection release];
+    [request release];
+    [receivedData release];
+    [super dealloc];
+}
+
+- (void) start
+{
+    NSAssert(!connection, @"This query has already been started.");
+    NSMutableString* url = [NSMutableString stringWithCapacity:1024];
+    [url appendFormat:
+        @"http://webservices.amazon.com/onca/xml?Service=AWSECommerceService" \
+         "&SubscriptionId=%@" \
+         "&Operation=ItemLookup" \
+         "&ResponseGroup=Small,ItemAttributes,Images,EditorialReview" \
+         "&IdType=EAN"
+         "&SearchIndex=DVD",
+         accessKey
+    ];
+    [url appendFormat:@"&ItemId=%@", ean];
+    request = [[NSURLRequest requestWithURL:[NSURL URLWithString:url]] retain];
+    connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
+}
+
+- (void) cancel
+{
+    [connection cancel];
+}
+
+@end
+
+#pragma mark -
+@implementation AmazonQuery (NSURLConnectionDelegate)
+
+- (void) connection:(NSURLConnection*)connection didReceiveResponse:(NSURLResponse*)response 
+{
+    receivedData = [[NSMutableData alloc] init];
+}
+
+- (void) connection:(NSURLConnection*)connection didReceiveData:(NSData*)data 
+{
+    [receivedData appendData:data];
+}
+
+- (void) connection:(NSURLConnection*)connection didFailWithError:(NSError*)error 
+{
+    [receivedData release];
+    receivedData = nil;
+    [self _fireDidFailWithError:error];
+}
+
+- (void) connectionDidFinishLoading:(NSURLConnection *)connection 
+{
+    NSMutableDictionary* response = nil;
+    NSError* error = nil;
+    if ([receivedData length] > 0) {
+        NSXMLDocument* xml = [[NSXMLDocument alloc] initWithData:receivedData options:NSXMLDocumentTidyXML error:&error];
+        NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] initWithDateFormat:@"%Y-%m-%d" allowNaturalLanguage:NO];
+        NSNumberFormatter* numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setNumberStyle:NSNumberFormatterNoStyle];
+        if (!error) @try {
+            /*  Process any "soft" errors; EAN not found, etc.  If the movie has 
+             *  any other EAN, then re-queue the item for lookup using one of 
+             *  those.
+             */
+            NSArray* softErrors = [[xml rootElement] objectsForXQuery:
+               @"for $p in ./Items/Request/Errors/Error[Code=\"AWS.InvalidParameterValue\"]/Message\n" \
+                "return\n" \
+                "<Error>{ string($p) }</Error>\n"
+                constants:nil
+                error:&error
+            ];
+            if (softErrors && [softErrors count]) {
+                NSEnumerator* enumerator = [softErrors objectEnumerator];
+                NSString* isbn;
+                while (isbn = [[enumerator nextObject] stringValue]) {
+                    isbn = [isbn substringToIndex:(' ' == [isbn characterAtIndex:10]) ? 10 : 13];
+                    NSLog(@"%@", isbn);
+                }
+            }
+
+            /*  Process any returned items using an XQuery to separate the stuff 
+             *  we actually care about from the stuff we don't.  The items are
+             *  ordered alphabetically to make the following section a little 
+             *  easier to follow.
+             */
+            NSArray* items = [[xml rootElement] objectsForXQuery:
+               @"for $p in ./Items/Item\n" \
+                "return\n" \
+                "<movie"
+                " asin='{ string($p/ASIN) }'" \
+                " detailPageURL='{ string($p/DetailPageURL) }'" \
+                " aspectRatio='{ string($p/ItemAttributes/AspectRatio) }'" \
+                " audienceRating='{ string($p/ItemAttributes/AudienceRating) }'" \
+                " actors='{ string-join(for $n in $p/ItemAttributes/Actor return string($n), '|') }'"\
+                " coverImageURL='{ string($p/LargeImage/URL) }'" \
+                " description='{ string($p/EditorialReviews/EditorialReview[Source=\"Description\" or Source=\"Product Description\" or Source][1]/Content) }'" \
+                " review='{ string($p/EditorialReviews/EditorialReview[Source=\"Amazon.com\"][1]/Content) }'" \
+                " releaseDate='{ string($p/ItemAttributes/ReleaseDate) }'" \
+                " theatricalReleaseDate='{ string($p/ItemAttributes/TheatricalReleaseDate) }'" \
+                " publisher='{ string($p/ItemAttributes/Publisher) }'" \
+                " title='{ string($p/ItemAttributes/Title) }'" \
+                " regionCode='{ string($p/ItemAttributes/RegionCode) }'" \
+                " runningTime='{ string($p/ItemAttributes/RunningTime) }'" \
+                "/>\n"
+                constants:nil
+                error:&error
+            ];
+            if ([items count]) {
+                NSXMLElement* item = [items objectAtIndex:0];
+                response = [NSMutableDictionary dictionary];
+                
+                NSString* asin = [[item attributeForName:@"asin"] stringValue];
+                if ([asin length]) {
+                    [response setObject:asin forKey:@"asin"];
+                }
+                
+                NSString* aspectRatio = [[item attributeForName:@"aspectRatio"] stringValue];
+                if ([aspectRatio length]) {
+                    [response setObject:aspectRatio forKey:@"aspectRatio"];
+                }
+                
+                NSArray* actors = [[[item attributeForName:@"actors"] stringValue] componentsSeparatedByString:@"|"];
+                if ([actors count]) {
+                    [response setObject:actors forKey:@"actors"];
+                }
+                
+                NSString* coverImageURL = [[item attributeForName:@"coverImageURL"] stringValue];
+                if ([coverImageURL length]) {
+                    [response setObject:coverImageURL forKey:@"coverImageURL"];
+                }
+                
+                NSString* description = [[item attributeForName:@"description"] stringValue];
+                if ([description length]) {
+                    [response setObject:description forKey:@"description"];
+                }
+
+                NSString* review = [[item attributeForName:@"review"] stringValue];
+                if ([review length]) {
+                    [response setObject:review forKey:@"review"];
+                }
+                
+                NSString* detailPageURL = [[item attributeForName:@"detailPageURL"] stringValue];
+                if ([detailPageURL length]) {
+                    [response setObject:detailPageURL forKey:@"detailPageURL"];
+                }
+                
+                NSDate* releaseDate = [NSDate dateWithNaturalLanguageString:[[item attributeForName:@"releaseDate"] stringValue]];      
+                if (releaseDate) {
+                    [response setObject:[dateFormatter stringFromDate:releaseDate] forKey:@"releaseDate"];
+                }
+                
+                NSDate* theatricalReleaseDate = [NSDate dateWithNaturalLanguageString:[[item attributeForName:@"theatricalReleaseDate"] stringValue]];      
+                if (theatricalReleaseDate) {
+                    [response setObject:[dateFormatter stringFromDate:theatricalReleaseDate] forKey:@"theatricalReleaseDate"];
+                }
+                
+                NSString* publisher = [[item attributeForName:@"publisher"] stringValue];
+                if ([publisher length]) {
+                    [response setObject:publisher forKey:@"publisher"];
+                }
+                
+                NSString* title = [[item attributeForName:@"title"] stringValue];
+                if ([title length]) {
+                    [response setObject:title forKey:@"title"];
+                }
+                
+                NSString* regionCode = [[item attributeForName:@"regionCode"] stringValue];
+                if ([regionCode length]) {
+                    [response setObject:[numberFormatter numberFromString:regionCode] forKey:@"regionCode"];
+                }
+                
+                NSString* runningTime = [[item attributeForName:@"runningTime"] stringValue];
+                if ([runningTime length]) {
+                    [response setObject:[numberFormatter numberFromString:runningTime] forKey:@"runningTime"];
+                }
+            }
+        } @catch (id exception) {
+            NSLog(@"%@", exception);
+        }
+        [dateFormatter release];
+        [numberFormatter release];
+        [xml release];
+    }
+
+    if (![response count] || error) {
+        [self _fireDidFailWithError:error];
+    } else {
+        [self _fireDidReceiveResponse:response];
+    }
+}
+
+@end
+
+#pragma mark -
+@implementation AmazonQuery (Private)
+
+- (void) _fireDidFailWithError:(NSError*)error
+{
+    if ([delegate respondsToSelector:@selector(amazonQuery:didFailWithError:userInfo:)]) {
+        @try {
+            [delegate amazonQuery:self didFailWithError:error userInfo:userInfo];
+        } @catch (id _exception) {
+            NSLog(@"AmazonQuery: Exception during amazonQuery:didFailWithError: -- %@", _exception);
+        }
+    }
+}
+
+- (void) _fireDidReceiveResponse:(NSDictionary*)response  
+{
+    if ([delegate respondsToSelector:@selector(amazonQuery:didReceiveResponse:userInfo:)]) {
+        @try {
+            [delegate amazonQuery:self didReceiveResponse:response userInfo:userInfo];
+        } @catch (id _exception) {
+            NSLog(@"AmazonQuery: Exception during amazonQuery:didReceiveResponse: -- %@", _exception);
+        }
+    }
+}
+
+@end

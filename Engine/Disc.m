@@ -3,12 +3,17 @@
 
 #pragma mark -
 @implementation Disc
+@synthesize infoDictionary;
+@synthesize fingerprint;
 
-- (id) initWithMedia:(Media*)_media
+- (id) initWithFingerprint:(NSString*)_fingerprint media:(Media*)_media
 {
+    NSAssert(_fingerprint, @"fingerprint cannot be nil.");
+    NSAssert(_media, @"media cannot be nil.");
+    NSAssert([_fingerprint isEqualToString:[_media fingerprint]], @"Fingerprints do not match.");
 	if (self = [super init]) {
 		allMedia = [[NSMutableArray alloc] initWithObjects:_media, nil];
-		fingerprint = [[_media fingerprint] retain];
+		fingerprint = [_fingerprint retain];
         [_media setDisc:self];
 	}
 	return self;
@@ -23,6 +28,7 @@
 
 - (void) addMedia:(Media*)media
 {
+    NSAssert([media disc] == nil, @"");
     [allMedia addObject:media];
     [media setDisc:self];
 }
@@ -30,11 +36,6 @@
 - (NSString*) contentType
 {
 	return [[allMedia objectAtIndex:0] contentType];
-}
-
-- (NSString*) fingerprint
-{
-	return fingerprint;
 }
 
 - (BOOL) hasDisc
@@ -57,6 +58,17 @@
     NSAssert([media disc] == self, @"");
     [media setDisc:nil];
     [allMedia removeObject:media];
+}
+
+- (void) setInfoDictionary:(NSMutableDictionary*)_infoDictionary
+{
+    if (infoDictionary != _infoDictionary) {
+        [infoDictionary release];
+        infoDictionary = [_infoDictionary retain];
+        for (Media* media in allMedia) {
+            media.infoDictionary = _infoDictionary;
+        }
+    }
 }
 
 @end

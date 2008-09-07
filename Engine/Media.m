@@ -1,6 +1,7 @@
 #import "Media.h"
 #import "JSONKit/JSONKit.h"
 #import "MediaSource.h"
+#import <libkern/OSAtomic.h>
 
 const CFStringRef kMDDiscDiscIdentFingerprint = CFSTR("com_discident_fingerprint");
 
@@ -10,27 +11,16 @@ extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
 @implementation Media
 
 @synthesize disc;
+@synthesize url;
 @synthesize isPhysicalMedia;
 @synthesize mediaSource;
-
-static NSArray* allKeys;
-
-+ (void) initialize
-{
-	allKeys = [[NSArray arrayWithObjects:
-		(id)kMDItemContentType,
-		(id)kMDDiscDiscIdentFingerprint,
-		(id)kMDItemFSSize,
-		(id)kMDItemPath,
-		nil
-	] retain];
-}
 
 - (id) initWithMediaSource:(id<MediaSource>)_mediaSource MDItemRef:(MDItemRef)_itemRef
 {
 	if (self = [super init]) {
         mediaSource = _mediaSource; // NOT RETAINED.
 		itemRef = (MDItemRef)CFRetain(_itemRef);
+        info = nil;
 		[self reload];
         isPhysicalMedia = NO;
 	}
@@ -90,8 +80,27 @@ static NSArray* allKeys;
 {
     if (!isPhysicalMedia) {
         [info autorelease];
-        info = [(NSDictionary*)MDItemCopyAttributes(itemRef, (CFArrayRef)allKeys) retain];
+        info = (NSDictionary*)MDItemCopyAttributeList(
+            itemRef, 
+            kMDItemContentType,
+            kMDDiscDiscIdentFingerprint,
+            kMDItemFSSize,
+            kMDItemPath,
+            nil
+        );
     }
+}
+
+- (NSMutableDictionary*) infoDictionary
+{
+    NSAssert(mediaSource, @"No mediaSource?");
+    return [mediaSource infoDictionaryForMedia:self];
+}
+
+- (void) setInfoDictionary:(NSMutableDictionary*)infoDictionary
+{
+    NSAssert(mediaSource, @"No mediaSource?");
+    [mediaSource setInfoDictionary:infoDictionary forMedia:self];
 }
 
 @end

@@ -9,20 +9,23 @@
 	Disc* disc;
     BOOL isPhysicalMedia;
     id<MediaSource> mediaSource;
+    NSURL* url;
 }
 
 - (id) initWithMediaSource:(id<MediaSource>)mediaSource MDItemRef:(MDItemRef)itemRef;
 - (id) initWithMediaSource:(id<MediaSource>)mediaSource physicalMedia:(NSString*)fingerprint atPath:(NSString*)pathToMedia;
 
 @property (retain) Disc* disc;
+@property (retain) NSURL* url;
 @property (readonly) NSString* contentType;
 @property (readonly) NSString* fingerprint;
 @property (readonly) NSString* pathToFile;
 @property (readonly) BOOL isPhysicalMedia;
 @property (readonly) id<MediaSource> mediaSource;
+@property (assign) NSMutableDictionary* infoDictionary;
 
 - (void) reload;
 
-extern const CFStringRef kMDDiscDiscIdentFingerprint;
-
 @end
+
+extern const CFStringRef kMDDiscDiscIdentFingerprint;

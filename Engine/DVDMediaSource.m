@@ -1,4 +1,29 @@
 #import "DVDMediaSource.h"
+#import <JSONKit/JSONKit.h>
+
+@interface NSDictionary (PlusPlus)
+
+- (id) objectForMetaKey:(NSString*)key;
+
+@end
+
+@implementation NSDictionary (PlusPlus)
+
+- (id) objectForMetaKey:(NSString*)key
+{
+    id object = [self objectForKey:key];
+    if (!object) {
+        NSDictionary* meta = [self objectForKey:@"meta"];
+        for (NSString* metaKey in meta) {
+            if (object = [meta objectForKey:metaKey]) {
+                break;
+            }
+        }
+    }
+    return object;
+}
+        
+@end
 
 static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSource)
 {
@@ -85,6 +110,56 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
     CFRelease(query);
     query = nil;
     mediaProcessed = 0;
+}
+
+- (NSMutableDictionary*) infoDictionaryForMedia:(Media*)media
+{
+    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    
+    /*  Attempt to load the Info.json from the filesystem.  If this fails,
+     *  we create a new, empty dictionary containing just the fingerprint.
+     */
+    NSMutableDictionary* info = [NSMutableDictionary dictionary];
+    @try {
+        info = [NSDictionary dictionaryWithJSON:[NSString stringWithContentsOfFile:[[media pathToFile] stringByAppendingPathComponent:@"Info.json"]]];
+
+        /*  Remove any reserved keys.
+         */
+        [info removeObjectForKey:@"fingerprint"];
+        [info removeObjectForKey:@"urls"];
+        
+        /*  Add a meta-dictionary if none exists.
+         */
+        NSMutableDictionary* meta = [info objectForKey:@"meta"];
+        if (!meta) {
+            [info setObject:meta = [NSMutableDictionary dictionary] forKey:@"meta"]; 
+        }
+        
+        /*  Add a file-meta dictionary if none exists.
+         */
+        NSMutableDictionary* fileMeta = [meta objectForKey:@"file"];
+        if (!fileMeta) {
+            [meta setObject:fileMeta = [NSMutableDictionary dictionary] forKey:@"file"]; 
+        }
+         
+        /*  All discs should have a title, even if it's just one that's been
+         *  derived from the (possibly crappy) name in the filesystem.
+         */
+        [fileMeta setObject:[[[[media pathToFile] lastPathComponent] stringByDeletingPathExtension] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" "]] forKey:@"title"];
+    } @catch (id) {
+        /* ignored */
+    }
+
+    return info;
+}
+
+- (void) setInfoDictionary:(NSMutableDictionary*)infoDictionary forMedia:(Media*)media
+{
+    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSMutableDictionary* info = [NSMutableDictionary dictionaryWithDictionary:infoDictionary];
+    [info removeObjectForKey:@"urls"];
+    [info setObject:media.fingerprint forKey:@"fingerprint"];
+    [[NSData dataWithObjectAsJSON:info] writeToFile:[[media pathToFile] stringByAppendingPathComponent:@"Info.json"] atomically:YES];
 }
 
 - (void) _queryDidUpdate:(NSNotification*)notification

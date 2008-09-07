@@ -7,7 +7,8 @@
 @property (assign) id<MediaSourceDelegate> delegate;
 - (void) start;
 - (void) stop;
-
+- (NSMutableDictionary*) infoDictionaryForMedia:(Media*)media;
+- (void) setInfoDictionary:(NSMutableDictionary*)infoDictionary forMedia:(Media*)media;
 @end
 
 @protocol MediaSourceDelegate

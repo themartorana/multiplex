@@ -4,15 +4,17 @@
 @interface Disc : NSObject {
 	NSString* fingerprint;
     NSMutableArray* allMedia;
+    NSMutableDictionary* infoDictionary;
 }
 
-- (id) initWithMedia:(Media*)media;
+- (id) initWithFingerprint:(NSString*)fingerprint media:(Media*)media;
 
-- (NSString*) contentType;
-- (NSString*) fingerprint;
-- (BOOL) hasDisc;
-- (NSString*) pathToFile;
-- (BOOL) isPhysicalMedia;
+@property (readonly) NSString* contentType;
+@property (readonly) NSString* fingerprint;
+@property (readonly) BOOL hasDisc;
+@property (readonly) NSString* pathToFile;
+@property (readonly) BOOL isPhysicalMedia;
+@property (retain) NSMutableDictionary* infoDictionary;
 
 - (void) addMedia:(Media*)media;
 - (void) removeMedia:(Media*)media;

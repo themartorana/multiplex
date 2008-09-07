@@ -93,7 +93,7 @@ BOOL GetMetadataForFile(void* thisInterface, NSMutableDictionary* attributes, NS
             [[NSData dataWithObjectAsJSON:[NSDictionary dictionaryWithDictionary:info]] writeToFile:infoFile atomically:YES];                    
         }
 
-        NSDictionary* movie = [info objectForKey:@"movie"];
+        NSDictionary* movie = [info objectForMetaKey:@"movie"];
         if (movie) {
             NSString* title = [movie objectForKey:@"title"];
             if (title) {
@@ -101,7 +101,7 @@ BOOL GetMetadataForFile(void* thisInterface, NSMutableDictionary* attributes, NS
                 [attributes setObject:title forKey:(NSString*)kMDItemTitle];
             }
             
-            NSString* releaseDateString = [movie objectForKey:@"releasedate"];
+            NSString* releaseDateString = [movie objectForKey:@"releaseDate"];
             if (releaseDateString) {
                 NSDate* releaseDate = [NSDate dateFromShortDateString:releaseDateString];
                 if (releaseDate) {

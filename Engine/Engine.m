@@ -242,7 +242,6 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         }
         
         if ([updatesByFingerprint count] > 5) {
-            fprintf(stderr, "add 5\n");
             NSMutableDictionary* message = [NSMutableDictionary dictionary];
             [message setObject:updatesByFingerprint forKey:@"update"];
             [protocol sendMessage:message];
@@ -253,7 +252,6 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     /*  Build and send the message.
      */
     if ([updatesByFingerprint count] > 0) {
-        fprintf(stderr, "add\n");
         NSMutableDictionary* message = [NSMutableDictionary dictionary];
         [message setObject:updatesByFingerprint forKey:@"update"];
         [protocol sendMessage:message];
@@ -351,7 +349,6 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         }
         
         if (([updatesByFingerprint count] + [deletesByFingerprint count]) > 5) {
-            fprintf(stderr, "update 5\n");
             NSMutableDictionary* message = [NSMutableDictionary dictionary];
             if ([updatesByFingerprint count]) {
                 [message setObject:updatesByFingerprint forKey:@"update"];
@@ -368,7 +365,6 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     /*  Build and send the message.
      */
     if (([updatesByFingerprint count] + [deletesByFingerprint count]) > 0) {
-        fprintf(stderr, "update\n");
         NSMutableDictionary* message = [NSMutableDictionary dictionary];
         if ([updatesByFingerprint count]) {
             [message setObject:updatesByFingerprint forKey:@"update"];

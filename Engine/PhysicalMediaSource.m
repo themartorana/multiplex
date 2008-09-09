@@ -82,13 +82,11 @@
 - (void) setInfoDictionary:(NSMutableDictionary*)infoDictionary forMedia:(Media*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
-    NSLog(@"%@", infoDictionary);
 }
 
 - (void) setFrontCover:(NSImage*)coverArt forMedia:(Media*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
-    NSLog(@"%@", media);
 }
 
 - (void) _volumeDidMount:(NSNotification*)notification

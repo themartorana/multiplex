@@ -118,12 +118,7 @@
                 error:&error
             ];
             if (softErrors && [softErrors count]) {
-                NSEnumerator* enumerator = [softErrors objectEnumerator];
-                NSString* isbn;
-                while (isbn = [[enumerator nextObject] stringValue]) {
-                    isbn = [isbn substringToIndex:(' ' == [isbn characterAtIndex:10]) ? 10 : 13];
-                    NSLog(@"%@", isbn);
-                }
+                /* TODO: Handle this?  */
             }
 
             /*  Process any returned items using an XQuery to separate the stuff 
@@ -230,7 +225,7 @@
                 }
             }
         } @catch (id exception) {
-            NSLog(@"%@", exception);
+            NSLog(@"AmazonQuery:  Exception during parse -- %@", exception);
         }
         [dateFormatter release];
         [numberFormatter release];

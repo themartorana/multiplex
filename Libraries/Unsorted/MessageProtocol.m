@@ -123,9 +123,6 @@
             
             NSString* messageText = [[NSString alloc] initWithData:[buffer subdataWithRange:NSMakeRange(bp - bpBase, bytesToRead)] encoding:NSUTF8StringEncoding];
             [self _fireDidReceiveMessage:[NSDictionary dictionaryWithJSON:messageText]];
-#ifdef DEBUG            
-            NSLog(@"Received: %@\n\n\n\n...\n\n\n\n", messageText);
-#endif
 
             NSData* oldCurrentBuffer = buffer;
             buffer = [[NSMutableData dataWithData:[buffer subdataWithRange:NSMakeRange((bp + bytesToRead) - bpBase, bpMax - (bp + bytesToRead))]] retain];

@@ -170,7 +170,6 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
     if ([fileManager fileExistsAtPath:pathToQuickLookFolder]) {
         [[coverArt PNGRepresentation] writeToFile:[pathToQuickLookFolder stringByAppendingPathComponent:@"FrontCover.png"] atomically:YES];
     }
-    NSLog(@"%@", media);
 }
 
 - (void) _queryDidUpdate:(NSNotification*)notification

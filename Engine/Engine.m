@@ -153,7 +153,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     for (NSString* topLevelKeyB in topLevelB) {
         NSMutableDictionary* secondLevelB = [topLevelB objectForKey:topLevelKeyB];
         for (NSString* secondLevelKeyB in secondLevelB) {
-            if (![secondLevelKeyB hasPrefix:@"_"] && ![userKeysA containsObject:secondLevelKeyB]) {
+            if (![secondLevelKeyB hasPrefix:@"_"] && ![mergedUserKeys containsObject:secondLevelKeyB]) {
                 id object = [secondLevelB objectForKey:secondLevelKeyB];
                 [movieB setObject:object forKey:secondLevelKeyB];
                 if (![synthesizedKeysB containsObject:secondLevelKeyB]) {

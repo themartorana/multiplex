@@ -2,9 +2,9 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.02">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">9E17</string>
+		<string key="IBDocument.SystemVersion">9F29</string>
 		<string key="IBDocument.InterfaceBuilderVersion">670</string>
-		<string key="IBDocument.AppKitVersion">949.33</string>
+		<string key="IBDocument.AppKitVersion">949.34</string>
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1600,6 +1600,7 @@
 												<object class="NSButtonCell" key="NSCancelButtonCell">
 													<int key="NSCellFlags">-2147353088</int>
 													<int key="NSCellFlags2">0</int>
+													<string key="NSContents">clear</string>
 													<object class="NSMutableArray" key="NSAccessibilityOverriddenAttributes">
 														<bool key="EncodedWithXMLCoder">YES</bool>
 														<object class="NSMutableDictionary">
@@ -1732,23 +1733,29 @@
 																				<object class="NSMutableArray" key="dict.sortedKeys">
 																					<bool key="EncodedWithXMLCoder">YES</bool>
 																					<string>allowsFloats</string>
+																					<string>decimalSeparator</string>
 																					<string>formatterBehavior</string>
+																					<string>groupingSeparator</string>
 																					<string>negativeFormat</string>
 																					<string>negativeInfinitySymbol</string>
 																					<string>nilSymbol</string>
 																					<string>positiveFormat</string>
 																					<string>positiveInfinitySymbol</string>
+																					<string>usesGroupingSeparator</string>
 																					<string>zeroSymbol</string>
 																				</object>
 																				<object class="NSMutableArray" key="dict.values">
 																					<bool key="EncodedWithXMLCoder">YES</bool>
 																					<integer value="0"/>
+																					<string>.</string>
 																					<integer value="1000"/>
+																					<string>,</string>
 																					<string>-0</string>
 																					<string type="base64-UTF8">LeKIng</string>
 																					<string/>
 																					<string>0</string>
 																					<string type="base64-UTF8">K+KIng</string>
+																					<integer value="0"/>
 																					<string>0</string>
 																				</object>
 																			</object>
@@ -1923,6 +1930,7 @@
 												<object class="NSButtonCell" key="NSCancelButtonCell">
 													<int key="NSCellFlags">-2147353088</int>
 													<int key="NSCellFlags2">0</int>
+													<string key="NSContents">clear</string>
 													<object class="NSMutableArray" key="NSAccessibilityOverriddenAttributes">
 														<bool key="EncodedWithXMLCoder">YES</bool>
 														<object class="NSMutableDictionary">
@@ -2095,6 +2103,7 @@
 					<string>gtin</string>
 					<string>title</string>
 					<string>movieDiscs</string>
+					<string>discs</string>
 				</object>
 				<bool key="NSEditable">YES</bool>
 				<bool key="NSAutomaticallyPreparesContent">YES</bool>
@@ -2114,6 +2123,8 @@
 					<string>discNumber</string>
 					<string>com_discident_fingerprint</string>
 					<string>discMedia</string>
+					<string>fingerprint</string>
+					<string>media</string>
 				</object>
 				<bool key="NSEditable">YES</bool>
 				<bool key="NSAutomaticallyPreparesContent">YES</bool>
@@ -3002,22 +3013,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: arrangedObjects.com_discident_fingerprint</string>
-						<reference key="source" ref="843287869"/>
-						<reference key="destination" ref="782886067"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="843287869"/>
-							<reference key="NSDestination" ref="782886067"/>
-							<string key="NSLabel">value: arrangedObjects.com_discident_fingerprint</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">arrangedObjects.com_discident_fingerprint</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">999</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
 						<string key="label">predicate: filterPredicate</string>
 						<reference key="source" ref="124371471"/>
 						<reference key="destination" ref="782886067"/>
@@ -3171,35 +3166,51 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">contentSet: selection.discMedia</string>
-						<reference key="source" ref="284831240"/>
+						<string key="label">value: arrangedObjects.fingerprint</string>
+						<reference key="source" ref="843287869"/>
 						<reference key="destination" ref="782886067"/>
 						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="284831240"/>
+							<reference key="NSSource" ref="843287869"/>
 							<reference key="NSDestination" ref="782886067"/>
-							<string key="NSLabel">contentSet: selection.discMedia</string>
-							<string key="NSBinding">contentSet</string>
-							<string key="NSKeyPath">selection.discMedia</string>
+							<string key="NSLabel">value: arrangedObjects.fingerprint</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">arrangedObjects.fingerprint</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">1036</int>
+					<int key="connectionID">1076</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">contentSet: selection.movieDiscs</string>
+						<string key="label">contentSet: selection.discs</string>
 						<reference key="source" ref="782886067"/>
 						<reference key="destination" ref="697403151"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="782886067"/>
 							<reference key="NSDestination" ref="697403151"/>
-							<string key="NSLabel">contentSet: selection.movieDiscs</string>
+							<string key="NSLabel">contentSet: selection.discs</string>
 							<string key="NSBinding">contentSet</string>
-							<string key="NSKeyPath">selection.movieDiscs</string>
+							<string key="NSKeyPath">selection.discs</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">1063</int>
+					<int key="connectionID">1077</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">contentSet: selection.media</string>
+						<reference key="source" ref="284831240"/>
+						<reference key="destination" ref="782886067"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="284831240"/>
+							<reference key="NSDestination" ref="782886067"/>
+							<string key="NSLabel">contentSet: selection.media</string>
+							<string key="NSBinding">contentSet</string>
+							<string key="NSKeyPath">selection.media</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">1078</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -5035,7 +5046,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1075</int>
+			<int key="maxID">1078</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -5088,6 +5099,20 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Engine/AmazonQuery.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Engine/CoverArtQuery.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

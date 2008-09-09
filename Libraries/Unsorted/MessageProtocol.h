@@ -8,7 +8,6 @@
     /**/
     NSMutableData* buffer;
     BOOL canCallDidReceiveMessage;
-    NSInteger bytesToCompleteMessage;
 }
 
 @property (retain) NSFileHandle* fileHandleForReading;

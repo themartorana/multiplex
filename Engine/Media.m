@@ -103,4 +103,9 @@ extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
     [mediaSource setInfoDictionary:infoDictionary forMedia:self];
 }
 
+- (void) setFrontCover:(NSImage*)coverArt
+{
+    [mediaSource setFrontCover:coverArt forMedia:self];
+}
+
 @end

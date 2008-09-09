@@ -3,6 +3,7 @@
 
 #pragma mark -
 @implementation Disc
+@dynamic allMedia;
 @synthesize infoDictionary;
 @synthesize fingerprint;
 
@@ -26,13 +27,6 @@
 	[super dealloc];
 }
 
-- (void) addMedia:(Media*)media
-{
-    NSAssert([media disc] == nil, @"");
-    [allMedia addObject:media];
-    [media setDisc:self];
-}
-
 - (NSString*) contentType
 {
 	return [[allMedia objectAtIndex:0] contentType];
@@ -53,11 +47,23 @@
     return [[allMedia objectAtIndex:0] isPhysicalMedia];
 }
 
+- (void) addMedia:(Media*)media
+{
+    NSAssert([media disc] == nil, @"");
+    [allMedia addObject:media];
+    [media setDisc:self];
+}
+
 - (void) removeMedia:(Media*)media
 {
     NSAssert([media disc] == self, @"");
     [media setDisc:nil];
     [allMedia removeObject:media];
+}
+
+- (NSArray*) allMedia
+{
+    return [[allMedia retain] autorelease];
 }
 
 - (void) setInfoDictionary:(NSMutableDictionary*)_infoDictionary

@@ -1,9 +1,12 @@
 #import "PhysicalMediaSource.h"
-#import "DiscIdent.h"
+#import "DiscIdentQuery.h"
 #import <IOKit/IOKitLib.h>
 #import <IOKit/storage/IOMedia.h>
 #import <IOKit/storage/IODVDMedia.h>
 #import <sys/mount.h>
+
+#import "NSImage+DmgCtrl.h"
+
 
 @interface PhysicalMediaSource (Private)
 - (NSString*) _deviceNameForMountPoint:(NSString*)mountPoint;
@@ -80,6 +83,12 @@
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
     NSLog(@"%@", infoDictionary);
+}
+
+- (void) setFrontCover:(NSImage*)coverArt forMedia:(Media*)media
+{
+    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSLog(@"%@", media);
 }
 
 - (void) _volumeDidMount:(NSNotification*)notification

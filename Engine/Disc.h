@@ -14,6 +14,7 @@
 @property (readonly) BOOL hasDisc;
 @property (readonly) NSString* pathToFile;
 @property (readonly) BOOL isPhysicalMedia;
+@property (readonly) NSArray* allMedia;
 @property (retain) NSMutableDictionary* infoDictionary;
 
 - (void) addMedia:(Media*)media;

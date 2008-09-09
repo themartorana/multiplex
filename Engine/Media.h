@@ -26,6 +26,8 @@
 
 - (void) reload;
 
+- (void) setFrontCover:(NSImage*)coverArt;
+
 @end
 
 extern const CFStringRef kMDDiscDiscIdentFingerprint;

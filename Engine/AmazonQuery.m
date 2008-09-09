@@ -1,4 +1,4 @@
-#import "Amazon.h"
+#import "AmazonQuery.h"
 
 #pragma mark -
 @interface AmazonQuery (Private)
@@ -135,20 +135,20 @@
                @"for $p in ./Items/Item\n" \
                 "return\n" \
                 "<movie"
-                " asin='{ string($p/ASIN) }'" \
-                " detailPageURL='{ string($p/DetailPageURL) }'" \
-                " aspectRatio='{ string($p/ItemAttributes/AspectRatio) }'" \
-                " audienceRating='{ string($p/ItemAttributes/AudienceRating) }'" \
+                " _id='{ string($p/ASIN) }'" \
+                " _detail_page_url='{ string($p/DetailPageURL) }'" \
+                " _cover_image_url='{ string($p/LargeImage/URL) }'" \
+                " aspect_ratio='{ string($p/ItemAttributes/AspectRatio) }'" \
+                " audience_rating='{ string($p/ItemAttributes/AudienceRating) }'" \
                 " actors='{ string-join(for $n in $p/ItemAttributes/Actor return string($n), '|') }'"\
-                " coverImageURL='{ string($p/LargeImage/URL) }'" \
                 " description='{ string($p/EditorialReviews/EditorialReview[Source=\"Description\" or Source=\"Product Description\" or Source][1]/Content) }'" \
                 " review='{ string($p/EditorialReviews/EditorialReview[Source=\"Amazon.com\"][1]/Content) }'" \
-                " releaseDate='{ string($p/ItemAttributes/ReleaseDate) }'" \
-                " theatricalReleaseDate='{ string($p/ItemAttributes/TheatricalReleaseDate) }'" \
+                " release_date='{ string($p/ItemAttributes/ReleaseDate) }'" \
+                " theatrical_release_date='{ string($p/ItemAttributes/TheatricalReleaseDate) }'" \
                 " publisher='{ string($p/ItemAttributes/Publisher) }'" \
                 " title='{ string($p/ItemAttributes/Title) }'" \
-                " regionCode='{ string($p/ItemAttributes/RegionCode) }'" \
-                " runningTime='{ string($p/ItemAttributes/RunningTime) }'" \
+                " region_code='{ string($p/ItemAttributes/RegionCode) }'" \
+                " running_time='{ string($p/ItemAttributes/RunningTime) }'" \
                 "/>\n"
                 constants:nil
                 error:&error
@@ -157,24 +157,33 @@
                 NSXMLElement* item = [items objectAtIndex:0];
                 response = [NSMutableDictionary dictionary];
                 
-                NSString* asin = [[item attributeForName:@"asin"] stringValue];
-                if ([asin length]) {
-                    [response setObject:asin forKey:@"asin"];
+                NSString* amazonId = [[item attributeForName:@"_id"] stringValue];
+                if ([amazonId length]) {
+                    [response setObject:amazonId forKey:@"_id"];
                 }
                 
-                NSString* aspectRatio = [[item attributeForName:@"aspectRatio"] stringValue];
+                NSString* coverImageURL = [[item attributeForName:@"_cover_image_url"] stringValue];
+                if ([coverImageURL length]) {
+                    [response setObject:coverImageURL forKey:@"_cover_image_url"];
+                }
+                
+                NSString* detailPageURL = [[item attributeForName:@"_detail_page_url"] stringValue];
+                if ([detailPageURL length]) {
+                    [response setObject:detailPageURL forKey:@"_detail_page_url"];
+                }
+                NSString* aspectRatio = [[item attributeForName:@"aspect_ratio"] stringValue];
                 if ([aspectRatio length]) {
-                    [response setObject:aspectRatio forKey:@"aspectRatio"];
+                    [response setObject:aspectRatio forKey:@"aspect_ratio"];
+                }
+                
+                NSString* audienceRating = [[item attributeForName:@"audience_rating"] stringValue];
+                if ([audienceRating length]) {
+                    [response setObject:audienceRating forKey:@"audience_rating"];
                 }
                 
                 NSArray* actors = [[[item attributeForName:@"actors"] stringValue] componentsSeparatedByString:@"|"];
                 if ([actors count]) {
                     [response setObject:actors forKey:@"actors"];
-                }
-                
-                NSString* coverImageURL = [[item attributeForName:@"coverImageURL"] stringValue];
-                if ([coverImageURL length]) {
-                    [response setObject:coverImageURL forKey:@"coverImageURL"];
                 }
                 
                 NSString* description = [[item attributeForName:@"description"] stringValue];
@@ -187,19 +196,14 @@
                     [response setObject:review forKey:@"review"];
                 }
                 
-                NSString* detailPageURL = [[item attributeForName:@"detailPageURL"] stringValue];
-                if ([detailPageURL length]) {
-                    [response setObject:detailPageURL forKey:@"detailPageURL"];
-                }
-                
-                NSDate* releaseDate = [NSDate dateWithNaturalLanguageString:[[item attributeForName:@"releaseDate"] stringValue]];      
+                NSDate* releaseDate = [NSDate dateWithNaturalLanguageString:[[item attributeForName:@"release_date"] stringValue]];      
                 if (releaseDate) {
-                    [response setObject:[dateFormatter stringFromDate:releaseDate] forKey:@"releaseDate"];
+                    [response setObject:[dateFormatter stringFromDate:releaseDate] forKey:@"release_date"];
                 }
                 
-                NSDate* theatricalReleaseDate = [NSDate dateWithNaturalLanguageString:[[item attributeForName:@"theatricalReleaseDate"] stringValue]];      
+                NSDate* theatricalReleaseDate = [NSDate dateWithNaturalLanguageString:[[item attributeForName:@"theatrical_release_date"] stringValue]];      
                 if (theatricalReleaseDate) {
-                    [response setObject:[dateFormatter stringFromDate:theatricalReleaseDate] forKey:@"theatricalReleaseDate"];
+                    [response setObject:[dateFormatter stringFromDate:theatricalReleaseDate] forKey:@"theatrical_release_date"];
                 }
                 
                 NSString* publisher = [[item attributeForName:@"publisher"] stringValue];
@@ -212,14 +216,17 @@
                     [response setObject:title forKey:@"title"];
                 }
                 
-                NSString* regionCode = [[item attributeForName:@"regionCode"] stringValue];
+                NSString* regionCode = [[item attributeForName:@"region_code"] stringValue];
                 if ([regionCode length]) {
-                    [response setObject:[numberFormatter numberFromString:regionCode] forKey:@"regionCode"];
+                    int value = [[numberFormatter numberFromString:regionCode] intValue];
+                    if (value >= 0 && value <= 8) {
+                        [response setObject:[NSNumber numberWithInt:value] forKey:@"region_code"];
+                    }
                 }
                 
-                NSString* runningTime = [[item attributeForName:@"runningTime"] stringValue];
+                NSString* runningTime = [[item attributeForName:@"running_time"] stringValue];
                 if ([runningTime length]) {
-                    [response setObject:[numberFormatter numberFromString:runningTime] forKey:@"runningTime"];
+                    [response setObject:[numberFormatter numberFromString:runningTime] forKey:@"running_time"];
                 }
             }
         } @catch (id exception) {

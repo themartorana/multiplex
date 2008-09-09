@@ -3,8 +3,9 @@
 #import "Disc.h"
 #import "DVDMediaSource.h"
 #import "PhysicalMediaSource.h"
-#import "DiscIdent.h"
-#import "Amazon.h"
+#import "DiscIdentQuery.h"
+#import "AmazonQuery.h"
+#import "CoverArtQuery.h"
 #import "MessageProtocol.h"
 #import "NSDictionary+KeyPaths.h"
 
@@ -101,6 +102,84 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     return newKeys;
 }
 
+- (NSMutableDictionary*) mergeInfoForDisc:(Disc*)disc withMediaInfo:(NSDictionary*)mediaInfo  
+{
+    /*  Grab the relevant parts of the Disc Info
+     */
+    NSMutableDictionary* infoA = [NSMutableDictionary dictionaryWithDictionary:[disc infoDictionary]];
+    NSMutableDictionary* movieA = [infoA objectForKey:@"movie"];
+    if (!movieA) {
+        [infoA setObject:movieA = [NSMutableDictionary dictionary] forKey:@"movie"];
+    }
+    NSMutableArray* synthesizedKeysA = [movieA objectForKey:@"synthesized-keys"];
+    if (!synthesizedKeysA) {
+        [movieA setObject:synthesizedKeysA = [NSMutableArray array] forKey:@"synthesized-keys"];
+    }
+    NSMutableArray* userKeysA = [NSMutableArray arrayWithArray:[movieA allKeys]];
+    [userKeysA removeObjectsInArray:synthesizedKeysA];
+
+    /*  Grab the relevant parts of the Media Info
+     */
+    NSMutableDictionary* infoB = [NSMutableDictionary dictionaryWithDictionary:mediaInfo];
+    NSMutableDictionary* movieB = [infoB objectForKey:@"movie"];
+    if (!movieB) {
+        [infoB setObject:movieB = [NSMutableDictionary dictionary] forKey:@"movie"];
+    }
+    NSMutableArray* synthesizedKeysB = [movieB objectForKey:@"synthesized-keys"];
+    if (!synthesizedKeysB) {
+        [movieB setObject:synthesizedKeysB = [NSMutableArray array] forKey:@"synthesized-keys"];
+    }
+    NSMutableArray* userKeysB = [NSMutableArray arrayWithArray:[movieB allKeys]];
+    [userKeysB removeObjectsInArray:synthesizedKeysB];
+        
+    /*  Merge the user and synthesized keys arrays from both dictionaries (into
+     *  userKeysB and synthesizedKeysB, respectively).
+     */
+    NSMutableSet* mergedSynthesizedKeys = [NSMutableSet setWithArray:synthesizedKeysA];
+    NSMutableSet* mergedUserKeys = [NSMutableSet setWithArray:userKeysA];
+    [mergedUserKeys addObjectsFromArray:userKeysB];
+    [mergedSynthesizedKeys addObjectsFromArray:synthesizedKeysB];
+    [mergedSynthesizedKeys minusSet:mergedUserKeys];
+    /**/
+    [userKeysB removeAllObjects];
+    [userKeysB addObjectsFromArray:[mergedUserKeys allObjects]];
+    [synthesizedKeysB removeAllObjects];
+    [synthesizedKeysB addObjectsFromArray:[mergedSynthesizedKeys allObjects]];
+    
+    /*  Grab any second-level meta keys that aren't prefixed with an "_" and 
+     *  merge them into the movieB dictionary as synthesized keys.
+     */
+    NSMutableDictionary* topLevelB = [infoB objectForKey:@"meta"];
+    for (NSString* topLevelKeyB in topLevelB) {
+        NSMutableDictionary* secondLevelB = [topLevelB objectForKey:topLevelKeyB];
+        for (NSString* secondLevelKeyB in secondLevelB) {
+            if (![secondLevelKeyB hasPrefix:@"_"] && ![userKeysA containsObject:secondLevelKeyB]) {
+                id object = [secondLevelB objectForKey:secondLevelKeyB];
+                [movieB setObject:object forKey:secondLevelKeyB];
+                if (![synthesizedKeysB containsObject:secondLevelKeyB]) {
+                    [synthesizedKeysB addObject:secondLevelKeyB];
+                }
+            }
+        }
+    }
+    [synthesizedKeysB sortUsingSelector:@selector(compare:)];
+    
+    /*  Flatten infoA and infoB and merge them into a new dictionary, and assign
+     *  that to the disc.infoDictionary property.
+     */
+    NSMutableDictionary* flattenedInfoA = [infoA flattenToKeyPathsAndObjects];
+    NSMutableDictionary* flattenedInfoB = [infoB flattenToKeyPathsAndObjects];
+    NSMutableDictionary* newKeyPathsAndObjects = [self determineChangedKeysUsingDictionary:flattenedInfoA andDictionary:flattenedInfoB];
+    if ([newKeyPathsAndObjects count]) {
+        [flattenedInfoA addEntriesFromDictionary:newKeyPathsAndObjects];
+        disc.infoDictionary = [NSMutableDictionary dictionaryWithExpandedKeyPathsAndObjects:flattenedInfoA];
+    }
+    
+    /*  Return the changeset.
+     */
+    return newKeyPathsAndObjects;
+}
+
 - (void) mediaSource:(id<MediaSource>)mediaSource didAddMedia:(NSArray*)arrayOfMedia
 {
     NSMutableDictionary* addsByFingerprint = [NSMutableDictionary dictionary];
@@ -151,16 +230,8 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             /*  Read in the info dictionary, and merge it with any that we've
              *  already loaded.
              */
-            NSMutableDictionary* flattenedDiscInfoDictionary = [[disc infoDictionary] flattenToKeyPathsAndObjects];
-            NSMutableDictionary* flattenedMediaInfoDictionary = [[media infoDictionary] flattenToKeyPathsAndObjects];
-            NSMutableDictionary* newKeyPathsAndObjects = [self determineChangedKeysUsingDictionary:flattenedDiscInfoDictionary andDictionary:flattenedMediaInfoDictionary];
+            NSMutableDictionary* newKeyPathsAndObjects = [self mergeInfoForDisc:disc withMediaInfo:media.infoDictionary];
             if ([newKeyPathsAndObjects count]) {
-                if (!disc.infoDictionary) {
-                    disc.infoDictionary = [NSDictionary dictionaryWithExpandedKeyPathsAndObjects:newKeyPathsAndObjects];
-                } else {
-                    [flattenedDiscInfoDictionary addEntriesFromDictionary:newKeyPathsAndObjects];
-                    disc.infoDictionary = [NSDictionary dictionaryWithExpandedKeyPathsAndObjects:flattenedDiscInfoDictionary];
-                }
                 NSMutableDictionary* infoForFingerprint = [addsOrUpdatesByFingerprint objectForKey:mediaFingerprint];
                 if (!infoForFingerprint) {
                     [addsOrUpdatesByFingerprint setObject:infoForFingerprint = [NSDictionary dictionaryWithExpandedKeyPathsAndObjects:newKeyPathsAndObjects] forKey:mediaFingerprint];
@@ -272,17 +343,8 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
          *  already loaded.
          */
         if (addsOrUpdatesByFingerprint) {
-            Disc* disc = media.disc;
-            NSMutableDictionary* flattenedDiscInfoDictionary = [[disc infoDictionary] flattenToKeyPathsAndObjects];
-            NSMutableDictionary* flattenedMediaInfoDictionary = [[media infoDictionary] flattenToKeyPathsAndObjects];
-            NSMutableDictionary* newKeyPathsAndObjects = [self determineChangedKeysUsingDictionary:flattenedDiscInfoDictionary andDictionary:flattenedMediaInfoDictionary];
+            NSMutableDictionary* newKeyPathsAndObjects = [self mergeInfoForDisc:media.disc withMediaInfo:media.infoDictionary];
             if ([newKeyPathsAndObjects count]) {
-                if (!disc.infoDictionary) {
-                    disc.infoDictionary = [NSDictionary dictionaryWithExpandedKeyPathsAndObjects:newKeyPathsAndObjects];
-                } else {
-                    [flattenedDiscInfoDictionary addEntriesFromDictionary:newKeyPathsAndObjects];
-                    disc.infoDictionary = [NSDictionary dictionaryWithExpandedKeyPathsAndObjects:flattenedDiscInfoDictionary];
-                }
                 NSMutableDictionary* infoForFingerprint = [addsOrUpdatesByFingerprint objectForKey:mediaFingerprint];
                 if (!infoForFingerprint) {
                     [addsOrUpdatesByFingerprint setObject:infoForFingerprint = [NSDictionary dictionaryWithExpandedKeyPathsAndObjects:newKeyPathsAndObjects] forKey:mediaFingerprint];
@@ -371,26 +433,8 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (void) discIdentQuery:(DiscIdentQuery*)query didReceiveResponse:(NSDictionary*)response userInfo:(Disc*)disc
 {
-    NSMutableDictionary* flattenedDiscInfoDictionary = [[disc infoDictionary] flattenToKeyPathsAndObjects];
-    NSMutableDictionary* flattenedMediaInfoDictionary = [[NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:response forKey:@"discident"] forKey:@"meta"] flattenToKeyPathsAndObjects];
-    NSMutableDictionary* newKeyPathsAndObjects = [self determineChangedKeysUsingDictionary:flattenedDiscInfoDictionary andDictionary:flattenedMediaInfoDictionary];
+    NSMutableDictionary* newKeyPathsAndObjects = [self mergeInfoForDisc:disc withMediaInfo:[NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:response forKey:@"discident"] forKey:@"meta"]];
     if ([newKeyPathsAndObjects count]) {
-        NSMutableDictionary* mergedInfo = nil;
-        if (!disc.infoDictionary) {
-            mergedInfo = [NSMutableDictionary dictionaryWithExpandedKeyPathsAndObjects:newKeyPathsAndObjects];
-        } else {
-            [flattenedDiscInfoDictionary addEntriesFromDictionary:newKeyPathsAndObjects];
-            mergedInfo = [NSDictionary dictionaryWithExpandedKeyPathsAndObjects:flattenedDiscInfoDictionary];
-        }
-        
-        NSMutableDictionary* movie = nil;
-        NSMutableArray* synthetic = nil;
-        if (nil == (movie = [mergedInfo objectForKey:@"movie"])) {
-            [mergedInfo setObject:movie = [NSMutableDictionary dictionaryWithObject:synthetic = [NSMutableArray array] forKey:@"synthetic"] forKey:@"movie"];
-        } else if (nil == (synthetic = [movie objectForKey:@"synthetic"])) {
-            [movie setObject:synthetic = [NSMutableArray array] forKey:@"synthetic"];
-        }
-
         NSMutableDictionary* message = [NSMutableDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithExpandedKeyPathsAndObjects:newKeyPathsAndObjects] forKey:disc.fingerprint] forKey:@"update"];
         [protocol sendMessage:message];
     }
@@ -399,6 +443,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     if ([gtin characterAtIndex:0] == '0') {
         [AmazonQuery queryWithAccessKey:kAmazonAccessKey ean:[gtin substringFromIndex:1] delegate:self userInfo:[disc retain] startImmediately:YES];
     }
+
     [disc release];
 }
 
@@ -412,19 +457,38 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (void) amazonQuery:(AmazonQuery*)query didReceiveResponse:(NSDictionary*)response userInfo:(Disc*)disc
 {
-    NSMutableDictionary* flattenedDiscInfoDictionary = [[disc infoDictionary] flattenToKeyPathsAndObjects];
-    NSMutableDictionary* flattenedMediaInfoDictionary = [[NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:response forKey:@"amazon"] forKey:@"meta"] flattenToKeyPathsAndObjects];
-    NSMutableDictionary* newKeyPathsAndObjects = [self determineChangedKeysUsingDictionary:flattenedDiscInfoDictionary andDictionary:flattenedMediaInfoDictionary];
+    NSMutableDictionary* newKeyPathsAndObjects = [self mergeInfoForDisc:disc withMediaInfo:[NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:response forKey:@"amazon"] forKey:@"meta"]];
     if ([newKeyPathsAndObjects count]) {
-        if (!disc.infoDictionary) {
-            disc.infoDictionary = [NSDictionary dictionaryWithExpandedKeyPathsAndObjects:newKeyPathsAndObjects];
-        } else {
-            [flattenedDiscInfoDictionary addEntriesFromDictionary:newKeyPathsAndObjects];
-            disc.infoDictionary = [NSDictionary dictionaryWithExpandedKeyPathsAndObjects:flattenedDiscInfoDictionary];
-        }
         NSMutableDictionary* message = [NSMutableDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithExpandedKeyPathsAndObjects:newKeyPathsAndObjects] forKey:disc.fingerprint] forKey:@"update"];
         [protocol sendMessage:message];
     }
+    
+    NSString* coverImageURL = [newKeyPathsAndObjects objectForKey:@"meta.amazon._cover_image_url"];
+    if (coverImageURL) @try {
+        [CoverArtQuery queryWithURL:[NSURL URLWithString:coverImageURL] delegate:self userInfo:[disc retain] startImmediately:YES];
+    } @catch (id exception) {
+        /* Ignored */
+    }
+
+    [disc release];
+}
+
+
+#pragma mark CoverArtQueryDelegate
+
+- (void) coverArtQuery:(CoverArtQuery*)query didFailWithError:(NSError*)error userInfo:(Disc*)disc
+{
+    [disc release];
+}
+
+- (void) coverArtQuery:(CoverArtQuery*)query didReceiveResponse:(NSImage*)response userInfo:(Disc*)disc
+{
+    /*  TODO: Process/Crop image to appropriate dimensions.  */
+    
+    for (Media* media in disc.allMedia) {
+        [media setFrontCover:response];
+    }
+
     [disc release];
 }
 

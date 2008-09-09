@@ -1,5 +1,6 @@
 #import "DVDMediaSource.h"
 #import <JSONKit/JSONKit.h>
+#import "NSImage+DmgCtrl.h"
 
 @interface NSDictionary (PlusPlus)
 
@@ -125,7 +126,6 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
 
         /*  Remove any reserved keys.
          */
-        [info removeObjectForKey:@"fingerprint"];
         [info removeObjectForKey:@"urls"];
         
         /*  Add a meta-dictionary if none exists.
@@ -158,8 +158,19 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* info = [NSMutableDictionary dictionaryWithDictionary:infoDictionary];
     [info removeObjectForKey:@"urls"];
-    [info setObject:media.fingerprint forKey:@"fingerprint"];
     [[NSData dataWithObjectAsJSON:info] writeToFile:[[media pathToFile] stringByAppendingPathComponent:@"Info.json"] atomically:YES];
+}
+
+- (void) setFrontCover:(NSImage*)coverArt forMedia:(Media*)media
+{
+    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");    
+    NSString* pathToQuickLookFolder = [media.pathToFile stringByAppendingPathComponent:@"QuickLook"];
+    NSFileManager* fileManager = [NSFileManager defaultManager];
+    [fileManager createDirectoryAtPath:pathToQuickLookFolder attributes:nil];
+    if ([fileManager fileExistsAtPath:pathToQuickLookFolder]) {
+        [[coverArt PNGRepresentation] writeToFile:[pathToQuickLookFolder stringByAppendingPathComponent:@"FrontCover.png"] atomically:YES];
+    }
+    NSLog(@"%@", media);
 }
 
 - (void) _queryDidUpdate:(NSNotification*)notification

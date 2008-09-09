@@ -93,7 +93,7 @@ BOOL GetMetadataForFile(void* thisInterface, NSMutableDictionary* attributes, NS
             [[NSData dataWithObjectAsJSON:[NSDictionary dictionaryWithDictionary:info]] writeToFile:infoFile atomically:YES];                    
         }
 
-        NSDictionary* movie = [info objectForMetaKey:@"movie"];
+        NSDictionary* movie = [info objectForKey:@"movie"];
         if (movie) {
             NSString* title = [movie objectForKey:@"title"];
             if (title) {
@@ -101,7 +101,7 @@ BOOL GetMetadataForFile(void* thisInterface, NSMutableDictionary* attributes, NS
                 [attributes setObject:title forKey:(NSString*)kMDItemTitle];
             }
             
-            NSString* releaseDateString = [movie objectForKey:@"releaseDate"];
+            NSString* releaseDateString = [movie objectForKey:@"release_date"];
             if (releaseDateString) {
                 NSDate* releaseDate = [NSDate dateFromShortDateString:releaseDateString];
                 if (releaseDate) {
@@ -109,7 +109,7 @@ BOOL GetMetadataForFile(void* thisInterface, NSMutableDictionary* attributes, NS
                 }
             }
             
-            NSArray* publishers = [movie objectForKey:@"publishers"];
+            NSArray* publishers = [movie objectForKey:@"studio"];
             if (publishers) {
                 [attributes setObject:publishers forKey:(NSString*)kMDItemPublishers];
             }
@@ -119,13 +119,18 @@ BOOL GetMetadataForFile(void* thisInterface, NSMutableDictionary* attributes, NS
                 [attributes setObject:actors forKey:(NSString*)kMDItemContributors];
             }
             
-            NSNumber* rating = [movie objectForKey:@"rating"];
-            if (rating) {
-                [attributes setObject:rating forKey:(NSString*)kMDItemAudiences];
+            NSNumber* audienceRating = [movie objectForKey:@"audience_rating"];
+            if (audienceRating) {
+                [attributes setObject:audienceRating forKey:(NSString*)kMDItemAudiences];
             }
             
             if ([movie objectForKey:@"description"]) {
                 [attributes setObject:[movie objectForKey:@"description"] forKey:(NSString*)kMDItemDescription];
+            }
+            
+            NSNumber* runningTime = [movie objectForKey:@"running_time"];
+            if (runningTime) {
+                [attributes setObject:[NSNumber numberWithInt:[runningTime intValue] * 60] forKey:(NSString*)kMDItemDurationSeconds];
             }
         }
             
@@ -135,7 +140,7 @@ BOOL GetMetadataForFile(void* thisInterface, NSMutableDictionary* attributes, NS
         }
 
         [attributes setObject:@"public.dvdmedia" forKey:(NSString*)kMDItemContentType];
-        [attributes setObject:fingerprint forKey:@"com_discident_fingerprint"];
+        [attributes setObject:fingerprint forKey:kMDItemDiscIdentFingerprint];
     } @catch (id exception) {
         return FALSE;
     }

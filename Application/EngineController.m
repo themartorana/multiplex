@@ -142,58 +142,11 @@
     return nil;
 }
 
-- (void) _saveEntityData:(NSDictionary*)movieInfo toDiscEntity:(NSManagedObject*)disc andMovieEntity:(NSManagedObject*)movie
-{
-    if (movie) {
-        NSString* title = [movieInfo objectForKey:@"title"];
-        if (title) {
-            [movie setValue:title forKey:@"title"];
-        }
-        NSString* gtin = [movieInfo objectForKey:@"gtin"];
-        if (gtin) {
-            [movie setValue:gtin forKey:@"gtin"];
-        }
-    }
-}
-
 
 #pragma mark LibraryComProtocol delegate methods
 
 - (void) protocol:(MessageProtocol*)protocol didReceiveMessage:(NSDictionary*)message 
 {
-    /*
-     */
-    NSDictionary* add = [message objectForKey:@"add"];
-    if (add && [add isKindOfClass:[NSDictionary class]]) {
-        for (NSString* fingerprint in add) {
-            NSDictionary* info = [add objectForKey:fingerprint];
-            NSDictionary* movieInfo = [info objectForKey:@"movie"];
-            
-            NSManagedObject* disc = [self findDiscByFingerprint:fingerprint];
-            if (!disc) {
-                disc = [[[NSManagedObject alloc] initWithEntity:discDesc insertIntoManagedObjectContext:managedObjectContext] autorelease];
-                [disc setValue:fingerprint forKey:@"fingerprint"];
-            }
-            
-            NSString* gtin = [movieInfo objectForKey:@"gtin"];
-            NSManagedObject* movie = gtin ? [self findMovieByGTIN:gtin] : nil;
-            if (!movie) {
-                movie = [[[NSManagedObject alloc] initWithEntity:movieDesc insertIntoManagedObjectContext:managedObjectContext] autorelease];
-            }
-            [disc setValue:movie forKey:@"movie"];
-            
-            [self _saveEntityData:movieInfo toDiscEntity:disc andMovieEntity:movie];
-            
-            for (NSString* url in [info objectForKey:@"urls"]) {
-                NSManagedObject* media = [[NSManagedObject alloc] initWithEntity:mediaDesc insertIntoManagedObjectContext:managedObjectContext];
-                [media setValue:url forKey:@"url"];
-                [media setValue:engineManagedObject forKey:@"engine"];
-                [media setValue:disc forKey:@"disc"];
-                [media release];
-            }
-        }
-    }
-
     /*
      */
     NSDictionary* update = [message objectForKey:@"update"];
@@ -202,19 +155,96 @@
             NSDictionary* info = [update objectForKey:fingerprint];
             NSDictionary* movieInfo = [info objectForKey:@"movie"];
 
+            /*  Find or create the disc that's represented by our fingerprint.
+             */
             NSManagedObject* disc = [self findDiscByFingerprint:fingerprint];
-            NSAssert(disc, @"what? no disc!");
-            NSManagedObject* movie = [disc valueForKey:@"movie"];
-            NSAssert(movie, @"what? no movie!");
-
-            [self _saveEntityData:movieInfo toDiscEntity:disc andMovieEntity:movie];
+            if (!disc) {
+                disc = [[[NSManagedObject alloc] initWithEntity:discDesc insertIntoManagedObjectContext:managedObjectContext] autorelease];
+                [disc setValue:fingerprint forKey:@"fingerprint"];
+            }
             
+            /*  For each URL provided, create a media object to represent it,
+             *  and attached it to our disc.
+             */
             for (NSString* url in [info objectForKey:@"urls"]) {
                 NSManagedObject* media = [[NSManagedObject alloc] initWithEntity:mediaDesc insertIntoManagedObjectContext:managedObjectContext];
                 [media setValue:url forKey:@"url"];
                 [media setValue:engineManagedObject forKey:@"engine"];
                 [media setValue:disc forKey:@"disc"];
                 [media release];
+            }
+            
+            /*  Figure out which movie to attach this disc to.  We may have 
+             *  created a temporary movie that could need to be deleted if 
+             *  another already exists with a particular GTIN.
+             */
+            NSString* gtin = [movieInfo objectForKey:@"gtin"];
+            NSManagedObject* movie = gtin ? [self findMovieByGTIN:gtin] : nil;
+            if (movie) {
+                NSManagedObject* movieForDisc = [disc valueForKey:@"movie"];
+                if (movie != movieForDisc) {
+                    [disc setValue:movie forKey:@"movie"];
+                    if (0 == [[movieForDisc valueForKey:@"discs"] count]) {
+                        [managedObjectContext deleteObject:movieForDisc];
+                    }
+                }
+            } else {
+                movie = [disc valueForKey:@"movie"];
+                if (!movie) {
+                    movie = [[[NSManagedObject alloc] initWithEntity:movieDesc insertIntoManagedObjectContext:managedObjectContext] autorelease];
+                }
+                if (gtin) {
+                    [movie setValue:gtin forKey:@"gtin"];
+                }
+                [disc setValue:movie forKey:@"movie"];
+            }
+            
+            /*  Set any movie-related properties.
+             */
+            NSString* aspect_ratio = [movieInfo objectForKey:@"aspect_ratio"];
+            if (aspect_ratio) {
+                [movie setValue:aspect_ratio forKey:@"aspectRatio"];
+            }
+            NSString* review = [movieInfo objectForKey:@"review"];
+            if (review) {
+                [movie setValue:review forKey:@"review"];
+            }
+            NSString* synopsis = [movieInfo objectForKey:@"synopsis"];
+            if (synopsis) {
+                [movie setValue:synopsis forKey:@"synopsis"];
+            }
+            NSString* title = [movieInfo objectForKey:@"title"];
+            if (title) {
+                [movie setValue:title forKey:@"title"];
+            }
+            
+            /*  If there is a "discs" dictionary present, enumerate it's keys,
+             *  creating disc objects and associating them with the movie that
+             *  we're attaching ourselves to.
+             */
+            NSDictionary* discInfo = [movieInfo objectForKey:@"discs"];
+            for (NSString* discInfoFingerprint in discInfo) {
+                NSDictionary* otherDiscInfo = [discInfo objectForKey:discInfoFingerprint];
+                NSManagedObject* disc = [self findDiscByFingerprint:discInfoFingerprint];
+                if (!disc) {
+                    disc = [[[NSManagedObject alloc] initWithEntity:discDesc insertIntoManagedObjectContext:managedObjectContext] autorelease];
+                    [disc setValue:discInfoFingerprint forKey:@"fingerprint"];
+                }
+                NSString* tag = [otherDiscInfo objectForKey:@"tag"];
+                if (tag && [tag length] == 2) {
+                    int number = [tag characterAtIndex:0] - '0';
+                    if (number >= 1 && number <= 9) {
+                        [disc setValue:[NSNumber numberWithInt:number] forKey:@"number"];
+                    }
+                    [disc setValue:[tag substringFromIndex:1] forKey:@"side"];
+                }
+                NSManagedObject* movieForDisc = [disc valueForKey:@"movie"];
+                if (movie != movieForDisc) {
+                    [disc setValue:movie forKey:@"movie"];
+                    if (movieForDisc && 0 == [[movieForDisc valueForKey:@"discs"] count]) {
+                        [managedObjectContext deleteObject:movieForDisc];
+                    }
+                }
             }
         }
     }

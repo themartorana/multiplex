@@ -136,11 +136,11 @@
                 " aspect_ratio='{ string($p/ItemAttributes/AspectRatio) }'" \
                 " audience_rating='{ string($p/ItemAttributes/AudienceRating) }'" \
                 " actors='{ string-join(for $n in $p/ItemAttributes/Actor return string($n), '|') }'"\
-                " description='{ string($p/EditorialReviews/EditorialReview[Source=\"Description\" or Source=\"Product Description\" or Source][1]/Content) }'" \
                 " review='{ string($p/EditorialReviews/EditorialReview[Source=\"Amazon.com\"][1]/Content) }'" \
                 " release_date='{ string($p/ItemAttributes/ReleaseDate) }'" \
+                " studio='{ string($p/ItemAttributes/Publisher) }'" \
+                " synopsis='{ string($p/EditorialReviews/EditorialReview[Source=\"Description\" or Source=\"Product Description\" or Source][1]/Content) }'" \
                 " theatrical_release_date='{ string($p/ItemAttributes/TheatricalReleaseDate) }'" \
-                " publisher='{ string($p/ItemAttributes/Publisher) }'" \
                 " title='{ string($p/ItemAttributes/Title) }'" \
                 " region_code='{ string($p/ItemAttributes/RegionCode) }'" \
                 " running_time='{ string($p/ItemAttributes/RunningTime) }'" \
@@ -166,6 +166,7 @@
                 if ([detailPageURL length]) {
                     [response setObject:detailPageURL forKey:@"_detail_page_url"];
                 }
+                
                 NSString* aspectRatio = [[item attributeForName:@"aspect_ratio"] stringValue];
                 if ([aspectRatio length]) {
                     [response setObject:aspectRatio forKey:@"aspect_ratio"];
@@ -181,9 +182,9 @@
                     [response setObject:actors forKey:@"actors"];
                 }
                 
-                NSString* description = [[item attributeForName:@"description"] stringValue];
-                if ([description length]) {
-                    [response setObject:description forKey:@"description"];
+                NSString* synopsis = [[item attributeForName:@"synopsis"] stringValue];
+                if ([synopsis length]) {
+                    [response setObject:synopsis forKey:@"synopsis"];
                 }
 
                 NSString* review = [[item attributeForName:@"review"] stringValue];
@@ -201,9 +202,9 @@
                     [response setObject:[dateFormatter stringFromDate:theatricalReleaseDate] forKey:@"theatrical_release_date"];
                 }
                 
-                NSString* publisher = [[item attributeForName:@"publisher"] stringValue];
-                if ([publisher length]) {
-                    [response setObject:publisher forKey:@"publisher"];
+                NSString* studio = [[item attributeForName:@"studio"] stringValue];
+                if ([studio length]) {
+                    [response setObject:studio forKey:@"studio"];
                 }
                 
                 NSString* title = [[item attributeForName:@"title"] stringValue];

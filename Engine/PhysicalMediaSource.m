@@ -76,7 +76,28 @@
 - (NSMutableDictionary*) infoDictionaryForMedia:(Media*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
-    return nil;
+    
+    /*  Attempt to load the Info.json from the filesystem.  If this fails,
+     *  we create a new, empty dictionary containing just the fingerprint.
+     */
+    NSMutableDictionary* info = [NSMutableDictionary dictionary];
+    NSMutableDictionary* meta = [NSMutableDictionary dictionary];
+    NSMutableDictionary* fileMeta = [NSMutableDictionary dictionary];
+    
+    /*  Add a meta-dictionary if none exists.
+     */
+    [info setObject:meta forKey:@"meta"]; 
+    
+    /*  Add a file-meta dictionary if none exists.
+     */
+    [meta setObject:fileMeta forKey:@"file"]; 
+    
+    /*  All discs should have a title, even if it's just one that's been
+     *  derived from the (possibly crappy) name in the filesystem.
+     */
+    [fileMeta setObject:[[[[media pathToFile] lastPathComponent] stringByDeletingPathExtension] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" "]] forKey:@"title"];
+    
+    return info;
 }
 
 - (void) setInfoDictionary:(NSMutableDictionary*)infoDictionary forMedia:(Media*)media

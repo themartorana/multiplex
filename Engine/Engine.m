@@ -240,15 +240,22 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             static NSString* pathToMDImport = @"/usr/bin/mdimport";
             [NSTask launchedTaskWithLaunchPath:pathToMDImport arguments:[NSArray arrayWithObjects:pathToMDImport, [media pathToFile], nil]];
         }
+        
+        if ([updatesByFingerprint count] > 5) {
+            fprintf(stderr, "add 5\n");
+            NSMutableDictionary* message = [NSMutableDictionary dictionary];
+            [message setObject:updatesByFingerprint forKey:@"update"];
+            [protocol sendMessage:message];
+            [updatesByFingerprint removeAllObjects];
+        }
     }
 
     /*  Build and send the message.
      */
-    NSMutableDictionary* message = [NSMutableDictionary dictionary];
-    if ([updatesByFingerprint count]) {
+    if ([updatesByFingerprint count] > 0) {
+        fprintf(stderr, "add\n");
+        NSMutableDictionary* message = [NSMutableDictionary dictionary];
         [message setObject:updatesByFingerprint forKey:@"update"];
-    }
-    if ([message count]) {
         [protocol sendMessage:message];
     }
 }
@@ -342,18 +349,33 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                 }
             }
         }
+        
+        if (([updatesByFingerprint count] + [deletesByFingerprint count]) > 5) {
+            fprintf(stderr, "update 5\n");
+            NSMutableDictionary* message = [NSMutableDictionary dictionary];
+            if ([updatesByFingerprint count]) {
+                [message setObject:updatesByFingerprint forKey:@"update"];
+            }
+            if ([deletesByFingerprint count]) {
+                [message setObject:deletesByFingerprint forKey:@"delete"];
+            }
+            [protocol sendMessage:message];
+            [updatesByFingerprint removeAllObjects];
+            [deletesByFingerprint removeAllObjects];
+        }
     }
 
     /*  Build and send the message.
      */
-    NSMutableDictionary* message = [NSMutableDictionary dictionary];
-    if ([updatesByFingerprint count]) {
-        [message setObject:updatesByFingerprint forKey:@"update"];
-    }
-    if ([deletesByFingerprint count]) {
-        [message setObject:deletesByFingerprint forKey:@"delete"];
-    }
-    if ([message count]) {
+    if (([updatesByFingerprint count] + [deletesByFingerprint count]) > 0) {
+        fprintf(stderr, "update\n");
+        NSMutableDictionary* message = [NSMutableDictionary dictionary];
+        if ([updatesByFingerprint count]) {
+            [message setObject:updatesByFingerprint forKey:@"update"];
+        }
+        if ([deletesByFingerprint count]) {
+            [message setObject:deletesByFingerprint forKey:@"delete"];
+        }
         [protocol sendMessage:message];
     }
 }

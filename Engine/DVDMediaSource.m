@@ -1,6 +1,7 @@
 #import "DVDMediaSource.h"
 #import <JSONKit/JSONKit.h>
 #import "NSImage+DmgCtrl.h"
+#import <sys/stat.h>
 
 @interface NSDictionary (PlusPlus)
 
@@ -116,15 +117,17 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
 - (NSMutableDictionary*) infoDictionaryForMedia:(Media*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
-    
+
+    NSString* pathToInfoFile = [[media pathToFile] stringByAppendingPathComponent:@"Info.json"];
+
     /*  Attempt to load the Info.json from the filesystem.  If this fails,
      *  we create a new, empty dictionary containing just the fingerprint.
      */
-    NSMutableDictionary* info = [NSDictionary dictionaryWithJSON:[NSString stringWithContentsOfFile:[[media pathToFile] stringByAppendingPathComponent:@"Info.json"]]];
+    NSMutableDictionary* info = [NSDictionary dictionaryWithJSON:[NSString stringWithContentsOfFile:pathToInfoFile]];
     if (!info) {
         info = [NSMutableDictionary dictionary];
     }
-
+    
     /*  Remove any reserved keys.
      */
     [info removeObjectForKey:@"urls"];
@@ -142,12 +145,12 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
     if (!fileMeta) {
         [meta setObject:fileMeta = [NSMutableDictionary dictionary] forKey:@"file"]; 
     }
-     
+    
     /*  All discs should have a title, even if it's just one that's been
      *  derived from the (possibly crappy) name in the filesystem.
      */
     [fileMeta setObject:[[[[media pathToFile] lastPathComponent] stringByDeletingPathExtension] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" "]] forKey:@"title"];
-
+    
     return info;
 }
 
@@ -156,7 +159,14 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* info = [NSMutableDictionary dictionaryWithDictionary:infoDictionary];
     [info removeObjectForKey:@"urls"];
-    [[NSData dataWithObjectAsJSON:info] writeToFile:[[media pathToFile] stringByAppendingPathComponent:@"Info.json"] atomically:YES];
+    
+    NSString* pathToInfoFile = [[media pathToFile] stringByAppendingPathComponent:@"Info.json"];
+    
+    NSData* dataToWrite = [NSData dataWithObjectAsJSON:info];
+    NSData* dataThatsThere = [NSData dataWithContentsOfFile:pathToInfoFile];
+    if (([dataToWrite length] != [dataThatsThere length]) || ![dataToWrite isEqualToData:dataThatsThere]) {
+        [dataToWrite writeToFile:pathToInfoFile atomically:YES];
+    }
 }
 
 - (void) setFrontCover:(NSImage*)coverArt forMedia:(Media*)media

@@ -142,6 +142,18 @@
     return nil;
 }
 
+- (void) deleteMovieIfNoMediaRemain:(NSManagedObject*)movie  
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:discDesc];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"movie == %@ && media.@count == 0", movie]];
+    NSError* error = nil;
+    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    [fetchRequest release];
+    if (!error && [results count] == [[movie valueForKey:@"discs"] count]) {
+        [managedObjectContext deleteObject:movie];
+    }
+}
 
 #pragma mark LibraryComProtocol delegate methods
 
@@ -184,8 +196,8 @@
                 NSManagedObject* movieForDisc = [disc valueForKey:@"movie"];
                 if (movie != movieForDisc) {
                     [disc setValue:movie forKey:@"movie"];
-                    if (0 == [[movieForDisc valueForKey:@"discs"] count]) {
-                        [managedObjectContext deleteObject:movieForDisc];
+                    if (movieForDisc) {
+                        [self deleteMovieIfNoMediaRemain:movieForDisc];
                     }
                 }
             } else {
@@ -241,8 +253,8 @@
                 NSManagedObject* movieForDisc = [disc valueForKey:@"movie"];
                 if (movie != movieForDisc) {
                     [disc setValue:movie forKey:@"movie"];
-                    if (movieForDisc && 0 == [[movieForDisc valueForKey:@"discs"] count]) {
-                        [managedObjectContext deleteObject:movieForDisc];
+                    if (movieForDisc) {
+                        [self deleteMovieIfNoMediaRemain:movieForDisc];
                     }
                 }
             }
@@ -258,15 +270,12 @@
             for (NSString* url in [info objectForKey:@"urls"]) {
                 NSManagedObject* media = [self findMediaByURL:url];
                 if (media) {
+                    [managedObjectContext deleteObject:media];
                     NSManagedObject* disc = [media valueForKey:@"disc"];
                     if (1 == [[disc valueForKey:@"media"] count]) {
                         NSManagedObject* movie = [disc valueForKey:@"movie"];
-                        if (1 == [[movie valueForKey:@"discs"] count]) {
-                            [managedObjectContext deleteObject:movie];
-                        }
-                        [managedObjectContext deleteObject:disc];
+                        [self deleteMovieIfNoMediaRemain:movie];
                     }
-                    [managedObjectContext deleteObject:media];
                 }
             }
         }

@@ -29,7 +29,9 @@
 
 static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSource)
 {
-	return [[Media alloc] initWithMediaSource:mediaSource MDItemRef:item];
+    Media* media = [[Media alloc] initWithMediaSource:mediaSource mediaInfo:[[NSMutableDictionary alloc] initWithObjectsAndKeys:(id)item, @"item", nil]];
+    [(DVDMediaSource*)mediaSource reloadMedia:media];
+    return media;
 }
 
 @implementation DVDMediaSource
@@ -117,39 +119,45 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
 - (NSMutableDictionary*) infoDictionaryForMedia:(Media*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
-
-    NSString* pathToInfoFile = [[media pathToFile] stringByAppendingPathComponent:@"Info.json"];
-
-    /*  Attempt to load the Info.json from the filesystem.  If this fails,
-     *  we create a new, empty dictionary containing just the fingerprint.
-     */
-    NSMutableDictionary* info = [NSDictionary dictionaryWithJSON:[NSString stringWithContentsOfFile:pathToInfoFile]];
+    NSMutableDictionary* mediaInfo = media.mediaInfo;
+    
+    NSMutableDictionary* info = [mediaInfo objectForKey:@"info"];
     if (!info) {
-        info = [NSMutableDictionary dictionary];
+        NSString* pathToFile = [media pathToFile];
+        NSString* pathToInfoFile = [pathToFile stringByAppendingPathComponent:@"Info.json"];
+        info = [NSDictionary dictionaryWithJSON:[NSString stringWithContentsOfFile:pathToInfoFile]];
+        if (!info) {
+            info = [NSMutableDictionary dictionary];
+        }
+        [mediaInfo setObject:info forKey:@"info"];
+
+        /*  Attempt to load the Info.json from the filesystem.  If this fails,
+         *  we create a new, empty dictionary containing just the fingerprint.
+         */
+        ;
+        if (!info) {
+            info = [NSMutableDictionary dictionary];
+        }
+        
+        /*  Add a meta-dictionary if none exists.
+         */
+        NSMutableDictionary* meta = [info objectForKey:@"meta"];
+        if (!meta) {
+            [info setObject:meta = [NSMutableDictionary dictionary] forKey:@"meta"]; 
+        }
+        
+        /*  Add a file-meta dictionary if none exists.
+         */
+        NSMutableDictionary* fileMeta = [meta objectForKey:@"file"];
+        if (!fileMeta) {
+            [meta setObject:fileMeta = [NSMutableDictionary dictionary] forKey:@"file"]; 
+        }
+        
+        /*  All discs should have a title, even if it's just one that's been
+         *  derived from the (possibly crappy) name in the filesystem.
+         */
+        [fileMeta setObject:[[[pathToFile lastPathComponent] stringByDeletingPathExtension] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" "]] forKey:@"title"];
     }
-    
-    /*  Remove any reserved keys.
-     */
-    [info removeObjectForKey:@"urls"];
-    
-    /*  Add a meta-dictionary if none exists.
-     */
-    NSMutableDictionary* meta = [info objectForKey:@"meta"];
-    if (!meta) {
-        [info setObject:meta = [NSMutableDictionary dictionary] forKey:@"meta"]; 
-    }
-    
-    /*  Add a file-meta dictionary if none exists.
-     */
-    NSMutableDictionary* fileMeta = [meta objectForKey:@"file"];
-    if (!fileMeta) {
-        [meta setObject:fileMeta = [NSMutableDictionary dictionary] forKey:@"file"]; 
-    }
-    
-    /*  All discs should have a title, even if it's just one that's been
-     *  derived from the (possibly crappy) name in the filesystem.
-     */
-    [fileMeta setObject:[[[[media pathToFile] lastPathComponent] stringByDeletingPathExtension] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" "]] forKey:@"title"];
     
     return info;
 }
@@ -157,12 +165,11 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
 - (void) setInfoDictionary:(NSMutableDictionary*)infoDictionary forMedia:(Media*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
-    NSMutableDictionary* info = [NSMutableDictionary dictionaryWithDictionary:infoDictionary];
-    [info removeObjectForKey:@"urls"];
+    NSMutableDictionary* mediaInfo = media.mediaInfo;
+    [mediaInfo setObject:infoDictionary forKey:@"info"];
     
     NSString* pathToInfoFile = [[media pathToFile] stringByAppendingPathComponent:@"Info.json"];
-    
-    NSData* dataToWrite = [NSData dataWithObjectAsJSON:info];
+    NSData* dataToWrite = [NSData dataWithObjectAsJSON:infoDictionary];
     NSData* dataThatsThere = [NSData dataWithContentsOfFile:pathToInfoFile];
     if (([dataToWrite length] != [dataThatsThere length]) || ![dataToWrite isEqualToData:dataThatsThere]) {
         [dataToWrite writeToFile:pathToInfoFile atomically:YES];
@@ -178,6 +185,39 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
     if ([fileManager fileExistsAtPath:pathToQuickLookFolder]) {
         [[coverArt PNGRepresentation] writeToFile:[pathToQuickLookFolder stringByAppendingPathComponent:@"FrontCover.png"] atomically:YES];
     }
+}
+
+- (void) reloadMedia:(Media*)media
+{
+    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSMutableDictionary* mediaInfo = media.mediaInfo;
+#if 0
+    MDItemRef item = (MDItemRef)[mediaInfo objectForKey:@"item"];
+    CFDictionaryRef meta = MDItemCopyAttributeList(
+        item,
+        @"com_discident_fingerprint",
+        nil
+    );
+    [mediaInfo setObject:(id)meta forKey:@"meta"];
+    CFRelease(meta);
+#endif
+    [mediaInfo removeObjectForKey:@"info"];
+}
+
+- (NSString*) fingerprintForMedia:(Media*)media
+{
+    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSMutableDictionary* mediaInfo = media.mediaInfo;
+    NSString* fingerprint = (NSString*)MDItemCopyAttribute((MDItemRef)[mediaInfo objectForKey:@"item"], CFSTR("com_discident_fingerprint"));
+    return [fingerprint autorelease];
+}
+
+- (NSString*) pathToFileForMedia:(Media*)media
+{
+    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSMutableDictionary* mediaInfo = media.mediaInfo;
+    NSString* pathToFile = (NSString*)MDItemCopyAttribute((MDItemRef)[mediaInfo objectForKey:@"item"], kMDItemPath);
+    return [pathToFile autorelease];
 }
 
 - (void) _queryDidUpdate:(NSNotification*)notification

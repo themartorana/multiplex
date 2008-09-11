@@ -50,6 +50,7 @@
 		F9A3A50E0E578B5F0087B159 /* libJSONKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = F9A3A4AB0E57887F0087B159 /* libJSONKit.dylib */; };
 		F9A3A73D0E579E770087B159 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A3A73C0E579E770087B159 /* Foundation.framework */; };
 		F9A3A7410E579E810087B159 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A3A7400E579E810087B159 /* AppKit.framework */; };
+		F9A6E7B20E78852300457F58 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AD7DB10E65AD5D0087E5E7 /* NSString+UUID.m */; };
 		F9AD7DB20E65AD5D0087E5E7 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AD7DB10E65AD5D0087E5E7 /* NSString+UUID.m */; };
 		F9AFE3E50B65CC6D0035DA65 /* ScratchPad in Resources */ = {isa = PBXBuildFile; fileRef = F9AFE3E40B65CC6D0035DA65 /* ScratchPad */; };
 		F9DA5B4A0E61C1BC00E96C0D /* DVDMediaSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F9DA5B490E61C1BC00E96C0D /* DVDMediaSource.m */; };
@@ -720,6 +721,7 @@
 				F9DA5B4A0E61C1BC00E96C0D /* DVDMediaSource.m in Sources */,
 				F9DA5B4D0E61C1C900E96C0D /* PhysicalMediaSource.m in Sources */,
 				F93B042C0E6F4FD6006CB915 /* NSDictionary+KeyPaths.m in Sources */,
+				F9A6E7B20E78852300457F58 /* NSString+UUID.m in Sources */,
 				F93B04A70E6F57CF006CB915 /* AmazonQuery.m in Sources */,
 				F9E3F8290E75799600DCA2A8 /* CoverArtQuery.m in Sources */,
 				F9E3F88A0E7587C000DCA2A8 /* NSImage+DmgCtrl.m in Sources */,

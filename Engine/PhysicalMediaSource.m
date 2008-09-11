@@ -76,26 +76,28 @@
 - (NSMutableDictionary*) infoDictionaryForMedia:(Media*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSMutableDictionary* mediaInfo = media.mediaInfo;
     
-    /*  Attempt to load the Info.json from the filesystem.  If this fails,
-     *  we create a new, empty dictionary containing just the fingerprint.
-     */
-    NSMutableDictionary* info = [NSMutableDictionary dictionary];
-    NSMutableDictionary* meta = [NSMutableDictionary dictionary];
-    NSMutableDictionary* fileMeta = [NSMutableDictionary dictionary];
-    
-    /*  Add a meta-dictionary if none exists.
-     */
-    [info setObject:meta forKey:@"meta"]; 
-    
-    /*  Add a file-meta dictionary if none exists.
-     */
-    [meta setObject:fileMeta forKey:@"file"]; 
-    
-    /*  All discs should have a title, even if it's just one that's been
-     *  derived from the (possibly crappy) name in the filesystem.
-     */
-    [fileMeta setObject:[[[[media pathToFile] lastPathComponent] stringByDeletingPathExtension] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" "]] forKey:@"title"];
+    NSMutableDictionary* info = [mediaInfo objectForKey:@"info"];
+    if (!info) {
+        [mediaInfo setObject:info = [NSMutableDictionary dictionary] forKey:@"info"];
+
+        NSMutableDictionary* meta = [NSMutableDictionary dictionary];
+        NSMutableDictionary* fileMeta = [NSMutableDictionary dictionary];
+        
+        /*  Add a meta-dictionary if none exists.
+         */
+        [info setObject:meta forKey:@"meta"]; 
+        
+        /*  Add a file-meta dictionary if none exists.
+         */
+        [meta setObject:fileMeta forKey:@"file"]; 
+        
+        /*  All discs should have a title, even if it's just one that's been
+         *  derived from the (possibly crappy) name in the filesystem.
+         */
+        [fileMeta setObject:[[[[media pathToFile] lastPathComponent] stringByDeletingPathExtension] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" "]] forKey:@"title"];
+    }
     
     return info;
 }
@@ -103,11 +105,33 @@
 - (void) setInfoDictionary:(NSMutableDictionary*)infoDictionary forMedia:(Media*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSMutableDictionary* mediaInfo = media.mediaInfo;
+    [mediaInfo setObject:infoDictionary forKey:@"info"];
 }
 
 - (void) setFrontCover:(NSImage*)coverArt forMedia:(Media*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+}
+
+- (void) reloadMedia:(Media*)media
+{
+    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    /* Ignored */
+}
+
+- (NSString*) pathToFileForMedia:(Media*)media
+{
+    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSMutableDictionary* mediaInfo = media.mediaInfo;
+    return [mediaInfo objectForKey:@"mountPoint"];
+}
+
+- (NSString*) fingerprintForMedia:(Media*)media
+{
+    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSMutableDictionary* mediaInfo = media.mediaInfo;
+    return [mediaInfo objectForKey:@"fingerprint"];
 }
 
 - (void) _volumeDidMount:(NSNotification*)notification
@@ -131,10 +155,10 @@
     if ([self _isNamedDeviceDVD:deviceName]) {
         NSString* fingerprint = [mountPoint discidentFingerprintForPath];
         if (fingerprint) {
-            Media* disc = [[Media alloc] initWithMediaSource:self physicalMedia:fingerprint atPath:mountPoint];
-            [delegate mediaSource:self didAddMedia:[NSArray arrayWithObject:disc]];
-            [mediaByDeviceName setObject:disc forKey:deviceName];
-            [disc release];
+            Media* media = [[Media alloc] initWithMediaSource:self mediaInfo:[[NSMutableDictionary alloc] initWithObjectsAndKeys:fingerprint, @"fingerprint", mountPoint, @"mountPoint", nil]];
+            [delegate mediaSource:self didAddMedia:[NSArray arrayWithObject:media]];
+            [mediaByDeviceName setObject:media forKey:deviceName];
+            [media release];
         }
     }
 }

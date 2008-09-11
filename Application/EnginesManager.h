@@ -1,21 +1,20 @@
-//
-//  EnginesManager.h
-//  Library
-//
-//  Created by David Martorana on 8/9/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
-//
-
 #import <Cocoa/Cocoa.h>
 #import "EngineController.h"
 
 @interface EnginesManager : NSObject {
-    NSMutableDictionary* _engines;
-    NSManagedObjectContext* _nsmoc;
+    NSMutableDictionary* engineControllers;
+    NSManagedObjectContext* managedObjectContext;
+    NSNetServiceBrowser* browser;
+    NSUserDefaults* engineDefaults;
+    NSString* localEngineID;
+    NSTask* localEngine;
+    NSMutableArray* netServices;
 }
 
-- (id) initWithManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
-- (void) closeAllEngines;
+- (id) initWithManagedObjectContext:(NSManagedObjectContext*)_managedObjectContext;
+- (void) stop;
 - (EngineController*) engineByUUIDKey:(NSString*)UUIDKey;
+
+@property (readonly) NSString* localEngineID;
 
 @end

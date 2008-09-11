@@ -3,29 +3,26 @@
 @class MessageProtocol;
 
 @interface EngineController : NSObject {
-    NSTask* engineTask;
-    MessageProtocol* protocol;
-    NSManagedObjectContext* managedObjectContext;
-    NSManagedObject* engineManagedObject;
-    
-    NSString* engineName;
-    NSString* engineAddress;
-    NSString* UUID;
+    NSString* machineName;
+    NSString* machineId;
+    NSNetService* netService;
 
-    @private
+    NSManagedObjectContext* managedObjectContext;
+
+    MessageProtocol* protocol;
     NSEntityDescription* mediaDesc;
     NSEntityDescription* discDesc;
     NSEntityDescription* movieDesc;
-    
 }
 
-@property (readwrite, retain) NSString* engineName;
-@property (readonly) NSString* UUID;
-@property (readonly) NSString* engineAddress;
+@property (readwrite, retain) NSString* machineName;
+@property (readonly) NSString* machineId;
 
-- (id) initWithLocalEngine:(NSManagedObjectContext*)managedObjectContext;
+- (id) initWithNetService:(NSNetService*)_netService managedObjectContext:(NSManagedObjectContext*)_managedObjectContext options:(NSDictionary*)_options;
 
 - (void) sendMessage:(NSDictionary*)message;
-- (BOOL) close;
+
+- (BOOL) connect;
+- (void) disconnect;
 
 @end

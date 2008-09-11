@@ -5,7 +5,12 @@
 @interface Engine : NSApplication <MediaSourceDelegate> {
     NSMutableDictionary* infoDictionariesByFingerprint;
     NSMutableDictionary* discsByFingerprint;
-    MessageProtocol* protocol; 
+    NSMutableArray* protocols;
+    NSString* machineId;
+    NSString* machineName;
+    NSMutableDictionary* txtData;
+    int networkPort;
+    NSNetService* netService;
 }
 
 @end

@@ -1,68 +1,50 @@
 #import "EngineController.h"
 #import "MessageProtocol.h"
 #import "NSString+UUID.h"
+#import <unistd.h>
+#import <netinet/ip.h>
+#import <netinet/ip6.h>
 
 @interface EngineController (Private)
-- (void) _saveEntityData:(NSDictionary*)messageDict toDiscEntity:(NSManagedObject*)discMO andMovieEntity:(NSManagedObject*)movieMO;
-- (void) _addMoviesData:(NSDictionary*)add;
-- (void) _updateMoviesData:(NSDictionary*)update;
-- (void) _deleteMoviesData:(NSDictionary*)delete;
+- (void) deleteAllMediaForThisEngine;
+- (void) deleteAllMoviesWithNoMedia;
+- (NSManagedObject*) findDiscByFingerprint:(NSString*)fingerprint;
+- (NSManagedObject*) findMovieByGTIN:(NSString*)gtin;
+- (NSManagedObject*) findMediaByURL:(NSString*)url;
+- (void) deleteMovieIfNoMediaRemain:(NSManagedObject*)movie;
 @end
 
 
 @implementation EngineController
 
-@synthesize engineName;
-@synthesize engineAddress;
-@synthesize UUID;
+@synthesize machineName;
+@synthesize machineId;
 
-- (id) initWithLocalEngine:(NSManagedObjectContext*)_managedObjectContext 
+- (id) initWithNetService:(NSNetService*)_netService managedObjectContext:(NSManagedObjectContext*)_managedObjectContext options:(NSDictionary*)_options
 {
-    NSAssert(_managedObjectContext, @"managedObjectContext must not be nil");
+    NSAssert(_netService, @"no net service?");
+    NSAssert(_managedObjectContext, @"no managed object context?");
+    NSAssert(_options, @"no options?");
     if (self = [super init]) {
-        UUID = [[NSString stringWithUUID] retain];
+        machineId = [[_options objectForKey:@"Machine ID"] retain];
+        machineName = [[_options objectForKey:@"Machine Name"] retain];
+        netService = [_netService retain];
         managedObjectContext = [_managedObjectContext retain];
-        
-        //  Wire up our protocol
-        NSPipe* pipe1 = [NSPipe pipe];
-        NSPipe* pipe2 = [NSPipe pipe];
-        protocol = [[MessageProtocol protocolWithDelegate:self fileHandleForReading:[pipe2 fileHandleForReading] fileHandleForWriting:[pipe1 fileHandleForWriting]] retain];
-
-        //  Fire up the engine task
-        engineTask = [[NSTask alloc] init];
-        [engineTask setStandardInput:[pipe1 fileHandleForReading]];
-        [engineTask setStandardOutput:[pipe2 fileHandleForWriting]];
-        [engineTask setLaunchPath:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Engine"]];
-        
-        //  Make sure we listen for a termination and launch the task
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(localEngineDidTerminate:) name:(NSString*)NSTaskDidTerminateNotification object:engineTask]; 
-        [engineTask launch];
-        
-        // Create the entity descriptions
+                
         mediaDesc = [[NSEntityDescription entityForName:@"Media" inManagedObjectContext:managedObjectContext] retain];
         discDesc = [[NSEntityDescription entityForName:@"Disc" inManagedObjectContext:managedObjectContext] retain];
         movieDesc = [[NSEntityDescription entityForName:@"Movie" inManagedObjectContext:managedObjectContext] retain];
-        
-        //  Add this engine to the Core Data set
-        engineName = @"Your computer";
-        engineAddress = @"localhost";
-        engineManagedObject = [[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"Engine" inManagedObjectContext:managedObjectContext] insertIntoManagedObjectContext:managedObjectContext];
-        [engineManagedObject setValue:engineAddress forKey:@"address"];
-        [engineManagedObject setValue:engineName forKey:@"niceName"];
-        [engineManagedObject setValue:UUID forKey:@"UUID"];
-        
-        [managedObjectContext save:nil];
     }
     return self;
 } 
 
 - (void) dealloc
 {
-    [engineManagedObject release];
-    [engineTask release];
-    [UUID release];
+    NSAssert(!protocol, @"stop not called before dealloc!");
+    [machineId release];
+    [machineName release];
+    [netService release];
     [managedObjectContext release];
-    [protocol release];
     [mediaDesc release];
     [discDesc release];
     [movieDesc release];
@@ -74,30 +56,89 @@
     [protocol sendMessage:message];
 }
 
-- (void) localEngineDidTerminate:(NSNotification*)notification 
+- (BOOL) connect
 {
-    NSAlert* a = [NSAlert alertWithMessageText:@"Local Engine Quit" 
-                                 defaultButton:@"OK" 
-                               alternateButton:nil 
-                                   otherButton:nil
-                     informativeTextWithFormat:@"The local engine quit.  The whole app should."];    
-    [a runModal];
-
-    //  The task is dead, no need for a listener.
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    NSAssert(!protocol, @"connection already active!");
+    for (NSData* address in [netService addresses]) {
+        const struct sockaddr* a = [address bytes];
+        if (a->sa_len == sizeof(struct sockaddr_in) && a->sa_family == AF_INET) {
+            int s = socket(AF_INET, SOCK_STREAM, 0);
+            if (s >= 0) {
+                if (0 == connect(s, a, a->sa_len)) {
+                    NSFileHandle* fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:s closeOnDealloc:YES];
+                    protocol = [[MessageProtocol protocolWithDelegate:self fileHandleForReading:fileHandle fileHandleForWriting:fileHandle] retain];
+                    [fileHandle release];
+                    break;
+                } else {
+                    close(s);
+                }
+            }
+        } else if (a->sa_len == sizeof(struct sockaddr_in6) && a->sa_family == AF_INET6) {
+            int s = socket(AF_INET6, SOCK_STREAM, 0);
+            if (s >= 0) {
+                if (0 == connect(s, a, a->sa_len)) {
+                    NSFileHandle* fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:s closeOnDealloc:YES];
+                    protocol = [[MessageProtocol protocolWithDelegate:self fileHandleForReading:fileHandle fileHandleForWriting:fileHandle] retain];
+                    [fileHandle release];
+                    break;
+                } else {
+                    close(s);
+                }
+            }
+        }
+    }
+    return protocol != nil;
 }
 
-- (BOOL) close 
+- (void) disconnect 
 {
     @try {
-        [protocol release];
-        [engineTask terminate];
-        NSLog(@"Closed connection to engine and terminated engine successfully.");
-        return TRUE;
+        [protocol close];
     } @catch (NSException* ex) {
-        NSLog(@"@%", ex);
+        /* Ignored */
+    } @finally {
+        [self deleteAllMediaForThisEngine];
+        [self deleteAllMoviesWithNoMedia];
+        [managedObjectContext save:nil];
+        [protocol release];
+        protocol = nil;
     }
-    return FALSE;
+}
+
+- (void) deleteAllMediaForThisEngine
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:mediaDesc];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"engine == %@", machineId]];
+    NSError* error = nil;
+    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    [fetchRequest release];
+    if (!error && [results count]) {
+        for (NSManagedObject* media in results) {
+            [managedObjectContext deleteObject:media];
+        }
+    }
+}
+
+- (void) deleteAllMoviesWithNoMedia
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:discDesc];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"media.@count == 0"]];
+    NSError* error = nil;
+    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    [fetchRequest release];
+    NSCountedSet* set = [NSCountedSet set];
+    if (!error && [results count]) {
+        for (NSManagedObject* disc in results) {
+            [set addObject:[disc valueForKey:@"movie"]];
+        }
+        for (NSManagedObject* movie in set) {
+            if ([[movie valueForKey:@"discs"] count] == [set countForObject:movie]) {
+                [managedObjectContext deleteObject:movie];
+            }
+        }
+    }
 }
 
 - (NSManagedObject*) findDiscByFingerprint:(NSString*)fingerprint
@@ -132,7 +173,7 @@
 {
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:mediaDesc];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"url == %@", url]]; 
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"engine == %@ && url == %@", machineId, url]]; 
     NSError* error = nil;
     NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
     [fetchRequest release];
@@ -159,14 +200,13 @@
 
 - (void) protocol:(MessageProtocol*)protocol didReceiveMessage:(NSDictionary*)message 
 {
-    /*
+    /*  Add
      */
-    NSDictionary* update = [message objectForKey:@"update"];
-    if (update && [update isKindOfClass:[NSDictionary class]]) {
-        for (NSString* fingerprint in update) {
-            NSDictionary* info = [update objectForKey:fingerprint];
-            NSDictionary* movieInfo = [info objectForKey:@"movie"];
-
+    NSDictionary* add = [message objectForKey:@"add"];
+    if (add && [add isKindOfClass:[NSDictionary class]]) {
+        for (NSString* fingerprint in add) {
+            NSDictionary* info = [add objectForKey:fingerprint];
+            
             /*  Find or create the disc that's represented by our fingerprint.
              */
             NSManagedObject* disc = [self findDiscByFingerprint:fingerprint];
@@ -181,10 +221,25 @@
             for (NSString* url in [info objectForKey:@"urls"]) {
                 NSManagedObject* media = [[NSManagedObject alloc] initWithEntity:mediaDesc insertIntoManagedObjectContext:managedObjectContext];
                 [media setValue:url forKey:@"url"];
-                [media setValue:engineManagedObject forKey:@"engine"];
+                [media setValue:machineId forKey:@"engine"];
                 [media setValue:disc forKey:@"disc"];
                 [media release];
             }
+        }
+    }
+            
+    /*  Update
+     */
+    NSDictionary* update = [message objectForKey:@"update"];
+    if (update && [update isKindOfClass:[NSDictionary class]]) {
+        for (NSString* fingerprint in update) {
+            NSDictionary* info = [update objectForKey:fingerprint];
+            NSDictionary* movieInfo = [info objectForKey:@"movie"];
+
+            /*  Find the disc that's represented by our fingerprint.
+             */
+            NSManagedObject* disc = [self findDiscByFingerprint:fingerprint];
+            NSAssert(disc, @"no disc?");
             
             /*  Figure out which movie to attach this disc to.  We may have 
              *  created a temporary movie that could need to be deleted if 
@@ -193,11 +248,11 @@
             NSString* gtin = [movieInfo objectForKey:@"gtin"];
             NSManagedObject* movie = gtin ? [self findMovieByGTIN:gtin] : nil;
             if (movie) {
-                NSManagedObject* movieForDisc = [disc valueForKey:@"movie"];
-                if (movie != movieForDisc) {
+                NSManagedObject* oldMovie = [disc valueForKey:@"movie"];
+                if ([movie isNotEqualTo:oldMovie]) {
                     [disc setValue:movie forKey:@"movie"];
-                    if (movieForDisc) {
-                        [self deleteMovieIfNoMediaRemain:movieForDisc];
+                    if (oldMovie) {
+                        [self deleteMovieIfNoMediaRemain:oldMovie];
                     }
                 }
             } else {
@@ -260,8 +315,8 @@
             }
         }
     }
-
-    /*
+    
+    /*  Delete
      */
     NSDictionary* delete = [message objectForKey:@"delete"];
     if (delete && [delete isKindOfClass:[NSDictionary class]]) {
@@ -270,17 +325,26 @@
             for (NSString* url in [info objectForKey:@"urls"]) {
                 NSManagedObject* media = [self findMediaByURL:url];
                 if (media) {
-                    [managedObjectContext deleteObject:media];
                     NSManagedObject* disc = [media valueForKey:@"disc"];
-                    if (1 == [[disc valueForKey:@"media"] count]) {
-                        NSManagedObject* movie = [disc valueForKey:@"movie"];
-                        [self deleteMovieIfNoMediaRemain:movie];
+                    [managedObjectContext deleteObject:media];
+                    int zeroCount = 0;
+                    int total = 0;
+                    NSManagedObject* movie = [disc valueForKey:@"movie"];
+                    for (NSManagedObject* otherDisc in [movie valueForKey:@"discs"]) {
+                        int count = [[otherDisc valueForKey:@"media"] count];
+                        zeroCount += (disc == otherDisc && (count == 1)) || (count == 0);
+                        total++;
+                    }
+                    if (zeroCount == total) {
+                        [managedObjectContext deleteObject:movie];
                     }
                 }
             }
         }
     }
-    
+
+    /*  Persist out our changes.
+     */
     [managedObjectContext save:nil];
 }
 

@@ -8,6 +8,7 @@
     /**/
     NSMutableData* buffer;
     BOOL canCallDidReceiveMessage;
+    BOOL canCallDidClose;
 }
 
 @property (retain) NSFileHandle* fileHandleForReading;
@@ -24,5 +25,6 @@
 @interface NSObject (LibraryComProtocolDelegate)
 
 - (void) protocol:(MessageProtocol*)protocol didReceiveMessage:(NSDictionary*)message;
+- (void) protocolDidClose:(MessageProtocol*)protocol;
 
 @end

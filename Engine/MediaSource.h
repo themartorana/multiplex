@@ -10,6 +10,9 @@
 - (NSMutableDictionary*) infoDictionaryForMedia:(Media*)media;
 - (void) setInfoDictionary:(NSMutableDictionary*)infoDictionary forMedia:(Media*)media;
 - (void) setFrontCover:(NSImage*)coverArt forMedia:(Media*)media;
+- (NSString*) pathToFileForMedia:(Media*)media;
+- (NSString*) fingerprintForMedia:(Media*)media;
+- (void) reloadMedia:(Media*)media;
 @end
 
 @protocol MediaSourceDelegate

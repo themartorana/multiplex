@@ -4,28 +4,25 @@
 @class Disc;
 
 @interface Media : NSObject {
-	MDItemRef itemRef;
-	NSDictionary* info;
+    void* mediaInfo;
+    NSString* fingerprint;
 	Disc* disc;
-    BOOL isPhysicalMedia;
-    id<MediaSource> mediaSource;
     NSURL* url;
+    id<MediaSource> mediaSource;
 }
 
-- (id) initWithMediaSource:(id<MediaSource>)mediaSource MDItemRef:(MDItemRef)itemRef;
-- (id) initWithMediaSource:(id<MediaSource>)mediaSource physicalMedia:(NSString*)fingerprint atPath:(NSString*)pathToMedia;
+- (id) initWithMediaSource:(id<MediaSource>)mediaSource mediaInfo:(void*)mediaInfo;
+
+@property (readonly) void* mediaInfo;
 
 @property (retain) Disc* disc;
 @property (retain) NSURL* url;
-@property (readonly) NSString* contentType;
-@property (readonly) NSString* fingerprint;
+@property (retain) NSString* fingerprint;
 @property (readonly) NSString* pathToFile;
-@property (readonly) BOOL isPhysicalMedia;
 @property (readonly) id<MediaSource> mediaSource;
 @property (assign) NSMutableDictionary* infoDictionary;
 
 - (void) reload;
-
 - (void) setFrontCover:(NSImage*)coverArt;
 
 @end

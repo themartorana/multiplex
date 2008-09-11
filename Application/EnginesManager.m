@@ -1,67 +1,146 @@
-//
-//  EnginesManager.m
-//  Library
-//
-
 #import "EnginesManager.h"
 #import "EngineController.h"
+#import "MessageProtocol.h"
+#import "NSString+UUID.h"
 
-//  This class will eventually sport an Bonjour listener as 
-//  well as just a single engine
+@interface EnginesManager (Private)
+
+- (void) netService:(NSNetService*)netService didNotResolve:(NSDictionary*)errorDict;
+- (void) netService:(NSNetService*)netService didUpdateTXTRecordData:(NSData*)data;
+- (void) netServiceDidResolveAddress:(NSNetService*)netService;
+
+@end
+
 
 @implementation EnginesManager
+@synthesize localEngineID;
 
-- (id) init {
-    NSException* exception = [NSException exceptionWithName:@"Wrong init method" reason:@"Please use initWithManagedObjectContext:" userInfo:nil];
-    [exception raise];
+- (id) initWithManagedObjectContext:(NSManagedObjectContext*)_managedObjectContext 
+{
+    if (self = [super init]) {
+        engineControllers = [[NSMutableDictionary alloc] init];
+        managedObjectContext = [_managedObjectContext retain];
 
-    return nil;
-}
-
-
-- (id) initWithManagedObjectContext:(NSManagedObjectContext*)managedObjectContext {
-    if (self = [super init]){
-        _engines = [[[NSMutableDictionary alloc] init] retain];
+        engineDefaults = [[NSUserDefaults alloc] init];
+        [engineDefaults addSuiteNamed:@"com.mothership.Library.Engine"];
+        localEngineID = [engineDefaults valueForKey:@"machine-id"];
+        if (!localEngineID) {
+            [engineDefaults setValue:localEngineID = [NSString stringWithUUID] forKey:@"machine-id"];
+            [engineDefaults synchronize];
+        }
         
-        _nsmoc = managedObjectContext;
-        
-        // Fire up the local engine
-        EngineController* ecLocal = [[EngineController alloc] initWithLocalEngine:_nsmoc];
-        [_engines setObject:ecLocal forKey:ecLocal.UUID];
+        browser = [[NSNetServiceBrowser alloc] init];
+        [browser setDelegate:self];
+        [browser searchForServicesOfType:@"_mezzanine._tcp." inDomain:@""]; 
+        [self performSelector:@selector(startLocalEngine) withObject:nil afterDelay:1.0];
     }
     
     return self;
 }
 
-///
-/// Allow someone to get a pointer to the engine controller
-/// via it's UUID key
-///
-- (EngineController*) engineByUUIDKey:(NSString*)UUIDKey
+- (void) dealloc
 {
-    return [_engines objectForKey:UUIDKey];
+    NSAssert(0 == [engineControllers count], @"closeAllEngines not called before dealloc");
+    [browser release];
+    [engineDefaults release];
+    [localEngineID release];
+    [engineControllers release];
+    [managedObjectContext release];
+    [super dealloc];
 }
 
+- (void) startLocalEngine
+{
+    NSLog(@"Starting local engine.");
+    localEngine = [NSTask launchedTaskWithLaunchPath:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Engine"] arguments:[NSArray array]];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(localEngineDidTerminate:) name:(NSString*)NSTaskDidTerminateNotification object:localEngine]; 
+}
 
-///
-/// Close all our engines
-/// 
-- (void) closeAllEngines {
-    // Loop through and close every engine
-    for (int i = 0; i < [[_engines allKeys] count]; i++) {
-        [(EngineController*)[_engines objectForKey:[[_engines allKeys] objectAtIndex:i]] close];
-        [_engines removeObjectForKey:[[_engines allKeys] objectAtIndex:i]];
+- (void) netService:(NSNetService*)netService didNotResolve:(NSDictionary*)errorDict
+{
+    NSLog(@"There was an error while attempting to resolve %@.", [netService name]);
+}
+
+- (void) netServiceDidResolveAddress:(NSNetService*)netService
+{
+    NSString* machineId = [netService name];
+    NSDictionary* rawData = [NSNetService dictionaryFromTXTRecordData:[netService TXTRecordData]];
+    NSString* machineName = [[[NSString alloc] initWithData:[rawData objectForKey:@"Machine Name"] encoding:NSUTF8StringEncoding] autorelease];
+    if (machineName && machineId) {
+         NSDictionary* options = [NSDictionary dictionaryWithObjectsAndKeys:
+            machineId, @"Machine Id",
+            machineName, @"Machine Name",
+            nil
+        ];
+
+        EngineController* controller = [[EngineController alloc] initWithNetService:netService managedObjectContext:managedObjectContext options:options];
+        [engineControllers setObject:controller forKey:machineId];
+        NSLog(@"Added net service %@", machineId);
+        if ([machineId isEqualToString:localEngineID]) {
+            NSLog(@"Started net service %@", machineId);
+            [controller connect];
+        }
     }
 }
 
+- (void) netServiceBrowserDidStopSearch:(NSNetServiceBrowser*)netServiceBrowser
+{
+    NSLog(@"Stopped search.");
+}
 
-- (void) dealloc {
-    [self closeAllEngines];
+- (void) netServiceBrowser:(NSNetServiceBrowser*)netServiceBrowser didFindService:(NSNetService*)netService moreComing:(BOOL)moreComing
+{
+    [netService setDelegate:self];
+    [netService resolveWithTimeout:5.0];
+    [netService retain];
     
-    [_engines release];
-    [_nsmoc release];
+    NSString* machineId = [netService name];
+    if ([machineId isEqualToString:localEngineID]) {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startLocalEngine) object:nil];
+    } else if (!moreComing && ![engineControllers objectForKey:localEngineID] && !localEngine) {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startLocalEngine) object:nil];
+        [self startLocalEngine];
+    }
+}
+
+- (void)netServiceBrowser:(NSNetServiceBrowser*)netServiceBrowser didRemoveService:(NSNetService*)netService moreComing:(BOOL)moreComing 
+{
+    [netService stop];
+    NSString* machineId = [netService name];
+    EngineController* engineController = [engineControllers objectForKey:machineId];
+    if (engineController) {
+        [engineController disconnect];
+        [engineControllers removeObjectForKey:machineId];
+    }
+}
+
+- (void) localEngineDidTerminate:(NSNotification*)notification 
+{
+    NSAlert* a = [NSAlert alertWithMessageText:@"Local Engine Quit" 
+                                 defaultButton:@"OK" 
+                               alternateButton:nil 
+                                   otherButton:nil
+                     informativeTextWithFormat:@"The local engine quit.  The whole app should."];    
+    [a runModal];
     
-    [super dealloc];
+    //  The task is dead, no need for a listener.
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (EngineController*) engineByUUIDKey:(NSString*)UUIDKey
+{
+    return [engineControllers objectForKey:UUIDKey];
+}
+
+- (void) stop 
+{
+    [browser stop];
+    [browser removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    for (NSString* key in engineControllers) {
+        EngineController* engineController = [engineControllers objectForKey:key];
+        [engineController disconnect];
+    }
+    [engineControllers removeAllObjects];
 }
 
 @end

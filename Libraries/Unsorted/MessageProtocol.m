@@ -3,6 +3,7 @@
 
 @interface MessageProtocol (Private)
 - (void) _fireDidReceiveMessage:(NSDictionary*)message;
+- (void) _fireDidClose;
 - (void) _dataCameIn:(NSNotification*)notification;
 @end
 
@@ -34,27 +35,41 @@
 
 - (void) dealloc
 {
-    [buffer dealloc];
-    [self setFileHandleForReading:nil];
-    [self setFileHandleForWriting:nil];
+    NSAssert(buffer == nil, @"close not called before dealloc!");
     [super dealloc];
 }
 
 - (void) close
 {
-    // Implement me.
+    if (buffer) {
+        [self setFileHandleForReading:nil];
+        [self setFileHandleForWriting:nil];
+        [self _fireDidClose];
+        [buffer release];
+        buffer = nil;
+    }
 }
 
 - (void) setDelegate:(id)_delegate
 {
+    NSAssert(buffer, @"This protocol has been closed.");
     delegate = _delegate;
-    if ([delegate respondsToSelector:@selector(protocol:didReceiveMessage:)]) {
-        canCallDidReceiveMessage = YES;
+    canCallDidReceiveMessage = [delegate respondsToSelector:@selector(protocol:didReceiveMessage:)];
+    canCallDidClose = [delegate respondsToSelector:@selector(protocolDidClose:)];
+}
+
+- (void) setFileHandleForWriting:(NSFileHandle*)_fileHandleForWriting
+{
+    NSAssert(buffer, @"This protocol has been closed.");
+    if (fileHandleForWriting != _fileHandleForWriting) {
+        [fileHandleForWriting release];
+        fileHandleForWriting = [_fileHandleForWriting retain];
     }
 }
 
 - (void) setFileHandleForReading:(NSFileHandle*)_fileHandleForReading 
 {
+    NSAssert(buffer, @"This protocol has been closed.");
     if (fileHandleForReading != _fileHandleForReading) {
         NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
 
@@ -74,6 +89,7 @@
 
 - (void) sendMessage:(NSDictionary*)message 
 {
+    NSAssert(buffer, @"This protocol has been closed.");
     @synchronized (self) {
         NSData* jsonData = [NSData dataWithObjectAsJSON:message];
         [fileHandleForWriting writeData:[[NSString stringWithFormat:@"%d\n", [jsonData length]] dataUsingEncoding:NSUTF8StringEncoding]];
@@ -96,13 +112,24 @@
     }
 }
 
+- (void) _fireDidClose
+{
+    @try {
+        if (canCallDidClose) {
+            [delegate protocolDidClose:self];
+        }
+    } @catch (id exception) {
+        NSLog(@"MessageProtocol: Exception during protocolDidClose: -- %@", exception);
+    }
+}
+
 ///
 /// Handle any incoming data off of the wire
 ///
 - (void) _dataCameIn:(NSNotification*)notification
 {
-    NSDictionary *userinfo = [notification userInfo];
-    NSData *data = [userinfo objectForKey:NSFileHandleNotificationDataItem]; 
+    NSDictionary *userInfo = [notification userInfo];
+    NSData *data = [userInfo objectForKey:NSFileHandleNotificationDataItem]; 
 
     if (data && [data length]) {
         [buffer appendData:data];
@@ -112,17 +139,18 @@
             const uint8_t* bpMax = bpBase + [buffer length];
 
             int bytesToRead = 0;
-            for (; bp < bpMax && *bp != '\n'; bp++) {
+            for (; bp < bpMax && *bp != '\r' && *bp != '\n'; bp++) {
                 int digit = *bp - '0';
-                NSAssert1(0 <= digit && digit <= 9, @"Something went horribly wrong! Digit is %d", digit);
+                if (0 > digit || digit > 9) {
+                    [self close];
+                    return;
+                }
                 bytesToRead = (bytesToRead * 10) + digit;
             }
-            int end = bpMax - bp;
-            if (*bp++ != '\n' || bytesToRead > end) {
-                break;
+            if (*bp == '\r') {
+                bp++;
             }
-            
-            if (bytesToRead > (bpMax - bp)) {
+            if (*bp++ != '\n' || bytesToRead > (bpMax - bp)) {
                 break;
             }
 
@@ -133,9 +161,11 @@
             buffer = [[NSMutableData dataWithData:[buffer subdataWithRange:NSMakeRange((bp + bytesToRead) - bpBase, bpMax - (bp + bytesToRead))]] retain];
             [oldCurrentBuffer release];
         } while ([buffer length] > 0);
+
+        [fileHandleForReading readInBackgroundAndNotify];
+    } else {
+        [self close];
     }
-    
-    [fileHandleForReading readInBackgroundAndNotify];
 }
 
 @end

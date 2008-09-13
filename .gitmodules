@@ -4,3 +4,6 @@
 [submodule "Libraries/DiscIdentKit"]
 	path = Libraries/DiscIdentKit
 	url = git://github.com/DiscIdent/objectivec.git
+[submodule "Frameworks/JSONKit"]
+	path = Frameworks/JSONKit
+	url = git://github.com/IndyHallLabs/jsonkit.git

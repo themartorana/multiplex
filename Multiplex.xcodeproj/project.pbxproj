@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		5535D98F0E4E3F5400A45761 /* EngineClientController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5535D98E0E4E3F5400A45761 /* EngineClientController.m */; };
 		5535DD6A0E4FF80B00A45761 /* lib+DmgCtrl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F94EA1ED0E4C93F800438E14 /* lib+DmgCtrl.a */; };
-		553FBB4D0E56245C0020A890 /* Engine in CopyFiles */ = {isa = PBXBuildFile; fileRef = 557B667E0E4A2D790009919E /* Engine */; };
+		553FBB4D0E56245C0020A890 /* Engine in Copy Files to Resources */ = {isa = PBXBuildFile; fileRef = 557B667E0E4A2D790009919E /* Engine */; };
 		557AC76D0E5B1E1A00271113 /* MessageProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 557AC76C0E5B1E1A00271113 /* MessageProtocol.m */; };
 		557AC76E0E5B1E1A00271113 /* MessageProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 557AC76C0E5B1E1A00271113 /* MessageProtocol.m */; };
 		557B66A30E4A2F4D0009919E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B66A20E4A2F4D0009919E /* main.m */; };
@@ -25,8 +25,6 @@
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		F93B042C0E6F4FD6006CB915 /* NSDictionary+KeyPaths.m in Sources */ = {isa = PBXBuildFile; fileRef = F93B042B0E6F4FD6006CB915 /* NSDictionary+KeyPaths.m */; };
 		F93B04A70E6F57CF006CB915 /* AmazonQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F93B04A60E6F57CF006CB915 /* AmazonQuery.m */; };
-		F94A060B0E7B9B7400C8A8B7 /* DiscIdentKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F94A06060E7B9B5800C8A8B7 /* DiscIdentKit.framework */; };
-		F94A060E0E7B9B7600C8A8B7 /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
 		F94EA1F40E4C942400438E14 /* lib+DmgCtrl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F94EA1ED0E4C93F800438E14 /* lib+DmgCtrl.a */; };
 		F94EA2020E4C94F400438E14 /* NSString+CarbonFSRefCreation.h in Headers */ = {isa = PBXBuildFile; fileRef = F94EA2000E4C94F400438E14 /* NSString+CarbonFSRefCreation.h */; };
 		F94EA2030E4C94F400438E14 /* NSString+CarbonFSRefCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA2010E4C94F400438E14 /* NSString+CarbonFSRefCreation.m */; };
@@ -37,13 +35,13 @@
 		F98DC70E0B63013B00371A83 /* GetMetadataForFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F98DC70A0B63013B00371A83 /* GetMetadataForFile.m */; };
 		F98DC7100B63013B00371A83 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = F98DC70C0B63013B00371A83 /* main.c */; };
 		F98DC7110B63013B00371A83 /* schema.xml in Resources */ = {isa = PBXBuildFile; fileRef = F98DC70D0B63013B00371A83 /* schema.xml */; };
-		F98DC7210B6301A400371A83 /* DVD.mdimporter in CopyFiles */ = {isa = PBXBuildFile; fileRef = F98DC6B60B63008700371A83 /* DVD.mdimporter */; };
+		F98DC7210B6301A400371A83 /* DVD.mdimporter in Copy Files to Library */ = {isa = PBXBuildFile; fileRef = F98DC6B60B63008700371A83 /* DVD.mdimporter */; };
 		F98DC7CA0B63029C00371A83 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F98DC7C90B63029C00371A83 /* CoreServices.framework */; };
 		F98DC8980B63038300371A83 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F98DC8970B63038300371A83 /* CoreFoundation.framework */; };
 		F98DCA560B6306E100371A83 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		F9970F430E7B9D94009A1B6A /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
-		F9970F490E7B9DCB009A1B6A /* JSONKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
-		F9970F4C0E7B9DD4009A1B6A /* DiscIdentKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F94A06060E7B9B5800C8A8B7 /* DiscIdentKit.framework */; };
+		F9970F490E7B9DCB009A1B6A /* JSONKit.framework in Copy Files to Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
+		F9970F4C0E7B9DD4009A1B6A /* DiscIdentKit.framework in Copy Files to Frameworks */ = {isa = PBXBuildFile; fileRef = F94A06060E7B9B5800C8A8B7 /* DiscIdentKit.framework */; };
 		F9A3A73D0E579E770087B159 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A3A73C0E579E770087B159 /* Foundation.framework */; };
 		F9A3A7410E579E810087B159 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A3A7400E579E810087B159 /* AppKit.framework */; };
 		F9A6E7B20E78852300457F58 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AD7DB10E65AD5D0087E5E7 /* NSString+UUID.m */; };
@@ -56,6 +54,8 @@
 		F9E935B10B62F88D007E9ACB /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E935B00B62F88D007E9ACB /* ApplicationServices.framework */; };
 		F9E935B30B62F89C007E9ACB /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E935B20B62F89C007E9ACB /* WebKit.framework */; };
 		F9ECE4330B654EED00253AA3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9ECE4320B654EED00253AA3 /* QuartzCore.framework */; };
+		F9F3388B0E7BAA5A00F3B302 /* DiscIdentKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F94A06060E7B9B5800C8A8B7 /* DiscIdentKit.framework */; };
+		F9F338A90E7BAA5F00F3B302 /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -139,35 +139,38 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		557B668A0E4A2DD00009919E /* CopyFiles */ = {
+		557B668A0E4A2DD00009919E /* Copy Files to Resources */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
-				553FBB4D0E56245C0020A890 /* Engine in CopyFiles */,
+				553FBB4D0E56245C0020A890 /* Engine in Copy Files to Resources */,
 			);
+			name = "Copy Files to Resources";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F98DC73B0B6301C300371A83 /* CopyFiles */ = {
+		F98DC73B0B6301C300371A83 /* Copy Files to Library */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 12;
 			dstPath = Contents/Library/Spotlight;
 			dstSubfolderSpec = 1;
 			files = (
-				F98DC7210B6301A400371A83 /* DVD.mdimporter in CopyFiles */,
+				F98DC7210B6301A400371A83 /* DVD.mdimporter in Copy Files to Library */,
 			);
+			name = "Copy Files to Library";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F9A3A5140E578B650087B159 /* CopyFiles */ = {
+		F9A3A5140E578B650087B159 /* Copy Files to Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				F9970F490E7B9DCB009A1B6A /* JSONKit.framework in CopyFiles */,
-				F9970F4C0E7B9DD4009A1B6A /* DiscIdentKit.framework in CopyFiles */,
+				F9970F490E7B9DCB009A1B6A /* JSONKit.framework in Copy Files to Frameworks */,
+				F9970F4C0E7B9DD4009A1B6A /* DiscIdentKit.framework in Copy Files to Frameworks */,
 			);
+			name = "Copy Files to Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -248,8 +251,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F94A060E0E7B9B7600C8A8B7 /* JSONKit.framework in Frameworks */,
-				F94A060B0E7B9B7400C8A8B7 /* DiscIdentKit.framework in Frameworks */,
+				F9F338A90E7BAA5F00F3B302 /* JSONKit.framework in Frameworks */,
+				F9F3388B0E7BAA5A00F3B302 /* DiscIdentKit.framework in Frameworks */,
 				F9A3A73D0E579E770087B159 /* Foundation.framework in Frameworks */,
 				F9A3A7410E579E810087B159 /* AppKit.framework in Frameworks */,
 				55DDB5EF0E5F225B0008C7CA /* IOKit.framework in Frameworks */,
@@ -371,8 +374,8 @@
 		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F94A05FD0E7B9B5800C8A8B7 /* DiscIdentKit.xcodeproj */,
 				F9C2AE540E7B747B00474D97 /* JSONKit.xcodeproj */,
+				F94A05FD0E7B9B5800C8A8B7 /* DiscIdentKit.xcodeproj */,
 				1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */,
 				1058C7A8FEA54F5311CA2CBB /* Other Frameworks */,
 			);
@@ -582,10 +585,10 @@
 			buildPhases = (
 				8D15AC2B0486D014006FF6A4 /* Resources */,
 				8D15AC300486D014006FF6A4 /* Sources */,
-				557B668A0E4A2DD00009919E /* CopyFiles */,
-				F98DC73B0B6301C300371A83 /* CopyFiles */,
-				F9A3A5140E578B650087B159 /* CopyFiles */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
+				557B668A0E4A2DD00009919E /* Copy Files to Resources */,
+				F98DC73B0B6301C300371A83 /* Copy Files to Library */,
+				F9A3A5140E578B650087B159 /* Copy Files to Frameworks */,
 				F9970F920E7B9F2C009A1B6A /* ShellScript */,
 			);
 			buildRules = (
@@ -720,7 +723,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\n#  Strip Everything\n\nif [ \"$ACTION\" = \"build\" ]; then\n  if [ \"$BUILD_STYLE\" = \"Release\" ]; then\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type f -perm 755 -exec strip -x \\{} \\;\n  fi\nfi\n\n\n#  Fixup the Spotlight Importer\n\ninstall_name_tool \\\n  -change \\\n    @executable_path/../Frameworks/JSONKit.framework/Versions/A/JSONKit \\\n    @loader_path/../../../../../Frameworks/JSONKit.framework/Versions/A/JSONKit \\\n  ${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/Spotlight/DVD.mdimporter/Contents/MacOS/DVD";
+			shellScript = "\n#  Strip Everything\n\nif [ \"$ACTION\" = \"build\" ]; then\n  if [ \"$BUILD_STYLE\" = \"Release\" ]; then\n    echo -n \"Stripping all executables and libraries...\"\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type f -perm 755 -exec strip -x \\{} +\n    echo \"ok\"\n\n    echo -n \"Removing all framework header files...\"\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type f -name '*.h' -exec rm -rf \\{} +\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type l -name 'Headers' -exec rm -rf \\{} +\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type d -name 'Headers' -exec rm -rf \\{} +\n    echo \"ok\"\n  fi\nfi\n\n\n#  Fixup the Spotlight Importer\n\ninstall_name_tool \\\n  -change \\\n    @executable_path/../Frameworks/JSONKit.framework/Versions/A/JSONKit \\\n    @loader_path/../../../../../Frameworks/JSONKit.framework/Versions/A/JSONKit \\\n  ${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/Spotlight/DVD.mdimporter/Contents/MacOS/DVD";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 

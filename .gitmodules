@@ -1,3 +1,6 @@
 [submodule "Libraries/JSONKit"]
 	path = Libraries/JSONKit
 	url = git://github.com/IndyHallLabs/jsonkit.git
+[submodule "Libraries/DiscIdentKit"]
+	path = Libraries/DiscIdentKit
+	url = git://github.com/DiscIdent/objectivec.git

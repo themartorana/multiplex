@@ -2,7 +2,7 @@
 
 @class MessageProtocol;
 
-@interface EngineClient : NSObject {
+@interface EngineConnection : NSObject {
     NSString* machineName;
     NSString* machineId;
     NSNetService* netService;

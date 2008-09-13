@@ -1,11 +1,11 @@
-#import "EngineClient.h"
+#import "EngineConnection.h"
 #import "MessageProtocol.h"
 #import "NSString+UUID.h"
 #import <unistd.h>
 #import <netinet/ip.h>
 #import <netinet/ip6.h>
 
-@interface EngineClient (Private)
+@interface EngineConnection (Private)
 - (void) deleteAllMediaForThisEngine;
 - (void) deleteAllMoviesWithNoMedia;
 - (NSManagedObject*) findDiscByFingerprint:(NSString*)fingerprint;
@@ -15,7 +15,7 @@
 @end
 
 
-@implementation EngineClient
+@implementation EngineConnection
 
 @synthesize machineName;
 @synthesize machineId;

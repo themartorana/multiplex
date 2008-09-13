@@ -1,28 +1,17 @@
 #import <Cocoa/Cocoa.h>
-
-@class MessageProtocol;
+#import "EngineConnection.h"
 
 @interface EngineController : NSObject {
-    NSString* machineName;
-    NSString* machineId;
-    NSNetService* netService;
-
+    NSMutableDictionary* engineControllers;
     NSManagedObjectContext* managedObjectContext;
-
-    MessageProtocol* protocol;
-    NSEntityDescription* mediaDesc;
-    NSEntityDescription* discDesc;
-    NSEntityDescription* movieDesc;
+    NSNetServiceBrowser* browser;
+    NSUserDefaults* engineDefaults;
+    NSString* localMachineID;
+    NSTask* localEngine;
+    NSMutableArray* netServices;
 }
 
-@property (readwrite, retain) NSString* machineName;
-@property (readonly) NSString* machineId;
-
-- (id) initWithNetService:(NSNetService*)_netService managedObjectContext:(NSManagedObjectContext*)_managedObjectContext options:(NSDictionary*)_options;
-
-- (void) sendMessage:(NSDictionary*)message;
-
-- (BOOL) connect;
-- (void) disconnect;
+- (id) initWithManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
+- (void) stop;
 
 @end

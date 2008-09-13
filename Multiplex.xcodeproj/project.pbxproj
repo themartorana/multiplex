@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5535D98F0E4E3F5400A45761 /* EngineClientController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5535D98E0E4E3F5400A45761 /* EngineClientController.m */; };
+		5535D98F0E4E3F5400A45761 /* EngineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5535D98E0E4E3F5400A45761 /* EngineController.m */; };
 		5535DD6A0E4FF80B00A45761 /* lib+DmgCtrl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F94EA1ED0E4C93F800438E14 /* lib+DmgCtrl.a */; };
 		553FBB4D0E56245C0020A890 /* Engine in Copy Files to Resources */ = {isa = PBXBuildFile; fileRef = 557B667E0E4A2D790009919E /* Engine */; };
 		557AC76D0E5B1E1A00271113 /* MessageProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 557AC76C0E5B1E1A00271113 /* MessageProtocol.m */; };
@@ -17,7 +17,7 @@
 		557B694E0E4CCD860009919E /* NSDate+Mothership.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B694D0E4CCD850009919E /* NSDate+Mothership.m */; };
 		557B694F0E4CCD860009919E /* NSDate+Mothership.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B694D0E4CCD850009919E /* NSDate+Mothership.m */; };
 		557B69740E4CD0790009919E /* MainController.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B69730E4CD0790009919E /* MainController.m */; };
-		557B69FE0E4CF44F0009919E /* EngineClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B69FD0E4CF44F0009919E /* EngineClient.m */; };
+		557B69FE0E4CF44F0009919E /* EngineConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B69FD0E4CF44F0009919E /* EngineConnection.m */; };
 		5583D1640E51D82700EB7AE6 /* Movies.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 5583D1630E51D82700EB7AE6 /* Movies.xcdatamodel */; };
 		55DDB5EF0E5F225B0008C7CA /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55DDB5EE0E5F225B0008C7CA /* IOKit.framework */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
@@ -182,8 +182,8 @@
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		5535D98D0E4E3F5400A45761 /* EngineClientController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngineClientController.h; sourceTree = "<group>"; };
-		5535D98E0E4E3F5400A45761 /* EngineClientController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngineClientController.m; sourceTree = "<group>"; };
+		5535D98D0E4E3F5400A45761 /* EngineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngineController.h; sourceTree = "<group>"; };
+		5535D98E0E4E3F5400A45761 /* EngineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngineController.m; sourceTree = "<group>"; };
 		557AC76B0E5B1E1A00271113 /* MessageProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageProtocol.h; sourceTree = "<group>"; };
 		557AC76C0E5B1E1A00271113 /* MessageProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageProtocol.m; sourceTree = "<group>"; };
 		557B667E0E4A2D790009919E /* Engine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Engine; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -193,8 +193,8 @@
 		557B694D0E4CCD850009919E /* NSDate+Mothership.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Mothership.m"; sourceTree = "<group>"; };
 		557B69720E4CD0790009919E /* MainController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainController.h; sourceTree = "<group>"; };
 		557B69730E4CD0790009919E /* MainController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainController.m; sourceTree = "<group>"; };
-		557B69FC0E4CF44F0009919E /* EngineClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngineClient.h; sourceTree = "<group>"; };
-		557B69FD0E4CF44F0009919E /* EngineClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngineClient.m; sourceTree = "<group>"; };
+		557B69FC0E4CF44F0009919E /* EngineConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngineConnection.h; sourceTree = "<group>"; };
+		557B69FD0E4CF44F0009919E /* EngineConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngineConnection.m; sourceTree = "<group>"; };
 		5583D1630E51D82700EB7AE6 /* Movies.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Movies.xcdatamodel; sourceTree = "<group>"; };
 		55DDB5EE0E5F225B0008C7CA /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		55DDB6AE0E5F2D6A0008C7CA /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -353,10 +353,10 @@
 			isa = PBXGroup;
 			children = (
 				557B69710E4CD0660009919E /* UI Controllers */,
-				557B69FC0E4CF44F0009919E /* EngineClient.h */,
-				557B69FD0E4CF44F0009919E /* EngineClient.m */,
-				5535D98D0E4E3F5400A45761 /* EngineClientController.h */,
-				5535D98E0E4E3F5400A45761 /* EngineClientController.m */,
+				557B69FC0E4CF44F0009919E /* EngineConnection.h */,
+				557B69FD0E4CF44F0009919E /* EngineConnection.m */,
+				5535D98D0E4E3F5400A45761 /* EngineController.h */,
+				5535D98E0E4E3F5400A45761 /* EngineController.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -755,8 +755,8 @@
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
 				557B694E0E4CCD860009919E /* NSDate+Mothership.m in Sources */,
 				557B69740E4CD0790009919E /* MainController.m in Sources */,
-				557B69FE0E4CF44F0009919E /* EngineClient.m in Sources */,
-				5535D98F0E4E3F5400A45761 /* EngineClientController.m in Sources */,
+				557B69FE0E4CF44F0009919E /* EngineConnection.m in Sources */,
+				5535D98F0E4E3F5400A45761 /* EngineController.m in Sources */,
 				5583D1640E51D82700EB7AE6 /* Movies.xcdatamodel in Sources */,
 				557AC76D0E5B1E1A00271113 /* MessageProtocol.m in Sources */,
 				F9AD7DB20E65AD5D0087E5E7 /* NSString+UUID.m in Sources */,

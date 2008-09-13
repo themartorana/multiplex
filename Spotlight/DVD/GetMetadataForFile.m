@@ -1,12 +1,12 @@
 #import <CoreFoundation/CoreFoundation.h>
 #import <CoreServices/CoreServices.h> 
 #import <Cocoa/Cocoa.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <openssl/md5.h>
-#include <sys/syslimits.h>
-#include "NSDate+Mothership.h"
-#include "JSONKit/JSONKit.h"
+#import <sys/types.h>
+#import <sys/stat.h>
+#import <openssl/md5.h>
+#import <sys/syslimits.h>
+#import "NSDate+Mothership.h"
+#import <JSONKit/JSONKit.h>
 
 const static NSString* kMDItemDiscIdentFingerprint = @"com_discident_fingerprint";
 

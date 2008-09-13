@@ -25,6 +25,8 @@
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		F93B042C0E6F4FD6006CB915 /* NSDictionary+KeyPaths.m in Sources */ = {isa = PBXBuildFile; fileRef = F93B042B0E6F4FD6006CB915 /* NSDictionary+KeyPaths.m */; };
 		F93B04A70E6F57CF006CB915 /* AmazonQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F93B04A60E6F57CF006CB915 /* AmazonQuery.m */; };
+		F94A060B0E7B9B7400C8A8B7 /* DiscIdentKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F94A06060E7B9B5800C8A8B7 /* DiscIdentKit.framework */; };
+		F94A060E0E7B9B7600C8A8B7 /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
 		F94EA1F40E4C942400438E14 /* lib+DmgCtrl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F94EA1ED0E4C93F800438E14 /* lib+DmgCtrl.a */; };
 		F94EA2020E4C94F400438E14 /* NSString+CarbonFSRefCreation.h in Headers */ = {isa = PBXBuildFile; fileRef = F94EA2000E4C94F400438E14 /* NSString+CarbonFSRefCreation.h */; };
 		F94EA2030E4C94F400438E14 /* NSString+CarbonFSRefCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA2010E4C94F400438E14 /* NSString+CarbonFSRefCreation.m */; };
@@ -32,15 +34,6 @@
 		F94EA2D10E4C9ECA00438E14 /* Engine.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA2D00E4C9ECA00438E14 /* Engine.m */; };
 		F94EA3780E4CA58D00438E14 /* Media.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA3770E4CA58D00438E14 /* Media.m */; };
 		F94EA6FC0E4E290B00438E14 /* Disc.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA6FB0E4E290B00438E14 /* Disc.m */; };
-		F9794B7C0E7AEA2F00F76800 /* libJSONKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A3A4AB0E57887F0087B159 /* libJSONKit.dylib */; };
-		F9794B7D0E7AEA3100F76800 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
-		F9794B7E0E7AEA3D00F76800 /* DiscIdentQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = F9794AA90E7AE55E00F76800 /* DiscIdentQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F9794B7F0E7AEA3D00F76800 /* DiscIdentQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F9794AAA0E7AE55E00F76800 /* DiscIdentQuery.m */; };
-		F9794B800E7AEA3D00F76800 /* DiscIdentKit.h in Headers */ = {isa = PBXBuildFile; fileRef = F9794AA80E7AE53900F76800 /* DiscIdentKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F9794B810E7AEA3D00F76800 /* NSString+DiscIdent.h in Headers */ = {isa = PBXBuildFile; fileRef = F9794AAE0E7AE5A400F76800 /* NSString+DiscIdent.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F9794B820E7AEA3D00F76800 /* NSString+DiscIdent.m in Sources */ = {isa = PBXBuildFile; fileRef = F9794AAF0E7AE5A400F76800 /* NSString+DiscIdent.m */; };
-		F9794BBA0E7AEBE700F76800 /* libDiscIdentKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = F9794B720E7AEA0E00F76800 /* libDiscIdentKit.dylib */; };
-		F9794BC10E7AEC4800F76800 /* libDiscIdentKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9794B720E7AEA0E00F76800 /* libDiscIdentKit.dylib */; };
 		F98DC70E0B63013B00371A83 /* GetMetadataForFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F98DC70A0B63013B00371A83 /* GetMetadataForFile.m */; };
 		F98DC7100B63013B00371A83 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = F98DC70C0B63013B00371A83 /* main.c */; };
 		F98DC7110B63013B00371A83 /* schema.xml in Resources */ = {isa = PBXBuildFile; fileRef = F98DC70D0B63013B00371A83 /* schema.xml */; };
@@ -48,18 +41,14 @@
 		F98DC7CA0B63029C00371A83 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F98DC7C90B63029C00371A83 /* CoreServices.framework */; };
 		F98DC8980B63038300371A83 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F98DC8970B63038300371A83 /* CoreFoundation.framework */; };
 		F98DCA560B6306E100371A83 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
-		F9A3A4B40E5789070087B159 /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = F9A3A4B00E5788AA0087B159 /* JSONKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F9A3A4B50E5789070087B159 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A3A4B20E5788ED0087B159 /* JSONKit.m */; };
-		F9A3A4BC0E57895C0087B159 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
-		F9A3A4C50E57897E0087B159 /* libJSONKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A3A4AB0E57887F0087B159 /* libJSONKit.dylib */; };
-		F9A3A4F10E578A6A0087B159 /* libJSONKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A3A4AB0E57887F0087B159 /* libJSONKit.dylib */; };
-		F9A3A4F40E578A710087B159 /* libJSONKit.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A3A4AB0E57887F0087B159 /* libJSONKit.dylib */; };
-		F9A3A50E0E578B5F0087B159 /* libJSONKit.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = F9A3A4AB0E57887F0087B159 /* libJSONKit.dylib */; };
+		F9970F430E7B9D94009A1B6A /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
+		F9970F490E7B9DCB009A1B6A /* JSONKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
+		F9970F4C0E7B9DD4009A1B6A /* DiscIdentKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F94A06060E7B9B5800C8A8B7 /* DiscIdentKit.framework */; };
 		F9A3A73D0E579E770087B159 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A3A73C0E579E770087B159 /* Foundation.framework */; };
 		F9A3A7410E579E810087B159 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A3A7400E579E810087B159 /* AppKit.framework */; };
 		F9A6E7B20E78852300457F58 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AD7DB10E65AD5D0087E5E7 /* NSString+UUID.m */; };
 		F9AD7DB20E65AD5D0087E5E7 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AD7DB10E65AD5D0087E5E7 /* NSString+UUID.m */; };
-		F9AFE3E50B65CC6D0035DA65 /* ScratchPad in Resources */ = {isa = PBXBuildFile; fileRef = F9AFE3E40B65CC6D0035DA65 /* ScratchPad */; };
+		F9C2B0300E7B919B00474D97 /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
 		F9DA5B4A0E61C1BC00E96C0D /* DVDMediaSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F9DA5B490E61C1BC00E96C0D /* DVDMediaSource.m */; };
 		F9DA5B4D0E61C1C900E96C0D /* PhysicalMediaSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F9DA5B4C0E61C1C900E96C0D /* PhysicalMediaSource.m */; };
 		F9E3F8290E75799600DCA2A8 /* CoverArtQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E3F8280E75799600DCA2A8 /* CoverArtQuery.m */; };
@@ -91,6 +80,27 @@
 			remoteGlobalIDString = 557B667D0E4A2D790009919E;
 			remoteInfo = Engine;
 		};
+		F94A06050E7B9B5800C8A8B7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F94A05FD0E7B9B5800C8A8B7 /* DiscIdentKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
+			remoteInfo = DiscIdentKit;
+		};
+		F94A06070E7B9B6F00C8A8B7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F9C2AE540E7B747B00474D97 /* JSONKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
+			remoteInfo = JSONKit;
+		};
+		F94A06090E7B9B6F00C8A8B7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F94A05FD0E7B9B5800C8A8B7 /* DiscIdentKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
+			remoteInfo = DiscIdentKit;
+		};
 		F94EA1F20E4C941800438E14 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
@@ -105,39 +115,25 @@
 			remoteGlobalIDString = F94EA1EC0E4C93F800438E14;
 			remoteInfo = "+DmgCtrl";
 		};
-		F9794B760E7AEA1200F76800 /* PBXContainerItemProxy */ = {
+		F9970F410E7B9D8C009A1B6A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			containerPortal = F9C2AE540E7B747B00474D97 /* JSONKit.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = F9A3A4AA0E57887F0087B159;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
 			remoteInfo = JSONKit;
 		};
-		F9794CF20E7AECB700F76800 /* PBXContainerItemProxy */ = {
+		F9C2AE580E7B747B00474D97 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F9794B710E7AEA0E00F76800;
-			remoteInfo = DiscIdentKit;
-		};
-		F9A3A4C20E5789730087B159 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F9A3A4AA0E57887F0087B159;
+			containerPortal = F9C2AE540E7B747B00474D97 /* JSONKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
 			remoteInfo = JSONKit;
 		};
-		F9A3A4EC0E578A4E0087B159 /* PBXContainerItemProxy */ = {
+		F9C2B0130E7B912C00474D97 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			containerPortal = F9C2AE540E7B747B00474D97 /* JSONKit.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = F9A3A4AA0E57887F0087B159;
-			remoteInfo = JSONKit;
-		};
-		F9A3A4EE0E578A540087B159 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F9A3A4AA0E57887F0087B159;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
 			remoteInfo = JSONKit;
 		};
 /* End PBXContainerItemProxy section */
@@ -169,8 +165,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				F9794BBA0E7AEBE700F76800 /* libDiscIdentKit.dylib in CopyFiles */,
-				F9A3A50E0E578B5F0087B159 /* libJSONKit.dylib in CopyFiles */,
+				F9970F490E7B9DCB009A1B6A /* JSONKit.framework in CopyFiles */,
+				F9970F4C0E7B9DD4009A1B6A /* DiscIdentKit.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,6 +203,7 @@
 		F93B042B0E6F4FD6006CB915 /* NSDictionary+KeyPaths.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+KeyPaths.m"; sourceTree = "<group>"; };
 		F93B04A50E6F57CF006CB915 /* AmazonQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmazonQuery.h; sourceTree = "<group>"; };
 		F93B04A60E6F57CF006CB915 /* AmazonQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmazonQuery.m; sourceTree = "<group>"; };
+		F94A05FD0E7B9B5800C8A8B7 /* DiscIdentKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DiscIdentKit.xcodeproj; path = Frameworks/DiscIdentKit/DiscIdentKit.xcodeproj; sourceTree = "<group>"; };
 		F94EA1ED0E4C93F800438E14 /* lib+DmgCtrl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "lib+DmgCtrl.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F94EA2000E4C94F400438E14 /* NSString+CarbonFSRefCreation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+CarbonFSRefCreation.h"; sourceTree = "<group>"; };
 		F94EA2010E4C94F400438E14 /* NSString+CarbonFSRefCreation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+CarbonFSRefCreation.m"; sourceTree = "<group>"; };
@@ -218,12 +215,6 @@
 		F94EA3770E4CA58D00438E14 /* Media.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Media.m; sourceTree = "<group>"; };
 		F94EA6FA0E4E290B00438E14 /* Disc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Disc.h; sourceTree = "<group>"; };
 		F94EA6FB0E4E290B00438E14 /* Disc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Disc.m; sourceTree = "<group>"; };
-		F9794AA80E7AE53900F76800 /* DiscIdentKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscIdentKit.h; sourceTree = "<group>"; };
-		F9794AA90E7AE55E00F76800 /* DiscIdentQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscIdentQuery.h; sourceTree = "<group>"; };
-		F9794AAA0E7AE55E00F76800 /* DiscIdentQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscIdentQuery.m; sourceTree = "<group>"; };
-		F9794AAE0E7AE5A400F76800 /* NSString+DiscIdent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+DiscIdent.h"; sourceTree = "<group>"; };
-		F9794AAF0E7AE5A400F76800 /* NSString+DiscIdent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+DiscIdent.m"; sourceTree = "<group>"; };
-		F9794B720E7AEA0E00F76800 /* libDiscIdentKit.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libDiscIdentKit.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		F98DC6B60B63008700371A83 /* DVD.mdimporter */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DVD.mdimporter; sourceTree = BUILT_PRODUCTS_DIR; };
 		F98DC70A0B63013B00371A83 /* GetMetadataForFile.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = GetMetadataForFile.m; sourceTree = "<group>"; };
 		F98DC70B0B63013B00371A83 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -231,14 +222,12 @@
 		F98DC70D0B63013B00371A83 /* schema.xml */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = schema.xml; sourceTree = "<group>"; };
 		F98DC7C90B63029C00371A83 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		F98DC8970B63038300371A83 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
-		F9A3A4AB0E57887F0087B159 /* libJSONKit.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libJSONKit.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		F9A3A4B00E5788AA0087B159 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
-		F9A3A4B20E5788ED0087B159 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		F9A3A73C0E579E770087B159 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F9A3A7400E579E810087B159 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		F9AD7DAF0E65AD200087E5E7 /* NSString+UUID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+UUID.h"; sourceTree = "<group>"; };
 		F9AD7DB10E65AD5D0087E5E7 /* NSString+UUID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+UUID.m"; sourceTree = "<group>"; };
 		F9AFE3E40B65CC6D0035DA65 /* ScratchPad */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ScratchPad; sourceTree = "<group>"; };
+		F9C2AE540E7B747B00474D97 /* JSONKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JSONKit.xcodeproj; path = Frameworks/JSONKit/JSONKit.xcodeproj; sourceTree = "<group>"; };
 		F9DA5B480E61C1BC00E96C0D /* DVDMediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVDMediaSource.h; sourceTree = "<group>"; };
 		F9DA5B490E61C1BC00E96C0D /* DVDMediaSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVDMediaSource.m; sourceTree = "<group>"; };
 		F9DA5B4B0E61C1C900E96C0D /* PhysicalMediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicalMediaSource.h; sourceTree = "<group>"; };
@@ -259,8 +248,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9794BC10E7AEC4800F76800 /* libDiscIdentKit.dylib in Frameworks */,
-				F9A3A4F40E578A710087B159 /* libJSONKit.dylib in Frameworks */,
+				F94A060E0E7B9B7600C8A8B7 /* JSONKit.framework in Frameworks */,
+				F94A060B0E7B9B7400C8A8B7 /* DiscIdentKit.framework in Frameworks */,
 				F9A3A73D0E579E770087B159 /* Foundation.framework in Frameworks */,
 				F9A3A7410E579E810087B159 /* AppKit.framework in Frameworks */,
 				55DDB5EF0E5F225B0008C7CA /* IOKit.framework in Frameworks */,
@@ -271,7 +260,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9A3A4C50E57897E0087B159 /* libJSONKit.dylib in Frameworks */,
+				F9970F430E7B9D94009A1B6A /* JSONKit.framework in Frameworks */,
 				F94EA1F40E4C942400438E14 /* lib+DmgCtrl.a in Frameworks */,
 				F9E935B10B62F88D007E9ACB /* ApplicationServices.framework in Frameworks */,
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
@@ -287,32 +276,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F9794B700E7AEA0E00F76800 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F9794B7C0E7AEA2F00F76800 /* libJSONKit.dylib in Frameworks */,
-				F9794B7D0E7AEA3100F76800 /* Cocoa.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		F98DC6B40B63008700371A83 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9A3A4F10E578A6A0087B159 /* libJSONKit.dylib in Frameworks */,
+				F9C2B0300E7B919B00474D97 /* JSONKit.framework in Frameworks */,
 				F98DCA560B6306E100371A83 /* Cocoa.framework in Frameworks */,
 				F98DC7CA0B63029C00371A83 /* CoreServices.framework in Frameworks */,
 				F98DC8980B63038300371A83 /* CoreFoundation.framework in Frameworks */,
 				5535DD6A0E4FF80B00A45761 /* lib+DmgCtrl.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F9A3A4A90E57887F0087B159 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F9A3A4BC0E57895C0087B159 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -350,8 +322,6 @@
 				F98DC6B60B63008700371A83 /* DVD.mdimporter */,
 				557B667E0E4A2D790009919E /* Engine */,
 				F94EA1ED0E4C93F800438E14 /* lib+DmgCtrl.a */,
-				F9A3A4AB0E57887F0087B159 /* libJSONKit.dylib */,
-				F9794B720E7AEA0E00F76800 /* libDiscIdentKit.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -401,6 +371,8 @@
 		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F94A05FD0E7B9B5800C8A8B7 /* DiscIdentKit.xcodeproj */,
+				F9C2AE540E7B747B00474D97 /* JSONKit.xcodeproj */,
 				1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */,
 				1058C7A8FEA54F5311CA2CBB /* Other Frameworks */,
 			);
@@ -463,6 +435,14 @@
 			name = "UI Controllers";
 			sourceTree = "<group>";
 		};
+		F94A05FE0E7B9B5800C8A8B7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F94A06060E7B9B5800C8A8B7 /* DiscIdentKit.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		F94EA1D70E4C937800438E14 /* +DmgCtrl */ = {
 			isa = PBXGroup;
 			children = (
@@ -511,26 +491,12 @@
 			path = Application;
 			sourceTree = "<group>";
 		};
-		F9A3A4A40E57883A0087B159 /* JSONKit */ = {
+		F9C2AE550E7B747B00474D97 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F9A3A4B00E5788AA0087B159 /* JSONKit.h */,
-				F9A3A4B20E5788ED0087B159 /* JSONKit.m */,
+				F9C2AE590E7B747B00474D97 /* JSONKit.framework */,
 			);
-			path = JSONKit;
-			sourceTree = "<group>";
-		};
-		F9B5A2A60E7ADEAC006E0046 /* DiscIdentKit */ = {
-			isa = PBXGroup;
-			children = (
-				F9794AA90E7AE55E00F76800 /* DiscIdentQuery.h */,
-				F9794AAA0E7AE55E00F76800 /* DiscIdentQuery.m */,
-				F9794AA80E7AE53900F76800 /* DiscIdentKit.h */,
-				F9794AAE0E7AE5A400F76800 /* NSString+DiscIdent.h */,
-				F9794AAF0E7AE5A400F76800 /* NSString+DiscIdent.m */,
-			);
-			name = DiscIdentKit;
-			path = DiscIdentKit/Source;
+			name = Products;
 			sourceTree = "<group>";
 		};
 		F9DA5B700E61C67B00E96C0D /* Media Sources */ = {
@@ -571,8 +537,6 @@
 			isa = PBXGroup;
 			children = (
 				557B694B0E4CCD760009919E /* Unsorted */,
-				F9A3A4A40E57883A0087B159 /* JSONKit */,
-				F9B5A2A60E7ADEAC006E0046 /* DiscIdentKit */,
 				F94EA1D70E4C937800438E14 /* +DmgCtrl */,
 			);
 			path = Libraries;
@@ -590,24 +554,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F9794B6E0E7AEA0E00F76800 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F9794B7E0E7AEA3D00F76800 /* DiscIdentQuery.h in Headers */,
-				F9794B800E7AEA3D00F76800 /* DiscIdentKit.h in Headers */,
-				F9794B810E7AEA3D00F76800 /* NSString+DiscIdent.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F9A3A4A70E57887F0087B159 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F9A3A4B40E5789070087B159 /* JSONKit.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -621,9 +567,9 @@
 			buildRules = (
 			);
 			dependencies = (
-				F9A3A4ED0E578A4E0087B159 /* PBXTargetDependency */,
-				F9794CF30E7AECB700F76800 /* PBXTargetDependency */,
 				F94EA6B30E4DFF7B00438E14 /* PBXTargetDependency */,
+				F94A06080E7B9B6F00C8A8B7 /* PBXTargetDependency */,
+				F94A060A0E7B9B6F00C8A8B7 /* PBXTargetDependency */,
 			);
 			name = Engine;
 			productName = Engine;
@@ -640,15 +586,15 @@
 				F98DC73B0B6301C300371A83 /* CopyFiles */,
 				F9A3A5140E578B650087B159 /* CopyFiles */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
-				F9E933F20B62F6CF007E9ACB /* ShellScript */,
+				F9970F920E7B9F2C009A1B6A /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				F9A3A4C30E5789730087B159 /* PBXTargetDependency */,
 				5535DBE10E4FC99200A45761 /* PBXTargetDependency */,
 				557B66900E4A2E0F0009919E /* PBXTargetDependency */,
 				F94EA1F30E4C941800438E14 /* PBXTargetDependency */,
+				F9970F420E7B9D8C009A1B6A /* PBXTargetDependency */,
 			);
 			name = Multiplex;
 			productInstallPath = "$(HOME)/Applications";
@@ -673,24 +619,6 @@
 			productReference = F94EA1ED0E4C93F800438E14 /* lib+DmgCtrl.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		F9794B710E7AEA0E00F76800 /* DiscIdentKit */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F9794B840E7AEA8300F76800 /* Build configuration list for PBXNativeTarget "DiscIdentKit" */;
-			buildPhases = (
-				F9794B6E0E7AEA0E00F76800 /* Headers */,
-				F9794B6F0E7AEA0E00F76800 /* Sources */,
-				F9794B700E7AEA0E00F76800 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				F9794B770E7AEA1200F76800 /* PBXTargetDependency */,
-			);
-			name = DiscIdentKit;
-			productName = DiscIdentKit;
-			productReference = F9794B720E7AEA0E00F76800 /* libDiscIdentKit.dylib */;
-			productType = "com.apple.product-type.library.dynamic";
-		};
 		F98DC6B50B63008700371A83 /* DVD.mdimporter */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F98DC6B80B63008800371A83 /* Build configuration list for PBXNativeTarget "DVD.mdimporter" */;
@@ -702,30 +630,13 @@
 			buildRules = (
 			);
 			dependencies = (
-				F9A3A4EF0E578A540087B159 /* PBXTargetDependency */,
 				5535DD530E4FF6AA00A45761 /* PBXTargetDependency */,
+				F9C2B0140E7B912C00474D97 /* PBXTargetDependency */,
 			);
 			name = DVD.mdimporter;
 			productName = CHM;
 			productReference = F98DC6B60B63008700371A83 /* DVD.mdimporter */;
 			productType = "com.apple.product-type.bundle";
-		};
-		F9A3A4AA0E57887F0087B159 /* JSONKit */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F9A3A4B10E5788AA0087B159 /* Build configuration list for PBXNativeTarget "JSONKit" */;
-			buildPhases = (
-				F9A3A4A70E57887F0087B159 /* Headers */,
-				F9A3A4A80E57887F0087B159 /* Sources */,
-				F9A3A4A90E57887F0087B159 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = JSONKit;
-			productName = JSONKit;
-			productReference = F9A3A4AB0E57887F0087B159 /* libJSONKit.dylib */;
-			productType = "com.apple.product-type.library.dynamic";
 		};
 /* End PBXNativeTarget section */
 
@@ -740,17 +651,42 @@
 			hasScannedForEncodings = 1;
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* BookShelf */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = F94A05FE0E7B9B5800C8A8B7 /* Products */;
+					ProjectRef = F94A05FD0E7B9B5800C8A8B7 /* DiscIdentKit.xcodeproj */;
+				},
+				{
+					ProductGroup = F9C2AE550E7B747B00474D97 /* Products */;
+					ProjectRef = F9C2AE540E7B747B00474D97 /* JSONKit.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				8D15AC270486D014006FF6A4 /* Multiplex */,
 				F98DC6B50B63008700371A83 /* DVD.mdimporter */,
 				557B667D0E4A2D790009919E /* Engine */,
 				F94EA1EC0E4C93F800438E14 /* +DmgCtrl */,
-				F9A3A4AA0E57887F0087B159 /* JSONKit */,
-				F9794B710E7AEA0E00F76800 /* DiscIdentKit */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		F94A06060E7B9B5800C8A8B7 /* DiscIdentKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = DiscIdentKit.framework;
+			remoteRef = F94A06050E7B9B5800C8A8B7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F9C2AE590E7B747B00474D97 /* JSONKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = JSONKit.framework;
+			remoteRef = F9C2AE580E7B747B00474D97 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8D15AC2B0486D014006FF6A4 /* Resources */ = {
@@ -758,7 +694,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
-				F9AFE3E50B65CC6D0035DA65 /* ScratchPad in Resources */,
 				557B69460E4CCD3F0009919E /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -774,7 +709,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		F9E933F20B62F6CF007E9ACB /* ShellScript */ = {
+		F9970F920E7B9F2C009A1B6A /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -785,8 +720,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\n#  Strip Everything\n\nif [ \"$ACTION\" = \"build\" ]; then\n  if [ \"$BUILD_STYLE\" = \"Release\" ]; then\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type f -perm 755 -exec strip -x \\{} \\;\n  fi\nfi\n\n\n# Fixup the Executable\n\ninstall_name_tool \\\n  -change \\\n    /usr/local/lib/libJSONKit.dylib \\\n    @executable_path/../Frameworks/libJSONKit.dylib \\\n  ${TARGET_BUILD_DIR}/${EXECUTABLE_PATH}\n\n\n#  Fixup the Engine\n\ninstall_name_tool \\\n  -change \\\n    /usr/local/lib/libJSONKit.dylib \\\n    @executable_path/../Frameworks/libJSONKit.dylib \\\n  ${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Resources/Engine\n\ninstall_name_tool \\\n  -change \\\n    /usr/local/lib/libDiscIdentKit.dylib \\\n    @executable_path/../Frameworks/libDiscIdentKit.dylib \\\n  ${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Resources/Engine\n\n\n#  Fixup the Spotlight Importer\n\ninstall_name_tool \\\n  -change \\\n    /usr/local/lib/libJSONKit.dylib \\\n    @loader_path/../../../../../Frameworks/libJSONKit.dylib \\\n  ${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/Spotlight/DVD.mdimporter/Contents/MacOS/DVD\n\n\n#  Fixup the Libraries\n\ninstall_name_tool \\\n  -change \\\n    /usr/local/lib/libJSONKit.dylib \\\n    @executable_path/../Frameworks/libJSONKit.dylib \\\n  ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libDiscIdentKit.dylib\n";
-			showEnvVarsInLog = 0;
+			shellScript = "\n#  Strip Everything\n\nif [ \"$ACTION\" = \"build\" ]; then\n  if [ \"$BUILD_STYLE\" = \"Release\" ]; then\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type f -perm 755 -exec strip -x \\{} \\;\n  fi\nfi\n\n\n#  Fixup the Spotlight Importer\n\ninstall_name_tool \\\n  -change \\\n    @executable_path/../Frameworks/JSONKit.framework/Versions/A/JSONKit \\\n    @loader_path/../../../../../Frameworks/JSONKit.framework/Versions/A/JSONKit \\\n  ${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/Spotlight/DVD.mdimporter/Contents/MacOS/DVD";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -833,15 +767,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F9794B6F0E7AEA0E00F76800 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F9794B7F0E7AEA3D00F76800 /* DiscIdentQuery.m in Sources */,
-				F9794B820E7AEA3D00F76800 /* NSString+DiscIdent.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		F98DC6B30B63008700371A83 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -849,14 +774,6 @@
 				F98DC70E0B63013B00371A83 /* GetMetadataForFile.m in Sources */,
 				F98DC7100B63013B00371A83 /* main.c in Sources */,
 				557B694F0E4CCD860009919E /* NSDate+Mothership.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F9A3A4A80E57887F0087B159 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F9A3A4B50E5789070087B159 /* JSONKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -878,6 +795,16 @@
 			target = 557B667D0E4A2D790009919E /* Engine */;
 			targetProxy = 557B668F0E4A2E0F0009919E /* PBXContainerItemProxy */;
 		};
+		F94A06080E7B9B6F00C8A8B7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = JSONKit;
+			targetProxy = F94A06070E7B9B6F00C8A8B7 /* PBXContainerItemProxy */;
+		};
+		F94A060A0E7B9B6F00C8A8B7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = DiscIdentKit;
+			targetProxy = F94A06090E7B9B6F00C8A8B7 /* PBXContainerItemProxy */;
+		};
 		F94EA1F30E4C941800438E14 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F94EA1EC0E4C93F800438E14 /* +DmgCtrl */;
@@ -888,30 +815,15 @@
 			target = F94EA1EC0E4C93F800438E14 /* +DmgCtrl */;
 			targetProxy = F94EA6B20E4DFF7B00438E14 /* PBXContainerItemProxy */;
 		};
-		F9794B770E7AEA1200F76800 /* PBXTargetDependency */ = {
+		F9970F420E7B9D8C009A1B6A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F9A3A4AA0E57887F0087B159 /* JSONKit */;
-			targetProxy = F9794B760E7AEA1200F76800 /* PBXContainerItemProxy */;
+			name = JSONKit;
+			targetProxy = F9970F410E7B9D8C009A1B6A /* PBXContainerItemProxy */;
 		};
-		F9794CF30E7AECB700F76800 /* PBXTargetDependency */ = {
+		F9C2B0140E7B912C00474D97 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F9794B710E7AEA0E00F76800 /* DiscIdentKit */;
-			targetProxy = F9794CF20E7AECB700F76800 /* PBXContainerItemProxy */;
-		};
-		F9A3A4C30E5789730087B159 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F9A3A4AA0E57887F0087B159 /* JSONKit */;
-			targetProxy = F9A3A4C20E5789730087B159 /* PBXContainerItemProxy */;
-		};
-		F9A3A4ED0E578A4E0087B159 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F9A3A4AA0E57887F0087B159 /* JSONKit */;
-			targetProxy = F9A3A4EC0E578A4E0087B159 /* PBXContainerItemProxy */;
-		};
-		F9A3A4EF0E578A540087B159 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F9A3A4AA0E57887F0087B159 /* JSONKit */;
-			targetProxy = F9A3A4EE0E578A540087B159 /* PBXContainerItemProxy */;
+			name = JSONKit;
+			targetProxy = F9C2B0130E7B912C00474D97 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -933,6 +845,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(NATIVE_ARCH)";
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -961,6 +874,7 @@
 				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "ppc i386 ppc64 x86_64";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
@@ -985,6 +899,10 @@
 			buildSettings = {
 				ARCHS = "$(NATIVE_ARCH)";
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Frameworks/JSONKit/build/${BUILD_STYLE}\"",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -999,7 +917,7 @@
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/build/Debug\"",
+					"\"$(SRCROOT)/build/${BUILD_STYLE}\"",
 				);
 				OTHER_CFLAGS = "-DDEBUG";
 				OTHER_LDFLAGS = "";
@@ -1015,6 +933,10 @@
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
 				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "ppc i386 ppc64 x86_64";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Frameworks/JSONKit/build/${BUILD_STYLE}\"",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_MODEL_TUNING = G5;
@@ -1025,7 +947,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/build/Debug\"",
+					"\"$(SRCROOT)/build/${BUILD_STYLE}\"",
 				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = Multiplex;
@@ -1036,6 +958,10 @@
 		C05733CC08A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/Frameworks/JSONKit/build/${BUILD_STYLE}",
+					"$(SRCROOT)/Frameworks/DiscIdentKit/build/${BUILD_STYLE}",
+				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
@@ -1046,6 +972,10 @@
 		C05733CD08A9546B00998B17 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/Frameworks/JSONKit/build/${BUILD_STYLE}",
+					"$(SRCROOT)/Frameworks/DiscIdentKit/build/${BUILD_STYLE}",
+				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
@@ -1088,51 +1018,12 @@
 			};
 			name = Release;
 		};
-		F9794B740E7AEA0E00F76800 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				EXECUTABLE_PREFIX = lib;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = /usr/local/lib;
-				OTHER_LDFLAGS = "-lcrypto";
-				PREBINDING = NO;
-				PRIVATE_HEADERS_FOLDER_PATH = /usr/local/include/DiscIdentKit/Private;
-				PRODUCT_NAME = DiscIdentKit;
-				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/DiscIdentKit;
-			};
-			name = Debug;
-		};
-		F9794B750E7AEA0E00F76800 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "ppc i386 ppc64 x86_64";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/lib;
-				OTHER_LDFLAGS = "-lcrypto";
-				PREBINDING = NO;
-				PRIVATE_HEADERS_FOLDER_PATH = /usr/local/include/DiscIdentKit/Private;
-				PRODUCT_NAME = DiscIdentKit;
-				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/DiscIdentKit;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		F98DC6B90B63008800371A83 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(NATIVE_ARCH)";
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -1158,6 +1049,10 @@
 				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "ppc i386 ppc64 x86_64";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Frameworks/JSONKit/build/Release\"",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
@@ -1170,43 +1065,6 @@
 				PRODUCT_NAME = DVD;
 				VERSION_INFO_FILE = "$(PRODUCT_NAME)_vers.c";
 				WRAPPER_EXTENSION = mdimporter;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
-		F9A3A4AC0E5788800087B159 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH)";
-				COPY_PHASE_STRIP = NO;
-				EXECUTABLE_PREFIX = lib;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
-				PRODUCT_NAME = JSONKit;
-				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/JSONKit;
-			};
-			name = Debug;
-		};
-		F9A3A4AD0E5788800087B159 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "ppc i386 ppc64 x86_64";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
-				PRODUCT_NAME = JSONKit;
-				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/JSONKit;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -1250,29 +1108,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F9794B840E7AEA8300F76800 /* Build configuration list for PBXNativeTarget "DiscIdentKit" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F9794B740E7AEA0E00F76800 /* Debug */,
-				F9794B750E7AEA0E00F76800 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		F98DC6B80B63008800371A83 /* Build configuration list for PBXNativeTarget "DVD.mdimporter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F98DC6B90B63008800371A83 /* Debug */,
 				F98DC6BA0B63008800371A83 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		F9A3A4B10E5788AA0087B159 /* Build configuration list for PBXNativeTarget "JSONKit" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F9A3A4AC0E5788800087B159 /* Debug */,
-				F9A3A4AD0E5788800087B159 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

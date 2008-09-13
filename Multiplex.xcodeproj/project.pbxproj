@@ -529,7 +529,8 @@
 				F9794AAE0E7AE5A400F76800 /* NSString+DiscIdent.h */,
 				F9794AAF0E7AE5A400F76800 /* NSString+DiscIdent.m */,
 			);
-			path = DiscIdentKit;
+			name = DiscIdentKit;
+			path = DiscIdentKit/Source;
 			sourceTree = "<group>";
 		};
 		F9DA5B700E61C67B00E96C0D /* Media Sources */ = {

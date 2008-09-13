@@ -33,17 +33,14 @@
         [browser setDelegate:self];
         [browser searchForServicesOfType:@"_com_multiplexapp_Engine._tcp." inDomain:@""]; 
         
-#if 0
-        NSString* lockFolder = @"/var/tmp/mezzanined";
-        [[NSFileManager defaultManager] createDirectoryAtPath:lockFolder attributes:nil];
-        NSDistributedLock* lock = [NSDistributedLock lockWithPath:[lockFolder stringByAppendingPathComponent:localEngineID]];
-        if (!lock || [lock tryLock]) {
-            [lock unlock];
-            NSLog(@"Starting local engine.");
-            localEngine = [NSTask launchedTaskWithLaunchPath:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Engine"] arguments:[NSArray array]];
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(localEngineDidTerminate:) name:(NSString*)NSTaskDidTerminateNotification object:localEngine]; 
+        NSString* pathToEngine = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Engine"];
+        NSTask* launchctl = [NSTask launchedTaskWithLaunchPath:@"/bin/launchctl" arguments:[NSArray arrayWithObjects:@"submit", @"-l", @"com.multiplexapp.Engine", pathToEngine, nil]];
+        [launchctl waitUntilExit];
+        if (0 == [launchctl terminationStatus]) {
+            NSLog(@"Started local engine.");
+        } else {
+            NSLog(@"Local engine may already be running.");
         }
-#endif
     }
     
     return self;
@@ -110,19 +107,6 @@
     }
 }
 
-- (void) localEngineDidTerminate:(NSNotification*)notification 
-{
-    NSAlert* a = [NSAlert alertWithMessageText:@"Local Engine Quit" 
-                                 defaultButton:@"OK" 
-                               alternateButton:nil 
-                                   otherButton:nil
-                     informativeTextWithFormat:@"The local engine quit.  The whole app should."];    
-    [a runModal];
-    
-    //  The task is dead, no need for a listener.
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 - (EngineClient*) engineByUUIDKey:(NSString*)UUIDKey
 {
     return [engineControllers objectForKey:UUIDKey];
@@ -137,6 +121,14 @@
         [engineController disconnect];
     }
     [engineControllers removeAllObjects];
+
+    NSTask* launchctl = [NSTask launchedTaskWithLaunchPath:@"/bin/launchctl" arguments:[NSArray arrayWithObjects:@"remove", @"com.multiplexapp.Engine", nil]];
+    [launchctl waitUntilExit];
+    if (0 == [launchctl terminationStatus]) {
+        NSLog(@"Stoppped local engine.");
+    } else {
+        NSLog(@"Local engine may still be running.");
+    }
 }
 
 @end

@@ -18,19 +18,19 @@ extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
 
 - (id) initWithMediaSource:(id<MediaSource>)_mediaSource mediaInfo:(void*)_mediaInfo;
 {
-	if (self = [super init]) {
+    if (self = [super init]) {
         mediaSource = _mediaSource; // NOT RETAINED.
         mediaInfo = _mediaInfo; // NOT RETAINED.
-	}
-	return self;
+    }
+    return self;
 }
 
 - (void) dealloc
 {
     [fingerprint release];
-	[disc release];
+    [disc release];
     [url release];    
-	[super dealloc];
+    [super dealloc];
 }
 
 - (void) reload

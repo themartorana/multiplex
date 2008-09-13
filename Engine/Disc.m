@@ -12,34 +12,34 @@
     NSAssert(_fingerprint, @"fingerprint cannot be nil.");
     NSAssert(_media, @"media cannot be nil.");
     NSAssert([_fingerprint isEqualToString:[_media fingerprint]], @"Fingerprints do not match.");
-	if (self = [super init]) {
-		allMedia = [[NSMutableArray alloc] initWithObjects:_media, nil];
-		fingerprint = [_fingerprint retain];
+    if (self = [super init]) {
+        allMedia = [[NSMutableArray alloc] initWithObjects:_media, nil];
+        fingerprint = [_fingerprint retain];
         [_media setDisc:self];
-	}
-	return self;
+    }
+    return self;
 }
 
 - (void) dealloc
 {
     [allMedia release];
-	[fingerprint release];
-	[super dealloc];
+    [fingerprint release];
+    [super dealloc];
 }
 
 - (NSString*) contentType
 {
-	return [[allMedia objectAtIndex:0] contentType];
+    return [[allMedia objectAtIndex:0] contentType];
 }
 
 - (BOOL) hasDisc
 {
-	return [allMedia count] > 0;
+    return [allMedia count] > 0;
 }
 
 - (NSString*) pathToFile
 {
-	return [[allMedia objectAtIndex:0] pathToFile];
+    return [[allMedia objectAtIndex:0] pathToFile];
 }
 
 - (BOOL) isPhysicalMedia

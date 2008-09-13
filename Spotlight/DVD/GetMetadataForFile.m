@@ -12,21 +12,21 @@ const static NSString* kMDItemDiscIdentFingerprint = @"com_discident_fingerprint
 
 NSString* computeDiscIdentFingerprintForPath(NSString* pathToFile) 
 {
-	/*	Do some quick checks.
-	 */
+    /*    Do some quick checks.
+     */
     NSFileManager* fileManager = [NSFileManager defaultManager];
     BOOL isDirectory = FALSE;
     if (![fileManager fileExistsAtPath:pathToFile isDirectory:&isDirectory] || !isDirectory) {
         return nil;
     }
-	NSString* videoPath = [pathToFile stringByAppendingPathComponent:@"VIDEO_TS"];
+    NSString* videoPath = [pathToFile stringByAppendingPathComponent:@"VIDEO_TS"];
     if (![fileManager fileExistsAtPath:videoPath isDirectory:&isDirectory] || !isDirectory) {
         return nil;
     }
 
-	/*  Build up the string that we hash to produce the fingerprint.
-	 */
-	NSMutableData* data = [NSMutableData data];
+    /*  Build up the string that we hash to produce the fingerprint.
+     */
+    NSMutableData* data = [NSMutableData data];
     for (NSString* path in [[fileManager subpathsAtPath:videoPath] sortedArrayUsingSelector:@selector(compare:)]) {
         if ([path length] > 0 && [path characterAtIndex:0] != '.') {
             struct stat sb;
@@ -41,7 +41,7 @@ NSString* computeDiscIdentFingerprintForPath(NSString* pathToFile)
             [data appendBytes:buffer length:length];
         }
     }
-	
+    
     /*  Generate the fingerprint.
      */
     unsigned char fingerprint[MD5_DIGEST_LENGTH];
@@ -66,7 +66,7 @@ NSString* computeDiscIdentFingerprintForPath(NSString* pathToFile)
         fingerprint[0x08], fingerprint[0x09], 
         fingerprint[0x0A], fingerprint[0x0B], fingerprint[0x0C], fingerprint[0x0D], fingerprint[0x0E], fingerprint[0x0F]
     );
-	return [NSString stringWithCString:readableFingerprint];
+    return [NSString stringWithCString:readableFingerprint];
 }
 
 BOOL GetMetadataForFile(void* thisInterface, NSMutableDictionary* attributes, NSString* contentTypeUTI, NSString* pathToFile)

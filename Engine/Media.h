@@ -6,7 +6,7 @@
 @interface Media : NSObject {
     void* mediaInfo;
     NSString* fingerprint;
-	Disc* disc;
+    Disc* disc;
     NSURL* url;
     id<MediaSource> mediaSource;
 }

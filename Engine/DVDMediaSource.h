@@ -2,7 +2,7 @@
 #import "MediaSource.h"
 
 @interface DVDMediaSource : NSObject <MediaSource> {
-	MDQueryRef query;
+    MDQueryRef query;
     int mediaProcessed;
     id<MediaSourceDelegate> delegate;
 }

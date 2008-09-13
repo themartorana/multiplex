@@ -2,7 +2,7 @@
 #import "Media.h"
 
 @interface Disc : NSObject {
-	NSString* fingerprint;
+    NSString* fingerprint;
     NSMutableArray* allMedia;
     NSMutableDictionary* infoDictionary;
 }

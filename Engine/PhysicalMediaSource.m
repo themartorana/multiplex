@@ -165,44 +165,44 @@
 
 - (NSString*) _deviceNameForMountPoint:(NSString*)mountPoint
 {
-	struct statfs s;
-	if (0 != statfs([mountPoint fileSystemRepresentation], &s)) {
-		return nil;
-	}
-	NSString* name = [[[NSString alloc] initWithUTF8String:s.f_mntfromname] autorelease];
-	if ([name hasPrefix:@"/dev/"]) {
-		name = [name substringFromIndex:5];
-	}
-	return name;
+    struct statfs s;
+    if (0 != statfs([mountPoint fileSystemRepresentation], &s)) {
+        return nil;
+    }
+    NSString* name = [[[NSString alloc] initWithUTF8String:s.f_mntfromname] autorelease];
+    if ([name hasPrefix:@"/dev/"]) {
+        name = [name substringFromIndex:5];
+    }
+    return name;
 }
 
 - (BOOL) _isNamedDeviceDVD:(NSString*)deviceName
 {
-	BOOL result = NO;
-	CFMutableDictionaryRef m;
-	if (m = IOBSDNameMatching(kIOMasterPortDefault, 0, [deviceName UTF8String])) {
-		io_service_t service = IOServiceGetMatchingService(kIOMasterPortDefault, m);   
-		if (service) {
-			io_iterator_t iterator;
-			if (KERN_SUCCESS == IORegistryEntryCreateIterator( 
+    BOOL result = NO;
+    CFMutableDictionaryRef m;
+    if (m = IOBSDNameMatching(kIOMasterPortDefault, 0, [deviceName UTF8String])) {
+        io_service_t service = IOServiceGetMatchingService(kIOMasterPortDefault, m);   
+        if (service) {
+            io_iterator_t iterator;
+            if (KERN_SUCCESS == IORegistryEntryCreateIterator( 
                 service,
                 kIOServicePlane,
                 kIORegistryIterateRecursively | kIORegistryIterateParents,
                 &iterator 
             )) {
-				if (iterator) {
-					IOObjectRetain(service);
-					do {
-						result = IOObjectConformsTo(service, kIODVDMediaClass);
-						IOObjectRelease(service);
-					} while (!result && (service = IOIteratorNext(iterator)));
-					IOObjectRelease(iterator);
-				}
-			}
-			IOObjectRelease(service);
-		}
-	}
-	return result;
+                if (iterator) {
+                    IOObjectRetain(service);
+                    do {
+                        result = IOObjectConformsTo(service, kIODVDMediaClass);
+                        IOObjectRelease(service);
+                    } while (!result && (service = IOIteratorNext(iterator)));
+                    IOObjectRelease(iterator);
+                }
+            }
+            IOObjectRelease(service);
+        }
+    }
+    return result;
 }
 
 @end

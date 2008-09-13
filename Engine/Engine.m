@@ -28,7 +28,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 + (void) initialize
 {
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
+    [userDefaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
         [NSString stringWithFormat:@"%@'s Movies", NSFullUserName()], @"machine-name",
         nil
     ]];

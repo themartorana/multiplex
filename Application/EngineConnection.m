@@ -14,7 +14,7 @@
 - (Disc*) findDiscByFingerprint:(NSString*)fingerprint;
 - (Movie*) findMovieByGTIN:(NSString*)gtin;
 - (Media*) findMediaByURL:(NSString*)url;
-- (void) deleteMovieIfNoMediaRemain:(Movie*)movie;
+- (void) deleteMovieIfNoMediaRemainForAnyDisc:(Movie*)movie;
 @end
 
 
@@ -172,7 +172,7 @@
     return nil;
 }
 
-- (void) deleteMovieIfNoMediaRemain:(Movie*)movie  
+- (void) deleteMovieIfNoMediaRemainForAnyDisc:(Movie*)movie  
 {
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:discDesc];
@@ -241,7 +241,7 @@
                 if ([movie isNotEqualTo:oldMovie]) {
                     disc.movie = movie;
                     if (oldMovie) {
-                        [self deleteMovieIfNoMediaRemain:oldMovie];
+                        [self deleteMovieIfNoMediaRemainForAnyDisc:oldMovie];
                     }
                 }
             } else {
@@ -298,7 +298,7 @@
                 if (movie != movieForDisc) {
                     disc.movie = movie;
                     if (movieForDisc) {
-                        [self deleteMovieIfNoMediaRemain:movieForDisc];
+                        [self deleteMovieIfNoMediaRemainForAnyDisc:movieForDisc];
                     }
                 }
             }

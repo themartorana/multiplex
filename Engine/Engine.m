@@ -1,4 +1,3 @@
-#import "JSONKit/JSONKit.h"
 #import "Engine.h"
 #import "Disc.h"
 #import "DVDMediaSource.h"
@@ -9,6 +8,9 @@
 #import "MessageProtocol.h"
 #import "NSDictionary+KeyPaths.h"
 #import "NSString+UUID.h"
+
+#import <JSONKit/JSONKit.h>
+
 #import <netinet/ip.h>
 #import <netinet/ip6.h>
 
@@ -70,25 +72,16 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (void) run
 {
-    /*  Register our media sources.  Later, this can be done more "plugin" 
-     *  style.
-     */
-    NSArray* mediaSources = [NSArray arrayWithObjects:
-        [[DVDMediaSource alloc] init],
-        [[PhysicalMediaSource alloc] init],
-        nil
-    ];
-
+    NSArray* mediaSources = nil;
     NSSocketPort* serverSocket = nil;
     NSFileHandle* serverHandle = nil;
+    
     @try {
-        /*  Set ourselves as the media source's delegate, and then start it up.
+        /*  Add observers for defaults that we care about.
          */
-        for (id<MediaSource> mediaSource in mediaSources) {
-            [mediaSource setDelegate:self];
-            [mediaSource start];
-        }
-
+        NSUserDefaultsController* defaultsController = [NSUserDefaultsController sharedUserDefaultsController];
+        [defaultsController addObserver:self forKeyPath:@"values.machine-name" options:NSKeyValueObservingOptionNew context:nil];
+        
         /*  Setup our socket to listen on, and begin accepting connections.
          */
         struct sockaddr_in6 sin6;
@@ -106,10 +99,21 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         [self republishNetService];
         NSLog(@"Listening on ip6 port: %d", networkPort);
 
-        /*  Add observers for defaults that we care about.
+        /*  Register our media sources.  Later, this can be done more "plugin" 
+         *  style.
          */
-        NSUserDefaultsController* defaultsController = [NSUserDefaultsController sharedUserDefaultsController];
-        [defaultsController addObserver:self forKeyPath:@"values.machine-name" options:NSKeyValueObservingOptionNew context:nil];
+        mediaSources = [NSArray arrayWithObjects:
+            [[DVDMediaSource alloc] init],
+            [[PhysicalMediaSource alloc] init],
+            nil
+        ];
+        
+        /*  Set ourselves as the media source's delegate, and then start it up.
+         */
+        for (id<MediaSource> mediaSource in mediaSources) {
+            [mediaSource setDelegate:self];
+            [mediaSource start];
+        }
         
         /*  Process our message loop unil we're told to stop.
          */
@@ -126,7 +130,11 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         /*  Shutdown all of our media sources.
          */
         for (id<MediaSource> mediaSource in mediaSources) {
-            [mediaSource stop];
+            @try {
+                [mediaSource stop];
+            } @catch (id exception) {
+                
+            }
         }
     }
 }
@@ -152,7 +160,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         [netService stop];
         [netService release];
     }
-    netService = [[NSNetService alloc] initWithDomain:@"local." type:@"_mezzanine._tcp" name:machineId port:networkPort];
+    netService = [[NSNetService alloc] initWithDomain:@"local." type:@"_com_multiplexapp_Engine._tcp" name:machineId port:networkPort];
     [netService setTXTRecordData:[NSNetService dataFromTXTRecordDictionary:txtData]];
     [netService publish];
 }

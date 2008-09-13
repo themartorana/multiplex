@@ -1,5 +1,5 @@
 #import "PhysicalMediaSource.h"
-#import "DiscIdentQuery.h"
+#import <DiscIdentKit/DiscIdentKit.h>
 #import <IOKit/IOKitLib.h>
 #import <IOKit/storage/IOMedia.h>
 #import <IOKit/storage/IODVDMedia.h>
@@ -153,7 +153,7 @@
 {
     NSString* deviceName = [self _deviceNameForMountPoint:mountPoint];
     if ([self _isNamedDeviceDVD:deviceName]) {
-        NSString* fingerprint = [mountPoint discidentFingerprintForPath];
+        NSString* fingerprint = [mountPoint stringByComputingDiscIdentFingerprintForDiscAtPath];
         if (fingerprint) {
             Media* media = [[Media alloc] initWithMediaSource:self mediaInfo:[[NSMutableDictionary alloc] initWithObjectsAndKeys:fingerprint, @"fingerprint", mountPoint, @"mountPoint", nil]];
             [delegate mediaSource:self didAddMedia:[NSArray arrayWithObject:media]];

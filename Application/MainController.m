@@ -1,5 +1,5 @@
 #import "MainController.h"
-#import "EngineController.h" 
+#import "EngineClientController.h" 
 
 @implementation MainController
 @synthesize managedObjectContext;
@@ -18,7 +18,7 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_coreDataChangeNotification:) name:NSManagedObjectContextObjectsDidChangeNotification object:managedObjectContext];
         //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_coreDataChangeNotification:) name:NSManagedObjectContextObjectsDidChangeNotification object:managedObjectContext];
        
-        enginesManager = [[EnginesManager alloc] initWithManagedObjectContext:managedObjectContext];
+        enginesManager = [[EngineClientController alloc] initWithManagedObjectContext:managedObjectContext];
         
         dirtyObjects = [[NSMutableSet set] retain];
     }
@@ -182,9 +182,5 @@
         }
     }
 }
-
-
-
-
 
 @end

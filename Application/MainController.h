@@ -1,8 +1,8 @@
 #import <Cocoa/Cocoa.h>
-#import "EnginesManager.h"
+#import "EngineClientController.h"
 
 @interface MainController : NSWindowController {
-    EnginesManager* enginesManager;
+    EngineClientController* enginesManager;
     NSManagedObjectModel* managedObjectModel;
     NSPersistentStoreCoordinator* persistentStoreCoordinator;
     NSManagedObjectContext* managedObjectContext;

@@ -1,16 +1,14 @@
-//
-//  Movie.h
-//  Library
-//
-//  Created by David Martorana on 8/11/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
-//
-
 #import <Cocoa/Cocoa.h>
 
-
-@interface Movie : NSObject {
-
+@interface Movie : NSManagedObject {
 }
+
+@property (retain) NSString* gtin;
+@property (retain) NSString* aspectRatio;
+@property (retain) NSString* review;
+@property (retain) NSString* synopsis;
+@property (retain) NSString* title;
+
+@property (readonly) NSSet* allDiscs;
 
 @end

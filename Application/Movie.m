@@ -1,14 +1,13 @@
-//
-//  Movie.m
-//  Library
-//
-//  Created by David Martorana on 8/11/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
-//
-
 #import "Movie.h"
 
-
 @implementation Movie
+
+@dynamic aspectRatio;
+@dynamic gtin;
+@dynamic review;
+@dynamic synopsis;
+@dynamic title;
+
+@dynamic allDiscs;
 
 @end

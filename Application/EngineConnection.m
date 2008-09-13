@@ -1,6 +1,9 @@
 #import "EngineConnection.h"
 #import "MessageProtocol.h"
 #import "NSString+UUID.h"
+#import "Disc.h"
+#import "Media.h"
+#import "Movie.h"
 #import <unistd.h>
 #import <netinet/ip.h>
 #import <netinet/ip6.h>
@@ -8,10 +11,10 @@
 @interface EngineConnection (Private)
 - (void) deleteAllMediaForThisEngine;
 - (void) deleteAllMoviesWithNoMedia;
-- (NSManagedObject*) findDiscByFingerprint:(NSString*)fingerprint;
-- (NSManagedObject*) findMovieByGTIN:(NSString*)gtin;
-- (NSManagedObject*) findMediaByURL:(NSString*)url;
-- (void) deleteMovieIfNoMediaRemain:(NSManagedObject*)movie;
+- (Disc*) findDiscByFingerprint:(NSString*)fingerprint;
+- (Movie*) findMovieByGTIN:(NSString*)gtin;
+- (Media*) findMediaByURL:(NSString*)url;
+- (void) deleteMovieIfNoMediaRemain:(Movie*)movie;
 @end
 
 
@@ -61,29 +64,15 @@
     NSAssert(!protocol, @"connection already active!");
     for (NSData* address in [netService addresses]) {
         const struct sockaddr* a = [address bytes];
-        if (a->sa_len == sizeof(struct sockaddr_in) && a->sa_family == AF_INET) {
-            int s = socket(AF_INET, SOCK_STREAM, 0);
-            if (s >= 0) {
-                if (0 == connect(s, a, a->sa_len)) {
-                    NSFileHandle* fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:s closeOnDealloc:YES];
-                    protocol = [[MessageProtocol protocolWithDelegate:self fileHandleForReading:fileHandle fileHandleForWriting:fileHandle] retain];
-                    [fileHandle release];
-                    break;
-                } else {
-                    close(s);
-                }
-            }
-        } else if (a->sa_len == sizeof(struct sockaddr_in6) && a->sa_family == AF_INET6) {
-            int s = socket(AF_INET6, SOCK_STREAM, 0);
-            if (s >= 0) {
-                if (0 == connect(s, a, a->sa_len)) {
-                    NSFileHandle* fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:s closeOnDealloc:YES];
-                    protocol = [[MessageProtocol protocolWithDelegate:self fileHandleForReading:fileHandle fileHandleForWriting:fileHandle] retain];
-                    [fileHandle release];
-                    break;
-                } else {
-                    close(s);
-                }
+        int s = socket(a->sa_family, SOCK_STREAM, 0);
+        if (s >= 0) {
+            if (0 == connect(s, a, a->sa_len)) {
+                NSFileHandle* fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:s closeOnDealloc:YES];
+                protocol = [[MessageProtocol protocolWithDelegate:self fileHandleForReading:fileHandle fileHandleForWriting:fileHandle] retain];
+                [fileHandle release];
+                break;
+            } else {
+                close(s);
             }
         }
     }
@@ -109,12 +98,12 @@
 {
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:mediaDesc];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"engine == %@", machineId]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"machineId == %@", machineId]];
     NSError* error = nil;
     NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
     [fetchRequest release];
     if (!error && [results count]) {
-        for (NSManagedObject* media in results) {
+        for (Media* media in results) {
             [managedObjectContext deleteObject:media];
         }
     }
@@ -124,24 +113,24 @@
 {
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:discDesc];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"media.@count == 0"]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"allMedia.@count == 0"]];
     NSError* error = nil;
     NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
     [fetchRequest release];
     NSCountedSet* set = [NSCountedSet set];
     if (!error && [results count]) {
-        for (NSManagedObject* disc in results) {
-            [set addObject:[disc valueForKey:@"movie"]];
+        for (Disc* disc in results) {
+            [set addObject:disc.movie];
         }
-        for (NSManagedObject* movie in set) {
-            if ([[movie valueForKey:@"discs"] count] == [set countForObject:movie]) {
+        for (Movie* movie in set) {
+            if ([movie.allDiscs count] == [set countForObject:movie]) {
                 [managedObjectContext deleteObject:movie];
             }
         }
     }
 }
 
-- (NSManagedObject*) findDiscByFingerprint:(NSString*)fingerprint
+- (Disc*) findDiscByFingerprint:(NSString*)fingerprint
 {
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:discDesc];
@@ -155,7 +144,7 @@
     return nil;
 }
 
-- (NSManagedObject*) findMovieByGTIN:(NSString*)gtin
+- (Movie*) findMovieByGTIN:(NSString*)gtin
 {
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:movieDesc];
@@ -169,11 +158,11 @@
     return nil;
 }
 
-- (NSManagedObject*) findMediaByURL:(NSString*)url
+- (Media*) findMediaByURL:(NSString*)url
 {
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:mediaDesc];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"engine == %@ && url == %@", machineId, url]]; 
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"machineId == %@ && url == %@", machineId, url]]; 
     NSError* error = nil;
     NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
     [fetchRequest release];
@@ -183,15 +172,15 @@
     return nil;
 }
 
-- (void) deleteMovieIfNoMediaRemain:(NSManagedObject*)movie  
+- (void) deleteMovieIfNoMediaRemain:(Movie*)movie  
 {
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:discDesc];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"movie == %@ && media.@count == 0", movie]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"movie == %@ && allMedia.@count == 0", movie]];
     NSError* error = nil;
     NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
     [fetchRequest release];
-    if (!error && [results count] == [[movie valueForKey:@"discs"] count]) {
+    if (!error && [results count] == [movie.allDiscs count]) {
         [managedObjectContext deleteObject:movie];
     }
 }
@@ -209,20 +198,20 @@
             
             /*  Find or create the disc that's represented by our fingerprint.
              */
-            NSManagedObject* disc = [self findDiscByFingerprint:fingerprint];
+            Disc* disc = [self findDiscByFingerprint:fingerprint];
             if (!disc) {
-                disc = [[[NSManagedObject alloc] initWithEntity:discDesc insertIntoManagedObjectContext:managedObjectContext] autorelease];
-                [disc setValue:fingerprint forKey:@"fingerprint"];
+                disc = [[[Disc alloc] initWithEntity:discDesc insertIntoManagedObjectContext:managedObjectContext] autorelease];
+                disc.fingerprint = fingerprint;
             }
             
             /*  For each URL provided, create a media object to represent it,
              *  and attached it to our disc.
              */
             for (NSString* url in [info objectForKey:@"urls"]) {
-                NSManagedObject* media = [[NSManagedObject alloc] initWithEntity:mediaDesc insertIntoManagedObjectContext:managedObjectContext];
-                [media setValue:url forKey:@"url"];
-                [media setValue:machineId forKey:@"engine"];
-                [media setValue:disc forKey:@"disc"];
+                Media* media = [[Media alloc] initWithEntity:mediaDesc insertIntoManagedObjectContext:managedObjectContext];
+                media.url = url;
+                media.machineId = machineId;
+                media.disc = disc;
                 [media release];
             }
         }
@@ -238,7 +227,7 @@
 
             /*  Find the disc that's represented by our fingerprint.
              */
-            NSManagedObject* disc = [self findDiscByFingerprint:fingerprint];
+            Disc* disc = [self findDiscByFingerprint:fingerprint];
             NSAssert(disc, @"no disc?");
             
             /*  Figure out which movie to attach this disc to.  We may have 
@@ -246,43 +235,43 @@
              *  another already exists with a particular GTIN.
              */
             NSString* gtin = [movieInfo objectForKey:@"gtin"];
-            NSManagedObject* movie = gtin ? [self findMovieByGTIN:gtin] : nil;
+            Movie* movie = gtin ? [self findMovieByGTIN:gtin] : nil;
             if (movie) {
-                NSManagedObject* oldMovie = [disc valueForKey:@"movie"];
+                Movie* oldMovie = disc.movie;
                 if ([movie isNotEqualTo:oldMovie]) {
-                    [disc setValue:movie forKey:@"movie"];
+                    disc.movie = movie;
                     if (oldMovie) {
                         [self deleteMovieIfNoMediaRemain:oldMovie];
                     }
                 }
             } else {
-                movie = [disc valueForKey:@"movie"];
+                movie = disc.movie;
                 if (!movie) {
-                    movie = [[[NSManagedObject alloc] initWithEntity:movieDesc insertIntoManagedObjectContext:managedObjectContext] autorelease];
+                    movie = [[[Movie alloc] initWithEntity:movieDesc insertIntoManagedObjectContext:managedObjectContext] autorelease];
                 }
                 if (gtin) {
-                    [movie setValue:gtin forKey:@"gtin"];
+                    movie.gtin = gtin;
                 }
-                [disc setValue:movie forKey:@"movie"];
+                disc.movie = movie;
             }
             
             /*  Set any movie-related properties.
              */
-            NSString* aspect_ratio = [movieInfo objectForKey:@"aspect_ratio"];
-            if (aspect_ratio) {
-                [movie setValue:aspect_ratio forKey:@"aspectRatio"];
+            NSString* aspectRatio = [movieInfo objectForKey:@"aspect_ratio"];
+            if (aspectRatio) {
+                movie.aspectRatio = aspectRatio;
             }
             NSString* review = [movieInfo objectForKey:@"review"];
             if (review) {
-                [movie setValue:review forKey:@"review"];
+                movie.review = review;
             }
             NSString* synopsis = [movieInfo objectForKey:@"synopsis"];
             if (synopsis) {
-                [movie setValue:synopsis forKey:@"synopsis"];
+                movie.synopsis = synopsis;
             }
             NSString* title = [movieInfo objectForKey:@"title"];
             if (title) {
-                [movie setValue:title forKey:@"title"];
+                movie.title = title;
             }
             
             /*  If there is a "discs" dictionary present, enumerate it's keys,
@@ -292,22 +281,22 @@
             NSDictionary* discInfo = [movieInfo objectForKey:@"discs"];
             for (NSString* discInfoFingerprint in discInfo) {
                 NSDictionary* otherDiscInfo = [discInfo objectForKey:discInfoFingerprint];
-                NSManagedObject* disc = [self findDiscByFingerprint:discInfoFingerprint];
+                Disc* disc = [self findDiscByFingerprint:discInfoFingerprint];
                 if (!disc) {
-                    disc = [[[NSManagedObject alloc] initWithEntity:discDesc insertIntoManagedObjectContext:managedObjectContext] autorelease];
-                    [disc setValue:discInfoFingerprint forKey:@"fingerprint"];
+                    disc = [[[Disc alloc] initWithEntity:discDesc insertIntoManagedObjectContext:managedObjectContext] autorelease];
+                    disc.fingerprint = discInfoFingerprint;
                 }
                 NSString* tag = [otherDiscInfo objectForKey:@"tag"];
                 if (tag && [tag length] == 2) {
                     int number = [tag characterAtIndex:0] - '0';
                     if (number >= 1 && number <= 9) {
-                        [disc setValue:[NSNumber numberWithInt:number] forKey:@"number"];
+                        disc.number = [NSNumber numberWithInt:number];
                     }
-                    [disc setValue:[tag substringFromIndex:1] forKey:@"side"];
+                    disc.side = [tag substringFromIndex:1];
                 }
-                NSManagedObject* movieForDisc = [disc valueForKey:@"movie"];
+                Movie* movieForDisc = disc.movie;
                 if (movie != movieForDisc) {
-                    [disc setValue:movie forKey:@"movie"];
+                    disc.movie = movie;
                     if (movieForDisc) {
                         [self deleteMovieIfNoMediaRemain:movieForDisc];
                     }
@@ -323,15 +312,15 @@
         for (NSString* fingerprint in delete) {
             NSDictionary* info = [delete objectForKey:fingerprint];
             for (NSString* url in [info objectForKey:@"urls"]) {
-                NSManagedObject* media = [self findMediaByURL:url];
+                Media* media = [self findMediaByURL:url];
                 if (media) {
-                    NSManagedObject* disc = [media valueForKey:@"disc"];
+                    Disc* disc = media.disc;
                     [managedObjectContext deleteObject:media];
                     int zeroCount = 0;
                     int total = 0;
-                    NSManagedObject* movie = [disc valueForKey:@"movie"];
-                    for (NSManagedObject* otherDisc in [movie valueForKey:@"discs"]) {
-                        int count = [[otherDisc valueForKey:@"media"] count];
+                    Movie* movie = disc.movie;
+                    for (Disc* otherDisc in movie.allDiscs) {
+                        int count = [otherDisc.allMedia count];
                         zeroCount += (disc == otherDisc && (count == 1)) || (count == 0);
                         total++;
                     }

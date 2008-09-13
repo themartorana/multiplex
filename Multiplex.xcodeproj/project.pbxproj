@@ -18,7 +18,7 @@
 		557B694F0E4CCD860009919E /* NSDate+Mothership.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B694D0E4CCD850009919E /* NSDate+Mothership.m */; };
 		557B69740E4CD0790009919E /* MainController.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B69730E4CD0790009919E /* MainController.m */; };
 		557B69FE0E4CF44F0009919E /* EngineConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B69FD0E4CF44F0009919E /* EngineConnection.m */; };
-		5583D1640E51D82700EB7AE6 /* Movies.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 5583D1630E51D82700EB7AE6 /* Movies.xcdatamodel */; };
+		5583D1640E51D82700EB7AE6 /* Multiplex.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */; };
 		55DDB5EF0E5F225B0008C7CA /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55DDB5EE0E5F225B0008C7CA /* IOKit.framework */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -47,6 +47,9 @@
 		F9A6E7B20E78852300457F58 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AD7DB10E65AD5D0087E5E7 /* NSString+UUID.m */; };
 		F9AD7DB20E65AD5D0087E5E7 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AD7DB10E65AD5D0087E5E7 /* NSString+UUID.m */; };
 		F9C2B0300E7B919B00474D97 /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
+		F9CA172A0E7C727C0049CD3E /* Movie.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CA17290E7C727C0049CD3E /* Movie.m */; };
+		F9CA172E0E7C72930049CD3E /* Disc.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CA172D0E7C72930049CD3E /* Disc.m */; };
+		F9CA17A90E7C79CE0049CD3E /* Media.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CA17A80E7C79CE0049CD3E /* Media.m */; };
 		F9DA5B4A0E61C1BC00E96C0D /* DVDMediaSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F9DA5B490E61C1BC00E96C0D /* DVDMediaSource.m */; };
 		F9DA5B4D0E61C1C900E96C0D /* PhysicalMediaSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F9DA5B4C0E61C1C900E96C0D /* PhysicalMediaSource.m */; };
 		F9E3F8290E75799600DCA2A8 /* CoverArtQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E3F8280E75799600DCA2A8 /* CoverArtQuery.m */; };
@@ -195,7 +198,7 @@
 		557B69730E4CD0790009919E /* MainController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainController.m; sourceTree = "<group>"; };
 		557B69FC0E4CF44F0009919E /* EngineConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngineConnection.h; sourceTree = "<group>"; };
 		557B69FD0E4CF44F0009919E /* EngineConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngineConnection.m; sourceTree = "<group>"; };
-		5583D1630E51D82700EB7AE6 /* Movies.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Movies.xcdatamodel; sourceTree = "<group>"; };
+		5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Multiplex.xcdatamodel; sourceTree = "<group>"; };
 		55DDB5EE0E5F225B0008C7CA /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		55DDB6AE0E5F2D6A0008C7CA /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		55DDB6C60E5F2DB10008C7CA /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
@@ -231,6 +234,12 @@
 		F9AD7DB10E65AD5D0087E5E7 /* NSString+UUID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+UUID.m"; sourceTree = "<group>"; };
 		F9AFE3E40B65CC6D0035DA65 /* ScratchPad */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ScratchPad; sourceTree = "<group>"; };
 		F9C2AE540E7B747B00474D97 /* JSONKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JSONKit.xcodeproj; path = Frameworks/JSONKit/JSONKit.xcodeproj; sourceTree = "<group>"; };
+		F9CA17280E7C727C0049CD3E /* Movie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Movie.h; sourceTree = "<group>"; };
+		F9CA17290E7C727C0049CD3E /* Movie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Movie.m; sourceTree = "<group>"; };
+		F9CA172C0E7C72930049CD3E /* Disc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Disc.h; sourceTree = "<group>"; };
+		F9CA172D0E7C72930049CD3E /* Disc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Disc.m; sourceTree = "<group>"; };
+		F9CA17A70E7C79CE0049CD3E /* Media.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Media.h; sourceTree = "<group>"; };
+		F9CA17A80E7C79CE0049CD3E /* Media.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Media.m; sourceTree = "<group>"; };
 		F9DA5B480E61C1BC00E96C0D /* DVDMediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVDMediaSource.h; sourceTree = "<group>"; };
 		F9DA5B490E61C1BC00E96C0D /* DVDMediaSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVDMediaSource.m; sourceTree = "<group>"; };
 		F9DA5B4B0E61C1C900E96C0D /* PhysicalMediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicalMediaSource.h; sourceTree = "<group>"; };
@@ -352,7 +361,6 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				557B69710E4CD0660009919E /* UI Controllers */,
 				557B69FC0E4CF44F0009919E /* EngineConnection.h */,
 				557B69FD0E4CF44F0009919E /* EngineConnection.m */,
 				5535D98D0E4E3F5400A45761 /* EngineController.h */,
@@ -385,7 +393,13 @@
 		5535DE020E508D3D00A45761 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				5583D1630E51D82700EB7AE6 /* Movies.xcdatamodel */,
+				5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */,
+				F9CA172C0E7C72930049CD3E /* Disc.h */,
+				F9CA172D0E7C72930049CD3E /* Disc.m */,
+				F9CA17A70E7C79CE0049CD3E /* Media.h */,
+				F9CA17A80E7C79CE0049CD3E /* Media.m */,
+				F9CA17280E7C727C0049CD3E /* Movie.h */,
+				F9CA17290E7C727C0049CD3E /* Movie.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -486,8 +500,9 @@
 		F98DCA920B6307B400371A83 /* Application */ = {
 			isa = PBXGroup;
 			children = (
-				5535DE020E508D3D00A45761 /* Models */,
 				2A37F4B0FDCFA73011CA2CEA /* main.m */,
+				5535DE020E508D3D00A45761 /* Models */,
+				557B69710E4CD0660009919E /* UI Controllers */,
 				2A37F4ABFDCFA73011CA2CEA /* Classes */,
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
 			);
@@ -757,9 +772,12 @@
 				557B69740E4CD0790009919E /* MainController.m in Sources */,
 				557B69FE0E4CF44F0009919E /* EngineConnection.m in Sources */,
 				5535D98F0E4E3F5400A45761 /* EngineController.m in Sources */,
-				5583D1640E51D82700EB7AE6 /* Movies.xcdatamodel in Sources */,
+				5583D1640E51D82700EB7AE6 /* Multiplex.xcdatamodel in Sources */,
 				557AC76D0E5B1E1A00271113 /* MessageProtocol.m in Sources */,
 				F9AD7DB20E65AD5D0087E5E7 /* NSString+UUID.m in Sources */,
+				F9CA172A0E7C727C0049CD3E /* Movie.m in Sources */,
+				F9CA172E0E7C72930049CD3E /* Disc.m in Sources */,
+				F9CA17A90E7C79CE0049CD3E /* Media.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

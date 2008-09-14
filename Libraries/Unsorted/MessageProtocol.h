@@ -5,6 +5,7 @@
     NSFileHandle* fileHandleForReading;
     NSFileHandle* fileHandleForWriting;
     id delegate;
+    void* userInfo;
     /**/
     NSMutableData* buffer;
     BOOL canCallDidReceiveMessage;
@@ -14,6 +15,7 @@
 @property (retain) NSFileHandle* fileHandleForReading;
 @property (retain) NSFileHandle* fileHandleForWriting;
 @property (assign) id delegate;
+@property (assign) void* userInfo;
 
 + (id) protocolWithDelegate:(id)delegate fileHandleForReading:(NSFileHandle*)fileHandleForReading fileHandleForWriting:(NSFileHandle*)fileHandleForWriting;
 

@@ -1,14 +1,18 @@
 #import <Cocoa/Cocoa.h>
-#import "EngineConnection.h"
 
 @interface EngineController : NSObject {
-    NSMutableDictionary* engineControllers;
+    NSMutableDictionary* netServiceByName;
+    NSMutableDictionary* protocolsByUUID;
+    /**/
     NSManagedObjectContext* managedObjectContext;
     NSNetServiceBrowser* browser;
-    NSUserDefaults* engineDefaults;
-    NSString* localMachineID;
-    NSTask* localEngine;
-    NSMutableArray* netServices;
+    NSString* localMachineUUID;
+    BOOL pushingBackChanges;
+    /**/
+    NSEntityDescription* engineDesc;
+    NSEntityDescription* mediaDesc;
+    NSEntityDescription* discDesc;
+    NSEntityDescription* movieDesc;
 }
 
 - (id) initWithManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;

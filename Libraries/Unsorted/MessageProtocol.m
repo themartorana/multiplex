@@ -12,6 +12,7 @@
 @synthesize fileHandleForReading;
 @synthesize fileHandleForWriting;
 @synthesize delegate;
+@synthesize userInfo;
 
 + (id) protocolWithDelegate:(id)delegate fileHandleForReading:(NSFileHandle*)fileHandleForReading fileHandleForWriting:(NSFileHandle*)fileHandleForWriting;
 {
@@ -44,9 +45,9 @@
     if (buffer) {
         [self setFileHandleForReading:nil];
         [self setFileHandleForWriting:nil];
-        [self _fireDidClose];
         [buffer release];
         buffer = nil;
+        [self _fireDidClose];
     }
 }
 
@@ -128,9 +129,7 @@
 ///
 - (void) _dataCameIn:(NSNotification*)notification
 {
-    NSDictionary *userInfo = [notification userInfo];
-    NSData *data = [userInfo objectForKey:NSFileHandleNotificationDataItem]; 
-
+    NSData *data = [[notification userInfo] objectForKey:NSFileHandleNotificationDataItem]; 
     if (data && [data length]) {
         [buffer appendData:data];
         do {

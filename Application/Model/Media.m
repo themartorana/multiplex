@@ -4,6 +4,6 @@
 
 @dynamic disc;
 @dynamic url;
-@dynamic machineId;
+@dynamic engine;
 
 @end

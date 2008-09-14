@@ -51,8 +51,8 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         [machineId retain];
 
         txtData = [[NSMutableDictionary dictionaryWithObjectsAndKeys:
-            [machineId dataUsingEncoding:NSUTF8StringEncoding], @"Machine ID",
-            [machineName dataUsingEncoding:NSUTF8StringEncoding], @"Machine Name",
+            [machineId dataUsingEncoding:NSUTF8StringEncoding], @"UUID",
+            [machineName dataUsingEncoding:NSUTF8StringEncoding], @"Name",
             nil
         ] retain];
     }
@@ -144,7 +144,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     BOOL republishServiceData = NO;
     
     if ([keyPath isEqual:@"values.machine-name"]) {
-        [txtData setObject:[[change objectForKey:NSKeyValueChangeNewKey] dataUsingEncoding:NSUTF8StringEncoding] forKey:@"Machine Name"];
+        [txtData setObject:[[change objectForKey:NSKeyValueChangeNewKey] dataUsingEncoding:NSUTF8StringEncoding] forKey:@"Name"];
         republishServiceData = YES;
     }
     

@@ -623,7 +623,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         [self sendMessage:[NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithExpandedKeyPathsAndObjects:newKeyPathsAndObjects] forKey:disc.fingerprint] forKey:@"update"]];
     }
     
-    NSString* coverImageURL = [newKeyPathsAndObjects objectForKey:@"meta.amazon._cover_image_url"];
+    NSString* coverImageURL = [newKeyPathsAndObjects objectForKey:@"meta.amazon._coverImageURL"];
     if (coverImageURL) @try {
         [CoverArtQuery queryWithURL:[NSURL URLWithString:coverImageURL] delegate:self userInfo:[disc retain] startImmediately:YES];
     } @catch (id exception) {

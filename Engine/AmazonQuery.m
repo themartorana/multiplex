@@ -159,22 +159,22 @@
                 
                 NSString* coverImageURL = [[item attributeForName:@"_cover_image_url"] stringValue];
                 if ([coverImageURL length]) {
-                    [response setObject:coverImageURL forKey:@"_cover_image_url"];
+                    [response setObject:coverImageURL forKey:@"_coverImageURL"];
                 }
                 
                 NSString* detailPageURL = [[item attributeForName:@"_detail_page_url"] stringValue];
                 if ([detailPageURL length]) {
-                    [response setObject:detailPageURL forKey:@"_detail_page_url"];
+                    [response setObject:detailPageURL forKey:@"_detailPageURL"];
                 }
                 
                 NSString* aspectRatio = [[item attributeForName:@"aspect_ratio"] stringValue];
                 if ([aspectRatio length]) {
-                    [response setObject:aspectRatio forKey:@"aspect_ratio"];
+                    [response setObject:aspectRatio forKey:@"aspectRatio"];
                 }
                 
                 NSString* audienceRating = [[item attributeForName:@"audience_rating"] stringValue];
                 if ([audienceRating length]) {
-                    [response setObject:audienceRating forKey:@"audience_rating"];
+                    [response setObject:audienceRating forKey:@"audienceRating"];
                 }
                 
                 NSArray* actors = [[[item attributeForName:@"actors"] stringValue] componentsSeparatedByString:@"|"];
@@ -194,12 +194,12 @@
                 
                 NSDate* releaseDate = [NSDate dateWithNaturalLanguageString:[[item attributeForName:@"release_date"] stringValue]];      
                 if (releaseDate) {
-                    [response setObject:[dateFormatter stringFromDate:releaseDate] forKey:@"release_date"];
+                    [response setObject:[dateFormatter stringFromDate:releaseDate] forKey:@"releaseDate"];
                 }
                 
                 NSDate* theatricalReleaseDate = [NSDate dateWithNaturalLanguageString:[[item attributeForName:@"theatrical_release_date"] stringValue]];      
                 if (theatricalReleaseDate) {
-                    [response setObject:[dateFormatter stringFromDate:theatricalReleaseDate] forKey:@"theatrical_release_date"];
+                    [response setObject:[dateFormatter stringFromDate:theatricalReleaseDate] forKey:@"theatricalReleaseDate"];
                 }
                 
                 NSString* studio = [[item attributeForName:@"studio"] stringValue];
@@ -216,13 +216,13 @@
                 if ([regionCode length]) {
                     int value = [[numberFormatter numberFromString:regionCode] intValue];
                     if (value >= 0 && value <= 8) {
-                        [response setObject:[NSNumber numberWithInt:value] forKey:@"region_code"];
+                        [response setObject:[NSNumber numberWithInt:value] forKey:@"regionCode"];
                     }
                 }
                 
                 NSString* runningTime = [[item attributeForName:@"running_time"] stringValue];
                 if ([runningTime length]) {
-                    [response setObject:[numberFormatter numberFromString:runningTime] forKey:@"running_time"];
+                    [response setObject:[numberFormatter numberFromString:runningTime] forKey:@"runningTime"];
                 }
             }
         } @catch (id exception) {

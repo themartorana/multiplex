@@ -6,6 +6,7 @@
     NSMutableDictionary* netServiceByName;
     NSMutableDictionary* protocolsByUUID;
     /**/
+    NSDateFormatter* dateFormatter;
     NSManagedObjectContext* managedObjectContext;
     NSNetServiceBrowser* browser;
     NSString* localMachineUUID;

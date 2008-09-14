@@ -49,7 +49,8 @@
         netServiceByName = [[NSMutableDictionary alloc] init];
         protocolsByUUID = [[NSMutableDictionary alloc] init];
         managedObjectContext = [_managedObjectContext retain];
-        
+        dateFormatter = [[NSDateFormatter alloc] initWithDateFormat:@"%Y-%m-%d" allowNaturalLanguage:NO];
+
         /*  Grab references to some commonly used entity descriptions.
          */
         engineDesc = [[NSEntityDescription entityForName:@"Engine" inManagedObjectContext:managedObjectContext] retain];
@@ -100,6 +101,7 @@
     [protocolsByUUID release];
     [netServiceByName release];
     /**/
+    [dateFormatter release];
     [browser release];
     [localMachineUUID release];
     [managedObjectContext release];
@@ -447,22 +449,51 @@
             
             /*  Set any movie-related properties.
              */
-            NSString* aspectRatio = [movieInfo objectForKey:@"aspect_ratio"];
-            if (aspectRatio) {
+            NSString* aspectRatio = [movieInfo objectForKey:@"aspectRatio"];
+            if ([aspectRatio length]) {
                 movie.aspectRatio = aspectRatio;
             }
             NSString* review = [movieInfo objectForKey:@"review"];
-            if (review) {
+            if ([review length]) {
                 movie.review = review;
             }
             NSString* synopsis = [movieInfo objectForKey:@"synopsis"];
-            if (synopsis) {
+            if ([synopsis length]) {
                 movie.synopsis = synopsis;
             }
             NSString* title = [movieInfo objectForKey:@"title"];
-            if (title) {
+            if ([title length]) {
                 movie.title = title;
             }
+            NSString* genre = [movieInfo objectForKey:@"genre"];
+            if ([genre length]) {
+                movie.genre = genre;
+            }
+            NSString* studio = [movieInfo objectForKey:@"studio"];
+            if ([studio length]) {
+                movie.studio = studio;
+            }
+            NSNumber* productionYear = [movieInfo objectForKey:@"productionYear"];
+            if (productionYear) {
+                movie.productionYear = productionYear;
+            }
+            NSNumber* runningTime = [movieInfo objectForKey:@"runningTime"];
+            if (runningTime) {
+                movie.runningTime = runningTime;
+            }
+            NSNumber* regionCode = [movieInfo objectForKey:@"regionCode"];
+            if (regionCode) {
+                movie.regionCode = regionCode;
+            }
+            NSString* theatricalReleaseDateAsString = [movieInfo objectForKey:@"theatricalReleaseDate"];
+            if ([theatricalReleaseDateAsString length]) {
+                movie.theatricalReleaseDate = [dateFormatter dateFromString:theatricalReleaseDateAsString];
+            }
+            NSString* releaseDateAsString = [movieInfo objectForKey:@"releaseDate"];
+            if ([releaseDateAsString length]) {
+                movie.releaseDate = [dateFormatter dateFromString:releaseDateAsString];
+            }
+            
             
             /*  If there is a "discs" dictionary present, enumerate it's keys,
              *  creating disc objects and associating them with the movie that

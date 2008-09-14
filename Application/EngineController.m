@@ -375,6 +375,9 @@
 - (void) protocol:(MessageProtocol*)protocol didReceiveMessage:(NSDictionary*)message 
 {
     Engine* engine = [self _findEngineByUUID:[protocol userInfo]];
+    if (!engine) {
+        return;
+    }
     
     /*  Add
      */

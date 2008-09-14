@@ -2671,22 +2671,6 @@
 					<int key="connectionID">572</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">saveBtn</string>
-						<reference key="source" ref="187112426"/>
-						<reference key="destination" ref="401606904"/>
-					</object>
-					<int key="connectionID">857</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">saveChanges:</string>
-						<reference key="source" ref="187112426"/>
-						<reference key="destination" ref="401606904"/>
-					</object>
-					<int key="connectionID">858</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">displayPatternValue1: selection.@count</string>
 						<reference key="source" ref="1026154356"/>

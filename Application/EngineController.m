@@ -11,15 +11,23 @@
 #import <netinet/ip6.h>
 
 @interface EngineController (Private)
-- (BOOL) connectEngine:(Engine*)engine;
-- (void) disconnectEngine:(Engine*)engine;
-- (void) deleteAllMediaForEngine:(Engine*)engine;
-- (void) deleteAllMoviesWithNoMedia;
-- (Disc*) findDiscByFingerprint:(NSString*)fingerprint;
-- (Movie*) findMovieByGTIN:(NSString*)gtin;
-- (Media*) findMediaByEngine:(Engine*)engine URL:(NSString*)_url;
-- (Engine*) findEngineByUUID:(NSString*)UUID;
-- (void) deleteMovieIfNoMediaRemainForAnyDisc:(Movie*)movie;
+- (void) _deleteAllMediaForEngine:(Engine*)engine;
+- (void) _deleteAllMoviesWithNoMedia;
+- (Disc*) _findDiscByFingerprint:(NSString*)fingerprint;
+- (Movie*) _findMovieByGTIN:(NSString*)gtin;
+- (Media*) _findMediaByEngine:(Engine*)engine URL:(NSString*)url;
+- (Engine*) _findEngineByUUID:(NSString*)UUID;
+- (Engine*) _findEngineByNetServiceName:(NSString*)netServiceName;
+- (void) _deleteMovieIfNoMediaRemainForAnyDisc:(Movie*)movie;
+@end
+
+@interface EngineController (CoreData)
+- (void) _coreDataChangeNotification:(NSNotification*)notification;
+@end
+
+@interface EngineController (MessageProtocolDelegate)
+- (void) protocolDidClose:(MessageProtocol*)protocol;
+- (void) protocol:(MessageProtocol*)protocol didReceiveMessage:(NSDictionary*)message;
 @end
 
 @interface EngineController (NSNetServiceDelegate)
@@ -41,9 +49,20 @@
         netServiceByName = [[NSMutableDictionary alloc] init];
         protocolsByUUID = [[NSMutableDictionary alloc] init];
         managedObjectContext = [_managedObjectContext retain];
-
+        
+        /*  Grab references to some commonly used entity descriptions.
+         */
+        engineDesc = [[NSEntityDescription entityForName:@"Engine" inManagedObjectContext:managedObjectContext] retain];
+        mediaDesc = [[NSEntityDescription entityForName:@"Media" inManagedObjectContext:managedObjectContext] retain];
+        discDesc = [[NSEntityDescription entityForName:@"Disc" inManagedObjectContext:managedObjectContext] retain];
+        movieDesc = [[NSEntityDescription entityForName:@"Movie" inManagedObjectContext:managedObjectContext] retain];
+        
+        /*  Register for CoreData notifications.
+         */
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_coreDataChangeNotification:) name:NSManagedObjectContextObjectsDidChangeNotification object:managedObjectContext];
 
+        /*  Grab (or generate) our local machine's Engine UUID.
+         */
         NSUserDefaults* engineDefaults = [[NSUserDefaults alloc] init];
         [engineDefaults addSuiteNamed:@"com.multiplexapp.Engine"];
         localMachineUUID = [engineDefaults valueForKey:@"machine-id"];
@@ -52,11 +71,16 @@
             [engineDefaults synchronize];
         }
         [engineDefaults release];
-        
+
+        /*  Fire up the Bonjour service browser.
+         */
         browser = [[NSNetServiceBrowser alloc] init];
         [browser setDelegate:self];
         [browser searchForServicesOfType:@"_com_multiplexapp_Engine._tcp." inDomain:@""]; 
         
+        /*  Use launchctl to start the local engine (if one's not started 
+         *  already.)
+         */
         NSString* pathToEngine = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Engine"];
         NSTask* launchctl = [NSTask launchedTaskWithLaunchPath:@"/bin/launchctl" arguments:[NSArray arrayWithObjects:@"submit", @"-l", @"com.multiplexapp.Engine", pathToEngine, nil]];
         [launchctl waitUntilExit];
@@ -65,11 +89,6 @@
         } else {
             NSLog(@"Local engine may already be running.");
         }
-        
-        engineDesc = [[NSEntityDescription entityForName:@"Engine" inManagedObjectContext:managedObjectContext] retain];
-        mediaDesc = [[NSEntityDescription entityForName:@"Media" inManagedObjectContext:managedObjectContext] retain];
-        discDesc = [[NSEntityDescription entityForName:@"Disc" inManagedObjectContext:managedObjectContext] retain];
-        movieDesc = [[NSEntityDescription entityForName:@"Movie" inManagedObjectContext:managedObjectContext] retain];
     }
     
     return self;
@@ -77,7 +96,7 @@
 
 - (void) dealloc
 {
-    NSAssert(0 == [protocolsByUUID count], @"stop not called before dealloc");
+    NSAssert(0 == [protocolsByUUID count], @"shutdown not called before dealloc");
     [protocolsByUUID release];
     [netServiceByName release];
     /**/
@@ -93,19 +112,27 @@
     [super dealloc];
 }
 
-- (void) stop 
+- (void) shutdown 
 {
+    /*  Kill all notification-handlers.
+     */
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
+
+    /*  Stop the Bonjour service browser.
+     */
     [browser stop];
     [browser removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     
+    /*  Close and clear all of our connections.
+     */
     for (NSString* uuid in protocolsByUUID) {
         MessageProtocol* protocol = [protocolsByUUID objectForKey:uuid];
         [protocol close];
     }
     [protocolsByUUID removeAllObjects];
     
+    /*  Use launchctl to shutdown our local engine.
+     */
     NSTask* launchctl = [NSTask launchedTaskWithLaunchPath:@"/bin/launchctl" arguments:[NSArray arrayWithObjects:@"remove", @"com.multiplexapp.Engine", nil]];
     [launchctl waitUntilExit];
     if (0 == [launchctl terminationStatus]) {
@@ -114,6 +141,199 @@
         NSLog(@"Local engine may still be running.");
     }
 }
+
+- (BOOL) connectEngine:(Engine*)engine
+{
+    NSAssert(engine, @"no engine?");
+    if ([protocolsByUUID objectForKey:engine.uuid]) {
+        return NO;
+    }
+    NSNetService* netService = [netServiceByName objectForKey:engine.netServiceName];
+    NSAssert(netService, @"no net service?");
+    
+    engine.status = @"Connecting";
+    [managedObjectContext save:nil];
+    MessageProtocol* protocol = nil;
+    for (NSData* address in [netService addresses]) {
+        const struct sockaddr* a = [address bytes];
+        int s = socket(a->sa_family, SOCK_STREAM, 0);
+        if (s >= 0) {
+            if (0 == connect(s, a, a->sa_len)) {
+                NSFileHandle* fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:s closeOnDealloc:YES];
+                protocol = [MessageProtocol protocolWithDelegate:self fileHandleForReading:fileHandle fileHandleForWriting:fileHandle];
+                protocol.userInfo = [engine.uuid retain];
+                [protocolsByUUID setObject:protocol forKey:engine.uuid];
+                [fileHandle release];
+                break;
+            } else {
+                close(s);
+            }
+        }
+    }
+    
+    if (protocol) {
+        engine.status = @"Connected";
+    } else {
+        engine.status = @"Not Connected";
+    }
+    [managedObjectContext save:nil];
+    return protocol != nil;
+}
+
+- (void) disconnectEngine:(Engine*)engine
+{
+    NSAssert(engine, @"no engine?");
+    engine.status = @"Disconnecting";
+    [managedObjectContext save:nil];
+    MessageProtocol* protocol = [protocolsByUUID objectForKey:engine.uuid];
+    if (protocol) {
+        NSString* uuid = protocol.userInfo;
+        NSAssert([uuid isEqualToString:engine.uuid], @"Why don't these match?");
+        @try {
+            [protocol close];
+        } @catch (NSException* ex) {
+            /* Ignored */
+        } @finally {
+            [self _deleteAllMediaForEngine:engine];
+            [self _deleteAllMoviesWithNoMedia];
+            [protocolsByUUID removeObjectForKey:engine.uuid];
+            engine.status = @"Not Connected";
+        }
+        [uuid release];
+        [managedObjectContext save:nil];
+    }
+}
+
+@end
+
+
+#pragma mark -
+@implementation EngineController (Private)
+
+- (void) _deleteAllMediaForEngine:(Engine*)engine
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:mediaDesc];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"engine == %@", engine]];
+    NSError* error = nil;
+    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    [fetchRequest release];
+    if (!error && [results count]) {
+        for (Media* media in results) {
+            [managedObjectContext deleteObject:media];
+        }
+    }
+}
+
+- (void) _deleteAllMoviesWithNoMedia
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:discDesc];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"allMedia.@count == 0"]];
+    NSError* error = nil;
+    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    [fetchRequest release];
+    NSCountedSet* set = [NSCountedSet set];
+    if (!error && [results count]) {
+        for (Disc* disc in results) {
+            [set addObject:disc.movie];
+        }
+        for (Movie* movie in set) {
+            if ([movie.allDiscs count] == [set countForObject:movie]) {
+                [managedObjectContext deleteObject:movie];
+            }
+        }
+    }
+}
+
+- (Disc*) _findDiscByFingerprint:(NSString*)fingerprint
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:discDesc];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"fingerprint == %@", fingerprint]];
+    NSError* error = nil;
+    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    [fetchRequest release];
+    if (!error && [results count]) {
+        return [results objectAtIndex:0];
+    }
+    return nil;
+}
+
+- (Movie*) _findMovieByGTIN:(NSString*)gtin
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:movieDesc];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"gtin == %@", gtin]]; 
+    NSError* error = nil;
+    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    [fetchRequest release];
+    if (!error && [results count]) {
+        return [results objectAtIndex:0];
+    }
+    return nil;
+}
+
+- (Media*) _findMediaByEngine:(Engine*)engine URL:(NSString*)url
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:mediaDesc];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"engine == %@ && url == %@", engine, url]]; 
+    NSError* error = nil;
+    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    [fetchRequest release];
+    if (!error && [results count]) {
+        return [results objectAtIndex:0];
+    }
+    return nil;
+}
+
+- (Engine*) _findEngineByUUID:(NSString*)UUID
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:engineDesc];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"uuid == %@", UUID]]; 
+    NSError* error = nil;
+    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    [fetchRequest release];
+    if (!error && [results count]) {
+        return [results objectAtIndex:0];
+    }
+    return nil;
+}
+
+- (Engine*) _findEngineByNetServiceName:(NSString*)netServiceName
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:engineDesc];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"netServiceName == %@", netServiceName]]; 
+    NSError* error = nil;
+    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    [fetchRequest release];
+    if (!error && [results count]) {
+        return [results objectAtIndex:0];
+    }
+    return nil;
+}
+
+- (void) _deleteMovieIfNoMediaRemainForAnyDisc:(Movie*)movie  
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:discDesc];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"movie == %@ && allMedia.@count == 0", movie]];
+    NSError* error = nil;
+    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    [fetchRequest release];
+    if (!error && [results count] == [movie.allDiscs count]) {
+        [managedObjectContext deleteObject:movie];
+    }
+}
+
+@end
+
+
+#pragma mark -
+@implementation EngineController (CoreData)
 
 - (void) _coreDataChangeNotification:(NSNotification*)notification
 {
@@ -137,178 +357,13 @@
 
 
 #pragma mark -
-@implementation EngineController (Private)
-
-- (BOOL) connectEngine:(Engine*)engine
-{
-    NSAssert(engine, @"no engine?");
-    if ([protocolsByUUID objectForKey:engine.uuid]) {
-        return NO;
-    }
-    NSNetService* netService = [netServiceByName objectForKey:engine.netServiceName];
-    NSAssert(netService, @"no net service?");
-
-    engine.status = @"Connecting";
-    MessageProtocol* protocol = nil;
-    for (NSData* address in [netService addresses]) {
-        const struct sockaddr* a = [address bytes];
-        int s = socket(a->sa_family, SOCK_STREAM, 0);
-        if (s >= 0) {
-            if (0 == connect(s, a, a->sa_len)) {
-                NSFileHandle* fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:s closeOnDealloc:YES];
-                protocol = [MessageProtocol protocolWithDelegate:self fileHandleForReading:fileHandle fileHandleForWriting:fileHandle];
-                protocol.userInfo = [engine.uuid retain];
-                [protocolsByUUID setObject:protocol forKey:engine.uuid];
-                [fileHandle release];
-                break;
-            } else {
-                close(s);
-            }
-        }
-    }
-    
-    if (protocol) {
-        engine.status = @"Connected";
-        return YES;
-    } else {
-        engine.status = @"Not Connected";
-        return NO;
-    }
-}
-
-- (void) disconnectEngine:(Engine*)engine
-{
-    NSAssert(engine, @"no engine?");
-    engine.status = @"Disconnecting";
-    MessageProtocol* protocol = [protocolsByUUID objectForKey:engine.uuid];
-    if (protocol) {
-        NSString* uuid = protocol.userInfo;
-        NSAssert([uuid isEqualToString:engine.uuid], @"Why don't these match?");
-        @try {
-            [protocol close];
-        } @catch (NSException* ex) {
-            /* Ignored */
-        } @finally {
-            [self deleteAllMediaForEngine:engine];
-            [self deleteAllMoviesWithNoMedia];
-            [protocolsByUUID removeObjectForKey:engine.uuid];
-            engine.status = @"Not Connected";
-        }
-        [uuid release];
-        [managedObjectContext save:nil];
-    }
-}
-
-- (void) deleteAllMediaForEngine:(Engine*)engine
-{
-    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:mediaDesc];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"engine == %@", engine]];
-    NSError* error = nil;
-    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    [fetchRequest release];
-    if (!error && [results count]) {
-        for (Media* media in results) {
-            [managedObjectContext deleteObject:media];
-        }
-    }
-}
-
-- (void) deleteAllMoviesWithNoMedia
-{
-    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:discDesc];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"allMedia.@count == 0"]];
-    NSError* error = nil;
-    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    [fetchRequest release];
-    NSCountedSet* set = [NSCountedSet set];
-    if (!error && [results count]) {
-        for (Disc* disc in results) {
-            [set addObject:disc.movie];
-        }
-        for (Movie* movie in set) {
-            if ([movie.allDiscs count] == [set countForObject:movie]) {
-                [managedObjectContext deleteObject:movie];
-            }
-        }
-    }
-}
-
-- (Disc*) findDiscByFingerprint:(NSString*)fingerprint
-{
-    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:discDesc];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"fingerprint == %@", fingerprint]];
-    NSError* error = nil;
-    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    [fetchRequest release];
-    if (!error && [results count]) {
-        return [results objectAtIndex:0];
-    }
-    return nil;
-}
-
-- (Movie*) findMovieByGTIN:(NSString*)gtin
-{
-    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:movieDesc];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"gtin == %@", gtin]]; 
-    NSError* error = nil;
-    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    [fetchRequest release];
-    if (!error && [results count]) {
-        return [results objectAtIndex:0];
-    }
-    return nil;
-}
-
-- (Media*) findMediaByEngine:(Engine*)engine URL:(NSString*)_url
-{
-    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:mediaDesc];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"engine == %@ && url == %@", engine, _url]]; 
-    NSError* error = nil;
-    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    [fetchRequest release];
-    if (!error && [results count]) {
-        return [results objectAtIndex:0];
-    }
-    return nil;
-}
-
-- (Engine*) findEngineByUUID:(NSString*)UUID
-{
-    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:engineDesc];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"uuid == %@", UUID]]; 
-    NSError* error = nil;
-    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    [fetchRequest release];
-    if (!error && [results count]) {
-        return [results objectAtIndex:0];
-    }
-    return nil;
-}
-
-- (void) deleteMovieIfNoMediaRemainForAnyDisc:(Movie*)movie  
-{
-    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:discDesc];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"movie == %@ && allMedia.@count == 0", movie]];
-    NSError* error = nil;
-    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    [fetchRequest release];
-    if (!error && [results count] == [movie.allDiscs count]) {
-        [managedObjectContext deleteObject:movie];
-    }
-}
+@implementation EngineController (MessageProtocolDelegate)
 
 - (void) protocolDidClose:(MessageProtocol*)protocol
 {
     @try {
         NSString* uuid = protocol.userInfo;
-        Engine* engine = [self findEngineByUUID:uuid];
+        Engine* engine = [self _findEngineByUUID:uuid];
         [self disconnectEngine:engine];
     } @catch (id exception) {
         /* ignored */
@@ -319,7 +374,7 @@
 
 - (void) protocol:(MessageProtocol*)protocol didReceiveMessage:(NSDictionary*)message 
 {
-    Engine* engine = [self findEngineByUUID:[protocol userInfo]];
+    Engine* engine = [self _findEngineByUUID:[protocol userInfo]];
     
     /*  Add
      */
@@ -330,7 +385,7 @@
             
             /*  Find or create the disc that's represented by our fingerprint.
              */
-            Disc* disc = [self findDiscByFingerprint:fingerprint];
+            Disc* disc = [self _findDiscByFingerprint:fingerprint];
             if (!disc) {
                 disc = [[[Disc alloc] initWithEntity:discDesc insertIntoManagedObjectContext:managedObjectContext] autorelease];
                 disc.fingerprint = fingerprint;
@@ -359,7 +414,7 @@
             
             /*  Find the disc that's represented by our fingerprint.
              */
-            Disc* disc = [self findDiscByFingerprint:fingerprint];
+            Disc* disc = [self _findDiscByFingerprint:fingerprint];
             NSAssert(disc, @"no disc?");
             
             /*  Figure out which movie to attach this disc to.  We may have 
@@ -367,13 +422,13 @@
              *  another already exists with a particular GTIN.
              */
             NSString* gtin = [movieInfo objectForKey:@"gtin"];
-            Movie* movie = gtin ? [self findMovieByGTIN:gtin] : nil;
+            Movie* movie = gtin ? [self _findMovieByGTIN:gtin] : nil;
             if (movie) {
                 Movie* oldMovie = disc.movie;
                 if ([movie isNotEqualTo:oldMovie]) {
                     disc.movie = movie;
                     if (oldMovie) {
-                        [self deleteMovieIfNoMediaRemainForAnyDisc:oldMovie];
+                        [self _deleteMovieIfNoMediaRemainForAnyDisc:oldMovie];
                     }
                 }
             } else {
@@ -413,7 +468,7 @@
             NSDictionary* discInfo = [movieInfo objectForKey:@"discs"];
             for (NSString* discInfoFingerprint in discInfo) {
                 NSDictionary* otherDiscInfo = [discInfo objectForKey:discInfoFingerprint];
-                Disc* disc = [self findDiscByFingerprint:discInfoFingerprint];
+                Disc* disc = [self _findDiscByFingerprint:discInfoFingerprint];
                 if (!disc) {
                     disc = [[[Disc alloc] initWithEntity:discDesc insertIntoManagedObjectContext:managedObjectContext] autorelease];
                     disc.fingerprint = discInfoFingerprint;
@@ -430,7 +485,7 @@
                 if (movie != movieForDisc) {
                     disc.movie = movie;
                     if (movieForDisc) {
-                        [self deleteMovieIfNoMediaRemainForAnyDisc:movieForDisc];
+                        [self _deleteMovieIfNoMediaRemainForAnyDisc:movieForDisc];
                     }
                 }
             }
@@ -444,7 +499,7 @@
         for (NSString* fingerprint in delete) {
             NSDictionary* info = [delete objectForKey:fingerprint];
             for (NSString* url in [info objectForKey:@"urls"]) {
-                Media* media = [self findMediaByEngine:engine URL:url];
+                Media* media = [self _findMediaByEngine:engine URL:url];
                 if (media) {
                     Disc* disc = media.disc;
                     [managedObjectContext deleteObject:media];
@@ -482,18 +537,19 @@
 
 - (void) netServiceDidResolveAddress:(NSNetService*)netService
 {
+    Engine* engine = [self _findEngineByNetServiceName:[netService name]];
+    NSAssert(engine, @"no engine?");
     NSDictionary* rawData = [NSNetService dictionaryFromTXTRecordData:[netService TXTRecordData]];
     NSString* uuid = [[[NSString alloc] initWithData:[rawData objectForKey:@"UUID"] encoding:NSUTF8StringEncoding] autorelease];
     NSString* name = [[[NSString alloc] initWithData:[rawData objectForKey:@"Name"] encoding:NSUTF8StringEncoding] autorelease];
-    if ([uuid length] && [name length]) {
-        Engine* engine = [[Engine alloc] initWithEntity:engineDesc insertIntoManagedObjectContext:managedObjectContext];
-        engine.uuid = uuid;
-        engine.name = name;
-        engine.netServiceName = [netService name];
-        [managedObjectContext save:nil];
-        if (YES || [uuid isEqualToString:localMachineUUID]) {
-            [self connectEngine:engine];
-        }
+    
+    engine.name = name;
+    engine.uuid = uuid;
+    engine.netServiceName = [netService name];
+    [managedObjectContext save:nil];
+    
+    if (YES || [uuid isEqualToString:localMachineUUID]) {
+        [self connectEngine:engine];
     }
 }
 
@@ -506,6 +562,13 @@
 - (void) netServiceBrowser:(NSNetServiceBrowser*)netServiceBrowser didFindService:(NSNetService*)netService moreComing:(BOOL)moreComing
 {
     [netServiceByName setObject:netService forKey:[netService name]];
+
+    Engine* engine = [[Engine alloc] initWithEntity:engineDesc insertIntoManagedObjectContext:managedObjectContext];
+    engine.netServiceName = [netService name];
+    engine.name = [netService name];
+    engine.status = @"Resolving";
+    [managedObjectContext save:nil];
+    
     [netService setDelegate:self];
     [netService resolveWithTimeout:5.0];
 }
@@ -514,6 +577,13 @@
 {
     [netService stop];
     [netServiceByName removeObjectForKey:[netService name]];
+
+    Engine* engine = [self _findEngineByNetServiceName:[netService name]];
+    NSAssert(engine, @"no engine?");
+    [self disconnectEngine:engine];
+    
+    [managedObjectContext deleteObject:engine];
+    [managedObjectContext save:nil];
 }
 
 @end

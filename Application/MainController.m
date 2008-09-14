@@ -1,5 +1,6 @@
 #import "MainController.h"
 #import "EngineController.h" 
+#import "Media.h" 
 
 @implementation MainController
 @synthesize managedObjectContext;
@@ -29,14 +30,14 @@
     [super dealloc];
 }
 
-- (void) applicationDidFinishLaunching:(NSNotification *)aNotification
+- (void) applicationDidFinishLaunching:(NSNotification*)notification
 {
     [self.window makeKeyAndOrderFront:nil];
 }
 
-- (void) applicationWillTerminate:(NSNotification *)aNotification
+- (void) applicationWillTerminate:(NSNotification*)notification
 {
-    [engineController stop];
+    [engineController shutdown];
 }
 
 
@@ -45,9 +46,9 @@
 /// 
 - (IBAction) launchMovie:(id)sender 
 {
-    NSManagedObject* disc = [[discsController selectedObjects] objectAtIndex:0];
-    if (disc) {
-        [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[disc valueForKey:@"url"]]];
+    Media* media = [[mediaController selectedObjects] objectAtIndex:0];
+    if (media) {
+        [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:media.url]];
     }
 }
 

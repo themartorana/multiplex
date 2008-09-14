@@ -160,7 +160,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         [netService stop];
         [netService release];
     }
-    netService = [[NSNetService alloc] initWithDomain:@"local." type:@"_com_multiplexapp_Engine._tcp" name:machineId port:networkPort];
+    netService = [[NSNetService alloc] initWithDomain:@"local." type:@"_com_multiplexapp_Engine._tcp" name:machineName port:networkPort];
     [netService setTXTRecordData:[NSNetService dataFromTXTRecordDictionary:txtData]];
     [netService publish];
 }

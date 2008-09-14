@@ -7,8 +7,7 @@
     NSPersistentStoreCoordinator* persistentStoreCoordinator;
     NSManagedObjectContext* managedObjectContext;
     /**/
-    IBOutlet NSArrayController *discsController;
-    IBOutlet NSButton* saveBtn;
+    IBOutlet NSArrayController *mediaController;
 }
 
 @property (readonly) NSManagedObjectContext* managedObjectContext;

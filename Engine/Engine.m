@@ -19,6 +19,8 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 @interface Engine (Private)
 
 - (void) republishNetService;
+- (void) loadMediaSourcePlugins;
+- (void) stopMediaSourcePlugins;
 
 @end
 
@@ -40,6 +42,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         discsByFingerprint = [[NSMutableDictionary alloc] init];
         infoDictionariesByFingerprint = [[NSMutableDictionary alloc] init];
         protocols = [[NSMutableArray alloc] init];
+        mediaSources = [[NSMutableArray alloc] init];
         
         NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
         machineName = [[userDefaults valueForKey:@"machine-name"] retain];
@@ -61,6 +64,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (void) dealloc
 {
+    [mediaSources release];
     [machineId release];
     [machineName release];
     [txtData release];
@@ -72,7 +76,6 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (void) run
 {
-    NSArray* mediaSources = nil;
     NSSocketPort* serverSocket = nil;
     NSFileHandle* serverHandle = nil;
     
@@ -99,22 +102,10 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         [self republishNetService];
         NSLog(@"Listening on ip6 port: %d", networkPort);
 
-        /*  Register our media sources.  Later, this can be done more "plugin" 
-         *  style.
+        /*  Load and start our Media Source plugins
          */
-        mediaSources = [NSArray arrayWithObjects:
-            [[DVDMediaSource alloc] init],
-            [[PhysicalMediaSource alloc] init],
-            nil
-        ];
-        
-        /*  Set ourselves as the media source's delegate, and then start it up.
-         */
-        for (id<MediaSource> mediaSource in mediaSources) {
-            [mediaSource setDelegate:self];
-            [mediaSource start];
-        }
-        
+        [self loadMediaSourcePlugins];        
+
         /*  Process our message loop unil we're told to stop.
          */
         [super run];
@@ -127,19 +118,66 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         [netService stop];
         [netService release];
         
-        /*  Shutdown all of our media sources.
-         */
-        for (id<MediaSource> mediaSource in mediaSources) {
-            @try {
-                [mediaSource stop];
-            } @catch (id exception) {
-                
+        [self stopMediaSourcePlugins];
+    }
+}
+
+- (void) loadMediaSourcePlugins
+{
+    /*  Determine the folder we'll search for ".mediasource" plugins.  This is 
+     *  a little complicated due to the fact that we load from one place under
+     *  the debugger, and another when we're running under Multiplex.
+     */
+    NSString* baseFolder = [[[NSBundle mainBundle] executablePath] stringByDeletingLastPathComponent];
+    if ([[baseFolder lastPathComponent] isEqualToString:@"Resources"]) {
+        baseFolder = [[baseFolder stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"Plugins"];
+    }
+    
+    /*  Search for ".mediasource" plugins, loading them and checking that they
+     *  conform to our MediaSource protocol before we fire up an instance and
+     *  try to connect ourselves to it.
+     */
+    for (NSString* pluginFile in [[NSFileManager defaultManager] directoryContentsAtPath:baseFolder]) {
+        if ([pluginFile hasSuffix:@".mediasource"]) {
+            NSError* error = nil;
+            NSBundle* plugin = [NSBundle bundleWithPath:[baseFolder stringByAppendingPathComponent:pluginFile]];
+            NSLog(@"Loading plugin: %@", pluginFile);
+            if (![plugin loadAndReturnError:&error]) {
+                NSLog(@"Error loading plugin (%@) -- %@", pluginFile, error);
+            } else {
+                Class principalClass = [plugin principalClass];
+                if ([principalClass conformsToProtocol:@protocol(MediaSource)]) {
+                    @try {
+                        /*  Set ourselves as the media source's delegate, and 
+                         *  then start it up.
+                         */
+                        id<MediaSource> mediaSource = [[principalClass alloc] init]; 
+                        [mediaSource setDelegate:self];
+                        [mediaSource start];
+                        
+                        [mediaSources addObject:mediaSource];
+                        NSLog(@"Loaded plugin: %@", pluginFile);
+                    } @catch (id exception) {
+                        NSLog(@"Exception occurred while starting mediaSource -- %@", exception);
+                    }
+                }
             }
         }
     }
 }
 
-- (void)observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void *)context
+- (void) stopMediaSourcePlugins
+{
+    for (id<MediaSource> mediaSource in mediaSources) {
+        @try {
+            [mediaSource stop];
+        } @catch (id exception) {
+            NSLog(@"Exception occurred while stopping mediaSource -- %@", exception);
+        }
+    }
+}
+
+- (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void *)context
 {  
     BOOL republishServiceData = NO;
     
@@ -156,11 +194,11 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (void) republishNetService
 {
-    if (netService) {
+    if (![[netService name] isEqualTo:machineName]) {
         [netService stop];
         [netService release];
+        netService = [[NSNetService alloc] initWithDomain:@"local." type:@"_com_multiplexapp_Engine._tcp" name:machineName port:networkPort];
     }
-    netService = [[NSNetService alloc] initWithDomain:@"local." type:@"_com_multiplexapp_Engine._tcp" name:machineName port:networkPort];
     [netService setTXTRecordData:[NSNetService dataFromTXTRecordDictionary:txtData]];
     [netService publish];
 }
@@ -392,6 +430,21 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             static NSString* pathToMDImport = @"/usr/bin/mdimport";
             [NSTask launchedTaskWithLaunchPath:pathToMDImport arguments:[NSArray arrayWithObjects:pathToMDImport, [media pathToFile], nil]];
         }
+
+        /*  Build and send the message.
+         */
+        if (([addsByFingerprint count] + [updatesByFingerprint count]) >= 5) {
+            NSMutableDictionary* message = [NSMutableDictionary dictionary];
+            if ([addsByFingerprint count]) {
+                [message setObject:addsByFingerprint forKey:@"add"];
+            }
+            if ([updatesByFingerprint count]) {
+                [message setObject:updatesByFingerprint forKey:@"update"];
+            }
+            [self sendMessage:message];
+            [addsByFingerprint removeAllObjects];
+            [updatesByFingerprint removeAllObjects];
+        }
     }
 
     /*  Build and send the message.
@@ -503,6 +556,25 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                 [infoDictionariesByFingerprint setObject:infoDictionary forKey:mediaFingerprint];
                 media.disc.infoDictionary = infoDictionary;
             }
+        }
+
+        /*  Build and send the message.
+         */
+        if (([addsByFingerprint count] + [updatesByFingerprint count] + [deletesByFingerprint count]) >= 5) {
+            NSMutableDictionary* message = [NSMutableDictionary dictionary];
+            if ([addsByFingerprint count]) {
+                [message setObject:addsByFingerprint forKey:@"add"];
+            }
+            if ([updatesByFingerprint count]) {
+                [message setObject:updatesByFingerprint forKey:@"update"];
+            }
+            if ([deletesByFingerprint count]) {
+                [message setObject:deletesByFingerprint forKey:@"delete"];
+            }
+            [self sendMessage:message];
+            [addsByFingerprint removeAllObjects];
+            [updatesByFingerprint removeAllObjects];
+            [deletesByFingerprint removeAllObjects];
         }
     }
 

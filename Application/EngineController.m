@@ -22,7 +22,7 @@
 @end
 
 @interface EngineController (CoreData)
-- (void) _coreDataChangeNotification:(NSNotification*)notification;
+- (void) _coreDataDidSaveNotification:(NSNotification*)notification;
 @end
 
 @interface EngineController (MessageProtocolDelegate)
@@ -57,10 +57,6 @@
         mediaDesc = [[NSEntityDescription entityForName:@"Media" inManagedObjectContext:managedObjectContext] retain];
         discDesc = [[NSEntityDescription entityForName:@"Disc" inManagedObjectContext:managedObjectContext] retain];
         movieDesc = [[NSEntityDescription entityForName:@"Movie" inManagedObjectContext:managedObjectContext] retain];
-        
-        /*  Register for CoreData notifications.
-         */
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_coreDataChangeNotification:) name:NSManagedObjectContextObjectsDidChangeNotification object:managedObjectContext];
 
         /*  Grab (or generate) our local machine's Engine UUID.
          */
@@ -337,20 +333,16 @@
 #pragma mark -
 @implementation EngineController (CoreData)
 
-- (void) _coreDataChangeNotification:(NSNotification*)notification
+- (void) _coreDataDidSaveNotification:(NSNotification*)notification
 {
-    if (pushingBackChanges) {
-        for (NSManagedObject* managedObject in [[notification userInfo] objectForKey:NSUpdatedObjectsKey]) {
-            NSString* entityName = [[managedObject entity] name];
+    for (NSManagedObject* managedObject in [[notification userInfo] objectForKey:NSUpdatedObjectsKey]) {
+        NSEntityDescription* const entityDescription = [managedObject entity];
+        if (entityDescription == movieDesc) {
             NSLog(@"%@", managedObject);
             NSLog(@"%@", [[managedObject changedValues] allKeys]);
-            if ([@"Disc" isEqualToString:entityName]) {
-            } else if ([@"Movie" isEqualToString:entityName]) {
-                NSArray* keys = [[managedObject changedValues] allKeys];
-                if ([keys count] == 1 && [[keys objectAtIndex:0] isEqualToString:@"movieDiscs"]) {
-                    continue;
-                }
-            }
+        } else if (entityDescription == discDesc) {
+            NSLog(@"%@", managedObject);
+            NSLog(@"%@", [[managedObject changedValues] allKeys]);
         }
     }
 }
@@ -555,7 +547,10 @@
     
     /*  Persist out our changes.
      */
+    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter removeObserver:self name:NSManagedObjectContextDidSaveNotification object:managedObjectContext];
     [managedObjectContext save:nil];
+    [notificationCenter addObserver:self selector:@selector(_coreDataDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:managedObjectContext];
 }
 
 @end

@@ -74,12 +74,12 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
     /*  Tell spotlight how much and how often we would like to be updated.
      */
     MDQueryBatchingParams batchingParameters = {
-        250,        // first_max_num
-        0,            // first_max_ms
-        250,        // progress_max_num
-        0,            // progress_max_ms
-        1,            // update_max_num
-        0            // update_max_ms
+        250,    // first_max_num
+        0,      // first_max_ms
+        250,    // progress_max_num
+        0,      // progress_max_ms
+        1,      // update_max_num
+        0       // update_max_ms
     };
     MDQuerySetBatchingParameters(query, batchingParameters);
 

@@ -10,7 +10,6 @@
     NSManagedObjectContext* managedObjectContext;
     NSNetServiceBrowser* browser;
     NSString* localMachineUUID;
-    BOOL pushingBackChanges;
     /**/
     NSEntityDescription* engineDesc;
     NSEntityDescription* mediaDesc;

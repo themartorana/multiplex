@@ -11,6 +11,7 @@
     NSMutableDictionary* txtData;
     int networkPort;
     NSNetService* netService;
+    NSMutableArray* mediaSources;
 }
 
 @end

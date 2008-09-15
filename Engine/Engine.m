@@ -8,6 +8,7 @@
 #import "MessageProtocol.h"
 #import "NSDictionary+KeyPaths.h"
 #import "NSString+UUID.h"
+#import "NSBundle+DmgCtrl.h"
 
 #import <JSONKit/JSONKit.h>
 
@@ -56,6 +57,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         txtData = [[NSMutableDictionary dictionaryWithObjectsAndKeys:
             [machineId dataUsingEncoding:NSUTF8StringEncoding], @"UUID",
             [machineName dataUsingEncoding:NSUTF8StringEncoding], @"Name",
+            [[[NSBundle mainBundle] version] dataUsingEncoding:NSUTF8StringEncoding], @"Version",
             nil
         ] retain];
     }
@@ -145,13 +147,14 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             if (![plugin loadAndReturnError:&error]) {
                 NSLog(@"Error loading plugin (%@) -- %@", pluginFile, error);
             } else {
+                id<MediaSource> mediaSource = nil;
                 Class principalClass = [plugin principalClass];
                 if ([principalClass conformsToProtocol:@protocol(MediaSource)]) {
                     @try {
                         /*  Set ourselves as the media source's delegate, and 
                          *  then start it up.
                          */
-                        id<MediaSource> mediaSource = [[principalClass alloc] init]; 
+                        mediaSource = [[principalClass alloc] init]; 
                         [mediaSource setDelegate:self];
                         [mediaSource start];
                         
@@ -159,7 +162,11 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                         NSLog(@"Loaded plugin: %@", pluginFile);
                     } @catch (id exception) {
                         NSLog(@"Exception occurred while starting mediaSource -- %@", exception);
+                        mediaSource = nil;
                     }
+                }
+                if (!mediaSource) {
+                    [plugin unload];
                 }
             }
         }

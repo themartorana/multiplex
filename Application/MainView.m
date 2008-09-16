@@ -18,16 +18,17 @@
 
 - (void) awakeFromNib
 {
-    self.layer = [CALayer layer];
+//    self.layer = [CALayer layer];
     [self setWantsLayer:YES];
     self.layer.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 1.0);
     self.layer.layoutManager = [CAConstraintLayoutManager layoutManager];
     
     floorLayer = [CALayer layer];
+    floorLayer.borderWidth = 1.0;
+    floorLayer.borderColor = CGColorCreateGenericRGB(1.0, 0.0, 0.0, 1.0);
     floorLayer.delegate = self;
     floorLayer.layoutManager = self;
-    floorLayer.borderWidth = 2.0;
-    floorLayer.borderColor = CGColorCreateGenericRGB(1.0, 0.0, 0.0, 1.0);
+    floorLayer.position = CGPointZero;
     floorLayer.constraints = [NSArray arrayWithObjects:
         [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
         [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
@@ -67,8 +68,12 @@
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
     if ([@"content.@count" isEqualToString:keyPath]) {
-        totalCount = [[object content] count];
-        [floorLayer setNeedsLayout];
+        int newTotalCount = [[object content] count];
+        if (totalCount < newTotalCount) {
+            totalCount = newTotalCount;
+            [floorLayer setNeedsLayout];
+            [self.layer setNeedsLayout];
+        }
     } else if ([@"arrangedObjects" isEqualToString:keyPath]) {
         NSArray* arrangedObjects = [object arrangedObjects];
         
@@ -98,6 +103,7 @@
         /*  Tell the root layer to re-layout.
          */
         [floorLayer setNeedsLayout];
+        [self.layer setNeedsLayout];
     }
 }
 
@@ -112,7 +118,9 @@
     MovieLayer* layer = [MovieLayer layer];
     layer.delegate = self;
     layer.movie = movie;
-    layer.backgroundColor = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 0.5);
+    layer.borderWidth = 3.0;
+    layer.borderColor = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 1.0);
+    layer.backgroundColor = CGColorCreateGenericRGB(0.5, 0.5, 0.5, 1.0);
     return layer;
 }
 
@@ -129,44 +137,98 @@
     return nil;
 }
 
-CGFloat WS = 2.0;
-CGFloat W = 14.0;
-CGFloat H = 20.0;
-CGFloat S = 1.0;
+CGFloat WS = 75.0;
+CGFloat W = 280.0;
+CGFloat H = 400.0;
+CGFloat HS = 45.0;
+
+- (NSDictionary*) computeParametersForSize:(CGSize)size andCount:(int)count
+{
+    CGFloat aspectToFit = size.width / size.height;
+    
+    int rows = 0;
+    int columns = 0;
+    CGFloat aspect = 0;
+    CGFloat length = 0;
+    CGFloat radius = 0;
+    CGFloat width = 0;
+    CGFloat height = 0;
+    
+    if (count > 0) {
+        do {
+            rows++;
+            columns = (count / rows) + ((count % rows) > 0); 
+            length = ((W + WS) * columns) + (WS / 2.0);
+            radius = length / M_PI;
+            width = radius * 2.0;
+            height += H + WS;
+            aspect = width / height;
+        } while ((aspect - aspectToFit) > 0.01);
+    }
+    
+    CGFloat scale = 0;
+    if (aspect > 0.0) {
+        scale = size.height / height;
+    } else {
+        scale = size.width / width;
+    }
+    
+    return [NSDictionary dictionaryWithObjectsAndKeys:
+        [NSNumber numberWithInt:columns], @"columns",
+        [NSNumber numberWithFloat:height], @"height",
+        [NSNumber numberWithInt:rows], @"rows",
+        [NSNumber numberWithFloat:radius], @"radius",
+        [NSNumber numberWithFloat:scale], @"scale",
+        [NSNumber numberWithFloat:width], @"width",
+        nil
+    ];
+}
 
 - (void) layoutSublayersOfLayer:(CALayer*)layer
 {
-    CGFloat i = 1.0;
-    CGFloat length = ((W + WS) * [layersInOrder count]) + (WS / 2.0);
-    CGFloat radius = length / M_PI;
-    CGFloat maxRadius = (((W + WS) * totalCount) + (WS / 2.0)) / M_PI;
+    NSDictionary* parameters = [self computeParametersForSize:NSSizeToCGSize(self.bounds.size) andCount:[layersInOrder count]];
+    
+    CGFloat x = 1.0;
+    CGFloat y = 1.0;
+    CGFloat rows = [[parameters objectForKey:@"rows"] floatValue];
+    CGFloat radius = [[parameters objectForKey:@"radius"] floatValue];
+    CGFloat scale = [[parameters objectForKey:@"scale"] floatValue];
+    
+    CATransform3D b = CATransform3DIdentity;
+    b = CATransform3DTranslate(b, layer.bounds.size.width / 2.0, -layer.bounds.size.height / 2.1 / scale, 0.0);
+    
     for (MovieLayer* layer in layersInOrder) {
         layer.frame = CGRectMake(0.0, 0.0, W, H);
         layer.position = CGPointZero;
-        CGFloat theta = (((W + WS) * i) - ((W + WS) / 2.0)) / radius;
+        CGFloat theta = (((W + WS) * x) - ((W + WS) / 2.0)) / radius;
         
-        CATransform3D t = CATransform3DIdentity;
-        t = CATransform3DTranslate(t, maxRadius * S, 0.0, 0.0);
-        t = CATransform3DTranslate(t, radius * cos(theta), 0.0, radius * -sin(theta));
+        CATransform3D t = b;
+        t = CATransform3DTranslate(t, radius * cos(theta), (H + HS) * y, radius * -sin(theta));
         t = CATransform3DRotate(t, theta - M_PI/2.0, 0.0, 1.0, 0.0);
         layer.transform = t;
 
-        i += 1.0;
+        y += 1.0;
+        if (y > rows) {
+            x++;
+            y = 1.0;
+        }
     }
 
     CATransform3D p = CATransform3DIdentity;
-//    p = CATransform3DTranslate(p, 0.0, 0.0, -500.0);
-	p = CATransform3DScale(p, S, S, 1.0);
-    p.m34 = 1.0 / -2000;
-    p = CATransform3DRotate(p, 0.1, 1.0, 0.0, 0.0);
+	p = CATransform3DScale(p, scale, scale, 1.0);
+    p.m34 = 1.0 / -radius;
+//    p = CATransform3DRotate(p, -0.1, 1.0, 0.0, 0.0);
     floorLayer.sublayerTransform = p;
 }
 
 - (CGSize) preferredSizeOfLayer:(CALayer*)layer
 {
-    CGFloat length = ((W + WS) * totalCount) + (WS / 2.0);
-    CGFloat radius = length / M_PI;
-    return CGSizeMake(radius * 2 * S, H * S);
+    NSDictionary* parameters = [self computeParametersForSize:NSSizeToCGSize(self.bounds.size) andCount:totalCount];
+    NSLog(@"%@", parameters);
+    CGFloat width = [[parameters objectForKey:@"width"] floatValue];
+    CGFloat height = [[parameters objectForKey:@"height"] floatValue];
+    CGFloat scale = [[parameters objectForKey:@"scale"] floatValue];
+    return CGSizeMake(width * scale, height * scale);
 }
 
 @end

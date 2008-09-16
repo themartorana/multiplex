@@ -31,8 +31,8 @@
     floorLayer.constraints = [NSArray arrayWithObjects:
         [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY],
         [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
-        [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth],
-        [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0.66 offset:0.0],
+        [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.95 offset:0.0],
+        [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0.70 offset:0.0],
         nil
     ];
     [self.layer addSublayer:floorLayer];
@@ -112,6 +112,11 @@
 #pragma mark -
 @implementation MainView (LayerStuff)
 
+CGFloat WS = 75.0;
+CGFloat W = 280.0;
+CGFloat H = 400.0;
+CGFloat HS = 45.0;
+
 - (MovieLayer*) layerForMovie:(Movie*)movie
 {
     MovieLayer* layer = [MovieLayer layer];
@@ -120,6 +125,8 @@
     layer.borderWidth = 3.0;
     layer.borderColor = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 1.0);
     layer.backgroundColor = CGColorCreateGenericRGB(0.5, 0.5, 0.5, 1.0);
+    layer.frame = CGRectMake(0.0, 0.0, W, H);
+    layer.position = CGPointZero;
     return layer;
 }
 
@@ -136,49 +143,61 @@
     return nil;
 }
 
-CGFloat WS = 75.0;
-CGFloat W = 280.0;
-CGFloat H = 400.0;
-CGFloat HS = 45.0;
-
 - (NSDictionary*) computeParametersForSize:(CGSize)size andCount:(int)count
 {
     CGFloat aspectToFit = size.width / size.height;
     
-    int rows = 0;
-    int columns = 0;
-    CGFloat aspect = 0;
-    CGFloat length = 0;
-    CGFloat radius = 0;
-    CGFloat width = 0;
-    CGFloat height = 0;
+    struct result {
+        int rows;
+        int columns;    
+        CGFloat length;
+        CGFloat radius;
+        CGFloat width;
+        CGFloat height;
+        /**/
+        CGFloat aspect;
+        CGFloat score;
+    }* resultSet = alloca(count * sizeof(struct result));
+    bzero(resultSet, sizeof(struct result));
     
     if (count > 0) {
+        int rows = 0;
+        resultSet--;
         do {
-            rows++;
-            columns = (count / rows); + ((count % rows) > 0); 
-            length = WS + ((W + WS) * columns);
-            radius = length / M_PI;
-            width = radius * 2.0;
-            height += H + WS;
-            aspect = width / height;
-        } while ((aspect - aspectToFit) > 0.01);
+            resultSet++;
+            resultSet->rows = ++rows;
+            resultSet->columns = (count / resultSet->rows) + ((count % resultSet->rows) > 0);
+            resultSet->height = HS + ((H + WS) * resultSet->rows);
+            resultSet->length = WS + ((W + WS) * resultSet->columns);
+            resultSet->radius = resultSet->length / M_PI;
+            resultSet->width = resultSet->radius * 2.0;
+            resultSet->aspect = resultSet->width / resultSet->height;
+            resultSet->score = resultSet->aspect - aspectToFit;
+        } while (resultSet->score > -0.005);
+        
+        CGFloat lowScore = CGFLOAT_MAX;
+        for (struct result* rp = resultSet, *rb = resultSet - rows; rp > rb; rp--) {
+            if (fabsf(rp->score) < lowScore) {
+                resultSet = rp;
+                lowScore = fabsf(rp->score);
+            }
+        }
     }
     
-    CGFloat scale = 0;
-    if (aspect > 0.0) {
-        scale = size.height / height;
+    CGFloat scale;
+    if (resultSet->aspect < 0.0) {
+        scale = size.height / resultSet->height;
     } else {
-        scale = size.width / width;
+        scale = size.width / resultSet->width;
     }
     
     return [NSDictionary dictionaryWithObjectsAndKeys:
-        [NSNumber numberWithInt:columns], @"columns",
-        [NSNumber numberWithFloat:height], @"height",
-        [NSNumber numberWithInt:rows], @"rows",
-        [NSNumber numberWithFloat:radius], @"radius",
+        [NSNumber numberWithInt:resultSet->columns], @"columns",
+        [NSNumber numberWithFloat:resultSet->height], @"height",
+        [NSNumber numberWithInt:resultSet->rows], @"rows",
+        [NSNumber numberWithFloat:resultSet->radius], @"radius",
         [NSNumber numberWithFloat:scale], @"scale",
-        [NSNumber numberWithFloat:width], @"width",
+        [NSNumber numberWithFloat:resultSet->width], @"width",
         nil
     ];
 }
@@ -187,39 +206,45 @@ CGFloat HS = 45.0;
 {
     NSDictionary* parameters = [self computeParametersForSize:floorLayer.bounds.size andCount:totalCount];
     
-    CGFloat x = 0.0;
-    CGFloat y = 0.0;
     CGFloat rows = [[parameters objectForKey:@"rows"] floatValue];
     CGFloat radius = [[parameters objectForKey:@"radius"] floatValue];
     CGFloat scale = [[parameters objectForKey:@"scale"] floatValue];
     CGFloat width = [[parameters objectForKey:@"width"] floatValue];
     CGFloat height = [[parameters objectForKey:@"height"] floatValue];
-    
+
+    /*  This base transform sets up the origin (0, 0) to the center of the 
+     *  layer.
+     */
     CATransform3D b = CATransform3DIdentity;
-    b = CATransform3DTranslate(b, floorLayer.bounds.size.width / 2.0, floorLayer.bounds.size.height / 2.0, 0.0);
-    
+    b = CATransform3DTranslate(b, floorLayer.bounds.size.width / 2.0, 0.0, 0.0);
+
+    /*  Loop through the layers in the list 
+     */
+    int x = 0;
+    int y = rows;
     for (MovieLayer* layer in layersInOrder) {
-        layer.frame = CGRectMake(0.0, 0.0, W, H);
-        layer.position = CGPointMake(0.0, 0.0);
-        
-        CGFloat chord = (WS / 2.0) + ((W + WS) * x);
+        CGFloat chord = WS + (W / 2.0) + ((W + WS) * x);
         CGFloat theta = -chord / radius;
         
         CATransform3D t = b;
-        t = CATransform3DTranslate(t, radius * -cos(theta), (height / 2.0) - ((HS / 2.0) + ((H + HS) * y)), radius * sin(theta));
+        t = CATransform3DTranslate(t, radius * -cos(theta), (H / 2.0) + ((H + HS) * y) - (height / 2.0), radius * sin(theta));
         t = CATransform3DRotate(t, theta - M_PI/2.0, 0.0, 1.0, 0.0);
         layer.transform = t;
 
-        y += 1.0;
-        if (y >= rows) {
+        y -= 1;
+        if (!y) {
             x++;
-            y = 0.0;
+            y = rows;
         }
     }
     
+    /*  Add in our scale factor and perspective...  then throw a little 
+     *  rotational "stank" on it.  ;)
+     */
     CATransform3D p = CATransform3DIdentity;
 	p = CATransform3DScale(p, scale, scale, 1.0);
     p.m34 = 1.0 / -width;
+	p = CATransform3DRotate(p, -0.05, 1.0, 0.0, 0.0);
     floorLayer.sublayerTransform = p;
 }
 

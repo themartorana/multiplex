@@ -1,7 +1,7 @@
 #import <Cocoa/Cocoa.h>
 #import "EngineController.h"
 
-@interface MainController : NSWindowController {
+@interface DebugWindowController : NSWindowController {
     EngineController* engineController;
     NSManagedObjectModel* managedObjectModel;
     NSPersistentStoreCoordinator* persistentStoreCoordinator;

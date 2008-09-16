@@ -73,7 +73,7 @@
          */
         browser = [[NSNetServiceBrowser alloc] init];
         [browser setDelegate:self];
-        [browser searchForServicesOfType:@"_com_multiplexapp_Engine._tcp." inDomain:@""]; 
+        [browser searchForServicesOfType:@"_com_multiplexapp_Engine._tcp." inDomain:@"local."]; 
         
         /*  Use launchctl to start the local engine (if one's not started 
          *  already.)

@@ -8,7 +8,6 @@
 #import "MessageProtocol.h"
 #import "NSDictionary+KeyPaths.h"
 #import "NSString+UUID.h"
-#import "NSBundle+DmgCtrl.h"
 
 #import <JSONKit/JSONKit.h>
 
@@ -57,7 +56,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         txtData = [[NSMutableDictionary dictionaryWithObjectsAndKeys:
             [machineId dataUsingEncoding:NSUTF8StringEncoding], @"UUID",
             [machineName dataUsingEncoding:NSUTF8StringEncoding], @"Name",
-            [[[NSBundle mainBundle] version] dataUsingEncoding:NSUTF8StringEncoding], @"Version",
+            [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] dataUsingEncoding:NSUTF8StringEncoding], @"Version",
             nil
         ] retain];
     }
@@ -115,10 +114,14 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         NSLog(@"Exception occurred while initializing; quitting. -- %@", exception);
     } @finally {
         [serverSocket release];
+        serverSocket = nil;
+        
         [serverHandle closeFile];
+        serverHandle = nil;
 
         [netService stop];
         [netService release];
+        netService = nil;
         
         [self stopMediaSourcePlugins];
     }
@@ -159,7 +162,6 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                         [mediaSource start];
                         
                         [mediaSources addObject:mediaSource];
-                        NSLog(@"Loaded plugin: %@", pluginFile);
                     } @catch (id exception) {
                         NSLog(@"Exception occurred while starting mediaSource -- %@", exception);
                         mediaSource = nil;

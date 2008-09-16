@@ -1,8 +1,8 @@
-#import "MainController.h"
+#import "DebugWindowController.h"
 #import "EngineController.h" 
 #import "Media.h" 
 
-@implementation MainController
+@implementation DebugWindowController
 @synthesize managedObjectContext;
 
 - (id) init 

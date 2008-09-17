@@ -125,6 +125,19 @@
         /*  Keep these around for next time...
          */
         [listOfLayersInOrder addObject:layersInOrder];
+
+        CGFloat opacity = 1.0;
+        NSMutableSet* tagged = [NSMutableSet set];
+        for (NSArray* layersInOrder in [listOfLayersInOrder reverseObjectEnumerator]) {
+            for (CALayer* layer in layersInOrder) {
+                if (![tagged containsObject:layer]) {
+                    layer.opaque = (opacity == 1.0);
+                    layer.opacity = opacity;
+                    [tagged addObject:layer];
+                }
+            }
+            opacity *= 0.2;
+        }
         
         /*  Tell the root layer to re-layout.
          */
@@ -141,7 +154,7 @@
 CGFloat WS = 75.0;
 CGFloat W = 280.0;
 CGFloat H = 400.0;
-CGFloat HS = 45.0;
+CGFloat HS = 75.0;
 
 - (MovieLayer*) layerForMovie:(Movie*)movie
 {
@@ -211,9 +224,10 @@ CGFloat HS = 45.0;
     }
     
     CGFloat scale;
-    if (resultSet->aspect < 0.0) {
+    if (resultSet->aspect > 0.0) {
         scale = size.height / resultSet->height;
-    } else {
+    }
+    if (scale * resultSet->width > size.width) {
         scale = size.width / resultSet->width;
     }
     
@@ -239,16 +253,20 @@ CGFloat HS = 45.0;
 
     NSDictionary* firstParameters = nil;
     NSDictionary* parameters = nil;
+    BOOL lastWasEmpty = YES;
+    CGFloat radius = 0;
     for (NSArray* layersInOrder in listOfLayersInOrder) {
         int count = [layersInOrder count];
+        lastWasEmpty = !count;
         parameters = [self computeParametersForSize:floorLayer.bounds.size andCount:count];
         if (!firstParameters) {
             firstParameters = parameters;
+            radius = [[parameters objectForKey:@"radius"] floatValue];
         }
         
         CGFloat radius = [[parameters objectForKey:@"radius"] floatValue];
         CGFloat rows = [[parameters objectForKey:@"rows"] floatValue];
-        CGFloat height = [[firstParameters objectForKey:@"height"] floatValue];
+        CGFloat height = [[parameters objectForKey:@"height"] floatValue];
         
         int x = 0;
         int y = rows;
@@ -258,7 +276,9 @@ CGFloat HS = 45.0;
             
             CATransform3D t = b;
             t = CATransform3DTranslate(t, radius * -cos(theta), ((H + HS) * y) - (H / 2.0) - (height / 2.0), radius * sin(theta));
-            t = CATransform3DRotate(t, theta + M_PI/2.0, 0.0, 1.0, 0.0);
+            if (count > 3) {
+                t = CATransform3DRotate(t, theta + M_PI/2.0, 0.0, 1.0, 0.0);
+            }
             layer.transform = t;
             
             y -= 1;
@@ -274,11 +294,13 @@ CGFloat HS = 45.0;
     /*  Add in our scale factor and perspective...  then throw a little 
      *  rotational "stank" on it.  ;)
      */
-    CATransform3D p = CATransform3DIdentity;
-	p = CATransform3DScale(p, scale, scale, 1.0);
-    p.m34 = 1.0 / -width;
-	p = CATransform3DRotate(p, -0.05, 1.0, 0.0, 0.0);
-    floorLayer.sublayerTransform = p;
+    if (!lastWasEmpty) {
+        CATransform3D p = CATransform3DIdentity;
+        p = CATransform3DScale(p, scale, scale, 1.0);
+        p.m34 = 1.0 / -width;
+//        p = CATransform3DRotate(p, -0.05, 1.0, 0.0, 0.0);
+        floorLayer.sublayerTransform = p;
+    }
 }
 
 @end

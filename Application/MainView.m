@@ -37,6 +37,7 @@
     [self.layer insertSublayer:floorLayer atIndex:0];
     
     radialGradientLayer = [CALayer layer];
+    radialGradientLayer.hidden = YES;
     radialGradientLayer.delegate = self;
     radialGradientLayer.position = CGPointZero;
     radialGradientLayer.frame = CGRectMake(0, 0, 100, 100);
@@ -71,18 +72,7 @@
 
 - (void) drawLayer:(CALayer*)layer inContext:(CGContextRef)c
 {
-    if (layer == self.layer) {
-        [NSGraphicsContext saveGraphicsState];
-        [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:c flipped:YES]];
-        {
-            NSColor* lightGrey = [NSColor colorWithDeviceRed:54.0/255.0 green:54.0/255.0 blue:54.0/255.0 alpha:1.0];
-            NSColor* darkGrey = [NSColor colorWithDeviceRed:9.0/255.0 green:9.0/255.0 blue:9.0/255.0 alpha:1.0];
-            NSGradient* gradient = [[NSGradient alloc] initWithColorsAndLocations:darkGrey, 0.0, lightGrey, 1.0, 1.0];
-//            [gradient drawInRect:NSRectFromCGRect(layer.bounds) angle:-90];
-            [gradient release];
-        }
-        [NSGraphicsContext restoreGraphicsState];
-    } else if (layer == radialGradientLayer) {
+    if (layer == radialGradientLayer) {
         [NSGraphicsContext saveGraphicsState];
         [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:c flipped:YES]];
         {
@@ -90,7 +80,7 @@
             NSPoint center = NSMakePoint(bounds.origin.x + bounds.size.width / 2.0, bounds.origin.y + bounds.size.height / 2.0);
             
             NSColor* lightGrey = [NSColor colorWithDeviceRed:154.0/255.0 green:154.0/255.0 blue:154.0/255.0 alpha:1.0];
-            NSColor* darkGrey = [NSColor colorWithDeviceRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:0.0];
+            NSColor* darkGrey = [NSColor colorWithDeviceRed:154.0/255.0 green:154.0/255.0 blue:154.0/255.0 alpha:0.0];
             NSGradient* gradient = [[NSGradient alloc] initWithColorsAndLocations:lightGrey, 0.0, darkGrey, 1.0, 1.0];
             [gradient drawFromCenter:center radius:0 toCenter:center radius:MIN(bounds.size.width, bounds.size.height)/2.0 options:0];
             [gradient release];
@@ -137,6 +127,7 @@
         NSArray* arrangedObjects = [object arrangedObjects];
 
         int count = [arrangedObjects count];
+        radialGradientLayer.hidden = count == 0;
         for (int i = [listOfLayersInOrder count] - 1; i >= 0; i--) {
             if ([[listOfLayersInOrder objectAtIndex:i] count] > count) {
                 break;
@@ -339,7 +330,7 @@ CGFloat HS = 75.0;
         }
         
         radialGradientLayer.position = CGPointZero;
-        radialGradientLayer.bounds = CGRectMake(length / 2.0, length / 2.0, width * 1.2, width * 1.2);
+        radialGradientLayer.bounds = CGRectMake(length / 2.0, length / 2.0, width, width);
         radialGradientLayer.transform = CATransform3DRotate(b, -M_PI / 2.0, 1.0, 0.0, 0.0);
         
         /*  Add in our scale and perspective...  then throw a little rotational 

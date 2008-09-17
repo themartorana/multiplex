@@ -123,11 +123,10 @@
     
     /*  Close and clear all of our connections.
      */
-    for (NSString* uuid in protocolsByUUID) {
+    for (NSString* uuid in [NSDictionary dictionaryWithDictionary:protocolsByUUID]) {
         MessageProtocol* protocol = [protocolsByUUID objectForKey:uuid];
         [protocol close];
     }
-    [protocolsByUUID removeAllObjects];
     
     /*  Use launchctl to shutdown our local engine.
      */

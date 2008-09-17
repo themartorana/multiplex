@@ -4,6 +4,7 @@
     NSMutableDictionary* layersByID;
     NSMutableArray* listOfLayersInOrder;
     CALayer* floorLayer; // NR
+    CALayer* radialGradientLayer; // NR
     id content;
 }
 

@@ -5,7 +5,6 @@
 
 @interface MainView (LayerStuff)
 - (MovieLayer*) layerForMovie:(Movie*)movie;
-- (void) drawLayer:(MovieLayer*)layer inContext:(CGContextRef)c;
 - (void) layoutSublayersOfLayer:(CALayer*)layer;
 @end
 
@@ -19,12 +18,12 @@
 - (void) awakeFromNib
 {
     [self setWantsLayer:YES];
-    self.layer.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 1.0);
     self.layer.layoutManager = [CAConstraintLayoutManager layoutManager];
+    self.layer.delegate = self;
+    self.layer.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 1.0);
+    [self.layer setNeedsDisplay];
     
     floorLayer = [CALayer layer];
-    floorLayer.borderWidth = 1.0;
-    floorLayer.borderColor = CGColorCreateGenericRGB(1.0, 0.0, 0.0, 1.0);
     floorLayer.delegate = self;
     floorLayer.layoutManager = self;
     floorLayer.position = CGPointZero;
@@ -35,7 +34,14 @@
         [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0.70 offset:0.0],
         nil
     ];
-    [self.layer addSublayer:floorLayer];
+    [self.layer insertSublayer:floorLayer atIndex:0];
+    
+    radialGradientLayer = [CALayer layer];
+    radialGradientLayer.delegate = self;
+    radialGradientLayer.position = CGPointZero;
+    radialGradientLayer.frame = CGRectMake(0, 0, 100, 100);
+    [radialGradientLayer setNeedsDisplay];
+    [floorLayer addSublayer:radialGradientLayer];
     
     listOfLayersInOrder = [[NSMutableArray alloc] initWithObjects:[NSMutableArray array], nil];
     layersByID = [[NSMutableDictionary alloc] init];
@@ -60,6 +66,37 @@
         } else {
             [NSException raise:NSInvalidArgumentException format:@"content must be of type NSArrayController."];
         }
+    }
+}
+
+- (void) drawLayer:(CALayer*)layer inContext:(CGContextRef)c
+{
+    if (layer == self.layer) {
+        [NSGraphicsContext saveGraphicsState];
+        [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:c flipped:YES]];
+        {
+            NSColor* lightGrey = [NSColor colorWithDeviceRed:54.0/255.0 green:54.0/255.0 blue:54.0/255.0 alpha:1.0];
+            NSColor* darkGrey = [NSColor colorWithDeviceRed:9.0/255.0 green:9.0/255.0 blue:9.0/255.0 alpha:1.0];
+            NSGradient* gradient = [[NSGradient alloc] initWithColorsAndLocations:darkGrey, 0.0, lightGrey, 1.0, 1.0];
+//            [gradient drawInRect:NSRectFromCGRect(layer.bounds) angle:-90];
+            [gradient release];
+        }
+        [NSGraphicsContext restoreGraphicsState];
+    } else if (layer == radialGradientLayer) {
+        [NSGraphicsContext saveGraphicsState];
+        [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:c flipped:YES]];
+        {
+            CGRect bounds = layer.bounds;
+            NSPoint center = NSMakePoint(bounds.origin.x + bounds.size.width / 2.0, bounds.origin.y + bounds.size.height / 2.0);
+            
+            NSColor* lightGrey = [NSColor colorWithDeviceRed:154.0/255.0 green:154.0/255.0 blue:154.0/255.0 alpha:1.0];
+            NSColor* darkGrey = [NSColor colorWithDeviceRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:0.0];
+            NSGradient* gradient = [[NSGradient alloc] initWithColorsAndLocations:lightGrey, 0.0, darkGrey, 1.0, 1.0];
+            [gradient drawFromCenter:center radius:0 toCenter:center radius:MIN(bounds.size.width, bounds.size.height)/2.0 options:0];
+            [gradient release];
+        }
+        [NSGraphicsContext restoreGraphicsState];
+        
     }
 }
 
@@ -159,17 +196,11 @@ CGFloat HS = 75.0;
 - (MovieLayer*) layerForMovie:(Movie*)movie
 {
     MovieLayer* layer = [MovieLayer layer];
-    layer.delegate = self;
     layer.movie = movie;
     layer.backgroundColor = CGColorCreateGenericRGB(0.5, 0.5, 0.5, 1.0);
     layer.frame = CGRectMake(0.0, 0.0, W, H);
     layer.position = CGPointZero;
     return layer;
-}
-
-- (void) drawLayer:(MovieLayer*)layer inContext:(CGContextRef)c
-{
-    /*  Movie layers drawn here  */
 }
 
 - (id<CAAction>) actionForLayer:(CALayer*)layer forKey:(NSString*)key
@@ -225,10 +256,11 @@ CGFloat HS = 75.0;
     NSAssert(layer == floorLayer, @"wtf?");
     
     /*  This base transform sets up the origin (0, 0) to the center of the 
-     *  layer.
+     *  layer along the X and Y axes.
      */
     CATransform3D b = CATransform3DIdentity;
     b = CATransform3DTranslate(b, floorLayer.bounds.size.width / 2.0, floorLayer.bounds.size.height / 2.0, 0.0);
+//    b = CATransform3DRotate(b, 0.3, 1.0, 0.0, 0.0);
 
     CGSize const size = floorLayer.bounds.size;
     BOOL lastWasEmpty = YES;
@@ -241,6 +273,7 @@ CGFloat HS = 75.0;
 
     /*  Process the rows, back-to-front.
      */
+    CGFloat base = 0;
     for (NSArray* layersInOrder in listOfLayersInOrder) {
         int count = [layersInOrder count];
         lastWasEmpty = !count;
@@ -251,30 +284,34 @@ CGFloat HS = 75.0;
         height = (HS + ((H + WS) * rows));
         length = (WS + ((W + WS) * columns));
         radius = length / M_PI;
+        if (0 == base) {
+            base = height;
+        }
         
         int x = 0;
         int y = rows;
         for (MovieLayer* layer in layersInOrder) {
             CGFloat chord = WS + (W / 2.0) + ((W + WS) * x);
-            CGFloat theta = -chord / radius;
             
             /*  Starting with the base transform, translate the layer along the
-             *  x and y.
+             *  Y axis.
              */
             CATransform3D t = b;
-            t = CATransform3DTranslate(t, radius * -cos(theta), ((H + HS) * y) - (H / 2.0) - (height / 2.0), 0.0);
+            t = CATransform3DTranslate(t, 0.0, ((H + HS) * y) - (H / 2.0), 0.0);
             
-            /*  If there are fewer than four columns, we'll just grid this 
-             *  thing.  Otherwise, we'll need to translate on the Z and do a
-             *  little rotating to make things look right.  For the rotation,
-             *  we need to go one direction on the left-hand of the arc, and 
-             *  the opposite direction on the right-hand.
+            /*  If there are fewer than five columns, we'll just grid this 
+             *  thing.  Otherwise, we'll need to translate on the X and Z and 
+             *  do a little rotating to make things look right.  For the 
+             *  rotation, we need to go one direction on the left-hand of the 
+             *  arc, and the opposite direction on the right-hand.
              */
-            if (columns <= 3) {
+            if (columns < 4) {
+                t = CATransform3DTranslate(t, chord - (length / 2.0), 0.0, 0.0);
                 width = length;
             } else {
                 width = radius * 2.0;
-                t = CATransform3DTranslate(t, 0.0, 0.0, radius * sin(theta));
+                CGFloat theta = -chord / radius;
+                t = CATransform3DTranslate(t, radius * -cos(theta), 0.0, radius * sin(theta));
                 if (y > (columns / 2)) {
                     t = CATransform3DRotate(t, theta - M_PI/2.0, 0.0, 1.0, 0.0);
                 } else {
@@ -283,6 +320,8 @@ CGFloat HS = 75.0;
             }
             layer.transform = t;
             
+            /*  Setup for the next iteration.
+             */
             y -= 1;
             if (!y) {
                 x++;
@@ -291,21 +330,26 @@ CGFloat HS = 75.0;
         }
     }
 
-    /*  Determine the scale that will "best" fit the screen.
-     */
-    CGFloat scale = size.width / width;
-    if (scale * height > size.height) {
-        scale = size.height / height;
-    }
-    
-    /*  Add in our scale and perspective...  then throw a little rotational 
-     *  "stank" on it.  ;)
-     */
     if (!lastWasEmpty) {
+        /*  Determine the scale that will "best" fit the screen.
+         */
+        CGFloat scale = size.width / width;
+        if (scale * height > size.height) {
+            scale = size.height / height;
+        }
+        
+        radialGradientLayer.position = CGPointZero;
+        radialGradientLayer.bounds = CGRectMake(length / 2.0, length / 2.0, width * 1.2, width * 1.2);
+        radialGradientLayer.transform = CATransform3DRotate(b, -M_PI / 2.0, 1.0, 0.0, 0.0);
+        
+        /*  Add in our scale and perspective...  then throw a little rotational 
+         *  "stank" on it.  ;)
+         */
         CATransform3D p = CATransform3DIdentity;
         p = CATransform3DScale(p, scale, scale, 1.0);
+        p = CATransform3DTranslate(p, 0.0, -height / 2.0, 0.0);
         p.m34 = 1.0 / -MAX(width, 2000);
-        p = CATransform3DRotate(p, -0.05, 1.0, 0.0, 0.0);
+        p = CATransform3DRotate(p, 0.1, 1.0, 0.0, 0.0);
         floorLayer.sublayerTransform = p;
     }
 }

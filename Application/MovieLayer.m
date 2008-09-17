@@ -47,6 +47,23 @@
     }
 }
 
+- (void) drawInContext:(CGContextRef)c
+{
+    CIImage* image = [self valueForKey:@"$image"];
+    if (image) {
+        CIFilter* scaleFilter = [CIFilter filterWithName:@"CILanczosScaleTransform"];
+        [scaleFilter setDefaults];
+        [scaleFilter setValue:image forKey:kCIInputImageKey];
+        [scaleFilter setValue:[NSNumber numberWithFloat:self.bounds.size.height / image.extent.size.height] forKey:@"inputScale"];
+        CIImage* scaledImage = [scaleFilter valueForKey:kCIOutputImageKey];
+
+        CIContext* context = [CIContext contextWithCGContext:c options:nil];
+        [context drawImage:scaledImage inRect:self.bounds fromRect:scaledImage.extent];
+    } else {
+        [super drawInContext:c];
+    }
+}
+
 #pragma mark NSURLConnection Delegate Methods
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
@@ -68,15 +85,13 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    CIImage *downloadedImage = [CIImage imageWithData:imageData];
-    CIContext* ciContext = [[[NSApp mainWindow] graphicsContext] CIContext];
-    CGImageRef iref = [ciContext createCGImage:downloadedImage fromRect:[downloadedImage extent]];
+    [self setValue:[CIImage imageWithData:imageData] forKey:@"$image"];
+    [self setNeedsDisplay];
     
-    [self setContents:(id)iref];
-    
-    CGImageRelease(iref);
     [imageData release];
+    imageData = nil;
     [connection release];
+    connection = nil;
 }
 
 

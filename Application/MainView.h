@@ -2,10 +2,9 @@
 
 @interface MainView : NSView {
     NSMutableDictionary* layersByID;
-    NSMutableArray* layersInOrder;
+    NSMutableArray* listOfLayersInOrder;
     CALayer* floorLayer; // NR
     id content;
-    int totalCount;
 }
 
 @property (retain) id content;

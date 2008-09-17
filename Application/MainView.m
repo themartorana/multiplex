@@ -36,12 +36,15 @@
         nil
     ];
     [self.layer addSublayer:floorLayer];
+    
+    listOfLayersInOrder = [[NSMutableArray alloc] initWithObjects:[NSMutableArray array], nil];
+    layersByID = [[NSMutableDictionary alloc] init];
 }
 
 - (void) dealloc
 {
     [layersByID release];
-    [layersInOrder release];
+    [listOfLayersInOrder release];
     [super dealloc];
 }
 
@@ -69,21 +72,45 @@
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
     if ([@"content.@count" isEqualToString:keyPath]) {
-        int newTotalCount = [[object content] count];
-        if (totalCount < newTotalCount) {
-            totalCount = newTotalCount;
+        NSMutableArray* allLayers = [listOfLayersInOrder objectAtIndex:0];
+        int oldCount = [allLayers count];
+        NSArray* allObjects = [object content];
+        int count = [[object content] count];
+        if (oldCount != count) {
+            NSMutableArray* layersInOrder = [NSMutableArray arrayWithCapacity:count];
+            for (Movie* movie in allObjects) {
+                NSManagedObjectID* objectID = [movie objectID];
+                MovieLayer* layer = [layersByID objectForKey:objectID];
+                if (!layer) {
+                    layer = [self layerForMovie:movie];
+                    [floorLayer addSublayer:layer];
+                    [layersByID setObject:layer forKey:objectID];
+                } else {
+                    [allLayers removeObject:layer];
+                }
+                [layersInOrder addObject:layer];
+            }
+            for (CALayer* layerToRemove in allLayers) {
+                [layerToRemove removeFromSuperlayer];
+            }
+            [listOfLayersInOrder replaceObjectAtIndex:0 withObject:layersInOrder];
             [floorLayer setNeedsLayout];
         }
     } else if ([@"arrangedObjects" isEqualToString:keyPath]) {
         NSArray* arrangedObjects = [object arrangedObjects];
-        
+
+        int count = [arrangedObjects count];
+        for (int i = [listOfLayersInOrder count] - 1; i >= 0; i--) {
+            if ([[listOfLayersInOrder objectAtIndex:i] count] > count) {
+                break;
+            }
+            [listOfLayersInOrder removeLastObject];
+        }
+                
         /*  Determine which items already have layers, and which need to have
          *  layers created for them.
          */
-        NSMutableArray* newLayersInOrder = [NSMutableArray arrayWithCapacity:[arrangedObjects count]];
-        if (!layersByID) {
-            layersByID = [[NSMutableDictionary alloc] init];
-        }
+        NSMutableArray* layersInOrder = [NSMutableArray arrayWithCapacity:count];
         for (Movie* movie in arrangedObjects) {
             NSManagedObjectID* objectID = [movie objectID];
             MovieLayer* layer = [layersByID objectForKey:objectID];
@@ -92,13 +119,12 @@
                 [floorLayer addSublayer:layer];
                 [layersByID setObject:layer forKey:objectID];
             }
-            [newLayersInOrder addObject:layer];
+            [layersInOrder addObject:layer];
         }
         
         /*  Keep these around for next time...
          */
-        [layersInOrder release];
-        layersInOrder = [newLayersInOrder retain];
+        [listOfLayersInOrder addObject:layersInOrder];
         
         /*  Tell the root layer to re-layout.
          */
@@ -204,39 +230,46 @@ CGFloat HS = 45.0;
 
 - (void) layoutSublayersOfLayer:(CALayer*)layer
 {
-    NSDictionary* parameters = [self computeParametersForSize:floorLayer.bounds.size andCount:totalCount];
-    
-    CGFloat rows = [[parameters objectForKey:@"rows"] floatValue];
-    CGFloat radius = [[parameters objectForKey:@"radius"] floatValue];
-    CGFloat scale = [[parameters objectForKey:@"scale"] floatValue];
-    CGFloat width = [[parameters objectForKey:@"width"] floatValue];
-    CGFloat height = [[parameters objectForKey:@"height"] floatValue];
-
+    NSAssert(layer == floorLayer, @"wtf?");
     /*  This base transform sets up the origin (0, 0) to the center of the 
      *  layer.
      */
     CATransform3D b = CATransform3DIdentity;
-    b = CATransform3DTranslate(b, floorLayer.bounds.size.width / 2.0, 0.0, 0.0);
+    b = CATransform3DTranslate(b, floorLayer.bounds.size.width / 2.0, floorLayer.bounds.size.height / 2.0, 0.0);
 
-    /*  Loop through the layers in the list 
-     */
-    int x = 0;
-    int y = rows;
-    for (MovieLayer* layer in layersInOrder) {
-        CGFloat chord = WS + (W / 2.0) + ((W + WS) * x);
-        CGFloat theta = -chord / radius;
+    NSDictionary* firstParameters = nil;
+    NSDictionary* parameters = nil;
+    for (NSArray* layersInOrder in listOfLayersInOrder) {
+        int count = [layersInOrder count];
+        parameters = [self computeParametersForSize:floorLayer.bounds.size andCount:count];
+        if (!firstParameters) {
+            firstParameters = parameters;
+        }
         
-        CATransform3D t = b;
-        t = CATransform3DTranslate(t, radius * -cos(theta), (H / 2.0) + ((H + HS) * y) - (height / 2.0), radius * sin(theta));
-        t = CATransform3DRotate(t, theta - M_PI/2.0, 0.0, 1.0, 0.0);
-        layer.transform = t;
-
-        y -= 1;
-        if (!y) {
-            x++;
-            y = rows;
+        CGFloat radius = [[parameters objectForKey:@"radius"] floatValue];
+        CGFloat rows = [[parameters objectForKey:@"rows"] floatValue];
+        CGFloat height = [[firstParameters objectForKey:@"height"] floatValue];
+        
+        int x = 0;
+        int y = rows;
+        for (MovieLayer* layer in layersInOrder) {
+            CGFloat chord = WS + (W / 2.0) + ((W + WS) * x);
+            CGFloat theta = -chord / radius;
+            
+            CATransform3D t = b;
+            t = CATransform3DTranslate(t, radius * -cos(theta), ((H + HS) * y) - (H / 2.0) - (height / 2.0), radius * sin(theta));
+            t = CATransform3DRotate(t, theta + M_PI/2.0, 0.0, 1.0, 0.0);
+            layer.transform = t;
+            
+            y -= 1;
+            if (!y) {
+                x++;
+                y = rows;
+            }
         }
     }
+    CGFloat scale = [[parameters objectForKey:@"scale"] floatValue];
+    CGFloat width = [[firstParameters objectForKey:@"width"] floatValue];
     
     /*  Add in our scale factor and perspective...  then throw a little 
      *  rotational "stank" on it.  ;)

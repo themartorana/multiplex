@@ -223,6 +223,7 @@ CGFloat HS = 75.0;
 - (void) layoutSublayersOfLayer:(CALayer*)layer
 {
     NSAssert(layer == floorLayer, @"wtf?");
+    
     /*  This base transform sets up the origin (0, 0) to the center of the 
      *  layer.
      */
@@ -237,6 +238,9 @@ CGFloat HS = 75.0;
     CGFloat width = 0;
     CGFloat radius = 0;
     CGFloat length = 0;
+
+    /*  Process the rows, back-to-front.
+     */
     for (NSArray* layersInOrder in listOfLayersInOrder) {
         int count = [layersInOrder count];
         lastWasEmpty = !count;
@@ -244,7 +248,6 @@ CGFloat HS = 75.0;
         
         columns = [[parameters objectForKey:@"columns"] floatValue];
         rows = [[parameters objectForKey:@"rows"] floatValue];
-        
         height = (HS + ((H + WS) * rows));
         length = (WS + ((W + WS) * columns));
         radius = length / M_PI;
@@ -255,14 +258,28 @@ CGFloat HS = 75.0;
             CGFloat chord = WS + (W / 2.0) + ((W + WS) * x);
             CGFloat theta = -chord / radius;
             
+            /*  Starting with the base transform, translate the layer along the
+             *  x and y.
+             */
             CATransform3D t = b;
             t = CATransform3DTranslate(t, radius * -cos(theta), ((H + HS) * y) - (H / 2.0) - (height / 2.0), 0.0);
+            
+            /*  If there are fewer than four columns, we'll just grid this 
+             *  thing.  Otherwise, we'll need to translate on the Z and do a
+             *  little rotating to make things look right.  For the rotation,
+             *  we need to go one direction on the left-hand of the arc, and 
+             *  the opposite direction on the right-hand.
+             */
             if (columns <= 3) {
                 width = length;
             } else {
                 width = radius * 2.0;
                 t = CATransform3DTranslate(t, 0.0, 0.0, radius * sin(theta));
-                t = CATransform3DRotate(t, theta + M_PI/2.0, 0.0, 1.0, 0.0);
+                if (y > (columns / 2)) {
+                    t = CATransform3DRotate(t, theta - M_PI/2.0, 0.0, 1.0, 0.0);
+                } else {
+                    t = CATransform3DRotate(t, theta + M_PI/2.0, 0.0, 1.0, 0.0);
+                }
             }
             layer.transform = t;
             
@@ -274,13 +291,15 @@ CGFloat HS = 75.0;
         }
     }
 
+    /*  Determine the scale that will "best" fit the screen.
+     */
     CGFloat scale = size.width / width;
     if (scale * height > size.height) {
         scale = size.height / height;
     }
     
-    /*  Add in our scale factor and perspective...  then throw a little 
-     *  rotational "stank" on it.  ;)
+    /*  Add in our scale and perspective...  then throw a little rotational 
+     *  "stank" on it.  ;)
      */
     if (!lastWasEmpty) {
         CATransform3D p = CATransform3DIdentity;

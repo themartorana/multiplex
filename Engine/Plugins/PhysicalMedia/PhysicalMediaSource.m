@@ -6,7 +6,27 @@
 #import <sys/mount.h>
 
 #import "NSImage+DmgCtrl.h"
+#import <JSONKit/JSONKit.h>
 
+@interface NSApplication (Extras)
+
+- (NSString*) pathToUserApplicationSupportFolder;
+
+@end
+
+@implementation NSApplication (Extras)
+
+- (NSString*) pathToUserApplicationSupportFolder
+{
+    FSRef fsRef = {0}; 
+    char path[2048] = {0}; 
+    if (noErr != FSFindFolder(kUserDomain, kApplicationSupportFolderType, TRUE, &fsRef) || noErr != FSRefMakePath(&fsRef, (UInt8*)path, sizeof path)) { 
+        return nil;
+    }
+    return [[NSFileManager defaultManager] stringWithFileSystemRepresentation:path length:strlen(path)]; 
+}
+
+@end
 
 @interface PhysicalMediaSource (Private)
 - (NSString*) _deviceNameForMountPoint:(NSString*)mountPoint;
@@ -20,6 +40,21 @@
 
 @implementation PhysicalMediaSource
 @synthesize delegate;
+
+- (NSString*) _pathToInfoFolder 
+{
+    return [[[NSApp pathToUserApplicationSupportFolder] stringByAppendingPathComponent:@"Multiplex"] stringByAppendingPathComponent:@"Info"];
+}
+
+- (NSString*) _pathToInfoFileForMedia:(Media*)media 
+{
+    return [[self _pathToInfoFolder] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.json", [self fingerprintForMedia:media]]];
+}
+
+- (NSString*) _pathToFrontCoverForMedia:(Media*)media 
+{
+    return [[self _pathToInfoFolder] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@-FrontCover.png", [self fingerprintForMedia:media]]];
+}
 
 - (id) init
 {
@@ -39,6 +74,10 @@
 {
     NSAssert(!started, @"PhysicalMediaSource already started.");
     started = YES;
+    
+    NSFileManager* fileManager = [NSFileManager defaultManager];
+    NSError* error = nil;
+    [fileManager createDirectoryAtPath:[self _pathToInfoFolder] withIntermediateDirectories:YES attributes:nil error:&error];
     
     /*  Pickup any media that's already mounted.
      */
@@ -78,8 +117,11 @@
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
     
-    NSMutableDictionary* info = [mediaInfo objectForKey:@"info"];
+    NSString *pathToInfoFile = [self _pathToInfoFileForMedia: media];
+    NSMutableDictionary* info = [NSMutableDictionary dictionaryWithJSON:[NSString stringWithContentsOfFile:pathToInfoFile]];
     if (!info) {
+        info = [NSMutableDictionary dictionary];
+
         [mediaInfo setObject:info = [NSMutableDictionary dictionary] forKey:@"info"];
 
         NSMutableDictionary* meta = [NSMutableDictionary dictionary];
@@ -107,11 +149,20 @@
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
     [mediaInfo setObject:infoDictionary forKey:@"info"];
+
+    NSString *pathToInfoFile = [self _pathToInfoFileForMedia: media];
+    NSData* dataToWrite = [NSData dataWithObjectAsJSON:infoDictionary];
+    NSData* dataThatsThere = [NSData dataWithContentsOfFile:pathToInfoFile];
+    if (([dataToWrite length] != [dataThatsThere length]) || ![dataToWrite isEqualToData:dataThatsThere]) {
+        [dataToWrite writeToFile:pathToInfoFile atomically:YES];
+    }
 }
 
 - (void) setFrontCover:(NSImage*)coverArt forMedia:(Media*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+
+    [[coverArt PNGRepresentation] writeToFile:[self _pathToFrontCoverForMedia: media] atomically:YES];
 }
 
 - (void) reloadMedia:(Media*)media

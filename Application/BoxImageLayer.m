@@ -12,6 +12,8 @@
 
 @implementation BoxImageLayer
 
+@synthesize boxImage;
+
 - (BoxImageLayer*) init
 {
     if (self = [super init]) {
@@ -26,45 +28,44 @@
 - (void) startSpinner
 {
     // Set up our spinner
-    idpil = [IndeterminateProgressIndicatorLayer layer];
-    idpil.constraints = [NSArray arrayWithObjects:
+    spinnerLayer = [IndeterminateProgressIndicatorLayer layer];
+    spinnerLayer.constraints = [NSArray arrayWithObjects:
                          [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
                          [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY scale:0.5 offset:0.0], 
                          [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.35 offset:0.0],
                          [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.35 offset:0.0],
                          nil
                          ];
-    [self addSublayer:idpil];
-    idpil.hidden = NO;
+    [self addSublayer:spinnerLayer];
+    spinnerLayer.hidden = NO;
 }
 
 - (void) stopSpinner
 {
-    if (idpil) {
-        idpil.hidden = YES;
+    if (spinnerLayer) {
+        spinnerLayer.hidden = YES;
         
-        if (idpil.superlayer) {
-            [idpil removeFromSuperlayer];
+        if (spinnerLayer.superlayer) {
+            [spinnerLayer removeFromSuperlayer];
         }
         
-        idpil = nil;
+        spinnerLayer = nil;
     }
 }
 
 
 - (void) drawInContext:(CGContextRef)c
 {
-    CIImage* image = [self valueForKey:@"$image"];
-    if (image) {        
+    if (boxImage) {        
         
-        if (idpil) {
+        if (spinnerLayer) {
             [self stopSpinner];
         }
         
         CIFilter* scaleFilter = [CIFilter filterWithName:@"CILanczosScaleTransform"];
         [scaleFilter setDefaults];
-        [scaleFilter setValue:image forKey:kCIInputImageKey];
-        [scaleFilter setValue:[NSNumber numberWithFloat:self.bounds.size.height / image.extent.size.height] forKey:@"inputScale"];
+        [scaleFilter setValue:boxImage forKey:kCIInputImageKey];
+        [scaleFilter setValue:[NSNumber numberWithFloat:self.bounds.size.height / boxImage.extent.size.height] forKey:@"inputScale"];
         CIImage* scaledImage = [scaleFilter valueForKey:kCIOutputImageKey];
         
         CIContext* context = [CIContext contextWithCGContext:c options:nil];

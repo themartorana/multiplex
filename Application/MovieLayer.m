@@ -102,7 +102,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    [boxImageLayer setValue:[CIImage imageWithData:imageData] forKey:@"$image"];
+    boxImageLayer.boxImage = [CIImage imageWithData:imageData];
     [boxImageLayer performSelector:@selector(setNeedsDisplay) withObject:nil afterDelay:0.01];
     
     [imageData release];

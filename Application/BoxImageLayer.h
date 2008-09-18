@@ -11,8 +11,11 @@
 #import "IndeterminateProgressIndicatorLayer.h"
 
 @interface BoxImageLayer : CATiledLayer {
-    IndeterminateProgressIndicatorLayer* idpil;
+    IndeterminateProgressIndicatorLayer* spinnerLayer;
+    CIImage* boxImage;
 }
+
+@property (retain) CIImage* boxImage;
 
 - (void) startSpinner;
 - (void) stopSpinner;

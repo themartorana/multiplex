@@ -2,7 +2,18 @@
 #import "Movie.h"
 #import "Disc.h"
 #import "Media.h"
-#import "BoxImageLayer.h"
+#import "IndeterminateProgressIndicatorLayer.h"
+
+@interface MovieLayer (Private)
+- (void) _startSpinner;
+- (void) _stopSpinner;
+@end
+
+static void glossInterpolation(void *info, const float *input, float *output);
+static float perceptualGlossFractionForColor(float *inputComponents);
+static void perceptualCausticColorForColor(float *inputComponents, float *outputComponents);
+static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRect);
+
 
 @implementation MovieLayer
 
@@ -14,7 +25,10 @@
         self.layoutManager = [CAConstraintLayoutManager layoutManager];
         [self setNeedsDisplay];
         
-        boxImageLayer = [[BoxImageLayer layer] retain];
+        boxImageLayer = [CATiledLayer layer];
+        boxImageLayer.delegate = self;
+        boxImageLayer.levelsOfDetail = 5;
+        boxImageLayer.levelsOfDetailBias = 1;
         boxImageLayer.constraints = [NSArray arrayWithObjects:
             [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
             [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
@@ -22,20 +36,21 @@
             [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight],
             nil
         ];
-        
         [self addSublayer:boxImageLayer];
     }
-    
     return self;
 }
 
-- (void) dealloc 
+- (void) dealloc
 {
-    [boxImageLayer release];
+    if (boxImage) {
+        CFRelease(boxImage);
+    }
     [super dealloc];
 }
 
-- (void) setMovie:(Movie*)_movie {
+- (void) setMovie:(Movie*)_movie 
+{
     movie = _movie;
     
     BOOL fullBreak = false;
@@ -58,7 +73,7 @@
                 if ([NSURLConnection canHandleRequest:request]) {
                     [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
                     
-                    [boxImageLayer startSpinner];
+                    [self _startSpinner];
                     
                     fullBreak = YES;
                     break;
@@ -72,60 +87,102 @@
     }
 }
 
-
 - (void) drawInContext:(CGContextRef)c
 {
-    DrawGlossGradient(c, [NSColor colorWithDeviceRed:0.05f green:0.05f blue:0.05f alpha:1.0], NSRectFromCGRect(self.bounds));
+    drawGlossGradient(c, [NSColor colorWithDeviceRed:0.05f green:0.05f blue:0.05f alpha:1.0], NSRectFromCGRect(self.bounds));
+}
+
+- (void) drawLayer:(CALayer*)layer inContext:(CGContextRef)c
+{
+    if (layer == boxImageLayer) {
+        if (boxImage) {
+            CGContextDrawImage(c, layer.bounds, boxImage);
+            [self _stopSpinner];
+        }
+    }
+}
+
+
+#pragma mark Private Methods
+
+- (void) _startSpinner
+{
+    NSAssert(!spinnerLayer, @"why isn't this nil?");
+    spinnerLayer = [IndeterminateProgressIndicatorLayer layer];
+    spinnerLayer.constraints = [NSArray arrayWithObjects:
+        [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
+        [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY scale:0.5 offset:0.0], 
+        [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.35 offset:0.0],
+        [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.35 offset:0.0],
+        nil
+    ];
+    [self addSublayer:spinnerLayer];
+    spinnerLayer.hidden = NO;
+}
+
+
+- (void) _stopSpinner
+{
+    if (spinnerLayer) {
+        spinnerLayer.hidden = YES;
+        [spinnerLayer removeFromSuperlayer];
+        spinnerLayer = nil;
+    }
 }
 
 
 #pragma mark NSURLConnection Delegate Methods
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+- (void) connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
     NSAssert(!imageData, @"why isn't this nil?");
     imageData = [[NSMutableData alloc] init];
 }
 
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError*)error
+- (void) connection:(NSURLConnection *)connection didFailWithError:(NSError*)error
 {
+    [self _stopSpinner];
     [imageData release];
     imageData = nil;
-    [boxImageLayer stopSpinner];
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+- (void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
     [imageData appendData:data];
 }
 
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+- (void) connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    boxImageLayer.boxImage = [CIImage imageWithData:imageData];
-    [boxImageLayer performSelector:@selector(setNeedsDisplay) withObject:nil afterDelay:0.01];
-    
+    CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)imageData, nil);
+    if (imageSource) {
+        boxImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil);
+        [boxImageLayer setNeedsDisplay];
+        CFRelease(imageSource);
+    } 
+     
     [imageData release];
     imageData = nil;
     [connection release];
     connection = nil;
 }
 
+@end
+
 
 #pragma mark Gradient Stuffs
 
-typedef struct
-    {
-        float color[4];
-        float caustic[4];
-        float expCoefficient;
-        float expScale;
-        float expOffset;
-        float initialWhite;
-        float finalWhite;
-    } GlossParameters;
+typedef struct {
+    float color[4];
+    float caustic[4];
+    float expCoefficient;
+    float expScale;
+    float expOffset;
+    float initialWhite;
+    float finalWhite;
+} GlossParameters;
 
-static void glossInterpolation(void *info, const float *input, float *output)
+void glossInterpolation(void *info, const float *input, float *output)
 {
     GlossParameters *params = (GlossParameters *)info;
     
@@ -220,7 +277,7 @@ void perceptualCausticColorForColor(float *inputComponents, float *outputCompone
     [targetColor getComponents:outputComponents];
 }
 
-void DrawGlossGradient(CGContextRef context, NSColor *color, NSRect inRect)
+void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRect)
 {
     const float EXP_COEFFICIENT = 1.2;
     const float REFLECTION_MAX = 0.40;
@@ -276,4 +333,3 @@ void DrawGlossGradient(CGContextRef context, NSColor *color, NSRect inRect)
     CGFunctionRelease(gradientFunction);
 }
 
-@end

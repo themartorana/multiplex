@@ -1,21 +1,17 @@
+#import <Cocoa/Cocoa.h>
 #import <QuartzCore/QuartzCore.h>
-#import "IndeterminateProgressIndicatorLayer.h"
-#import "BoxImageLayer.h"
 
 @class Movie;
+@class IndeterminateProgressIndicatorLayer;
 
 @interface MovieLayer : CALayer {
     Movie* movie;
     NSMutableData* imageData;
-    IndeterminateProgressIndicatorLayer* idpil;
-    BoxImageLayer* boxImageLayer; 
+    IndeterminateProgressIndicatorLayer* spinnerLayer;
+    CATiledLayer* boxImageLayer; 
+    CGImageRef boxImage;
 }
 
 @property (retain) Movie* movie;
-
-static void glossInterpolation(void *info, const float *input, float *output);
-float perceptualGlossFractionForColor(float *inputComponents);
-void perceptualCausticColorForColor(float *inputComponents, float *outputComponents);
-void DrawGlossGradient(CGContextRef context, NSColor *color, NSRect inRect);
 
 @end

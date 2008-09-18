@@ -20,21 +20,15 @@
 
         for (Media* media in discMedia) {
             if (media.url && [media.url length] > 0) {
-                
                 NSString* url = [[media.url stringByAppendingPathComponent:@"QuickLook"] stringByAppendingPathComponent:@"FrontCover.png"];
                 url = [url stringByReplacingOccurrencesOfString:@"file:/localhost/" withString:@"file:///"];
-                NSLog(@"%@", url);
                 
                 // Call out to it.
                 NSURL* imageURL = [NSURL URLWithString:url];
                 NSURLRequest* request = [NSURLRequest requestWithURL:imageURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5.0];
                 
                 if ([NSURLConnection canHandleRequest:request]) {
-                    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-                    if(connection) {
-                        imageData = [[NSMutableData data] retain];
-                    }
-                    
+                    [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
                     fullBreak = YES;
                     break;
                 }
@@ -68,13 +62,14 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    [imageData setLength:0];
+    NSAssert(!imageData, @"why isn't this nil?");
+    imageData = [[NSMutableData alloc] init];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError*)error
 {
     [imageData release];
-    NSLog(@"Connection error: %@", error);
+    imageData = nil;
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
@@ -86,7 +81,7 @@
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     [self setValue:[CIImage imageWithData:imageData] forKey:@"$image"];
-    [self setNeedsDisplay];
+    [self performSelector:@selector(setNeedsDisplay) withObject:nil afterDelay:0.01];
     
     [imageData release];
     imageData = nil;

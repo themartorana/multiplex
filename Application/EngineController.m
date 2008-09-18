@@ -577,7 +577,7 @@
     engine.netServiceName = [netService name];
     [managedObjectContext save:nil];
     
-    if ([uuid isEqualToString:localMachineUUID]) {
+    if (YES || [uuid isEqualToString:localMachineUUID]) {
         [self connectEngine:engine];
     }
 }

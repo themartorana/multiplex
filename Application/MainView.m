@@ -18,10 +18,9 @@
 - (void) awakeFromNib
 {
     [self setWantsLayer:YES];
-    self.layer.layoutManager = [CAConstraintLayoutManager layoutManager];
-    self.layer.delegate = self;
-    self.layer.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 1.0);
-    [self.layer setNeedsDisplay];
+    CALayer* rootLayer = self.layer;
+    rootLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
+    rootLayer.delegate = self;
     
     floorLayer = [CALayer layer];
     floorLayer.delegate = self;
@@ -31,10 +30,10 @@
         [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY],
         [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
         [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.95 offset:0.0],
-        [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0.70 offset:0.0],
+        [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0.95 offset:0],
         nil
     ];
-    [self.layer insertSublayer:floorLayer atIndex:0];
+    [rootLayer insertSublayer:floorLayer atIndex:0];
     
     radialGradientLayer = [CALayer layer];
     radialGradientLayer.hidden = YES;

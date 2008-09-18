@@ -121,28 +121,28 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 557B667D0E4A2D790009919E /* Engine */;
+			remoteGlobalIDString = 557B667D0E4A2D790009919E;
 			remoteInfo = Engine;
 		};
 		F9A1D1810E82E4FC00AB691D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = F9D30D600E7DD5B500D99DCA /* PhysicalMedia.mediasource */;
+			remoteGlobalIDString = F9D30D600E7DD5B500D99DCA;
 			remoteInfo = PhysicalMedia.mediasource;
 		};
 		F9A1D1830E82E4FC00AB691D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = F9D314CD0E7DD99500D99DCA /* DVDMedia.mediasource */;
+			remoteGlobalIDString = F9D314CD0E7DD99500D99DCA;
 			remoteInfo = DVDMedia.mediasource;
 		};
 		F9A1D1860E82E51700AB691D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = F9A1D17C0E82E4F400AB691D /* Engine and All Plugins */;
+			remoteGlobalIDString = F9A1D17C0E82E4F400AB691D;
 			remoteInfo = "Engine and All Plugins";
 		};
 		F9C2AE580E7B747B00474D97 /* PBXContainerItemProxy */ = {

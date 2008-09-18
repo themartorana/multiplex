@@ -8,8 +8,8 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="1151"/>
 			<integer value="961"/>
-			<integer value="1152"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2166,16 +2166,27 @@
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSCustomView" id="572135655">
+							<reference key="NSNextResponder" ref="384445475"/>
+							<int key="NSvFlags">274</int>
+							<string key="NSFrame">{{0, 234}, {730, 349}}</string>
+							<reference key="NSSuperview" ref="384445475"/>
+							<string key="NSClassName">MainView</string>
+						</object>
 						<object class="NSSearchField" id="268782376">
 							<reference key="NSNextResponder" ref="384445475"/>
 							<int key="NSvFlags">261</int>
-							<string key="NSFrame">{{274, 158}, {182, 22}}</string>
+							<string key="NSFrame">{{274, 138}, {182, 22}}</string>
 							<reference key="NSSuperview" ref="384445475"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSSearchFieldCell" key="NSCell" id="928070300">
 								<int key="NSCellFlags">341966400</int>
 								<int key="NSCellFlags2">33792</int>
-								<reference key="NSSupport" ref="707745533"/>
+								<object class="NSFont" key="NSSupport">
+									<string key="NSName">LucidaGrande-Bold</string>
+									<double key="NSSize">1.300000e+01</double>
+									<int key="NSfFlags">16</int>
+								</object>
 								<string key="NSPlaceholderString">All</string>
 								<reference key="NSControlView" ref="268782376"/>
 								<bool key="NSDrawsBackground">YES</bool>
@@ -2225,13 +2236,6 @@
 								</object>
 								<int key="NSMaximumRecents">255</int>
 							</object>
-						</object>
-						<object class="NSCustomView" id="572135655">
-							<reference key="NSNextResponder" ref="384445475"/>
-							<int key="NSvFlags">274</int>
-							<string key="NSFrameSize">{730, 583}</string>
-							<reference key="NSSuperview" ref="384445475"/>
-							<string key="NSClassName">NSView</string>
 						</object>
 					</object>
 					<string key="NSFrameSize">{730, 583}</string>
@@ -3199,14 +3203,6 @@
 					<int key="connectionID">1155</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">mainView</string>
-						<reference key="source" ref="623785332"/>
-						<reference key="destination" ref="384445475"/>
-					</object>
-					<int key="connectionID">1156</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">predicate: filterPredicate</string>
 						<reference key="source" ref="268782376"/>
@@ -3234,6 +3230,14 @@
 						</object>
 					</object>
 					<int key="connectionID">1164</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">mainView</string>
+						<reference key="source" ref="623785332"/>
+						<reference key="destination" ref="572135655"/>
+					</object>
+					<int key="connectionID">1165</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -4641,8 +4645,11 @@
 					<string>1150.IBPluginDependency</string>
 					<string>1150.IBWindowTemplateEditedContentRect</string>
 					<string>1150.NSWindowTemplate.visibleAtLaunch</string>
-					<string>1151.CustomClassName</string>
 					<string>1151.IBPluginDependency</string>
+					<string>1151.IBViewIntegration.shadowBlurRadius</string>
+					<string>1151.IBViewIntegration.shadowColor</string>
+					<string>1151.IBViewIntegration.shadowOffsetHeight</string>
+					<string>1151.IBViewIntegration.shadowOffsetWidth</string>
 					<string>1152.IBPluginDependency</string>
 					<string>1153.IBPluginDependency</string>
 					<string>124.IBPluginDependency</string>
@@ -4892,12 +4899,15 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{1670, 336}, {730, 583}}</string>
+					<string>{{506, 176}, {730, 583}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{1670, 336}, {730, 583}}</string>
+					<string>{{506, 176}, {730, 583}}</string>
 					<reference ref="9"/>
-					<string>MainView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<real value="0.000000e+00"/>
+					<reference ref="4281419"/>
+					<real value="0.000000e+00"/>
+					<real value="0.000000e+00"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -5143,7 +5153,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1164</int>
+			<int key="maxID">1165</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

@@ -18,12 +18,16 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 @interface Engine (Private)
 
-- (void) republishNetService;
-- (void) loadMediaSourcePlugins;
-- (void) stopMediaSourcePlugins;
+- (void) _republishNetService;
+- (void) _loadMediaSourcePlugins;
+- (void) _stopMediaSourcePlugins;
 
 @end
 
+@interface Engine (NSNetServiceDelegate)
+- (void) netService:(NSNetService*)netService didNotPublish:(NSDictionary*)errorInfo;
+- (void) netServiceDidPublish:(NSNetService*)netService;
+@end
 
 @implementation Engine
 
@@ -31,7 +35,6 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 {
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-        [NSString stringWithFormat:@"%@'s Movies", NSFullUserName()], @"machine-name",
         nil
     ]];
 }
@@ -44,15 +47,20 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         protocols = [[NSMutableArray alloc] init];
         mediaSources = [[NSMutableArray alloc] init];
         
-        NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-        machineName = [[userDefaults valueForKey:@"machine-name"] retain];
-        machineId = [userDefaults valueForKey:@"machine-id"];
+        static CFStringRef const kEngineMachineIdKey = CFSTR("machine-id");
+        static CFStringRef const kEngineMachineNameKey = CFSTR("machine-name");
+        static CFStringRef const kEngineAppDomain = CFSTR("com.multiplexapp.Engine");
+        machineId = (NSString*)CFPreferencesCopyValue(kEngineMachineIdKey, kEngineAppDomain, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
         if (!machineId) {
-            [userDefaults setValue:machineId = [NSString stringWithUUID] forKey:@"machine-id"];
-            [userDefaults synchronize];
+            machineId = [[NSString stringWithUUID] retain];
+            CFPreferencesSetValue(kEngineMachineIdKey, (CFStringRef)machineId, kEngineAppDomain, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+            CFPreferencesSynchronize(kEngineAppDomain, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
         }
-        [machineId retain];
-
+        machineName = (NSString*)CFPreferencesCopyValue(kEngineMachineNameKey, kEngineAppDomain, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+        if (!machineName) {
+            machineName = [[NSString alloc] initWithFormat:@"%@'s Movies", NSFullUserName()];
+        }
+        
         txtData = [[NSMutableDictionary dictionaryWithObjectsAndKeys:
             [machineId dataUsingEncoding:NSUTF8StringEncoding], @"UUID",
             [machineName dataUsingEncoding:NSUTF8StringEncoding], @"Name",
@@ -100,12 +108,12 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         serverHandle = [[NSFileHandle alloc] initWithFileDescriptor:[serverSocket socket] closeOnDealloc:YES];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(acceptConnection:) name:NSFileHandleConnectionAcceptedNotification object:serverHandle];
         [serverHandle acceptConnectionInBackgroundAndNotify];
-        [self republishNetService];
+        [self _republishNetService];
         NSLog(@"Listening on ip6 port: %d", networkPort);
 
         /*  Load and start our Media Source plugins
          */
-        [self loadMediaSourcePlugins];        
+        [self _loadMediaSourcePlugins];        
 
         /*  Process our message loop unil we're told to stop.
          */
@@ -123,11 +131,11 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         [netService release];
         netService = nil;
         
-        [self stopMediaSourcePlugins];
+        [self _stopMediaSourcePlugins];
     }
 }
 
-- (void) loadMediaSourcePlugins
+- (void) _loadMediaSourcePlugins
 {
     /*  Determine the folder we'll search for ".mediasource" plugins.  This is 
      *  a little complicated due to the fact that we load from one place under
@@ -175,7 +183,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     }
 }
 
-- (void) stopMediaSourcePlugins
+- (void) _stopMediaSourcePlugins
 {
     for (id<MediaSource> mediaSource in mediaSources) {
         @try {
@@ -201,12 +209,16 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     }
 }
 
-- (void) republishNetService
+- (void) _republishNetService
 {
-    if (![[netService name] isEqualTo:machineName]) {
+    if (netService && ![[netService name] isEqualTo:machineName]) {
         [netService stop];
         [netService release];
+        netService = nil;
+    }
+    if (!netService) {
         netService = [[NSNetService alloc] initWithDomain:@"local." type:@"_com_multiplexapp_Engine._tcp" name:machineName port:networkPort];
+        netService.delegate = self;
     }
     [netService setTXTRecordData:[NSNetService dataFromTXTRecordDictionary:txtData]];
     [netService publish];
@@ -647,6 +659,19 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 }
 
 
+#pragma mark NSNetServiceDelegate
+
+- (void) netService:(NSNetService*)netService didNotPublish:(NSDictionary*)errorInfo
+{
+    NSLog(@"Unable to publish: %@", errorInfo);
+}
+
+- (void) netServiceDidPublish:(NSNetService*)netService
+{
+    NSLog(@"Published.");
+}
+
+
 #pragma mark MessageProtocolDelegate
 
 - (void) protocol:(MessageProtocol*)protocol didReceiveMessage:(NSDictionary*)messageDict
@@ -658,6 +683,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 {
     [protocols removeObject:protocol];
 }
+
 
 #pragma mark DiscIdentQueryDelegate
 

@@ -60,20 +60,20 @@
 
         /*  Grab (or generate) our local machine's Engine UUID.
          */
-        NSUserDefaults* engineDefaults = [[NSUserDefaults alloc] init];
-        [engineDefaults addSuiteNamed:@"com.multiplexapp.Engine"];
-        localMachineUUID = [engineDefaults valueForKey:@"machine-id"];
+        static CFStringRef const kEngineMachineIdKey = CFSTR("machine-id");
+        static CFStringRef const kEngineAppDomain = CFSTR("com.multiplexapp.Engine");
+        localMachineUUID = (NSString*)CFPreferencesCopyValue(kEngineMachineIdKey, kEngineAppDomain, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
         if (!localMachineUUID) {
-            [engineDefaults setValue:localMachineUUID = [NSString stringWithUUID] forKey:@"machine-id"];
-            [engineDefaults synchronize];
+            localMachineUUID = [[NSString stringWithUUID] retain];
+            CFPreferencesSetValue(kEngineMachineIdKey, (CFStringRef)localMachineUUID, kEngineAppDomain, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+            CFPreferencesSynchronize(kEngineAppDomain, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
         }
-        [engineDefaults release];
-
+        
         /*  Fire up the Bonjour service browser.
          */
         browser = [[NSNetServiceBrowser alloc] init];
         [browser setDelegate:self];
-        [browser searchForServicesOfType:@"_com_multiplexapp_Engine._tcp." inDomain:@"local."]; 
+        [browser searchForServicesOfType:@"_com_multiplexapp_Engine._tcp." inDomain:@""]; 
         
         /*  Use launchctl to start the local engine (if one's not started 
          *  already.)
@@ -573,10 +573,11 @@
     
     engine.name = name;
     engine.uuid = uuid;
+    engine.status = @"Resolved";
     engine.netServiceName = [netService name];
     [managedObjectContext save:nil];
     
-    if (YES || [uuid isEqualToString:localMachineUUID]) {
+    if ([uuid isEqualToString:localMachineUUID]) {
         [self connectEngine:engine];
     }
 }
@@ -598,12 +599,14 @@
     [managedObjectContext save:nil];
     
     [netService setDelegate:self];
+    [netService scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     [netService resolveWithTimeout:5.0];
 }
 
 - (void) netServiceBrowser:(NSNetServiceBrowser*)netServiceBrowser didRemoveService:(NSNetService*)netService moreComing:(BOOL)moreComing 
 {
     [netService stop];
+    [netService removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     [netServiceByName removeObjectForKey:[netService name]];
 
     Engine* engine = [self _findEngineByNetServiceName:[netService name]];

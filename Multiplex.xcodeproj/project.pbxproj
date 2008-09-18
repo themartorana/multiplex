@@ -6,6 +6,22 @@
 	objectVersion = 44;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		F9A1D17C0E82E4F400AB691D /* Engine and All Plugins */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = F9A1D18E0E82E52100AB691D /* Build configuration list for PBXAggregateTarget "Engine and All Plugins" */;
+			buildPhases = (
+			);
+			dependencies = (
+				F9A1D1800E82E4FC00AB691D /* PBXTargetDependency */,
+				F9A1D1820E82E4FC00AB691D /* PBXTargetDependency */,
+				F9A1D1840E82E4FC00AB691D /* PBXTargetDependency */,
+			);
+			name = "Engine and All Plugins";
+			productName = "Engine and All Plugins";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		5535D98F0E4E3F5400A45761 /* EngineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5535D98E0E4E3F5400A45761 /* EngineController.m */; };
 		557AC76D0E5B1E1A00271113 /* MessageProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 557AC76C0E5B1E1A00271113 /* MessageProtocol.m */; };
@@ -98,6 +114,34 @@
 			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
 			remoteInfo = JSONKit;
 		};
+		F9A1D17F0E82E4FC00AB691D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 557B667D0E4A2D790009919E /* Engine */;
+			remoteInfo = Engine;
+		};
+		F9A1D1810E82E4FC00AB691D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F9D30D600E7DD5B500D99DCA /* PhysicalMedia.mediasource */;
+			remoteInfo = PhysicalMedia.mediasource;
+		};
+		F9A1D1830E82E4FC00AB691D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F9D314CD0E7DD99500D99DCA /* DVDMedia.mediasource */;
+			remoteInfo = DVDMedia.mediasource;
+		};
+		F9A1D1860E82E51700AB691D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F9A1D17C0E82E4F400AB691D /* Engine and All Plugins */;
+			remoteInfo = "Engine and All Plugins";
+		};
 		F9C2AE580E7B747B00474D97 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F9C2AE540E7B747B00474D97 /* JSONKit.xcodeproj */;
@@ -127,27 +171,6 @@
 			remoteInfo = JSONKit;
 		};
 		F9D314D50E7DD99D00D99DCA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 557B667D0E4A2D790009919E;
-			remoteInfo = Engine;
-		};
-		F9D314FF0E7DDB6700D99DCA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F9D30D600E7DD5B500D99DCA;
-			remoteInfo = PhysicalMedia.mediasource;
-		};
-		F9D315030E7DDB6900D99DCA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F9D314CD0E7DD99500D99DCA;
-			remoteInfo = DVDMedia.mediasource;
-		};
-		F9D315140E7DDB7100D99DCA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 			proxyType = 1;
@@ -641,11 +664,9 @@
 			buildRules = (
 			);
 			dependencies = (
-				F9D315150E7DDB7100D99DCA /* PBXTargetDependency */,
+				F9A1D1870E82E51700AB691D /* PBXTargetDependency */,
 				5535DBE10E4FC99200A45761 /* PBXTargetDependency */,
 				F9970F420E7B9D8C009A1B6A /* PBXTargetDependency */,
-				F9D315000E7DDB6700D99DCA /* PBXTargetDependency */,
-				F9D315040E7DDB6900D99DCA /* PBXTargetDependency */,
 			);
 			name = Multiplex;
 			productInstallPath = "$(HOME)/Applications";
@@ -735,6 +756,7 @@
 			targets = (
 				8D15AC270486D014006FF6A4 /* Multiplex */,
 				F98DC6B50B63008700371A83 /* DVD.mdimporter */,
+				F9A1D17C0E82E4F400AB691D /* Engine and All Plugins */,
 				557B667D0E4A2D790009919E /* Engine */,
 				F9D30D600E7DD5B500D99DCA /* PhysicalMedia.mediasource */,
 				F9D314CD0E7DD99500D99DCA /* DVDMedia.mediasource */,
@@ -912,6 +934,26 @@
 			name = JSONKit;
 			targetProxy = F9970F410E7B9D8C009A1B6A /* PBXContainerItemProxy */;
 		};
+		F9A1D1800E82E4FC00AB691D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 557B667D0E4A2D790009919E /* Engine */;
+			targetProxy = F9A1D17F0E82E4FC00AB691D /* PBXContainerItemProxy */;
+		};
+		F9A1D1820E82E4FC00AB691D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F9D30D600E7DD5B500D99DCA /* PhysicalMedia.mediasource */;
+			targetProxy = F9A1D1810E82E4FC00AB691D /* PBXContainerItemProxy */;
+		};
+		F9A1D1840E82E4FC00AB691D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F9D314CD0E7DD99500D99DCA /* DVDMedia.mediasource */;
+			targetProxy = F9A1D1830E82E4FC00AB691D /* PBXContainerItemProxy */;
+		};
+		F9A1D1870E82E51700AB691D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F9A1D17C0E82E4F400AB691D /* Engine and All Plugins */;
+			targetProxy = F9A1D1860E82E51700AB691D /* PBXContainerItemProxy */;
+		};
 		F9C2B0140E7B912C00474D97 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = JSONKit;
@@ -931,21 +973,6 @@
 			isa = PBXTargetDependency;
 			target = 557B667D0E4A2D790009919E /* Engine */;
 			targetProxy = F9D314D50E7DD99D00D99DCA /* PBXContainerItemProxy */;
-		};
-		F9D315000E7DDB6700D99DCA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F9D30D600E7DD5B500D99DCA /* PhysicalMedia.mediasource */;
-			targetProxy = F9D314FF0E7DDB6700D99DCA /* PBXContainerItemProxy */;
-		};
-		F9D315040E7DDB6900D99DCA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F9D314CD0E7DD99500D99DCA /* DVDMedia.mediasource */;
-			targetProxy = F9D315030E7DDB6900D99DCA /* PBXContainerItemProxy */;
-		};
-		F9D315150E7DDB7100D99DCA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 557B667D0E4A2D790009919E /* Engine */;
-			targetProxy = F9D315140E7DDB7100D99DCA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1154,6 +1181,27 @@
 			};
 			name = Release;
 		};
+		F9A1D17D0E82E4F500AB691D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = "Engine and All Plugins";
+			};
+			name = Debug;
+		};
+		F9A1D17E0E82E4F500AB691D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "Engine and All Plugins";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		F9D30D630E7DD5B500D99DCA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1295,6 +1343,15 @@
 			buildConfigurations = (
 				F98DC6B90B63008800371A83 /* Debug */,
 				F98DC6BA0B63008800371A83 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F9A1D18E0E82E52100AB691D /* Build configuration list for PBXAggregateTarget "Engine and All Plugins" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F9A1D17D0E82E4F500AB691D /* Debug */,
+				F9A1D17E0E82E4F500AB691D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

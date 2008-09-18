@@ -188,7 +188,6 @@ CGFloat HS = 75.0;
 {
     MovieLayer* layer = [MovieLayer layer];
     layer.movie = movie;
-    layer.backgroundColor = CGColorCreateGenericRGB(0.5, 0.5, 0.5, 1.0);
     layer.frame = CGRectMake(0.0, 0.0, W, H);
     layer.position = CGPointZero;
     return layer;

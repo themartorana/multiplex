@@ -21,9 +21,9 @@
 @property (readonly) NSString* pathToFile;
 @property (readonly) id<MediaSource> mediaSource;
 @property (assign) NSMutableDictionary* infoDictionary;
+@property (assign) NSData* frontCover;
 
 - (void) reload;
-- (void) setFrontCover:(NSImage*)coverArt;
 
 @end
 

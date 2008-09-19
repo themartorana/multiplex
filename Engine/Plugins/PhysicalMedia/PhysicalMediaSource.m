@@ -18,12 +18,11 @@
 
 - (NSString*) pathToUserApplicationSupportFolder
 {
-    FSRef fsRef = {0}; 
-    char path[2048] = {0}; 
-    if (noErr != FSFindFolder(kUserDomain, kApplicationSupportFolderType, TRUE, &fsRef) || noErr != FSRefMakePath(&fsRef, (UInt8*)path, sizeof path)) { 
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    if (![paths count]) {
         return nil;
     }
-    return [[NSFileManager defaultManager] stringWithFileSystemRepresentation:path length:strlen(path)]; 
+    return [paths objectAtIndex:0]; 
 }
 
 @end
@@ -158,11 +157,16 @@
     }
 }
 
-- (void) setFrontCover:(NSImage*)coverArt forMedia:(Media*)media
+- (NSData*) frontCoverForMedia:(Media*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    return [NSData dataWithContentsOfFile:[self _pathToFrontCoverForMedia: media]];
+}
 
-    [[coverArt PNGRepresentation] writeToFile:[self _pathToFrontCoverForMedia: media] atomically:YES];
+- (void) setFrontCover:(NSData*)frontCover forMedia:(Media*)media
+{
+    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    [frontCover writeToFile:[self _pathToFrontCoverForMedia: media] atomically:YES];
 }
 
 - (void) reloadMedia:(Media*)media

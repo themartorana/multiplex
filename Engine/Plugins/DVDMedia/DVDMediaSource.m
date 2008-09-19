@@ -176,14 +176,20 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
     }
 }
 
-- (void) setFrontCover:(NSImage*)coverArt forMedia:(Media*)media
+- (NSData*) frontCoverForMedia:(Media*)media
+{
+    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    return [NSData dataWithContentsOfFile:[[media.pathToFile stringByAppendingPathComponent:@"QuickLook"] stringByAppendingPathComponent:@"FrontCover.png"]];
+}
+
+- (void) setFrontCover:(NSData*)frontCover forMedia:(Media*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");    
     NSString* pathToQuickLookFolder = [media.pathToFile stringByAppendingPathComponent:@"QuickLook"];
     NSFileManager* fileManager = [NSFileManager defaultManager];
     [fileManager createDirectoryAtPath:pathToQuickLookFolder attributes:nil];
     if ([fileManager fileExistsAtPath:pathToQuickLookFolder]) {
-        [[coverArt PNGRepresentation] writeToFile:[pathToQuickLookFolder stringByAppendingPathComponent:@"FrontCover.png"] atomically:YES];
+        [frontCover writeToFile:[pathToQuickLookFolder stringByAppendingPathComponent:@"FrontCover.png"] atomically:YES];
     }
 }
 

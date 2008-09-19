@@ -387,6 +387,8 @@
                 disc.fingerprint = fingerprint;
             }
             
+            NSString* frontCoverURL = [info objectForKey:@"frontCoverURL"];
+            
             /*  For each URL provided, create a media object to represent it,
              *  and attached it to our disc.
              */
@@ -395,6 +397,9 @@
                 media.url = url;
                 media.engine = engine;
                 media.disc = disc;
+                if (frontCoverURL) {
+                    media.frontCoverURL = frontCoverURL;
+                }
                 [media release];
             }
         }

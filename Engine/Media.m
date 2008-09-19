@@ -15,6 +15,7 @@ extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
 @synthesize disc;
 @synthesize url;
 @synthesize mediaSource;
+@synthesize frontCover;
 
 - (id) initWithMediaSource:(id<MediaSource>)_mediaSource mediaInfo:(void*)_mediaInfo;
 {
@@ -63,9 +64,14 @@ extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
     [mediaSource setInfoDictionary:infoDictionary forMedia:self];
 }
 
-- (void) setFrontCover:(NSImage*)coverArt
+- (NSData*) frontCover
 {
-    [mediaSource setFrontCover:coverArt forMedia:self];
+    return [mediaSource frontCoverForMedia:self];
+}
+
+- (void) setFrontCover:(NSData*)frontCover
+{
+    [mediaSource setFrontCover:frontCover forMedia:self];
 }
 
 @end

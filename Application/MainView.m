@@ -249,7 +249,6 @@ CGFloat HS = 75.0;
      */
     CATransform3D b = CATransform3DIdentity;
     b = CATransform3DTranslate(b, floorLayer.bounds.size.width / 2.0, floorLayer.bounds.size.height / 2.0, 0.0);
-//    b = CATransform3DRotate(b, 0.3, 1.0, 0.0, 0.0);
 
     CGSize const size = floorLayer.bounds.size;
     BOOL lastWasEmpty = YES;
@@ -295,8 +294,8 @@ CGFloat HS = 75.0;
              *  arc, and the opposite direction on the right-hand.
              */
             if (columns < 4) {
-                t = CATransform3DTranslate(t, chord - (length / 2.0), 0.0, 0.0);
                 width = length;
+                t = CATransform3DTranslate(t, chord - (length / 2.0), 0.0, -columns);
             } else {
                 width = radius * 2.0;
                 CGFloat theta = -chord / radius;

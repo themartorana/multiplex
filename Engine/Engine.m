@@ -8,6 +8,7 @@
 #import "MessageProtocol.h"
 #import "NSDictionary+KeyPaths.h"
 #import "NSString+UUID.h"
+#import "NSImage+DmgCtrl.h"
 
 #import <JSONKit/JSONKit.h>
 
@@ -18,9 +19,10 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 @interface Engine (Private)
 
-- (void) _republishNetService;
 - (void) _loadMediaSourcePlugins;
 - (void) _stopMediaSourcePlugins;
+- (void) _republishNetService;
+- (NSString*) _frontCoverURLForFingerprint:(NSString*)fingeprint;
 
 @end
 
@@ -94,22 +96,38 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         NSUserDefaultsController* defaultsController = [NSUserDefaultsController sharedUserDefaultsController];
         [defaultsController addObserver:self forKeyPath:@"values.machine-name" options:NSKeyValueObservingOptionNew context:nil];
         
+        {
+            struct sockaddr_in6 sin6;
+            sin6.sin6_len = sizeof(sin6);
+            sin6.sin6_family = AF_INET6;
+            sin6.sin6_flowinfo = 0;
+            sin6.sin6_port = 0;
+            sin6.sin6_addr = in6addr_any;
+            NSSocketPort* serverSocket = [[NSSocketPort alloc] initWithProtocolFamily:PF_INET6 socketType:SOCK_STREAM protocol:0 address:[NSData dataWithBytesNoCopy:&sin6 length:sizeof(sin6) freeWhenDone:NO]];
+            struct sockaddr_in6* psin6 = (struct sockaddr_in6*)[[serverSocket address] bytes];
+            baseImageURL = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"http://%@:%d/", [[NSHost currentHost] name], ntohs(psin6->sin6_port)]];
+            NSLog(@"%@", baseImageURL);
+            imageServer = [[HTTPServer alloc] initWithSocketPort:serverSocket delegate:self];
+        }
+        
         /*  Setup our socket to listen on, and begin accepting connections.
          */
-        struct sockaddr_in6 sin6;
-        sin6.sin6_len = sizeof(sin6);
-        sin6.sin6_family = AF_INET6;
-        sin6.sin6_flowinfo = 0;
-        sin6.sin6_port = 0;
-        sin6.sin6_addr = in6addr_any;
-        serverSocket = [[NSSocketPort alloc] initWithProtocolFamily:PF_INET6 socketType:SOCK_STREAM protocol:0 address:[NSData dataWithBytesNoCopy:&sin6 length:sizeof(sin6) freeWhenDone:NO]];
-        struct sockaddr_in6* psin6 = (struct sockaddr_in6*)[[serverSocket address] bytes];
-        networkPort = ntohs(psin6->sin6_port);
-        serverHandle = [[NSFileHandle alloc] initWithFileDescriptor:[serverSocket socket] closeOnDealloc:YES];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(acceptConnection:) name:NSFileHandleConnectionAcceptedNotification object:serverHandle];
-        [serverHandle acceptConnectionInBackgroundAndNotify];
-        [self _republishNetService];
-        NSLog(@"Listening on ip6 port: %d", networkPort);
+        {
+            struct sockaddr_in6 sin6;
+            sin6.sin6_len = sizeof(sin6);
+            sin6.sin6_family = AF_INET6;
+            sin6.sin6_flowinfo = 0;
+            sin6.sin6_port = 0;
+            sin6.sin6_addr = in6addr_any;
+            serverSocket = [[NSSocketPort alloc] initWithProtocolFamily:PF_INET6 socketType:SOCK_STREAM protocol:0 address:[NSData dataWithBytesNoCopy:&sin6 length:sizeof(sin6) freeWhenDone:NO]];
+            struct sockaddr_in6* psin6 = (struct sockaddr_in6*)[[serverSocket address] bytes];
+            networkPort = ntohs(psin6->sin6_port);
+            serverHandle = [[NSFileHandle alloc] initWithFileDescriptor:[serverSocket socket] closeOnDealloc:YES];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(acceptConnection:) name:NSFileHandleConnectionAcceptedNotification object:serverHandle];
+            [serverHandle acceptConnectionInBackgroundAndNotify];
+            [self _republishNetService];
+            NSLog(@"Listening on ip6 port: %d", networkPort);
+        }
 
         /*  Load and start our Media Source plugins
          */
@@ -224,6 +242,11 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     [netService publish];
 }
 
+- (NSString*) _frontCoverURLForFingerprint:(NSString*)fingerprint
+{
+    return [[NSURL URLWithString:[NSString stringWithFormat:@"/%@/FrontCover", fingerprint] relativeToURL:baseImageURL] absoluteString];
+}
+
 - (void) acceptConnection:(NSNotification*)notification 
 {
     [[notification object] acceptConnectionInBackgroundAndNotify];
@@ -240,7 +263,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                 for (Media* media in disc.allMedia) {
                     [urls addObject:[media.url absoluteString]];
                 }
-                [adds setObject:[NSDictionary dictionaryWithObject:urls forKey:@"urls"] forKey:fingerprint];
+                [adds setObject:[NSDictionary dictionaryWithObjectsAndKeys:urls, @"urls", [self _frontCoverURLForFingerprint:fingerprint], @"frontCoverURL", nil] forKey:fingerprint];
             }
             [protocol sendMessage:[NSDictionary dictionaryWithObjectsAndKeys:adds, @"add", nil]];
             [protocol sendMessage:[NSDictionary dictionaryWithObjectsAndKeys:infoDictionariesByFingerprint, @"update", nil]];
@@ -385,6 +408,35 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     }
 }
 
+
+#pragma mark HTTPServerDelegate
+
+- (void) processURL:(NSURL*)url connection:(HTTPConnection*)connection;
+{
+    NSArray* parts = [[url path] componentsSeparatedByString:@"/"];
+    NSString* fingerprint = nil;
+    if ([parts count] == 3 && [@"FrontCover" isEqualToString:[parts objectAtIndex:2]] && [fingerprint = [parts objectAtIndex:1] length] == 36) {
+        Disc* disc = [discsByFingerprint objectForKey:fingerprint];
+        if (disc) {
+            NSData* frontCover = nil;
+            for (Media* media in disc.allMedia) {
+                frontCover = media.frontCover;
+                if (frontCover) {
+                    break;
+                }
+            }
+            if (frontCover) {
+                [connection replyWithData:frontCover MIMEType:@"image/png"];
+                return;
+            }
+        }
+    }
+    [connection replyWithStatusCode:404 message:nil];
+}
+
+
+#pragma mark MediaSourceDelegate
+
 - (void) mediaSource:(id<MediaSource>)mediaSource didAddMedia:(NSArray*)arrayOfMedia
 {
     NSMutableDictionary* addsByFingerprint = [NSMutableDictionary dictionary];
@@ -416,7 +468,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             NSMutableDictionary* entry = [addsByFingerprint objectForKey:mediaFingerprint];
             if (!entry) {
                 [addsByFingerprint setObject:
-                    [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                    entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                         [NSMutableArray arrayWithObject:[media.url absoluteString]],
                         @"urls",
                         nil
@@ -427,6 +479,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             } else {
                 [[entry objectForKey:@"urls"] addObject:[media.url absoluteString]];
             }
+            [entry setObject:[self _frontCoverURLForFingerprint:media.fingerprint] forKey:@"frontCoverURL"];
             
             /*  Read in the info dictionary, and merge it with any that we've
              *  already loaded.
@@ -509,7 +562,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                     NSMutableDictionary* entry = [deletesByFingerprint objectForKey:mediaFingerprint];
                     if (!entry) {
                         [deletesByFingerprint setObject:
-                            [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                            entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                 [NSMutableArray arrayWithObject:[media.url absoluteString]],
                                 @"urls",
                                 nil
@@ -555,6 +608,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                     } else {
                         [[entry objectForKey:@"urls"] addObject:[media.url absoluteString]];
                     }
+                    [entry setObject:[self _frontCoverURLForFingerprint:media.fingerprint] forKey:@"frontCoverURL"];
                 }
             }
 
@@ -632,7 +686,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             NSMutableDictionary* entry = [deletesByFingerprint objectForKey:discFingerprint];
             if (!entry) {
                 [deletesByFingerprint setObject:
-                    [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                    entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                         [NSMutableArray arrayWithObject:[media.url absoluteString]],
                         @"urls",
                         nil
@@ -753,7 +807,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     /*  TODO: Process/Crop image to appropriate dimensions.  */
     
     for (Media* media in disc.allMedia) {
-        [media setFrontCover:response];
+        [media setFrontCover:[response PNGRepresentation]];
     }
 
     [disc release];

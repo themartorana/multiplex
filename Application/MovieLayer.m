@@ -28,7 +28,7 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
         boxImageLayer = [CATiledLayer layer];
         boxImageLayer.delegate = self;
         boxImageLayer.levelsOfDetail = 5;
-        boxImageLayer.levelsOfDetailBias = 1;
+        boxImageLayer.levelsOfDetailBias = 2;
         boxImageLayer.constraints = [NSArray arrayWithObjects:
             [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
             [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
@@ -62,19 +62,13 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
         NSArray* discMedia = [disc.allMedia allObjects];
 
         for (Media* media in discMedia) {
-            if (media.url && [media.url length] > 0) {
-                NSString* url = [[media.url stringByAppendingPathComponent:@"QuickLook"] stringByAppendingPathComponent:@"FrontCover.png"];
-                url = [url stringByReplacingOccurrencesOfString:@"file:/localhost/" withString:@"file:///"];
-                
-                // Call out to it.
+            NSString* url = media.frontCoverURL;
+            if ([url length]) {
                 NSURL* imageURL = [NSURL URLWithString:url];
                 NSURLRequest* request = [NSURLRequest requestWithURL:imageURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5.0];
-                
                 if ([NSURLConnection canHandleRequest:request]) {
                     [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
-                    
                     [self _startSpinner];
-                    
                     fullBreak = YES;
                     break;
                 }
@@ -97,7 +91,7 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
     if (layer == boxImageLayer) {
         if (boxImage) {
             CGContextDrawImage(c, layer.bounds, boxImage);
-            [self _stopSpinner];
+            [self performSelectorOnMainThread:@selector(_stopSpinner) withObject:nil waitUntilDone:NO];
         }
     }
 }
@@ -157,9 +151,15 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
     CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)imageData, nil);
     if (imageSource) {
         boxImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil);
-        [boxImageLayer setNeedsDisplay];
+        if (boxImage) {
+            [boxImageLayer setNeedsDisplay];
+        } else {
+            [self _stopSpinner];
+        }
         CFRelease(imageSource);
-    } 
+    } else {
+        [self _stopSpinner];
+    }
      
     [imageData release];
     imageData = nil;

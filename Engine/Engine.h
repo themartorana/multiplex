@@ -1,6 +1,7 @@
 #import <Cocoa/Cocoa.h>
-#import "MessageProtocol.h"
+#import "Media.h"
 #import "MediaSource.h"
+#import "HTTPServer.h"
 
 @interface Engine : NSApplication <MediaSourceDelegate> {
     NSMutableDictionary* infoDictionariesByFingerprint;
@@ -12,6 +13,8 @@
     int networkPort;
     NSNetService* netService;
     NSMutableArray* mediaSources;
+    NSURL* baseImageURL;
+    HTTPServer* imageServer;
 }
 
 @end

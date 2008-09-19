@@ -160,6 +160,8 @@
     }
     @catch (NSException* exception) {
         NSLog(@"Error while sending response: %@", [exception  reason]);
+    } @finally {
+        [fileHandle closeFile];
     }
     
     CFRelease(msgData);

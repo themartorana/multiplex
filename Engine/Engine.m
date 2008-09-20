@@ -741,13 +741,15 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 #pragma mark DiscIdentQueryDelegate
 
-- (void) discIdentQuery:(DiscIdentQuery*)query didFailWithError:(NSError*)error userInfo:(Disc*)disc
+- (void) discIdentQuery:(DiscIdentQuery*)query didFailWithError:(NSError*)error userInfo:(void*)userInfo
 {
+    Disc* disc = (Disc*)userInfo;
     [disc release];
 }
 
-- (void) discIdentQuery:(DiscIdentQuery*)query didReceiveResponse:(NSDictionary*)response userInfo:(Disc*)disc
+- (void) discIdentQuery:(DiscIdentQuery*)query didReceiveResponse:(NSDictionary*)response userInfo:(void*)userInfo
 {
+    Disc* disc = (Disc*)userInfo;
     NSMutableDictionary* newKeyPathsAndObjects = nil;
     NSMutableDictionary* infoDictionary = nil;
     [self mergeInfoForDisc:[infoDictionariesByFingerprint objectForKey:disc.fingerprint] withMediaInfo:[NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:response forKey:@"discident"] forKey:@"meta"] newKeyPathsAndObjects:&newKeyPathsAndObjects mergedInfoDictionary:&infoDictionary];
@@ -768,13 +770,15 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 #pragma mark AmazonQueryDelegate
 
-- (void) amazonQuery:(AmazonQuery*)query didFailWithError:(NSError*)error userInfo:(Disc*)disc
+- (void) amazonQuery:(AmazonQuery*)query didFailWithError:(NSError*)error userInfo:(void*)userInfo
 {
+    Disc* disc = (Disc*)userInfo;
     [disc release];
 }
 
-- (void) amazonQuery:(AmazonQuery*)query didReceiveResponse:(NSDictionary*)response userInfo:(Disc*)disc
+- (void) amazonQuery:(AmazonQuery*)query didReceiveResponse:(NSDictionary*)response userInfo:(void*)userInfo
 {
+    Disc* disc = (Disc*)userInfo;
     NSMutableDictionary* newKeyPathsAndObjects = nil;
     NSMutableDictionary* infoDictionary = nil;
     [self mergeInfoForDisc:[infoDictionariesByFingerprint objectForKey:disc.fingerprint] withMediaInfo:[NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:response forKey:@"amazon"] forKey:@"meta"] newKeyPathsAndObjects:&newKeyPathsAndObjects mergedInfoDictionary:&infoDictionary];
@@ -797,13 +801,16 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 #pragma mark CoverArtQueryDelegate
 
-- (void) coverArtQuery:(CoverArtQuery*)query didFailWithError:(NSError*)error userInfo:(Disc*)disc
+- (void) coverArtQuery:(CoverArtQuery*)query didFailWithError:(NSError*)error userInfo:(void*)userInfo
 {
+    Disc* disc = (Disc*)userInfo;
     [disc release];
 }
 
-- (void) coverArtQuery:(CoverArtQuery*)query didReceiveResponse:(NSImage*)response userInfo:(Disc*)disc
+- (void) coverArtQuery:(CoverArtQuery*)query didReceiveResponse:(NSImage*)response userInfo:(void*)userInfo
 {
+    Disc* disc = (Disc*)userInfo;
+
     /*  TODO: Process/Crop image to appropriate dimensions.  */
     
     for (Media* media in disc.allMedia) {

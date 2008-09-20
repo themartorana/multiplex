@@ -119,42 +119,42 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = F94A05FD0E7B9B5800C8A8B7 /* DiscIdentKit.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 8DC2EF4F0486A6940098B216 /* DiscIdentKit */;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
 			remoteInfo = DiscIdentKit;
 		};
 		F9A1D62A0E8350C800AB691D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F9C2AE540E7B747B00474D97 /* JSONKit.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 8DC2EF4F0486A6940098B216 /* JSONKit */;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
 			remoteInfo = JSONKit;
 		};
 		F9A1D63F0E83515500AB691D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = F9A1D6210E8350C100AB691D /* Engine */;
+			remoteGlobalIDString = F9A1D6210E8350C100AB691D;
 			remoteInfo = Engine;
 		};
 		F9A1D89E0E8368B900AB691D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = F9A1D17C0E82E4F400AB691D /* All Engine Plugins */;
+			remoteGlobalIDString = F9A1D17C0E82E4F400AB691D;
 			remoteInfo = "All Engine Plugins";
 		};
 		F9A1D8AD0E8368EC00AB691D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = F9A1D6210E8350C100AB691D /* Engine */;
+			remoteGlobalIDString = F9A1D6210E8350C100AB691D;
 			remoteInfo = Engine;
 		};
 		F9A1D8B10E8368FB00AB691D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = F9A1D6210E8350C100AB691D /* Engine */;
+			remoteGlobalIDString = F9A1D6210E8350C100AB691D;
 			remoteInfo = Engine;
 		};
 		F9C2AE580E7B747B00474D97 /* PBXContainerItemProxy */ = {
@@ -1021,6 +1021,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_VERSION = 4.2;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Application/Resources/Info.plist;
 				INSTALL_PATH = /Applications;
@@ -1051,6 +1052,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_VERSION = 4.2;
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Application/Resources/Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -1105,6 +1107,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_VERSION = 4.2;
 				INFOPLIST_FILE = Spotlight/DVD/Info.plist;
 				INSTALL_PATH = /Library/Spotlight;
 				OTHER_LDFLAGS = "-lcrypto";
@@ -1132,6 +1135,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_VERSION = 4.2;
 				INFOPLIST_FILE = Spotlight/DVD/Info.plist;
 				INSTALL_PATH = /Library/Spotlight;
 				OTHER_LDFLAGS = "-lcrypto";
@@ -1175,7 +1179,9 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				GCC_VERSION = 4.2;
 				INSTALL_PATH = /usr/local/bin;
+				OTHER_CFLAGS = "-fvisibility=default";
 				OTHER_LDFLAGS = (
 					"-sectcreate",
 					__TEXT,
@@ -1193,13 +1199,15 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
 				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "ppc i386 ppc64 x86_64";
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				GCC_VERSION = 4.2;
 				INSTALL_PATH = /usr/local/bin;
+				OTHER_CFLAGS = "-fvisibility=default";
 				OTHER_LDFLAGS = (
 					"-sectcreate",
 					__TEXT,
@@ -1223,7 +1231,8 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				GCC_PREFIX_HEADER = "";
+				GCC_VERSION = 4.2;
 				INFOPLIST_FILE = Engine/Plugins/PhysicalMedia/Info.plist;
 				INSTALL_PATH = "@executable_path/../Library/Plugins";
 				OTHER_LDFLAGS = (
@@ -1242,13 +1251,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "ppc i386 ppc64 x86_64";
 				BUNDLE_LOADER = "$(BUILD_ROOT)/$(BUILD_STYLE)/Engine";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				GCC_PREFIX_HEADER = "";
+				GCC_VERSION = 4.2;
 				INFOPLIST_FILE = Engine/Plugins/PhysicalMedia/Info.plist;
 				INSTALL_PATH = "@executable_path/../Library/Plugins";
 				OTHER_LDFLAGS = (
@@ -1276,7 +1288,8 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				GCC_PREFIX_HEADER = "";
+				GCC_VERSION = 4.2;
 				INFOPLIST_FILE = Engine/Plugins/DVDMedia/Info.plist;
 				INSTALL_PATH = "@executable_path/../Library/Plugins";
 				OTHER_LDFLAGS = (
@@ -1295,6 +1308,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "ppc i386 ppc64 x86_64";
 				BUNDLE_LOADER = "$(BUILD_ROOT)/$(BUILD_STYLE)/Engine";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1302,7 +1317,8 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				GCC_PREFIX_HEADER = "";
+				GCC_VERSION = 4.2;
 				INFOPLIST_FILE = Engine/Plugins/DVDMedia/Info.plist;
 				INSTALL_PATH = "@executable_path/../Library/Plugins";
 				OTHER_LDFLAGS = (

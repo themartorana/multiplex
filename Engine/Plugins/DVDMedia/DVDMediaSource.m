@@ -226,18 +226,57 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
     return [pathToFile autorelease];
 }
 
+- (void) _fireDidAddMedia:(NSArray*)media
+{
+    if ([NSThread currentThread] == [NSThread mainThread]) {
+        @try {
+            [delegate mediaSource:self didAddMedia:media];
+        } @catch (id exception) {
+            /* IGNORED */
+        }
+    } else {
+        [self performSelectorOnMainThread:@selector(_fireDidAddMedia:) withObject:media waitUntilDone:NO];
+    }
+}
+
+- (void) _fireDidUpdateMedia:(NSArray*)media
+{
+    if ([NSThread currentThread] == [NSThread mainThread]) {
+        @try {
+            [delegate mediaSource:self didUpdateMedia:media];
+        } @catch (id exception) {
+            /* IGNORED */
+        }
+    } else {
+        [self performSelectorOnMainThread:@selector(_fireDidUpdateMedia:) withObject:media waitUntilDone:NO];
+    }
+}
+
+- (void) _fireDidRemoveMedia:(NSArray*)media
+{
+    if ([NSThread currentThread] == [NSThread mainThread]) {
+        @try {
+            [delegate mediaSource:self didRemoveMedia:media];
+        } @catch (id exception) {
+            /* IGNORED */
+        }
+    } else {
+        [self performSelectorOnMainThread:@selector(_fireDidRemoveMedia:) withObject:media waitUntilDone:NO];
+    }
+}
+
 - (void) _queryDidUpdate:(NSNotification*)notification
 {
     NSDictionary* info = [notification userInfo];
 
     NSArray* removedDiscs = [info objectForKey:(id)kMDQueryUpdateRemovedItems];
     if (removedDiscs) {
-        [delegate mediaSource:self didRemoveMedia:removedDiscs];
+        [self _fireDidRemoveMedia:removedDiscs];
     }
 
     NSArray* changedDiscs = [info objectForKey:(id)kMDQueryUpdateChangedItems];
     if (changedDiscs) {
-        [delegate mediaSource:self didUpdateMedia:changedDiscs];
+        [self _fireDidUpdateMedia:changedDiscs];
     }
 
     if ([[notification name] isEqualTo:(id)kMDQueryProgressNotification]) {
@@ -246,14 +285,14 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
         for (int i = mediaProcessed; i < imax; i++) {
             [addedDiscs addObject:(Media*)MDQueryGetResultAtIndex(query, i)];
         }
-        [delegate mediaSource:self didAddMedia:addedDiscs];
+        [self _fireDidAddMedia:addedDiscs];
         mediaProcessed = imax;
     } else if ([[notification name] isEqualTo:(id)kMDQueryDidFinishNotification]) {
         //NSLog(@"finished");
     } else {
         NSArray* addedDiscs = [info objectForKey:(id)kMDQueryUpdateAddedItems];
         if (addedDiscs) {
-            [delegate mediaSource:self didAddMedia:addedDiscs];
+            [self _fireDidAddMedia:addedDiscs];
         }
     }
 }

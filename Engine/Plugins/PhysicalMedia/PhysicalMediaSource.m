@@ -189,6 +189,45 @@
     return [mediaInfo objectForKey:@"fingerprint"];
 }
 
+- (void) _fireDidAddMedia:(NSArray*)media
+{
+    if ([NSThread currentThread] == [NSThread mainThread]) {
+        @try {
+            [delegate mediaSource:self didAddMedia:media];
+        } @catch (id exception) {
+            /* IGNORED */
+        }
+    } else {
+        [self performSelectorOnMainThread:@selector(_fireDidAddMedia:) withObject:media waitUntilDone:NO];
+    }
+}
+
+- (void) _fireDidUpdateMedia:(NSArray*)media
+{
+    if ([NSThread currentThread] == [NSThread mainThread]) {
+        @try {
+            [delegate mediaSource:self didUpdateMedia:media];
+        } @catch (id exception) {
+            /* IGNORED */
+        }
+    } else {
+        [self performSelectorOnMainThread:@selector(_fireDidUpdateMedia:) withObject:media waitUntilDone:NO];
+    }
+}
+
+- (void) _fireDidRemoveMedia:(NSArray*)media
+{
+    if ([NSThread currentThread] == [NSThread mainThread]) {
+        @try {
+            [delegate mediaSource:self didRemoveMedia:media];
+        } @catch (id exception) {
+            /* IGNORED */
+        }
+    } else {
+        [self performSelectorOnMainThread:@selector(_fireDidRemoveMedia:) withObject:media waitUntilDone:NO];
+    }
+}
+
 - (void) _volumeDidMount:(NSNotification*)notification
 {
     [self _tryToUseMountPoint:[[notification userInfo] objectForKey:@"NSDevicePath"]];
@@ -197,9 +236,9 @@
 - (void) _volumeDidUnmount:(NSNotification*)notification
 {
     NSString* deviceName = [self _deviceNameForMountPoint:[[notification userInfo] objectForKey:@"NSDevicePath"]];
-    Media* disc = [mediaByDeviceName objectForKey:deviceName];
-    if (disc) {
-        [delegate mediaSource:self didRemoveMedia:[NSArray arrayWithObject:disc]];
+    Media* media = [mediaByDeviceName objectForKey:deviceName];
+    if (media) {
+        [self _fireDidRemoveMedia:[NSArray arrayWithObject:media]];
         [mediaByDeviceName removeObjectForKey:deviceName];
     }
 }
@@ -211,7 +250,7 @@
         NSString* fingerprint = [mountPoint stringByComputingDiscIdentFingerprintForDiscAtPath];
         if (fingerprint) {
             Media* media = [[Media alloc] initWithMediaSource:self mediaInfo:[[NSMutableDictionary alloc] initWithObjectsAndKeys:fingerprint, @"fingerprint", mountPoint, @"mountPoint", nil]];
-            [delegate mediaSource:self didAddMedia:[NSArray arrayWithObject:media]];
+            [self _fireDidAddMedia:[NSArray arrayWithObject:media]];
             [mediaByDeviceName setObject:media forKey:deviceName];
             [media release];
         }

@@ -366,13 +366,14 @@
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F967B07F0E7E1F3100C12B92 /* QuartzCore.framework */,
-				F9D315230E7DDB9900D99DCA /* CoreData.framework */,
-				F9D315280E7DDBB200D99DCA /* Cocoa.framework */,
-				F9D30D6F0E7DD69A00D99DCA /* IOKit.framework */,
-				F9D3129F0E7DD85200D99DCA /* Foundation.framework */,
-				F9D312A40E7DD88100D99DCA /* ApplicationServices.framework */,
 				F9D313EC0E7DD8A100D99DCA /* AppKit.framework */,
+				F9D312A40E7DD88100D99DCA /* ApplicationServices.framework */,
+				F9D315280E7DDBB200D99DCA /* Cocoa.framework */,
+				F9D315230E7DDB9900D99DCA /* CoreData.framework */,
+				F9A1D66D0E8353C900AB691D /* CoreServices.framework */,
+				F9D3129F0E7DD85200D99DCA /* Foundation.framework */,
+				F9D30D6F0E7DD69A00D99DCA /* IOKit.framework */,
+				F967B07F0E7E1F3100C12B92 /* QuartzCore.framework */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -399,7 +400,6 @@
 				F9E932820B62F183007E9ACB /* Libraries */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
-				F9A1D66D0E8353C900AB691D /* CoreServices.framework */,
 			);
 			name = BookShelf;
 			sourceTree = "<group>";

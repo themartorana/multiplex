@@ -153,6 +153,7 @@ typedef enum _MovieNotificationType {
         int count = [[object content] count];
         if (oldCount != count) {
             NSMutableArray* layersInOrder = [NSMutableArray arrayWithCapacity:count];
+            NSMutableSet* keySet = [NSMutableSet setWithArray:[layersByID allKeys]];
             for (Movie* movie in allObjects) {
                 NSManagedObjectID* objectID = [movie objectID];
                 MovieLayer* layer = [layersByID objectForKey:objectID];
@@ -160,14 +161,15 @@ typedef enum _MovieNotificationType {
                     layer = [self layerForMovie:movie];
                     [floorLayer addSublayer:layer];
                     [layersByID setObject:layer forKey:objectID];
-                } else {
-                    [allLayers removeObject:layer];
                 }
+                [keySet removeObject:objectID];
                 [layersInOrder addObject:layer];
             }
-            for (CALayer* layerToRemove in allLayers) {
-                [layerToRemove removeFromSuperlayer];
-            }
+            for (id keyOfLayerToDelete in keySet) {
+                CALayer* layerToDelete = [layersByID objectForKey:keyOfLayerToDelete];
+                [layerToDelete removeFromSuperlayer];
+                [layersByID removeObjectForKey:keyOfLayerToDelete];
+            } 
             [listOfLayersInOrder replaceObjectAtIndex:0 withObject:layersInOrder];
             [floorLayer setNeedsLayout];
         }
@@ -176,7 +178,7 @@ typedef enum _MovieNotificationType {
 
         int count = [arrangedObjects count];
         radialGradientLayer.hidden = count == 0;
-        for (int i = [listOfLayersInOrder count] - 1; i >= 0; i--) {
+        for (int i = [listOfLayersInOrder count] - 1; i > 0; i--) {
             if ([[listOfLayersInOrder objectAtIndex:i] count] > count) {
                 break;
             }
@@ -292,6 +294,8 @@ CGFloat HS = 75.0;
 - (void) layoutSublayersOfLayer:(CALayer*)layer
 {
     NSAssert(layer == floorLayer, @"wtf?");
+    [CATransaction begin];
+    [CATransaction setValue:[NSNumber numberWithFloat:0.5] forKey:kCATransactionAnimationDuration];
     
     /*  This base transform sets up the origin (0, 0) to the center of the 
      *  layer along the X and Y axes.
@@ -390,6 +394,8 @@ CGFloat HS = 75.0;
         p = CATransform3DRotate(p, 0.1, 1.0, 0.0, 0.0);
         floorLayer.sublayerTransform = p;
     }
+
+    [CATransaction commit];
 }
 
 @end

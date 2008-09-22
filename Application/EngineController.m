@@ -416,7 +416,9 @@
             /*  Find the disc that's represented by our fingerprint.
              */
             Disc* disc = [self _findDiscByFingerprint:fingerprint];
-            NSAssert(disc, @"no disc?");
+            if (!disc) {
+                continue;
+            }
             
             /*  Figure out which movie to attach this disc to.  We may have 
              *  created a temporary movie that could need to be deleted if 

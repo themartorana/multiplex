@@ -3,6 +3,15 @@
 #import "MovieLayer.h"
 #import <QuartzCore/QuartzCore.h>
 
+typedef enum _MovieNotificationType {
+    MovieNotificationTypeNone,
+    MovieNotificationTypeMovieClicked,
+    MovieNotificationTypeMovieDoubleClicked,
+    MovieNotificationTypeMovieHovered,
+    MovieNotificationTypePlayButtonClicked,
+    MovieNotificationTypeInfoButtonClicked
+} MovieNotificationType;
+
 @interface MainView (LayerStuff)
 - (MovieLayer*) layerForMovie:(Movie*)movie;
 - (void) layoutSublayersOfLayer:(CALayer*)layer;
@@ -47,6 +56,16 @@
     layersByID = [[NSMutableDictionary alloc] init];
 }
 
+- (BOOL)acceptsFirstMouse:(NSEvent *)theEvent
+{
+    return YES;
+}
+
+- (BOOL) acceptsFirstResponder
+{
+    return YES;
+}
+
 - (void) dealloc
 {
     [layersByID release];
@@ -86,6 +105,36 @@
         }
         [NSGraphicsContext restoreGraphicsState];
         
+    }
+}
+
+- (void) mouseMoved:(NSEvent*)theEvent
+{    
+    NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+    CGPoint p = NSPointToCGPoint(point);
+    NSLog(@"Point is:\t%g, %g", p.x, p.y);
+    CALayer* layer = [floorLayer hitTest:p];
+    MovieNotificationType notificationType = MovieNotificationTypeNone;
+    
+    // Eventually test the type of layer to see what event
+    // should be performed
+    notificationType = MovieNotificationTypeMovieHovered;
+    
+    while (layer && ![layer isKindOfClass:[MovieLayer class]]) {
+        if (layer.superlayer) {
+            layer = layer.superlayer;
+        }
+        else {
+            return;
+        }
+    }
+    
+    if (layer) {
+        Movie* m = [(MovieLayer*)layer movie];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"MovieNotificationTypeMovieHovered"
+                                                            object:self
+                                                          userInfo:[NSDictionary dictionaryWithObject:m forKey:@"movie"]];
     }
 }
 
@@ -300,6 +349,7 @@ CGFloat HS = 75.0;
                 width = radius * 2.0;
                 CGFloat theta = -chord / radius;
                 t = CATransform3DTranslate(t, radius * -cos(theta), 0.0, radius * sin(theta));
+                
                 if (y > (columns / 2)) {
                     t = CATransform3DRotate(t, theta - M_PI/2.0, 0.0, 1.0, 0.0);
                 } else {

@@ -18,25 +18,44 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
 @implementation MovieLayer
 
 @synthesize movie;
+@synthesize isHovered;
 
 - (MovieLayer*) init
-{
+{    
     if (self = [super init]) {
+        self.isHovered = NO;
+        
         self.layoutManager = [CAConstraintLayoutManager layoutManager];
         [self setNeedsDisplay];
+        
         
         boxImageLayer = [CATiledLayer layer];
         boxImageLayer.delegate = self;
         boxImageLayer.levelsOfDetail = 5;
         boxImageLayer.levelsOfDetailBias = 2;
         boxImageLayer.constraints = [NSArray arrayWithObjects:
-            [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
-            [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
-            [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth],
-            [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight],
-            nil
-        ];
+                                     [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
+                                     [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
+                                     [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth],
+                                     [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight],
+                                     nil
+                                     ];
         [self addSublayer:boxImageLayer];
+        
+        // Set up the text layer
+        titleLayer = [CATextLayer layer];
+        titleLayer.alignmentMode = kCAAlignmentCenter;
+        titleLayer.font = [NSFont systemFontOfSize:14.0];
+        titleLayer.constraints = [NSArray arrayWithObjects:
+                                  [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
+                                  [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
+                                  [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth],
+                                  [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight],
+                                  nil
+                                  ];
+        titleLayer.foregroundColor = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 1.0);
+        titleLayer.wrapped = YES;
+        [self addSublayer:titleLayer];
     }
     return self;
 }
@@ -52,6 +71,8 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
 - (void) setMovie:(Movie*)_movie 
 {
     movie = _movie;
+    
+    titleLayer.string = movie.title;
     
     BOOL fullBreak = false;
     
@@ -92,6 +113,7 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
         if (boxImage) {
             CGContextDrawImage(c, layer.bounds, boxImage);
             [self performSelectorOnMainThread:@selector(_stopSpinner) withObject:nil waitUntilDone:NO];
+            [self performSelectorOnMainThread:@selector(_hideTitle) withObject:nil waitUntilDone:NO];
         }
     }
 }
@@ -119,6 +141,31 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
 {
     if (spinnerLayer) {
         spinnerLayer.hidden = YES;
+        [spinnerLayer removeFromSuperlayer];
+        spinnerLayer = nil;
+    }
+}
+
+
+- (void) _hideTitle
+{
+    if (titleLayer) {
+        titleLayer.hidden = YES;
+        [titleLayer removeFromSuperlayer];
+        titleLayer = nil;
+    }
+}
+
+
+#pragma mark BoxImageLayer delegate
+
+- (void) boxImageLayerDidDisplayBox
+{
+    if (titleLayer && titleLayer.superlayer) {
+        [titleLayer removeFromSuperlayer];
+        titleLayer = nil;
+    }
+    if (spinnerLayer && spinnerLayer.superlayer) {
         [spinnerLayer removeFromSuperlayer];
         spinnerLayer = nil;
     }

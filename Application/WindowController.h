@@ -5,6 +5,8 @@
 @interface WindowController : NSWindowController {
     IBOutlet NSArrayController* movies;
     IBOutlet MainView* mainView;
+    
+    IBOutlet NSView* secondaryView;
 }
 
 @end

@@ -8,10 +8,16 @@
     Movie* movie;
     NSMutableData* imageData;
     IndeterminateProgressIndicatorLayer* spinnerLayer;
+    
+    CATextLayer* titleLayer;
+    
     CATiledLayer* boxImageLayer; 
     CGImageRef boxImage;
+    
+    BOOL isHovered;
 }
 
 @property (retain) Movie* movie;
+@property (readwrite) BOOL isHovered;
 
 @end

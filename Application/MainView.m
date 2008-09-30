@@ -3,15 +3,6 @@
 #import "MovieLayer.h"
 #import <QuartzCore/QuartzCore.h>
 
-typedef enum _MovieNotificationType {
-    MovieNotificationTypeNone,
-    MovieNotificationTypeMovieClicked,
-    MovieNotificationTypeMovieDoubleClicked,
-    MovieNotificationTypeMovieHovered,
-    MovieNotificationTypePlayButtonClicked,
-    MovieNotificationTypeInfoButtonClicked
-} MovieNotificationType;
-
 @interface MainView (LayerStuff)
 - (MovieLayer*) layerForMovie:(Movie*)movie;
 - (void) layoutSublayersOfLayer:(CALayer*)layer;
@@ -22,7 +13,9 @@ typedef enum _MovieNotificationType {
 @end
 
 @implementation MainView
+
 @synthesize content;
+@synthesize hoveredMovie;
 
 - (void) awakeFromNib
 {
@@ -39,10 +32,12 @@ typedef enum _MovieNotificationType {
         [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY],
         [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
         [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.90 offset:0.0],
-        [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0.85 offset:0],
+        [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0.85 offset:0.0],
         nil
     ];
     [rootLayer insertSublayer:floorLayer atIndex:0];
+    /*floorLayer.borderColor = CGColorCreateGenericRGB(1.0, 0.0, 0.0, 1.0);
+    floorLayer.borderWidth = 2.0;*/
     
     radialGradientLayer = [CALayer layer];
     radialGradientLayer.hidden = YES;
@@ -54,17 +49,15 @@ typedef enum _MovieNotificationType {
     
     listOfLayersInOrder = [[NSMutableArray alloc] initWithObjects:[NSMutableArray array], nil];
     layersByID = [[NSMutableDictionary alloc] init];
+    
+    // Set up our mouse tracking area
+    mouseTrackingArea = [[NSTrackingArea alloc] initWithRect:NSRectFromCGRect(rootLayer.bounds) 
+                                                     options:(NSTrackingMouseMoved|NSTrackingActiveAlways|NSTrackingInVisibleRect|NSTrackingMouseEnteredAndExited) 
+                                                       owner:self 
+                                                    userInfo:nil];
+    [self addTrackingArea:mouseTrackingArea];
 }
 
-- (BOOL)acceptsFirstMouse:(NSEvent *)theEvent
-{
-    return YES;
-}
-
-- (BOOL) acceptsFirstResponder
-{
-    return YES;
-}
 
 - (void) dealloc
 {
@@ -82,6 +75,10 @@ typedef enum _MovieNotificationType {
         if ([content isKindOfClass:[NSArrayController class]]) {
             [content addObserver:self forKeyPath:@"content.@count" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
             [content addObserver:self forKeyPath:@"arrangedObjects" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+            
+            // For bindings
+            [(NSArrayController*)content setSelectionIndexes:[NSIndexSet indexSet]];
+            
         } else {
             [NSException raise:NSInvalidArgumentException format:@"content must be of type NSArrayController."];
         }
@@ -108,18 +105,11 @@ typedef enum _MovieNotificationType {
     }
 }
 
-- (void) mouseMoved:(NSEvent*)theEvent
-{    
-    NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-    CGPoint p = NSPointToCGPoint(point);
-    NSLog(@"Point is:\t%g, %g", p.x, p.y);
+- (void) mouseUp:(NSEvent*)theEvent
+{
+    CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
     CALayer* layer = [floorLayer hitTest:p];
-    MovieNotificationType notificationType = MovieNotificationTypeNone;
-    
-    // Eventually test the type of layer to see what event
-    // should be performed
-    notificationType = MovieNotificationTypeMovieHovered;
-    
+
     while (layer && ![layer isKindOfClass:[MovieLayer class]]) {
         if (layer.superlayer) {
             layer = layer.superlayer;
@@ -131,11 +121,33 @@ typedef enum _MovieNotificationType {
     
     if (layer) {
         Movie* m = [(MovieLayer*)layer movie];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"MovieNotificationTypeMovieHovered"
-                                                            object:self
-                                                          userInfo:[NSDictionary dictionaryWithObject:m forKey:@"movie"]];
+        [(NSArrayController*)content setSelectedObjects:[NSArray arrayWithObject:m]];        
     }
+}
+
+- (void) mouseMoved:(NSEvent*)theEvent
+{    
+    CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
+    CALayer* layer = [floorLayer hitTest:p];
+    
+    if (!layer) {
+        self.hoveredMovie = nil;
+    } 
+    else while (layer) {
+        if (layer == radialGradientLayer) {
+            self.hoveredMovie = nil;
+            break;
+        } else if ([layer isKindOfClass:[MovieLayer class]]) {
+            self.hoveredMovie = [(MovieLayer*)layer movie];
+            break;
+        }
+        layer = layer.superlayer;
+    }
+}
+
+- (void) mouseExited:(NSEvent*)theEvent
+{
+    self.hoveredMovie = nil;
 }
 
 @end

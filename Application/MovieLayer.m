@@ -86,7 +86,7 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
             NSString* url = media.frontCoverURL;
             if ([url length]) {
                 NSURL* imageURL = [NSURL URLWithString:url];
-                NSURLRequest* request = [NSURLRequest requestWithURL:imageURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5.0];
+                NSURLRequest* request = [NSURLRequest requestWithURL:imageURL];
                 if ([NSURLConnection canHandleRequest:request]) {
                     [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
                     [self _startSpinner];

@@ -9,7 +9,7 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="961"/>
-			<integer value="1166"/>
+			<integer value="1151"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1077,7 +1077,7 @@
 			<object class="NSWindowTemplate" id="924156165">
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{122, 349}, {799, 691}}</string>
+				<string key="NSWindowRect">{{757, 349}, {799, 691}}</string>
 				<int key="NSWTFlags">603979776</int>
 				<string key="NSWindowTitle">Master/Detail</string>
 				<string key="NSWindowClass">NSWindow</string>
@@ -2156,7 +2156,7 @@
 			<object class="NSWindowTemplate" id="913744916">
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{928, 336}, {730, 583}}</string>
+				<string key="NSWindowRect">{{42, 420}, {730, 583}}</string>
 				<int key="NSWTFlags">603979776</int>
 				<string key="NSWindowTitle">Window</string>
 				<string key="NSWindowClass">NSWindow</string>
@@ -2170,7 +2170,7 @@
 						<object class="NSCustomView" id="572135655">
 							<reference key="NSNextResponder" ref="384445475"/>
 							<int key="NSvFlags">274</int>
-							<string key="NSFrame">{{0, 161}, {730, 422}}</string>
+							<string key="NSFrame">{{0, 136}, {730, 447}}</string>
 							<reference key="NSSuperview" ref="384445475"/>
 							<string key="NSClassName">MainView</string>
 						</object>
@@ -2182,7 +2182,7 @@
 								<object class="NSSearchField" id="268782376">
 									<reference key="NSNextResponder" ref="243160278"/>
 									<int key="NSvFlags">269</int>
-									<string key="NSFrame">{{284, 162}, {182, 22}}</string>
+									<string key="NSFrame">{{286, 20}, {182, 22}}</string>
 									<reference key="NSSuperview" ref="243160278"/>
 									<bool key="NSEnabled">YES</bool>
 									<object class="NSSearchFieldCell" key="NSCell" id="928070300">
@@ -2244,15 +2244,15 @@
 									</object>
 								</object>
 							</object>
-							<string key="NSFrame">{{-10, 0}, {740, 191}}</string>
+							<string key="NSFrameSize">{740, 232}</string>
 							<reference key="NSSuperview" ref="384445475"/>
-							<string key="NSClassName">NSView</string>
+							<string key="NSClassName">InfoView</string>
 						</object>
 					</object>
 					<string key="NSFrameSize">{730, 583}</string>
 					<reference key="NSSuperview"/>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1920, 1178}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1600, 1178}}</string>
 				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
 			</object>
 			<object class="NSCustomObject" id="623785332">
@@ -3272,11 +3272,11 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">secondaryView</string>
+						<string key="label">infoView</string>
 						<reference key="source" ref="623785332"/>
 						<reference key="destination" ref="243160278"/>
 					</object>
-					<int key="connectionID">1174</int>
+					<int key="connectionID">1176</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -5143,9 +5143,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{{23, 794}, {245, 183}}</string>
-					<string>{{1201, 465}, {799, 691}}</string>
+					<string>{{76, 372}, {799, 691}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{1201, 465}, {799, 691}}</string>
+					<string>{{76, 372}, {799, 691}}</string>
 					<reference ref="9"/>
 					<string>{3.40282e+38, 3.40282e+38}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -5201,7 +5201,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1174</int>
+			<int key="maxID">1176</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -5228,6 +5228,14 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">InfoView</string>
+					<string key="superclassName">NSView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Application/InfoView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -5285,15 +5293,15 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>infoView</string>
 							<string>mainView</string>
 							<string>movies</string>
-							<string>secondaryView</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>InfoView</string>
 							<string>MainView</string>
 							<string>NSArrayController</string>
-							<string>NSView</string>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">

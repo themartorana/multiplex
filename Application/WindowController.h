@@ -1,12 +1,12 @@
 #import <Cocoa/Cocoa.h>
 
 @class MainView;
+@class InfoView;
 
 @interface WindowController : NSWindowController {
     IBOutlet NSArrayController* movies;
     IBOutlet MainView* mainView;
-    
-    IBOutlet NSView* secondaryView;
+    IBOutlet InfoView* infoView;
 }
 
 @end

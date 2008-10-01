@@ -19,6 +19,7 @@
 - (Engine*) _findEngineByUUID:(NSString*)UUID;
 - (Engine*) _findEngineByNetServiceName:(NSString*)netServiceName;
 - (void) _deleteMovieIfNoMediaRemainForAnyDisc:(Movie*)movie;
+- (NSString*) _getMovieRating:(NSDictionary*)movieInfo;
 @end
 
 @interface EngineController (CoreData)
@@ -326,6 +327,32 @@
     }
 }
 
+- (NSString*) _getMovieRating:(NSDictionary*)movieInfo
+{
+    NSString* audienceRating = [movieInfo objectForKey:@"audienceRating"];
+    if ([audienceRating length]) {
+        return audienceRating;
+    }
+    audienceRating = [movieInfo objectForKey:@"audience_rating"];
+    if ([audienceRating length]) {
+        return audienceRating;
+    }
+    
+#ifndef NO_HACKS
+    NSString* synopsis = [movieInfo objectForKey:@"synopsis"];
+    if ([synopsis length]) {
+        NSRange locationOfRating = [synopsis rangeOfString:@"Rating:"];
+        if (locationOfRating.location != NSNotFound) {
+            NSString* rating = [synopsis substringFromIndex:locationOfRating.location + locationOfRating.length];
+            rating = [rating substringToIndex:[rating rangeOfString:@" "].location];
+            return rating;                    
+        }
+    } 
+#endif
+    
+    return @"N/A";
+}
+
 @end
 
 
@@ -491,7 +518,7 @@
             if ([releaseDateAsString length]) {
                 movie.releaseDate = [dateFormatter dateFromString:releaseDateAsString];
             }
-            
+            movie.rating = [self _getMovieRating:movieInfo];
             
             /*  If there is a "discs" dictionary present, enumerate it's keys,
              *  creating disc objects and associating them with the movie that

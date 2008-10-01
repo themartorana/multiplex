@@ -13,7 +13,6 @@
 @interface InfoView : NSView {
     NSArray* selectedMovies;
     Movie* hoveredMovie;
-    Movie* hoveredOrSelectedMovie;
     
     /* Layers for basic info */
     CALayer* basicInfoLayer;
@@ -23,16 +22,21 @@
     CATextLayer* selectedTextLayer;
     CALayer* secondaryInfoLayer;
     CATextLayer* numDiscsLayer;
-    CATextLayer* MPAARatingLayer;
+    CATextLayer* ratingLayer;
     CALayer* playButtonLayer;
     CALayer* infoButtonLayer;
     
     NSTrackingArea* mouseTrackingArea;
+    NSString* numDiscsString;
+    NSString* ratingString;
+    NSString* movieTitleString;
 }
 
-@property (readwrite, retain) NSArray* selectedMovies;
-@property (readwrite, retain) Movie* hoveredMovie;
-@property (readwrite, retain) Movie* hoveredOrSelectedMovie;
+@property (retain) NSArray* selectedMovies;
+@property (retain) Movie* hoveredMovie;
+@property (readonly) NSString* numDiscsString;
+@property (readonly) NSString* ratingString;
+@property (readonly) NSString* movieTitleString;
 
 - (void) setUpBasicInfoLayer;
 

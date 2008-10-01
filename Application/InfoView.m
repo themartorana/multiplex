@@ -13,49 +13,72 @@
 
 @synthesize hoveredMovie;
 @synthesize selectedMovies;
-@synthesize hoveredOrSelectedMovie;
+@synthesize numDiscsString;
+@synthesize ratingString;
+@synthesize movieTitleString;
 
 + (NSSet*) keyPathsForValuesAffectingValueForKey:(NSString*)key
 {
-    if ([key isEqualToString:@"hoveredOrSelectedMovie"]) {
+    if ([key isEqualToString:@"numDiscsString"] ||
+        [key isEqualToString:@"ratingString"] || 
+        [key isEqualToString:@"movieTitleString"]) {
         return [NSSet setWithArray:[NSArray arrayWithObjects:@"selectedMovies", @"hoveredMovie", nil]];
     }
+    
     return [super keyPathsForValuesAffectingValueForKey:key];
 }
 
 - (void) awakeFromNib
 {
+    self.wantsLayer = YES;
+    
     // Set up the basic info layer
     [self setUpBasicInfoLayer];
     
     // Set up a tracking area
     mouseTrackingArea = [[NSTrackingArea alloc] initWithRect:NSRectFromCGRect([self layer].bounds) 
-                                                     options:(NSTrackingMouseMoved|NSTrackingActiveAlways|NSTrackingInVisibleRect) 
+                                                     options:(NSTrackingMouseMoved|NSTrackingActiveAlways|NSTrackingInVisibleRect|NSTrackingMouseEnteredAndExited) 
                                                        owner:self 
                                                     userInfo:nil];
     [self addTrackingArea:mouseTrackingArea];
     
     // Bindings
-    [titleLayer bind:@"string" toObject:self withKeyPath:@"hoveredOrSelectedMovie.title" options:nil];
+    [titleLayer bind:@"string" toObject:self withKeyPath:@"movieTitleString" options:nil];
+    [numDiscsLayer bind:@"string" toObject:self withKeyPath:@"numDiscsString" options:nil];
+    [ratingLayer bind:@"string" toObject:self withKeyPath:@"ratingString" options:nil];
 }
 
-
-///
-/// A "fake" property for our fun bindings
-///
-- (Movie*) hoveredOrSelectedMovie
+- (NSString*) movieTitleString
 {
     if (hoveredMovie) {
-        return hoveredMovie;
+        return hoveredMovie.title;
+    }
+    else if (selectedMovies && [selectedMovies count] > 0) {
+        return ((Movie*)[selectedMovies objectAtIndex:0]).title;
     }
     else {
-        if ([selectedMovies count] > 0) {
-            return (Movie*)[selectedMovies objectAtIndex:0];
-        }
-        else {
-            return nil;
-        }
+        return @" ";
     }
+}
+
+- (NSString*) numDiscsString
+{
+    if (selectedMovies && [selectedMovies count] > 0) {
+        Movie* m = [selectedMovies objectAtIndex:0];
+        return [NSString stringWithFormat:@"%d discs", [m.allDiscs count]];
+    }
+    else
+        return @" ";
+}
+
+- (NSString*) ratingString
+{
+    if (selectedMovies && [selectedMovies count] > 0) {
+        Movie* m = [selectedMovies objectAtIndex:0];
+        return [NSString stringWithFormat:@"Rating: %@", m.rating];
+    }
+    else
+        return @" ";
 }
 
 
@@ -78,6 +101,7 @@
     [[self layer] setLayoutManager:[CAConstraintLayoutManager layoutManager]];
     
     // Set up the basicInfoLayer that contains all of our basic info sublayers
+
     basicInfoLayer = [[CALayer layer] retain];
     basicInfoLayer.anchorPoint = CGPointZero;
     basicInfoLayer.frame = CGRectMake(0.0, 0.0, [self layer].bounds.size.width, 80.0);
@@ -87,33 +111,17 @@
                                   [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
                                   [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.0 offset:500.0],
                                   [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0.0 offset:80.0],
-                                  [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY scale:1.0 offset:-10.0],
+                                  [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY scale:1.0 offset:-20.0],
                                   nil];
     [[self layer] addSublayer:basicInfoLayer];
     basicInfoLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
         
-    // Set up the selected text layer
-    /*selectedTextLayer = [[CATextLayer layer] retain];
-    selectedTextLayer.anchorPoint = CGPointZero;
-    selectedTextLayer.string = @"- selected -";
-    selectedTextLayer.hidden = YES;
-    selectedTextLayer.constraints = [NSArray arrayWithObjects:
-                                     [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY scale:1.0 offset:-5.0],
-                                     [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth],
-                                     [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
-                                     nil];
-    selectedTextLayer.wrapped = NO;
-    selectedTextLayer.alignmentMode = kCAAlignmentCenter;
-    selectedTextLayer.fontSize = 14.0;
-    selectedTextLayer.name = @"selectedTextLayer";
-    [basicInfoLayer addSublayer:selectedTextLayer];
-    */
     
     // Set up the surrounding layer
     surroundingLayer = [[CALayer layer] retain];
     surroundingLayer.anchorPoint = CGPointZero;
     surroundingLayer.frame = CGRectMake(0.0, 0.0, 1.0, 1.0);
-    surroundingLayer.hidden = YES;
+    surroundingLayer.hidden = NO;
     surroundingLayer.borderColor = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 0.6);
     surroundingLayer.cornerRadius = 10.0;
     surroundingLayer.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.4);
@@ -125,56 +133,55 @@
                                     [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight],
                                     nil];
     [basicInfoLayer addSublayer:surroundingLayer];
-                                     
-    // Set up the titleHostingLayer
-    titleHostingLayer = [[CALayer layer] retain];
-    titleHostingLayer.anchorPoint = CGPointZero;
-    titleHostingLayer.frame = CGRectMake(0.0, 0.0, 0.0, 50.0);
-    titleHostingLayer.constraints = [NSArray arrayWithObjects:
-                                     [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
-                                     [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.8 offset:0.0],
-                                     [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
-                                     nil];
-    titleHostingLayer.name = @"titleHostingLayer";
-    [basicInfoLayer addSublayer:titleHostingLayer];
+    
     
     // Set up the titleLayer
     titleLayer = [[CATextLayer layer] retain];
     titleLayer.anchorPoint = CGPointZero;
-    titleLayer.wrapped = YES;
+    titleLayer.wrapped = NO;
     titleLayer.alignmentMode = kCAAlignmentCenter;
     titleLayer.font = [NSFont boldSystemFontOfSize:20.0];
     titleLayer.fontSize = 20.0;
+    titleLayer.constraints = [NSArray arrayWithObjects:
+                              [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
+                              [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY scale:1.0 offset:-9.0],
+                              [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.9 offset:0.0],
+                              nil];
     titleLayer.name = @"titleLayer";
-    titleLayer.autoresizingMask = kCALayerWidthSizable;
     titleLayer.truncationMode = kCATruncationEnd;
-    [titleHostingLayer addSublayer:titleLayer];
-    titleLayer.bounds = titleLayer.superlayer.bounds;
-    
-    // Set up the secondaryInfoLayer which will hold our number of discs as
-    // well as our ratings layer
+    [basicInfoLayer addSublayer:titleLayer];
+
+    // Add in all the information that will exist in the
+    // surroundinLayer layer
+    surroundingLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
     
     // Add the number of discs
-    
     numDiscsLayer = [[CATextLayer layer] retain];
     numDiscsLayer.fontSize = 12.0;
+    numDiscsLayer.font = [NSFont boldSystemFontOfSize:12.0];
     numDiscsLayer.constraints = [NSArray arrayWithObjects:
-                                 [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"titleHostingLayer" attribute:kCAConstraintMinY],
-                                 [CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"titleHostingLayer" attribute:kCAConstraintMinX],
-                                 [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"titleHostingLayer" attribute:kCAConstraintWidth scale:0.5 offset:0.0],
+                                 [CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY scale:1.0 offset:30.0],
+                                 [CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX scale:1.0 offset:10.0],
+                                 [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.4 offset:0.0],
                                  nil];
     numDiscsLayer.name = @"numDiscsLayer";
-    [basicInfoLayer addSublayer:numDiscsLayer];
+    numDiscsLayer.hidden = NO;
+    [surroundingLayer addSublayer:numDiscsLayer];
+    
     
     // Add the MPAA rating
-    MPAARatingLayer = [[CATextLayer layer] retain];
-    MPAARatingLayer.fontSize = 12.0;
-    MPAARatingLayer.constraints = [NSArray arrayWithObjects:
-                                   [CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"titleHostingLayer" attribute:kCAConstraintMaxX],
-                                   [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"titleHostingLayer" attribute:kCAConstraintWidth scale:0.5 offset:0.0],
+    ratingLayer = [[CATextLayer layer] retain];
+    ratingLayer.fontSize = 12.0;
+    ratingLayer.font = [NSFont boldSystemFontOfSize:12.0];
+    //MPAARatingLayer.borderColor = CGColorCreateGenericRGB(1.0, 0.0, 0.0, 1.0);
+    //MPAARatingLayer.borderWidth = 1.0;
+    ratingLayer.constraints = [NSArray arrayWithObjects:
+                                   [CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY scale:1.0 offset:9.0],
+                                   [CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX scale:1.0 offset:10.0],
+                                   [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth],
                                    nil];
-    MPAARatingLayer.name = @"MPAARatingLayer";
-    [basicInfoLayer addSublayer:MPAARatingLayer];
+    ratingLayer.name = @"MPAARatingLayer";
+    [surroundingLayer addSublayer:ratingLayer];
 }
 
 
@@ -182,14 +189,18 @@
 {
     CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
     CALayer* layer = [[self layer] hitTest:p];
-
 }
 
 - (void) mouseMoved:(NSEvent*)theEvent
 {    
     CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
+    surroundingLayer.hidden = (nil == [basicInfoLayer hitTest:p] ||
+                               (!selectedMovies || [selectedMovies count] <= 0));
+}
 
-    surroundingLayer.hidden = nil == [basicInfoLayer hitTest:p];
+- (void) mouseExited
+{
+    surroundingLayer.hidden = YES;
 }
 
 @end

@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/QuartzCore.h>
 #import "Movie.h"
+#import "PlayButtonLayer.h"
 
 @interface InfoView : NSView {
     NSArray* selectedMovies;
@@ -18,15 +19,17 @@
     CALayer* basicInfoLayer;
     CALayer* surroundingLayer;
     CALayer* titleHostingLayer;
-    CATextLayer* titleLayer;
-    CATextLayer* selectedTextLayer;
     CALayer* secondaryInfoLayer;
+    CALayer* infoButtonLayer;
+        
+    CATextLayer* titleLayer;
     CATextLayer* numDiscsLayer;
     CATextLayer* ratingLayer;
-    CALayer* playButtonLayer;
-    CALayer* infoButtonLayer;
+    
+    PlayButtonLayer* playButtonLayer;
     
     NSTrackingArea* mouseTrackingArea;
+
     NSString* numDiscsString;
     NSString* ratingString;
     NSString* movieTitleString;

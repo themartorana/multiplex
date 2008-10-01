@@ -7,7 +7,10 @@
 //
 
 #import "InfoView.h"
-
+#import "PlayButtonLayer.h"
+#import "Disc.h"
+#import "Media.h"
+#import "InfoButtonLayer.h"
 
 @implementation InfoView
 
@@ -46,6 +49,8 @@
     [titleLayer bind:@"string" toObject:self withKeyPath:@"movieTitleString" options:nil];
     [numDiscsLayer bind:@"string" toObject:self withKeyPath:@"numDiscsString" options:nil];
     [ratingLayer bind:@"string" toObject:self withKeyPath:@"ratingString" options:nil];
+    [playButtonLayer bind:@"hidden" toObject:surroundingLayer withKeyPath:@"hidden" options:nil];
+    [infoButtonLayer bind:@"hidden" toObject:surroundingLayer withKeyPath:@"hidden" options:nil];
 }
 
 - (NSString*) movieTitleString
@@ -121,11 +126,12 @@
     surroundingLayer = [[CALayer layer] retain];
     surroundingLayer.anchorPoint = CGPointZero;
     surroundingLayer.frame = CGRectMake(0.0, 0.0, 1.0, 1.0);
-    surroundingLayer.hidden = NO;
+    surroundingLayer.hidden = YES;
     surroundingLayer.borderColor = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 0.6);
     surroundingLayer.cornerRadius = 10.0;
     surroundingLayer.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.4);
     surroundingLayer.borderWidth = 2.0;
+    surroundingLayer.name = @"surroundingLayer";
     surroundingLayer.constraints = [NSArray arrayWithObjects:
                                     [CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX],
                                     [CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY],
@@ -182,6 +188,31 @@
                                    nil];
     ratingLayer.name = @"MPAARatingLayer";
     [surroundingLayer addSublayer:ratingLayer];
+    
+    
+    // Add the play button layer
+    playButtonLayer = [[PlayButtonLayer layer] retain];
+    playButtonLayer.constraints = [NSArray arrayWithObjects:
+                                   [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"surroundingLayer" attribute:kCAConstraintMaxX],
+                                   [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"surroundingLayer" attribute:kCAConstraintMinY scale:1.0 offset:18.0],
+                                   [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"surroundingLayer" attribute:kCAConstraintWidth scale:0.0 offset:100.0],
+                                   [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"surroundingLayer" attribute:kCAConstraintHeight scale:0.0 offset:100.0],
+                                   nil];
+    playButtonLayer.hidden = YES;
+    [basicInfoLayer addSublayer:playButtonLayer];
+
+    
+    // Add the info button layer
+    infoButtonLayer = [[InfoButtonLayer layer] retain];
+    infoButtonLayer.constraints = [NSArray arrayWithObjects:
+                                   [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"surroundingLayer" attribute:kCAConstraintMaxX],
+                                   [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"surroundingLayer" attribute:kCAConstraintMinY scale:1.0 offset:18.0],
+                                   [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"surroundingLayer" attribute:kCAConstraintWidth scale:0.0 offset:100.0],
+                                   [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"surroundingLayer" attribute:kCAConstraintHeight scale:0.0 offset:100.0],
+                                   nil];
+    infoButtonLayer.hidden = YES;
+    [basicInfoLayer addSublayer:infoButtonLayer];
+    
 }
 
 
@@ -189,6 +220,15 @@
 {
     CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
     CALayer* layer = [[self layer] hitTest:p];
+    if (layer == playButtonLayer) {
+        
+        Disc* d = [[[(Movie*)[selectedMovies objectAtIndex:0] allDiscs] allObjects] objectAtIndex:0];
+        Media* m = [[(NSSet*)d.allMedia allObjects] objectAtIndex:0];
+        
+        if (m) {
+            [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:m.url]];
+        }
+    }
 }
 
 - (void) mouseMoved:(NSEvent*)theEvent

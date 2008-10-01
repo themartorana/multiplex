@@ -10,7 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 @interface PlayButtonLayer : CALayer {
-
+    CGImageRef playButtonImage;
 }
 
 @end

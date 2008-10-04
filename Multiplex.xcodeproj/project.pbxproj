@@ -23,6 +23,8 @@
 
 /* Begin PBXBuildFile section */
 		5535D98F0E4E3F5400A45761 /* EngineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5535D98E0E4E3F5400A45761 /* EngineController.m */; };
+		556BD78C0E9444ED00EC698A /* WorkingStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 556BD78B0E9444ED00EC698A /* WorkingStatusView.m */; };
+		556BD7900E94470600EC698A /* Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 556BD78F0E94470600EC698A /* Activity.m */; };
 		557AC76D0E5B1E1A00271113 /* MessageProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 557AC76C0E5B1E1A00271113 /* MessageProtocol.m */; };
 		557B69460E4CCD3F0009919E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 557B69450E4CCD3F0009919E /* MainMenu.xib */; };
 		557B694E0E4CCD860009919E /* NSDate+Mothership.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B694D0E4CCD850009919E /* NSDate+Mothership.m */; };
@@ -33,6 +35,11 @@
 		5598E60C0E91D294005FCC91 /* PlayButtonLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5598E60B0E91D294005FCC91 /* PlayButtonLayer.m */; };
 		55D390750E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D390740E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m */; };
 		55D390770E82DE72007413C5 /* Progress.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55D390760E82DE72007413C5 /* Progress.pdf */; };
+		55D957A40E94202500E35FF4 /* InfoButtonLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D957A30E94202500E35FF4 /* InfoButtonLayer.m */; };
+		55D957BC0E94221F00E35FF4 /* search120x120.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55D957BB0E94221F00E35FF4 /* search120x120.pdf */; };
+		55D957DD0E94248300E35FF4 /* BasicInfoTitleColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D957DC0E94248300E35FF4 /* BasicInfoTitleColor.m */; };
+		55D9581B0E942EB300E35FF4 /* button-play-down.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55D9581A0E942EB300E35FF4 /* button-play-down.pdf */; };
+		55F815360E94082A005EF5DE /* button-play.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55F815350E94082A005EF5DE /* button-play.pdf */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		F967AFF60E7E13ED00C12B92 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = F967AFF50E7E13ED00C12B92 /* MainView.m */; };
@@ -236,6 +243,10 @@
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5535D98D0E4E3F5400A45761 /* EngineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngineController.h; sourceTree = "<group>"; };
 		5535D98E0E4E3F5400A45761 /* EngineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngineController.m; sourceTree = "<group>"; };
+		556BD78A0E9444ED00EC698A /* WorkingStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WorkingStatusView.h; sourceTree = "<group>"; };
+		556BD78B0E9444ED00EC698A /* WorkingStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WorkingStatusView.m; sourceTree = "<group>"; };
+		556BD78E0E94470600EC698A /* Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Activity.h; sourceTree = "<group>"; };
+		556BD78F0E94470600EC698A /* Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Activity.m; sourceTree = "<group>"; };
 		557AC76B0E5B1E1A00271113 /* MessageProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageProtocol.h; sourceTree = "<group>"; };
 		557AC76C0E5B1E1A00271113 /* MessageProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageProtocol.m; sourceTree = "<group>"; };
 		557B66A20E4A2F4D0009919E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -252,6 +263,13 @@
 		55D390730E82D692007413C5 /* IndeterminateProgressIndicatorLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndeterminateProgressIndicatorLayer.h; sourceTree = "<group>"; };
 		55D390740E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndeterminateProgressIndicatorLayer.m; sourceTree = "<group>"; };
 		55D390760E82DE72007413C5 /* Progress.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Progress.pdf; sourceTree = "<group>"; };
+		55D957A20E94202500E35FF4 /* InfoButtonLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoButtonLayer.h; sourceTree = "<group>"; };
+		55D957A30E94202500E35FF4 /* InfoButtonLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoButtonLayer.m; sourceTree = "<group>"; };
+		55D957BB0E94221F00E35FF4 /* search120x120.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = search120x120.pdf; sourceTree = "<group>"; };
+		55D957DB0E94248300E35FF4 /* BasicInfoTitleColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicInfoTitleColor.h; sourceTree = "<group>"; };
+		55D957DC0E94248300E35FF4 /* BasicInfoTitleColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicInfoTitleColor.m; sourceTree = "<group>"; };
+		55D9581A0E942EB300E35FF4 /* button-play-down.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "button-play-down.pdf"; sourceTree = "<group>"; };
+		55F815350E94082A005EF5DE /* button-play.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "button-play.pdf"; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* Multiplex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Multiplex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F93B042A0E6F4FD6006CB915 /* NSDictionary+KeyPaths.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+KeyPaths.h"; sourceTree = "<group>"; };
@@ -415,6 +433,8 @@
 			children = (
 				5535D98D0E4E3F5400A45761 /* EngineController.h */,
 				5535D98E0E4E3F5400A45761 /* EngineController.m */,
+				556BD78E0E94470600EC698A /* Activity.h */,
+				556BD78F0E94470600EC698A /* Activity.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -422,6 +442,9 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				55D9581A0E942EB300E35FF4 /* button-play-down.pdf */,
+				55D957BB0E94221F00E35FF4 /* search120x120.pdf */,
+				55F815350E94082A005EF5DE /* button-play.pdf */,
 				55D390760E82DE72007413C5 /* Progress.pdf */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
@@ -509,6 +532,15 @@
 			name = "UI Controllers";
 			sourceTree = "<group>";
 		};
+		55D957DA0E94246800E35FF4 /* ValueTransformers */ = {
+			isa = PBXGroup;
+			children = (
+				55D957DB0E94248300E35FF4 /* BasicInfoTitleColor.h */,
+				55D957DC0E94248300E35FF4 /* BasicInfoTitleColor.m */,
+			);
+			name = ValueTransformers;
+			sourceTree = "<group>";
+		};
 		F94A05FE0E7B9B5800C8A8B7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -532,6 +564,8 @@
 				F967AFF50E7E13ED00C12B92 /* MainView.m */,
 				5598E6020E91C5C6005FCC91 /* InfoView.h */,
 				5598E6030E91C5C6005FCC91 /* InfoView.m */,
+				556BD78A0E9444ED00EC698A /* WorkingStatusView.h */,
+				556BD78B0E9444ED00EC698A /* WorkingStatusView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -545,6 +579,8 @@
 				F967B0D70E7E22BF00C12B92 /* MovieLayer.m */,
 				5598E60A0E91D294005FCC91 /* PlayButtonLayer.h */,
 				5598E60B0E91D294005FCC91 /* PlayButtonLayer.m */,
+				55D957A20E94202500E35FF4 /* InfoButtonLayer.h */,
+				55D957A30E94202500E35FF4 /* InfoButtonLayer.m */,
 			);
 			name = Layers;
 			sourceTree = "<group>";
@@ -571,6 +607,7 @@
 		F98DCA920B6307B400371A83 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				55D957DA0E94246800E35FF4 /* ValueTransformers */,
 				F967B0D50E7E22B300C12B92 /* Layers */,
 				F967AFF30E7E13D400C12B92 /* Views */,
 				2A37F4B0FDCFA73011CA2CEA /* main.m */,
@@ -813,6 +850,9 @@
 				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
 				557B69460E4CCD3F0009919E /* MainMenu.xib in Resources */,
 				55D390770E82DE72007413C5 /* Progress.pdf in Resources */,
+				55F815360E94082A005EF5DE /* button-play.pdf in Resources */,
+				55D957BC0E94221F00E35FF4 /* search120x120.pdf in Resources */,
+				55D9581B0E942EB300E35FF4 /* button-play-down.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -892,6 +932,10 @@
 				55D390750E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m in Sources */,
 				5598E6040E91C5C6005FCC91 /* InfoView.m in Sources */,
 				5598E60C0E91D294005FCC91 /* PlayButtonLayer.m in Sources */,
+				55D957A40E94202500E35FF4 /* InfoButtonLayer.m in Sources */,
+				55D957DD0E94248300E35FF4 /* BasicInfoTitleColor.m in Sources */,
+				556BD78C0E9444ED00EC698A /* WorkingStatusView.m in Sources */,
+				556BD7900E94470600EC698A /* Activity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

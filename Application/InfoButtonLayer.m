@@ -15,7 +15,7 @@
 {
     if (self = [super init]) {
         // Load our play button image
-        NSString* path = [[NSBundle mainBundle] pathForResource:@"button-play" ofType:@"pdf"];
+        NSString* path = [[NSBundle mainBundle] pathForResource:@"search120x120" ofType:@"pdf"];
         NSURL* url = [NSURL fileURLWithPath:path];
         NSImage* img = [[NSImage alloc] initWithContentsOfURL:url];
         

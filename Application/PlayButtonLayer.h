@@ -11,6 +11,13 @@
 
 @interface PlayButtonLayer : CALayer {
     CGImageRef playButtonImage;
+    CGImageRef playButtonImageDown;
+    
+    BOOL isMouseDown;
 }
+
+@property BOOL isMouseDown;
+
+- (CGImageRef) getImageFromPDF:(NSString*)path;
 
 @end

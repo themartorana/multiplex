@@ -3,11 +3,11 @@
 
 @class Movie;
 @class IndeterminateProgressIndicatorLayer;
+@class Activity;
 
 @interface MovieLayer : CALayer {
     Movie* movie;
     NSMutableData* imageData;
-    IndeterminateProgressIndicatorLayer* spinnerLayer;
     
     CATextLayer* titleLayer;
     
@@ -15,6 +15,8 @@
     CGImageRef boxImage;
     
     BOOL isHovered;
+    
+    Activity* activity;
 }
 
 @property (retain) Movie* movie;

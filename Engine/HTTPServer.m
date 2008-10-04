@@ -161,6 +161,7 @@
     @catch (NSException* exception) {
         NSLog(@"Error while sending response: %@", [exception  reason]);
     } @finally {
+        NSLog(@"Closing file handle with status code %d", code);
         [fileHandle closeFile];
     }
     

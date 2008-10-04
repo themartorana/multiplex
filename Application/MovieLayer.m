@@ -3,10 +3,10 @@
 #import "Disc.h"
 #import "Media.h"
 #import "IndeterminateProgressIndicatorLayer.h"
+#import "Activity.h"
 
 @interface MovieLayer (Private)
-- (void) _startSpinner;
-- (void) _stopSpinner;
+- (void) _terminateActivity;
 @end
 
 static void glossInterpolation(void *info, const float *input, float *output);
@@ -86,10 +86,11 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
             NSString* url = media.frontCoverURL;
             if ([url length]) {
                 NSURL* imageURL = [NSURL URLWithString:url];
-                NSURLRequest* request = [NSURLRequest requestWithURL:imageURL];
+                NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:imageURL];
+                [request setTimeoutInterval:5.0];
                 if ([NSURLConnection canHandleRequest:request]) {
                     [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
-                    [self _startSpinner];
+                    activity = [[Activity alloc] initWithActivityName:@"Loading box images" andShowInUI:YES];
                     fullBreak = YES;
                     break;
                 }
@@ -112,7 +113,6 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
     if (layer == boxImageLayer) {
         if (boxImage) {
             CGContextDrawImage(c, layer.bounds, boxImage);
-            [self performSelectorOnMainThread:@selector(_stopSpinner) withObject:nil waitUntilDone:NO];
             [self performSelectorOnMainThread:@selector(_hideTitle) withObject:nil waitUntilDone:NO];
         }
     }
@@ -121,31 +121,14 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
 
 #pragma mark Private Methods
 
-- (void) _startSpinner
+- (void) _terminateActivity
 {
-    NSAssert(!spinnerLayer, @"why isn't this nil?");
-    spinnerLayer = [IndeterminateProgressIndicatorLayer layer];
-    spinnerLayer.constraints = [NSArray arrayWithObjects:
-        [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
-        [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY scale:0.5 offset:0.0], 
-        [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.35 offset:0.0],
-        [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.35 offset:0.0],
-        nil
-    ];
-    [self addSublayer:spinnerLayer];
-    spinnerLayer.hidden = NO;
-}
-
-
-- (void) _stopSpinner
-{
-    if (spinnerLayer) {
-        spinnerLayer.hidden = YES;
-        [spinnerLayer removeFromSuperlayer];
-        spinnerLayer = nil;
+    if (activity) {
+        [activity terminate];
+        [activity release];
+        activity = nil;
     }
 }
-
 
 - (void) _hideTitle
 {
@@ -165,10 +148,6 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
         [titleLayer removeFromSuperlayer];
         titleLayer = nil;
     }
-    if (spinnerLayer && spinnerLayer.superlayer) {
-        [spinnerLayer removeFromSuperlayer];
-        spinnerLayer = nil;
-    }
 }
 
 
@@ -182,7 +161,7 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
 
 - (void) connection:(NSURLConnection *)connection didFailWithError:(NSError*)error
 {
-    [self _stopSpinner];
+    [self _terminateActivity];
     [imageData release];
     imageData = nil;
 }
@@ -200,14 +179,12 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
         boxImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil);
         if (boxImage) {
             [boxImageLayer setNeedsDisplay];
-        } else {
-            [self _stopSpinner];
         }
         CFRelease(imageSource);
-    } else {
-        [self _stopSpinner];
     }
-     
+    
+    [self _terminateActivity];
+         
     [imageData release];
     imageData = nil;
     [connection release];

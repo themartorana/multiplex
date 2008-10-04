@@ -11,6 +11,7 @@
 #import "Disc.h"
 #import "Media.h"
 #import "InfoButtonLayer.h"
+#import "BasicInfoTitleColor.h"
 
 @implementation InfoView
 
@@ -31,6 +32,15 @@
     return [super keyPathsForValuesAffectingValueForKey:key];
 }
 
+- (Class)valueClassForBinding:(NSString *)binding {
+    if ([binding isEqualToString:@"foregroundColor"]) {
+        return [BasicInfoTitleColor class];
+    } else {
+        return [super valueClassForBinding:binding];
+    }
+}
+
+
 - (void) awakeFromNib
 {
     self.wantsLayer = YES;
@@ -47,6 +57,12 @@
     
     // Bindings
     [titleLayer bind:@"string" toObject:self withKeyPath:@"movieTitleString" options:nil];
+    [titleLayer bind:@"foregroundColor" 
+            toObject:surroundingLayer 
+         withKeyPath:@"hidden"
+             options:[NSDictionary dictionaryWithObject:[NSValueTransformer valueTransformerForName:@"BasicInfoTitleColor"] 
+                                                 forKey:NSValueTransformerBindingOption]
+    ];
     [numDiscsLayer bind:@"string" toObject:self withKeyPath:@"numDiscsString" options:nil];
     [ratingLayer bind:@"string" toObject:self withKeyPath:@"ratingString" options:nil];
     [playButtonLayer bind:@"hidden" toObject:surroundingLayer withKeyPath:@"hidden" options:nil];
@@ -127,9 +143,9 @@
     surroundingLayer.anchorPoint = CGPointZero;
     surroundingLayer.frame = CGRectMake(0.0, 0.0, 1.0, 1.0);
     surroundingLayer.hidden = YES;
-    surroundingLayer.borderColor = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 0.6);
+    surroundingLayer.borderColor = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 1.0);
     surroundingLayer.cornerRadius = 10.0;
-    surroundingLayer.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.4);
+    surroundingLayer.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.6);
     surroundingLayer.borderWidth = 2.0;
     surroundingLayer.name = @"surroundingLayer";
     surroundingLayer.constraints = [NSArray arrayWithObjects:
@@ -147,7 +163,7 @@
     titleLayer.wrapped = NO;
     titleLayer.alignmentMode = kCAAlignmentCenter;
     titleLayer.font = [NSFont boldSystemFontOfSize:20.0];
-    titleLayer.fontSize = 20.0;
+    titleLayer.fontSize = 22.0;
     titleLayer.constraints = [NSArray arrayWithObjects:
                               [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
                               [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY scale:1.0 offset:-9.0],
@@ -199,16 +215,17 @@
                                    [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"surroundingLayer" attribute:kCAConstraintHeight scale:0.0 offset:100.0],
                                    nil];
     playButtonLayer.hidden = YES;
+    playButtonLayer.name = @"playButtonLayer";
     [basicInfoLayer addSublayer:playButtonLayer];
 
     
     // Add the info button layer
     infoButtonLayer = [[InfoButtonLayer layer] retain];
     infoButtonLayer.constraints = [NSArray arrayWithObjects:
-                                   [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"surroundingLayer" attribute:kCAConstraintMaxX],
-                                   [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"surroundingLayer" attribute:kCAConstraintMinY scale:1.0 offset:18.0],
-                                   [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"surroundingLayer" attribute:kCAConstraintWidth scale:0.0 offset:100.0],
-                                   [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"surroundingLayer" attribute:kCAConstraintHeight scale:0.0 offset:100.0],
+                                   [CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"playButtonLayer" attribute:kCAConstraintMinX],
+                                   [CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY scale:1.0 offset:9.0],
+                                   [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"surroundingLayer" attribute:kCAConstraintWidth scale:0.0 offset:30.0],
+                                   [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"surroundingLayer" attribute:kCAConstraintHeight scale:0.0 offset:30.0],
                                    nil];
     infoButtonLayer.hidden = YES;
     [basicInfoLayer addSublayer:infoButtonLayer];
@@ -228,6 +245,19 @@
         if (m) {
             [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:m.url]];
         }
+    }
+    
+    // Reset
+    playButtonLayer.isMouseDown = NO;
+}
+
+- (void) mouseDown:(NSEvent*)theEvent
+{
+    CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
+    CALayer* layer = [[self layer] hitTest:p];
+    
+    if (layer == playButtonLayer) {
+        playButtonLayer.isMouseDown = YES;
     }
 }
 

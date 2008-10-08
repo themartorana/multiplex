@@ -10,6 +10,7 @@
 #import <WebKit/WebKit.h>
 
 @class Movie;
+@class InfoPaneDiscsView;
 
 @interface InfoPaneFormController : NSObject {
     NSArray* selectedMovies;
@@ -18,7 +19,7 @@
     NSColor* labelColor;
     
     IBOutlet WebView* descriptionWebView;
-    IBOutlet NSTabViewItem* discsTabViewItem;
+    IBOutlet InfoPaneDiscsView* discsTabView;
 }
 
 @property (retain) NSArray* selectedMovies;

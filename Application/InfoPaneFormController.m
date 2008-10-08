@@ -8,6 +8,7 @@
 
 #import "InfoPaneFormController.h"
 #import "Movie.h"
+#import "InfoPaneDiscsView.h"
 #import <WebKit/WebKit.h>
 
 
@@ -31,6 +32,8 @@
     // Set up the appropriate things for the web view
     [descriptionWebView setEditingDelegate:self];
     [descriptionWebView setEditable:YES];
+    
+    [discsTabView bind:@"selectedMovie" toObject:self withKeyPath:@"selectedMovie" options:nil];
 }
 
 - (void) setSelectedMovies:(NSArray*)_selectedMovies

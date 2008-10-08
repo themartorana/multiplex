@@ -6,14 +6,14 @@
 //  Copyright 2008 __MyCompanyName__. All rights reserved.
 //
 
-#import "InfoView.h"
+#import "BasicInfoView.h"
 #import "PlayButtonLayer.h"
 #import "Disc.h"
 #import "Media.h"
 #import "InfoButtonLayer.h"
-#import "BasicInfoTitleColor.h"
+#import "BasicInfoTitleColorValueTransformer.h"
 
-@implementation InfoView
+@implementation BasicInfoView
 
 @synthesize hoveredMovie;
 @synthesize selectedMovies;
@@ -34,7 +34,7 @@
 
 - (Class)valueClassForBinding:(NSString *)binding {
     if ([binding isEqualToString:@"foregroundColor"]) {
-        return [BasicInfoTitleColor class];
+        return [BasicInfoTitleColorValueTransformer class];
     } else {
         return [super valueClassForBinding:binding];
     }
@@ -60,7 +60,7 @@
     [titleLayer bind:@"foregroundColor" 
             toObject:surroundingLayer 
          withKeyPath:@"hidden"
-             options:[NSDictionary dictionaryWithObject:[NSValueTransformer valueTransformerForName:@"BasicInfoTitleColor"] 
+             options:[NSDictionary dictionaryWithObject:[NSValueTransformer valueTransformerForName:@"BasicInfoTitleColorValueTransformer"] 
                                                  forKey:NSValueTransformerBindingOption]
     ];
     [numDiscsLayer bind:@"string" toObject:self withKeyPath:@"numDiscsString" options:nil];

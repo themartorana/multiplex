@@ -2,7 +2,7 @@
 #import "MainView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Movie.h"
-#import "InfoView.h"
+#import "BasicInfoView.h"
 
 @implementation WindowController
 
@@ -17,8 +17,10 @@
     [mainView setContent:movies];
     
     // Do some bindings
-    [infoView bind:@"selectedMovies" toObject:movies withKeyPath:@"selectedObjects" options:nil];
-    [infoView bind:@"hoveredMovie" toObject:mainView withKeyPath:@"hoveredMovie" options:nil];
+    [basicInfoView bind:@"selectedMovies" toObject:movies withKeyPath:@"selectedObjects" options:nil];
+    [basicInfoView bind:@"hoveredMovie" toObject:mainView withKeyPath:@"hoveredMovie" options:nil];
+    
+    [infoPaneFormController bind:@"selectedMovies" toObject:movies withKeyPath:@"selectedObjects" options:nil];
 }
 
 @end

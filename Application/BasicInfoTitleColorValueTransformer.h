@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface BasicInfoTitleColor : NSValueTransformer {
+@interface BasicInfoTitleColorValueTransformer : NSValueTransformer {
 
 }
 

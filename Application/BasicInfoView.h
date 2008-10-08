@@ -11,7 +11,7 @@
 #import "Movie.h"
 #import "PlayButtonLayer.h"
 
-@interface InfoView : NSView {
+@interface BasicInfoView : NSView {
     NSArray* selectedMovies;
     Movie* hoveredMovie;
     

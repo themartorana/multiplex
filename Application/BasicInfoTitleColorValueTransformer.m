@@ -1,6 +1,6 @@
-#import "BasicInfoTitleColor.h"
+#import "BasicInfoTitleColorValueTransformer.h"
 
-@implementation BasicInfoTitleColor
+@implementation BasicInfoTitleColorValueTransformer
 
 + (Class)transformedValueClass { return [NSObject class]; }
 

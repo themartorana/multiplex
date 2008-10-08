@@ -1,12 +1,16 @@
 #import <Cocoa/Cocoa.h>
 
 @class MainView;
-@class InfoView;
+@class BasicInfoView;
+@class InfoPaneFormController;
 
 @interface WindowController : NSWindowController {
     IBOutlet NSArrayController* movies;
     IBOutlet MainView* mainView;
-    IBOutlet InfoView* infoView;
+    
+    IBOutlet BasicInfoView* basicInfoView;
+    
+    IBOutlet InfoPaneFormController* infoPaneFormController;
 }
 
 @end

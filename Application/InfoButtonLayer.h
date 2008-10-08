@@ -9,9 +9,15 @@
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/QuartzCore.h>
 
-
 @interface InfoButtonLayer : CALayer {
     CGImageRef infoButtonImage;
+    CGImageRef infoButtonImageDown;
+    
+    BOOL isMouseDown;
 }
+
+@property BOOL isMouseDown;
+
+- (CGImageRef) getImageFromPDF:(NSString*)path;
 
 @end

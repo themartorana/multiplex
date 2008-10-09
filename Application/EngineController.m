@@ -540,6 +540,10 @@
                     }
                     disc.side = [tag substringFromIndex:1];
                 }
+                NSString* description = [otherDiscInfo objectForKey:@"description"];
+                if ([description length]) {
+                    disc.description = description;
+                }
                 Movie* movieForDisc = disc.movie;
                 if (movie != movieForDisc) {
                     disc.movie = movie;

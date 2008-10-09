@@ -6,6 +6,7 @@
 @dynamic fingerprint;
 @dynamic number;
 @dynamic side;
+@dynamic description;
 
 @dynamic allMedia;
 

@@ -19,6 +19,7 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
 
 @synthesize movie;
 @synthesize isHovered;
+@synthesize boxImage;
 
 - (MovieLayer*) init
 {    
@@ -28,6 +29,7 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
         self.layoutManager = [CAConstraintLayoutManager layoutManager];
         [self setNeedsDisplay];
         
+        self.borderColor = CGColorCreateGenericRGB(231.0/255.0, 111.0/255.0, 52.0/255.0, 1.0);
         
         boxImageLayer = [CATiledLayer layer];
         boxImageLayer.delegate = self;
@@ -67,6 +69,13 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
     }
     [super dealloc];
 }
+
+- (void) setBoxImage:(CGImageRef)_boxImage
+{
+    boxImage = _boxImage;
+    [self setNeedsDisplay];
+}
+
 
 - (void) setMovie:(Movie*)_movie 
 {
@@ -118,6 +127,20 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
     }
 }
 
+- (void) setIsHovered:(BOOL)hovered
+{
+    [CATransaction begin];
+    
+    isHovered = hovered;
+    if (hovered) {
+        self.borderWidth = 0.0;
+    }
+    else {
+        self.borderWidth = 0.0;
+    }
+    
+    [CATransaction commit];
+}
 
 #pragma mark Private Methods
 
@@ -176,10 +199,7 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
 {
     CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)imageData, nil);
     if (imageSource) {
-        boxImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil);
-        if (boxImage) {
-            [boxImageLayer setNeedsDisplay];
-        }
+        self.boxImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil);
         CFRelease(imageSource);
     }
     

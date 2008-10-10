@@ -2,6 +2,8 @@
 #import "MainView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Movie.h"
+#import "Disc.h"
+#import "Media.h"
 #import "BasicInfoView.h"
 
 @implementation WindowController
@@ -21,6 +23,26 @@
     [basicInfoView bind:@"hoveredMovie" toObject:mainView withKeyPath:@"hoveredMovie" options:nil];
     
     [infoPaneFormController bind:@"selectedMovies" toObject:movies withKeyPath:@"selectedObjects" options:nil];
+    
+    // Listen for play requests
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playMovieRequest:) name:@"MultiplexPlayDisc" object:nil];
+}
+
+- (void) playMovieRequest:(NSNotification*)notification
+{
+    if ([notification object]) {
+        Disc* d = (Disc*)[notification object];
+        NSArray* allMedia = [d.allMedia allObjects];
+        
+        if ([allMedia count] > 0) {
+            for (Media* media in allMedia) {
+                if ([media.isAvailable boolValue]) {
+                    // Play
+                    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:media.url]];
+                }
+            } 
+        }
+    }
 }
 
 @end

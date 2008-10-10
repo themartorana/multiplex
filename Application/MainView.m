@@ -56,6 +56,13 @@
                                                        owner:self 
                                                     userInfo:nil];
     [self addTrackingArea:mouseTrackingArea];
+    
+    highlightLayer = [[CALayer layer] retain];
+    highlightLayer.borderColor = CGColorCreateGenericRGB(231.0/255.0, 111.0/255.0, 52.0/255.0, 1.0);
+    highlightLayer.borderWidth = 10.0;
+    highlightLayer.cornerRadius = 10.0;
+    highlightLayer.hidden = YES;
+    [floorLayer addSublayer:highlightLayer];
 }
 
 
@@ -131,13 +138,28 @@
     CALayer* layer = [floorLayer hitTest:p];
     
     if (!layer) {
+        highlightLayer.hidden = YES;
         self.hoveredMovie = nil;
     } 
     else while (layer) {
         if (layer == radialGradientLayer) {
             self.hoveredMovie = nil;
+            highlightLayer.hidden = YES;
             break;
         } else if ([layer isKindOfClass:[MovieLayer class]]) {
+            
+            MovieLayer* mLayer = (MovieLayer*)layer;
+            
+            [CATransaction begin];
+            [CATransaction setValue:[NSNumber numberWithDouble:0.0] forKey:kCATransactionAnimationDuration];
+            highlightLayer.hidden = NO;
+            highlightLayer.anchorPoint = mLayer.anchorPoint;
+            highlightLayer.bounds = CGRectInset(mLayer.bounds, -20, -20);
+            highlightLayer.position = mLayer.position;
+            highlightLayer.zPosition = mLayer.zPosition - 1;
+            highlightLayer.transform = mLayer.transform;
+            [CATransaction commit];
+            
             self.hoveredMovie = [(MovieLayer*)layer movie];
             break;
         }

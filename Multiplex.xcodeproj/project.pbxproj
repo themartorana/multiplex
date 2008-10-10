@@ -36,15 +36,18 @@
 		557B69740E4CD0790009919E /* DebugWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B69730E4CD0790009919E /* DebugWindowController.m */; };
 		5583D1640E51D82700EB7AE6 /* Multiplex.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */; };
 		558D19CF0E9C606E000F67FA /* CloseButtonLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D19CE0E9C606E000F67FA /* CloseButtonLayer.m */; };
-		558D19D50E9C657A000F67FA /* close128x128.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 558D19D20E9C657A000F67FA /* close128x128.pdf */; };
-		558D19D60E9C657A000F67FA /* info128x128.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 558D19D30E9C657A000F67FA /* info128x128.pdf */; };
-		558D19D70E9C657A000F67FA /* search128x128.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 558D19D40E9C657A000F67FA /* search128x128.pdf */; };
 		558D1A810E9C6FED000F67FA /* InfoPaneBoxView.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1A800E9C6FED000F67FA /* InfoPaneBoxView.m */; };
 		558D1AF00E9D186B000F67FA /* InfoPaneDiscsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */; };
 		558D1B030E9D3F37000F67FA /* PageNumberLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1B020E9D3F37000F67FA /* PageNumberLayer.m */; };
 		558D1BB60E9D4F01000F67FA /* CALayer+Mothership.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1BB50E9D4F01000F67FA /* CALayer+Mothership.m */; };
 		558D1BF00E9D52ED000F67FA /* NSColor+Mothership.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1BEF0E9D52ED000F67FA /* NSColor+Mothership.m */; };
 		558D1C3E0E9D5562000F67FA /* DiscPlayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1C3D0E9D5562000F67FA /* DiscPlayLayer.m */; };
+		558D1EB10E9E65A8000F67FA /* close-click128x128.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 558D1EAB0E9E65A8000F67FA /* close-click128x128.pdf */; };
+		558D1EB20E9E65A8000F67FA /* close128x128.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 558D1EAC0E9E65A8000F67FA /* close128x128.pdf */; };
+		558D1EB30E9E65A8000F67FA /* info-click128x128.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 558D1EAD0E9E65A8000F67FA /* info-click128x128.pdf */; };
+		558D1EB40E9E65A8000F67FA /* info128x128.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 558D1EAE0E9E65A8000F67FA /* info128x128.pdf */; };
+		558D1EB50E9E65A8000F67FA /* search-click128x128.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 558D1EAF0E9E65A8000F67FA /* search-click128x128.pdf */; };
+		558D1EB60E9E65A8000F67FA /* search128x128.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 558D1EB00E9E65A8000F67FA /* search128x128.pdf */; };
 		5598E6040E91C5C6005FCC91 /* BasicInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5598E6030E91C5C6005FCC91 /* BasicInfoView.m */; };
 		5598E60C0E91D294005FCC91 /* PlayButtonLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5598E60B0E91D294005FCC91 /* PlayButtonLayer.m */; };
 		55A8E81D0E9BE18200DC9F35 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55A8E81C0E9BE18200DC9F35 /* WebKit.framework */; };
@@ -280,9 +283,6 @@
 		5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Multiplex.xcdatamodel; sourceTree = "<group>"; };
 		558D19CD0E9C606E000F67FA /* CloseButtonLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloseButtonLayer.h; sourceTree = "<group>"; };
 		558D19CE0E9C606E000F67FA /* CloseButtonLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloseButtonLayer.m; sourceTree = "<group>"; };
-		558D19D20E9C657A000F67FA /* close128x128.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = close128x128.pdf; sourceTree = "<group>"; };
-		558D19D30E9C657A000F67FA /* info128x128.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = info128x128.pdf; sourceTree = "<group>"; };
-		558D19D40E9C657A000F67FA /* search128x128.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = search128x128.pdf; sourceTree = "<group>"; };
 		558D1A7F0E9C6FED000F67FA /* InfoPaneBoxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPaneBoxView.h; sourceTree = "<group>"; };
 		558D1A800E9C6FED000F67FA /* InfoPaneBoxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoPaneBoxView.m; sourceTree = "<group>"; };
 		558D1AEE0E9D186B000F67FA /* InfoPaneDiscsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPaneDiscsView.h; sourceTree = "<group>"; };
@@ -295,6 +295,12 @@
 		558D1BEF0E9D52ED000F67FA /* NSColor+Mothership.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+Mothership.m"; sourceTree = "<group>"; };
 		558D1C3C0E9D5562000F67FA /* DiscPlayLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscPlayLayer.h; sourceTree = "<group>"; };
 		558D1C3D0E9D5562000F67FA /* DiscPlayLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscPlayLayer.m; sourceTree = "<group>"; };
+		558D1EAB0E9E65A8000F67FA /* close-click128x128.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "close-click128x128.pdf"; sourceTree = "<group>"; };
+		558D1EAC0E9E65A8000F67FA /* close128x128.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = close128x128.pdf; sourceTree = "<group>"; };
+		558D1EAD0E9E65A8000F67FA /* info-click128x128.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "info-click128x128.pdf"; sourceTree = "<group>"; };
+		558D1EAE0E9E65A8000F67FA /* info128x128.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = info128x128.pdf; sourceTree = "<group>"; };
+		558D1EAF0E9E65A8000F67FA /* search-click128x128.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "search-click128x128.pdf"; sourceTree = "<group>"; };
+		558D1EB00E9E65A8000F67FA /* search128x128.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = search128x128.pdf; sourceTree = "<group>"; };
 		5598E6020E91C5C6005FCC91 /* BasicInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicInfoView.h; sourceTree = "<group>"; };
 		5598E6030E91C5C6005FCC91 /* BasicInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicInfoView.m; sourceTree = "<group>"; };
 		5598E60A0E91D294005FCC91 /* PlayButtonLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayButtonLayer.h; sourceTree = "<group>"; };
@@ -483,9 +489,12 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				558D19D20E9C657A000F67FA /* close128x128.pdf */,
-				558D19D30E9C657A000F67FA /* info128x128.pdf */,
-				558D19D40E9C657A000F67FA /* search128x128.pdf */,
+				558D1EAB0E9E65A8000F67FA /* close-click128x128.pdf */,
+				558D1EAC0E9E65A8000F67FA /* close128x128.pdf */,
+				558D1EAD0E9E65A8000F67FA /* info-click128x128.pdf */,
+				558D1EAE0E9E65A8000F67FA /* info128x128.pdf */,
+				558D1EAF0E9E65A8000F67FA /* search-click128x128.pdf */,
+				558D1EB00E9E65A8000F67FA /* search128x128.pdf */,
 				55D9581A0E942EB300E35FF4 /* button-play-down.pdf */,
 				55F815350E94082A005EF5DE /* button-play.pdf */,
 				55D390760E82DE72007413C5 /* Progress.pdf */,
@@ -925,9 +934,12 @@
 				55D390770E82DE72007413C5 /* Progress.pdf in Resources */,
 				55F815360E94082A005EF5DE /* button-play.pdf in Resources */,
 				55D9581B0E942EB300E35FF4 /* button-play-down.pdf in Resources */,
-				558D19D50E9C657A000F67FA /* close128x128.pdf in Resources */,
-				558D19D60E9C657A000F67FA /* info128x128.pdf in Resources */,
-				558D19D70E9C657A000F67FA /* search128x128.pdf in Resources */,
+				558D1EB10E9E65A8000F67FA /* close-click128x128.pdf in Resources */,
+				558D1EB20E9E65A8000F67FA /* close128x128.pdf in Resources */,
+				558D1EB30E9E65A8000F67FA /* info-click128x128.pdf in Resources */,
+				558D1EB40E9E65A8000F67FA /* info128x128.pdf in Resources */,
+				558D1EB50E9E65A8000F67FA /* search-click128x128.pdf in Resources */,
+				558D1EB60E9E65A8000F67FA /* search128x128.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

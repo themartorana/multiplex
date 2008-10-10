@@ -2,6 +2,7 @@
 #import "PlayButtonLayer.h"
 #import "Disc.h"
 #import "Movie.h"
+#import "Media.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation DiscPlayLayer
@@ -64,8 +65,24 @@
 {
     disc = _disc;
     
-    discNumberTitle.string = [NSString stringWithFormat:@"Disc %@", disc.number];
-    descriptionLayer.string = [NSString stringWithFormat:@"Disc %@ of %d", disc.number, [disc.movie.allDiscs count]];
+    if (disc) {
+        discNumberTitle.string = [NSString stringWithFormat:@"Disc %@", disc.number];
+        descriptionLayer.string = [NSString stringWithFormat:@"Disc %@ of %d", disc.number, [disc.movie.allDiscs count]];
+        
+        BOOL shouldHide = YES;
+        
+        if ([disc.allMedia count] > 0) {
+            NSArray* allMedia = [disc.allMedia allObjects];
+            for (Media* media in allMedia) {
+                if ([media.isAvailable boolValue]) {
+                    shouldHide = NO;
+                }
+            }
+        }
+        
+        playButtonLayer.hidden = shouldHide;
+    }
+    
 }
 
 - (void) setHovered:(BOOL)isHovered

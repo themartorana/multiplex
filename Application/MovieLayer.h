@@ -21,5 +21,6 @@
 
 @property (retain) Movie* movie;
 @property (readwrite) BOOL isHovered;
+@property CGImageRef boxImage;
 
 @end

@@ -10,5 +10,6 @@
 @property (retain) Disc* disc;
 @property (retain) Engine* engine;
 @property (retain) NSString* frontCoverURL;
+@property (retain) NSNumber* isAvailable;
 
 @end

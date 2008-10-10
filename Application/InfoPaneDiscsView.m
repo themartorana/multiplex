@@ -27,6 +27,8 @@
     viewLayer.frame = [[self layer] frame];
     [self setLayer:viewLayer];
     [self setWantsLayer:YES];
+    
+    [viewLayer bind:@"bounds" toObject:self withKeyPath:@"bounds" options:nil];
 
     scrollingLayer = [[CALayer layer] retain];
     discsHostingLayer = [[CALayer layer] retain];

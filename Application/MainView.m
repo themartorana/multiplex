@@ -128,7 +128,11 @@
     
     if (layer) {
         Movie* m = [(MovieLayer*)layer movie];
-        [(NSArrayController*)content setSelectedObjects:[NSArray arrayWithObject:m]];        
+        [(NSArrayController*)content setSelectedObjects:[NSArray arrayWithObject:m]];
+        
+        if ([theEvent clickCount] == 2) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexShowMovieDialog" object:nil];
+        }
     }
 }
 

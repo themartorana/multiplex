@@ -5,6 +5,7 @@
 #import "Disc.h"
 #import "Media.h"
 #import "BasicInfoView.h"
+#import "InfoPaneHostingView.h"
 
 @implementation WindowController
 
@@ -26,6 +27,7 @@
     
     // Listen for play requests
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playMovieRequest:) name:@"MultiplexPlayDisc" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openInfoView:) name:@"MultiplexShowMovieDialog" object:nil];
 }
 
 - (void) playMovieRequest:(NSNotification*)notification
@@ -45,4 +47,20 @@
     }
 }
 
+- (void) openInfoView:(NSNotification*)notification
+{
+    [infoPaneHostingView setFrame:[[[mainView window] contentView] frame]];
+    [[[mainView window] contentView] addSubview:infoPaneHostingView];
+}
+
+- (void) closeInfoView:(NSNotification*)notification
+{
+    
+}
+
 @end
+
+
+
+
+

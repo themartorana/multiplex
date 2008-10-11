@@ -10,6 +10,4 @@
 
 @property BOOL isMouseDown;
 
-- (CGImageRef) getImageFromPDF:(NSString*)path;
-
 @end

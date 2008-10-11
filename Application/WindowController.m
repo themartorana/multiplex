@@ -84,12 +84,14 @@
     [anim startAnimation];
     [anim release];
     */
-     
-    CIFilter* blurFilter = [CIFilter filterWithName:@"CIGausianBlur"];
+    
+    /*
+    CIFilter* blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
     [blurFilter setDefaults];
     [blurFilter setValue:[NSNumber numberWithInt:5.0] forKey:@"inputRadius"];
     [infoPaneHostingView setBackgroundFilters:[NSArray arrayWithObject:blurFilter]];
-    
+    */
+     
     [infoPaneHostingView setHidden:NO];
 }
 
@@ -97,17 +99,17 @@
 {
     [mainView resumeTracking];
     
-    /*
     NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:
                           infoPaneHostingView, NSViewAnimationTargetKey,
                           NSViewAnimationFadeOutEffect, NSViewAnimationEffectKey,
                           nil];
-    
+    /*
     NSViewAnimation* anim = [[NSViewAnimation alloc] initWithViewAnimations:[NSArray arrayWithObject:dict]];
     [anim setDuration:1.0];
     [anim setAnimationCurve:NSAnimationEaseIn];
     [anim startAnimation];
-    [anim release];*/
+    [anim release];
+    */
     
     [infoPaneHostingView setBackgroundFilters:nil];
     [infoPaneHostingView setHidden:YES];

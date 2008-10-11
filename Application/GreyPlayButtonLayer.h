@@ -13,8 +13,4 @@
     CGImageRef playButtonImage;
 }
 
-@property BOOL isMouseDown;
-
-- (CGImageRef) getImageFromPDF:(NSString*)path;
-
 @end

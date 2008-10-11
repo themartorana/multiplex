@@ -30,6 +30,6 @@
 @end
 
 
-@interface NSObject (SimpleHTTPServerDelegate)
+@interface NSObject (HTTPServerDelegate)
 - (void) processURL:(NSURL*)url connection:(HTTPConnection*)connection;
 @end

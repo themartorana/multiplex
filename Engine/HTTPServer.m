@@ -74,7 +74,7 @@
 
 - (id) initWithFileHandle:(NSFileHandle*)_fileHandle address:(NSString*)_address delegate:(id)_delegate
 {
-    if( self = [super init] ) {
+    if (self = [super init]) {
         fileHandle = [_fileHandle retain];
         delegate = [_delegate retain];
         address = [_address retain];
@@ -101,6 +101,12 @@
 
 - (void) _close
 {
+    @try {
+        [fileHandle closeFile];
+    } @finally {
+        [fileHandle release];
+        fileHandle = nil;
+    }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -142,9 +148,13 @@
     CFHTTPMessageRef msg = CFHTTPMessageCreateResponse(kCFAllocatorDefault, code, NULL, kCFHTTPVersion1_1);
     
     for (NSString* key in headers) {
+        if (![key isKindOfClass:[NSString class]]) {
+            key = [key description];
+        }
         id value = [headers objectForKey:key];
-        if( ![value isKindOfClass:[NSString class]] ) value = [value description];
-        if( ![key isKindOfClass:[NSString class]] ) key = [key description];
+        if (![value isKindOfClass:[NSString class]]) {
+            value = [value description];
+        }
         CFHTTPMessageSetHeaderFieldValue(msg, (CFStringRef)key, (CFStringRef)value);
     }
     
@@ -160,10 +170,8 @@
     }
     @catch (NSException* exception) {
         NSLog(@"Error while sending response: %@", [exception  reason]);
-    } @finally {
-        NSLog(@"Closing file handle with status code %d", code);
-        [fileHandle closeFile];
     }
+    [self _close];
     
     CFRelease(msgData);
     CFRelease(msg);

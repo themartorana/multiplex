@@ -32,6 +32,11 @@
     // Set up the appropriate things for the web view
     [descriptionWebView setEditingDelegate:self];
     [descriptionWebView setEditable:YES];
+    [descriptionWebView setDrawsBackground:NO];
+    
+    WebPreferences* prefs = [descriptionWebView preferences];
+    [prefs setUserStyleSheetEnabled:YES];
+    [prefs setUserStyleSheetLocation:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"default" ofType:@"css"]]];
     
     [discsTabView bind:@"selectedMovie" toObject:self withKeyPath:@"selectedMovie" options:nil];
 }

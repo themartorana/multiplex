@@ -51,11 +51,7 @@
     layersByID = [[NSMutableDictionary alloc] init];
     
     // Set up our mouse tracking area
-    mouseTrackingArea = [[NSTrackingArea alloc] initWithRect:NSRectFromCGRect(rootLayer.bounds) 
-                                                     options:(NSTrackingMouseMoved|NSTrackingActiveWhenFirstResponder|NSTrackingInVisibleRect|NSTrackingMouseEnteredAndExited) 
-                                                       owner:self 
-                                                    userInfo:nil];
-    [self addTrackingArea:mouseTrackingArea];
+    [self resumeTracking];
     
     highlightLayer = [[CALayer layer] retain];
     highlightLayer.borderColor = CGColorCreateGenericRGB(231.0/255.0, 111.0/255.0, 52.0/255.0, 1.0);
@@ -174,6 +170,24 @@
 - (void) mouseExited:(NSEvent*)theEvent
 {
     self.hoveredMovie = nil;
+}
+
+- (void) pauseTracking
+{
+    if (mouseTrackingArea) {
+        [self removeTrackingArea:mouseTrackingArea];
+        [mouseTrackingArea release];
+        mouseTrackingArea = nil;
+    }
+}
+
+- (void) resumeTracking
+{
+    mouseTrackingArea = [[NSTrackingArea alloc] initWithRect:NSRectFromCGRect([self layer].bounds) 
+                                                     options:(NSTrackingMouseMoved|NSTrackingActiveAlways|NSTrackingInVisibleRect|NSTrackingMouseEnteredAndExited) 
+                                                       owner:self 
+                                                    userInfo:nil];
+    [self addTrackingArea:mouseTrackingArea];    
 }
 
 @end

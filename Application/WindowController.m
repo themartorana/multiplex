@@ -12,6 +12,7 @@
 - (void) awakeFromNib
 {
     // TODO: Move this somewhere appropriate!!
+    [infoPaneHostingView setHidden:YES];
     [infoPaneHostingView setFrame:[[[mainView window] contentView] frame]];
     [[[mainView window] contentView] addSubview:infoPaneHostingView];
     
@@ -69,11 +70,46 @@
 
 - (void) openInfoView:(NSNotification*)notification
 {
+    [mainView pauseTracking];
+    
+    /*
+    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                         infoPaneHostingView, NSViewAnimationTargetKey,
+                         NSViewAnimationFadeInEffect, NSViewAnimationEffectKey,
+                         nil];
+    
+    NSViewAnimation* anim = [[NSViewAnimation alloc] initWithViewAnimations:[NSArray arrayWithObject:dict]];
+    [anim setDuration:1.0];
+    [anim setAnimationCurve:NSAnimationEaseIn];
+    [anim startAnimation];
+    [anim release];
+    */
+     
+    CIFilter* blurFilter = [CIFilter filterWithName:@"CIGausianBlur"];
+    [blurFilter setDefaults];
+    [blurFilter setValue:[NSNumber numberWithInt:5.0] forKey:@"inputRadius"];
+    [infoPaneHostingView setBackgroundFilters:[NSArray arrayWithObject:blurFilter]];
+    
     [infoPaneHostingView setHidden:NO];
 }
 
 - (void) closeInfoView:(NSNotification*)notification
 {
+    [mainView resumeTracking];
+    
+    /*
+    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                          infoPaneHostingView, NSViewAnimationTargetKey,
+                          NSViewAnimationFadeOutEffect, NSViewAnimationEffectKey,
+                          nil];
+    
+    NSViewAnimation* anim = [[NSViewAnimation alloc] initWithViewAnimations:[NSArray arrayWithObject:dict]];
+    [anim setDuration:1.0];
+    [anim setAnimationCurve:NSAnimationEaseIn];
+    [anim startAnimation];
+    [anim release];*/
+    
+    [infoPaneHostingView setBackgroundFilters:nil];
     [infoPaneHostingView setHidden:YES];
 }
 

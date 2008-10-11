@@ -33,6 +33,7 @@
                                nil];
     [[self layer] addSublayer:borderLayer];
     
+    /*
     playButtonLayer = [PlayButtonLayer layer];
     playButtonLayer.anchorPoint = CGPointZero;
     playButtonLayer.zPosition = 1;
@@ -43,6 +44,7 @@
                                    [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0.0 offset:200.0],
                                    nil];
     [[self layer] addSublayer:playButtonLayer];
+    */
     
     closeButtonLayer = [CloseButtonLayer layer];
     closeButtonLayer.anchorPoint = CGPointZero;
@@ -54,7 +56,12 @@
                                     [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0.0 offset:30.0],
                                     nil];
     [[self layer] addSublayer:closeButtonLayer];
-    
+   
+}
+
+- (BOOL) wantsDefaultClipping
+{
+    return NO;
 }
 
 - (void) dealloc
@@ -62,30 +69,26 @@
     [super dealloc];
 }
 
-- (void) updateTrackingAreas
-{
-    NSLog(NSStringFromRect(NSRectFromCGRect([playButtonLayer frame])));
-    
-    playButtonTrackingArea = [[NSTrackingArea alloc] initWithRect:NSRectFromCGRect([playButtonLayer frame]) 
-                                                          options:(NSTrackingActiveAlways|NSTrackingMouseMoved|NSTrackingInVisibleRect) 
-                                                            owner:playButtonLayer 
-                                                         userInfo:nil];
-    
-    [self addTrackingArea:playButtonTrackingArea];
-}
-
 - (void) mouseDown:(NSEvent*)theEvent
 {
-    closeButtonLayer.isMouseDown = YES;
-    playButtonLayer.isMouseDown = YES;
+    CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
+    CALayer* layer = [closeButtonLayer hitTest:p];
+    
+    if (layer && layer == closeButtonLayer) {
+        closeButtonLayer.isMouseDown = YES;        
+    }
 }
 
 - (void) mouseUp:(NSEvent*)theEvent
 {
     closeButtonLayer.isMouseDown = NO;
-    playButtonLayer.isMouseDown = NO;
     
     CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
+    CALayer* layer = [closeButtonLayer hitTest:p];
+    
+    if (layer && layer == closeButtonLayer) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexCloseMovieDialog" object:nil];        
+    }
 }
 
 @end

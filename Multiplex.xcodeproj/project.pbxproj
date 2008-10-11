@@ -50,9 +50,12 @@
 		558D1EB60E9E65A8000F67FA /* search128x128.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 558D1EB00E9E65A8000F67FA /* search128x128.pdf */; };
 		55912E230EA006B700446666 /* GreyPlayButtonLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 55912E220EA006B700446666 /* GreyPlayButtonLayer.m */; };
 		55912E250EA0083C00446666 /* play-button-inactive.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55912E240EA0083C00446666 /* play-button-inactive.pdf */; };
+		559130570EA03F9600446666 /* BigPlayButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 559130550EA03F9600446666 /* BigPlayButtonView.m */; };
 		5598E6040E91C5C6005FCC91 /* BasicInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5598E6030E91C5C6005FCC91 /* BasicInfoView.m */; };
 		5598E60C0E91D294005FCC91 /* PlayButtonLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5598E60B0E91D294005FCC91 /* PlayButtonLayer.m */; };
 		55A8E81D0E9BE18200DC9F35 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55A8E81C0E9BE18200DC9F35 /* WebKit.framework */; };
+		55B81A490EA049D500775EAE /* default.css in Resources */ = {isa = PBXBuildFile; fileRef = 55B81A480EA049D500775EAE /* default.css */; };
+		55B81B240EA05EBD00775EAE /* NSImage+Mothership.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B81B230EA05EBD00775EAE /* NSImage+Mothership.m */; };
 		55D390750E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D390740E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m */; };
 		55D390770E82DE72007413C5 /* Progress.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55D390760E82DE72007413C5 /* Progress.pdf */; };
 		55D957A40E94202500E35FF4 /* InfoButtonLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D957A30E94202500E35FF4 /* InfoButtonLayer.m */; };
@@ -306,11 +309,16 @@
 		55912E210EA006B700446666 /* GreyPlayButtonLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GreyPlayButtonLayer.h; sourceTree = "<group>"; };
 		55912E220EA006B700446666 /* GreyPlayButtonLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GreyPlayButtonLayer.m; sourceTree = "<group>"; };
 		55912E240EA0083C00446666 /* play-button-inactive.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "play-button-inactive.pdf"; sourceTree = "<group>"; };
+		559130550EA03F9600446666 /* BigPlayButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BigPlayButtonView.m; sourceTree = "<group>"; };
+		559130560EA03F9600446666 /* BigPlayButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigPlayButtonView.h; sourceTree = "<group>"; };
 		5598E6020E91C5C6005FCC91 /* BasicInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicInfoView.h; sourceTree = "<group>"; };
 		5598E6030E91C5C6005FCC91 /* BasicInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicInfoView.m; sourceTree = "<group>"; };
 		5598E60A0E91D294005FCC91 /* PlayButtonLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayButtonLayer.h; sourceTree = "<group>"; };
 		5598E60B0E91D294005FCC91 /* PlayButtonLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayButtonLayer.m; sourceTree = "<group>"; };
 		55A8E81C0E9BE18200DC9F35 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
+		55B81A480EA049D500775EAE /* default.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = default.css; sourceTree = "<group>"; };
+		55B81B220EA05EBD00775EAE /* NSImage+Mothership.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+Mothership.h"; sourceTree = "<group>"; };
+		55B81B230EA05EBD00775EAE /* NSImage+Mothership.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+Mothership.m"; sourceTree = "<group>"; };
 		55D390730E82D692007413C5 /* IndeterminateProgressIndicatorLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndeterminateProgressIndicatorLayer.h; sourceTree = "<group>"; };
 		55D390740E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndeterminateProgressIndicatorLayer.m; sourceTree = "<group>"; };
 		55D390760E82DE72007413C5 /* Progress.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Progress.pdf; sourceTree = "<group>"; };
@@ -507,6 +515,7 @@
 				8D15AC360486D014006FF6A4 /* Info.plist */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				557B69450E4CCD3F0009919E /* MainMenu.xib */,
+				55B81A480EA049D500775EAE /* default.css */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -579,6 +588,8 @@
 				558D1BB50E9D4F01000F67FA /* CALayer+Mothership.m */,
 				558D1BEE0E9D52ED000F67FA /* NSColor+Mothership.h */,
 				558D1BEF0E9D52ED000F67FA /* NSColor+Mothership.m */,
+				55B81B220EA05EBD00775EAE /* NSImage+Mothership.h */,
+				55B81B230EA05EBD00775EAE /* NSImage+Mothership.m */,
 			);
 			path = Unsorted;
 			sourceTree = "<group>";
@@ -639,6 +650,8 @@
 		F967AFF30E7E13D400C12B92 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				559130550EA03F9600446666 /* BigPlayButtonView.m */,
+				559130560EA03F9600446666 /* BigPlayButtonView.h */,
 				F967AFF40E7E13ED00C12B92 /* MainView.h */,
 				F967AFF50E7E13ED00C12B92 /* MainView.m */,
 				5598E6020E91C5C6005FCC91 /* BasicInfoView.h */,
@@ -949,6 +962,7 @@
 				558D1EB50E9E65A8000F67FA /* search-click128x128.pdf in Resources */,
 				558D1EB60E9E65A8000F67FA /* search128x128.pdf in Resources */,
 				55912E250EA0083C00446666 /* play-button-inactive.pdf in Resources */,
+				55B81A490EA049D500775EAE /* default.css in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1044,6 +1058,8 @@
 				558D1BF00E9D52ED000F67FA /* NSColor+Mothership.m in Sources */,
 				558D1C3E0E9D5562000F67FA /* DiscPlayLayer.m in Sources */,
 				55912E230EA006B700446666 /* GreyPlayButtonLayer.m in Sources */,
+				559130570EA03F9600446666 /* BigPlayButtonView.m in Sources */,
+				55B81B240EA05EBD00775EAE /* NSImage+Mothership.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

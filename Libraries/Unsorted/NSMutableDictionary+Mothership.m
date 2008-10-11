@@ -1,10 +1,4 @@
-//
-//  NSMutableDictionary+Mothership.m
-//  Multiplex
-//
-//  Created by David Martorana on 10/11/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
-//
+// TODO: Add removal of the box images!
 
 #import "NSMutableDictionary+Mothership.h"
 

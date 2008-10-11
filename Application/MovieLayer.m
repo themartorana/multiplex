@@ -108,13 +108,16 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
         
         if (fullBreak) {
             break;
-        }        
+        }
     }
 }
 
 - (void) drawInContext:(CGContextRef)c
 {
     drawGlossGradient(c, [NSColor colorWithDeviceRed:0.05f green:0.05f blue:0.05f alpha:1.0], NSRectFromCGRect(self.bounds));
+    
+    // TODO: Temporary fix, seems to get box images drawing more consistently
+    [self drawLayer:boxImageLayer inContext:c];
 }
 
 - (void) drawLayer:(CALayer*)layer inContext:(CGContextRef)c

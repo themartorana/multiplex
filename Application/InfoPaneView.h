@@ -11,11 +11,17 @@
 
 @class PlayButtonLayer;
 @class InfoButtonLayer;
+@class CloseButtonLayer;
+@class GreyButtonLayer;
 
 @interface InfoPaneView : NSView {
     PlayButtonLayer* playButtonLayer;
     InfoButtonLayer* infoButtonLayer;
-    //CloseButtonLayer* closeButtonLayer;
+    CloseButtonLayer* closeButtonLayer;
+    GreyButtonLayer* greyPlayButtonLayer;
+    
+    NSTrackingArea* mouseTrackingArea;
+    NSTrackingArea* playButtonTrackingArea;
 }
 
 @end

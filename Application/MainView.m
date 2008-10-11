@@ -52,7 +52,7 @@
     
     // Set up our mouse tracking area
     mouseTrackingArea = [[NSTrackingArea alloc] initWithRect:NSRectFromCGRect(rootLayer.bounds) 
-                                                     options:(NSTrackingMouseMoved|NSTrackingActiveAlways|NSTrackingInVisibleRect|NSTrackingMouseEnteredAndExited) 
+                                                     options:(NSTrackingMouseMoved|NSTrackingActiveWhenFirstResponder|NSTrackingInVisibleRect|NSTrackingMouseEnteredAndExited) 
                                                        owner:self 
                                                     userInfo:nil];
     [self addTrackingArea:mouseTrackingArea];

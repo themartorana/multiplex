@@ -8,6 +8,7 @@
 
 #import "InfoPaneView.h"
 #import "PlayButtonLayer.h"
+#import "CloseButtonLayer.h"
 
 
 @implementation InfoPaneView
@@ -32,7 +33,7 @@
                                nil];
     [[self layer] addSublayer:borderLayer];
     
-    playButtonLayer = [[PlayButtonLayer layer] retain];
+    playButtonLayer = [PlayButtonLayer layer];
     playButtonLayer.anchorPoint = CGPointZero;
     playButtonLayer.zPosition = 1;
     playButtonLayer.constraints = [NSArray arrayWithObjects:
@@ -43,7 +44,48 @@
                                    nil];
     [[self layer] addSublayer:playButtonLayer];
     
+    closeButtonLayer = [CloseButtonLayer layer];
+    closeButtonLayer.anchorPoint = CGPointZero;
+    closeButtonLayer.zPosition = 1;
+    closeButtonLayer.constraints = [NSArray arrayWithObjects:
+                                    [CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX scale:1.0 offset:-10.0],
+                                    [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY scale:1.0 offset:-10.0],
+                                    [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.0 offset:30.0],
+                                    [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0.0 offset:30.0],
+                                    nil];
+    [[self layer] addSublayer:closeButtonLayer];
     
+}
+
+- (void) dealloc
+{
+    [super dealloc];
+}
+
+- (void) updateTrackingAreas
+{
+    NSLog(NSStringFromRect(NSRectFromCGRect([playButtonLayer frame])));
+    
+    playButtonTrackingArea = [[NSTrackingArea alloc] initWithRect:NSRectFromCGRect([playButtonLayer frame]) 
+                                                          options:(NSTrackingActiveAlways|NSTrackingMouseMoved|NSTrackingInVisibleRect) 
+                                                            owner:playButtonLayer 
+                                                         userInfo:nil];
+    
+    [self addTrackingArea:playButtonTrackingArea];
+}
+
+- (void) mouseDown:(NSEvent*)theEvent
+{
+    closeButtonLayer.isMouseDown = YES;
+    playButtonLayer.isMouseDown = YES;
+}
+
+- (void) mouseUp:(NSEvent*)theEvent
+{
+    closeButtonLayer.isMouseDown = NO;
+    playButtonLayer.isMouseDown = NO;
+    
+    CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
 }
 
 @end

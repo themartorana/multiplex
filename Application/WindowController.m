@@ -11,6 +11,10 @@
 
 - (void) awakeFromNib
 {
+    // TODO: Move this somewhere appropriate!!
+    [infoPaneHostingView setFrame:[[[mainView window] contentView] frame]];
+    [[[mainView window] contentView] addSubview:infoPaneHostingView];
+    
     NSView* contentView = self.window.contentView;
     contentView.wantsLayer = YES;
     
@@ -26,11 +30,13 @@
     [infoPaneFormController bind:@"selectedMovies" toObject:movies withKeyPath:@"selectedObjects" options:nil];
     
     // Listen for play requests
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playMovieRequest:) name:@"MultiplexPlayDisc" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playDiscRequest:) name:@"MultiplexPlayDisc" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openInfoView:) name:@"MultiplexShowMovieDialog" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeInfoView:) name:@"MultiplexCloseMovieDialog" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playSelectedMovie:) name:@"MultiplexPlayButtonClicked" object:nil];
 }
 
-- (void) playMovieRequest:(NSNotification*)notification
+- (void) playDiscRequest:(NSNotification*)notification
 {
     if ([notification object]) {
         Disc* d = (Disc*)[notification object];
@@ -47,15 +53,28 @@
     }
 }
 
+- (void) playSelectedMovie:(NSNotification*)notification
+{
+    Movie* movie = (Movie*)[movies selection];
+    
+    if ([movie.allDiscs count] == 1) {
+        Disc* d = (Disc*)[[movie.allDiscs allObjects] objectAtIndex:0];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayDisc" object:d];
+    }
+    else if ([movie.allDiscs count] > 1) {
+        // We want to show the dialog
+        [infoPaneHostingView setHidden:NO];    
+    }
+}
+
 - (void) openInfoView:(NSNotification*)notification
 {
-    [infoPaneHostingView setFrame:[[[mainView window] contentView] frame]];
-    [[[mainView window] contentView] addSubview:infoPaneHostingView];
+    [infoPaneHostingView setHidden:NO];
 }
 
 - (void) closeInfoView:(NSNotification*)notification
 {
-    
+    [infoPaneHostingView setHidden:YES];
 }
 
 @end

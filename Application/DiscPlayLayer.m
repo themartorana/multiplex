@@ -1,5 +1,6 @@
 #import "DiscPlayLayer.h"
 #import "PlayButtonLayer.h"
+#import "GreyPlayButtonLayer.h"
 #import "Disc.h"
 #import "Movie.h"
 #import "Media.h"
@@ -14,7 +15,7 @@
 {
     if (self = [super init]) {
         [self setUpPlayLayer];
-        self.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.25);
+        self.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.5);
         self.borderColor = CGColorGetConstantColor(kCGColorWhite);
         self.cornerRadius = 10.0;
     }
@@ -36,6 +37,15 @@
                                        76.0,
                                        76.0);
     [self addSublayer:playButtonLayer];
+ 
+    greyPlayButtonLayer = [[GreyPlayButtonLayer layer] retain];
+    greyPlayButtonLayer.anchorPoint = CGPointZero;
+    greyPlayButtonLayer.frame = CGRectMake(370.0 - 76.0 - universalPadding, 
+                                       (109.0/2.0) - (76.0/2.0), 
+                                       76.0,
+                                       76.0);
+    [self addSublayer:greyPlayButtonLayer];
+    
     
     discNumberTitle = [[CATextLayer layer] retain];
     discNumberTitle.font = [NSFont boldSystemFontOfSize:28.0];
@@ -90,18 +100,20 @@
     hovered = isHovered;
     
     if (isHovered) {
-        self.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.5);
+        self.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 1.0);
         self.borderWidth = 2.0;
         
         discNumberTitle.foregroundColor = CGColorCreateGenericRGB(231.0/255.0, 111.0/255.0, 52.0/255.0, 1.0);
         descriptionLayer.foregroundColor = CGColorGetConstantColor(kCGColorWhite);
+        greyPlayButtonLayer.hidden = YES;
     }
     else {
-        self.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.25);
+        self.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.5);
         self.borderWidth = 0.0;
 
         discNumberTitle.foregroundColor = CGColorCreateGenericRGB(0.6, 0.6, 0.6, 1.0);
         descriptionLayer.foregroundColor = CGColorCreateGenericRGB(0.6, 0.6, 0.6, 1.0);
+        greyPlayButtonLayer.hidden = NO;
     }
 }
 

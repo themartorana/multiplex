@@ -2,11 +2,13 @@
 #import <QuartzCore/QuartzCore.h>
 
 @class PlayButtonLayer;
+@class GreyPlayButtonLayer;
 @class Disc;
 
 @interface DiscPlayLayer : CALayer {
 
     PlayButtonLayer* playButtonLayer;
+    GreyPlayButtonLayer* greyPlayButtonLayer;
     CATextLayer* discNumberTitle;
     CATextLayer* descriptionLayer;
     

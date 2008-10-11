@@ -17,10 +17,10 @@
 {
     if (self = [super init]) {
         // Load our play button image
-        NSString* path = [[NSBundle mainBundle] pathForResource:@"button-play" ofType:@"pdf"];
+        NSString* path = [[NSBundle mainBundle] pathForResource:@"close128x128" ofType:@"pdf"];
         closeButtonImage = [self getImageFromPDF:path];
         
-        path = [[NSBundle mainBundle] pathForResource:@"button-play-down" ofType:@"pdf"];
+        path = [[NSBundle mainBundle] pathForResource:@"close-click128x128" ofType:@"pdf"];
         closeButtonImageDown = [self getImageFromPDF:path];
     }
     

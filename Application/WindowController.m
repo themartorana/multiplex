@@ -56,7 +56,7 @@
 
 - (void) playSelectedMovie:(NSNotification*)notification
 {
-    Movie* movie = (Movie*)[movies selection];
+    Movie* movie = (Movie*)[[movies selectedObjects] objectAtIndex:0];
     
     if ([movie.allDiscs count] == 1) {
         Disc* d = (Disc*)[[movie.allDiscs allObjects] objectAtIndex:0];
@@ -86,10 +86,10 @@
     */
     
     /*
-    CIFilter* blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
+    CIFilter* blurFilter = [CIFilter filterWithName:@"CIBoxBlur"];
     [blurFilter setDefaults];
-    [blurFilter setValue:[NSNumber numberWithInt:5.0] forKey:@"inputRadius"];
-    [infoPaneHostingView setBackgroundFilters:[NSArray arrayWithObject:blurFilter]];
+    [blurFilter setValue:[NSNumber numberWithInt:4.0] forKey:@"inputRadius"];
+    [[infoPaneHostingView layer] setBackgroundFilters:[NSArray arrayWithObject:blurFilter]];
     */
      
     [infoPaneHostingView setHidden:NO];
@@ -99,11 +99,12 @@
 {
     [mainView resumeTracking];
     
+    /*
     NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:
                           infoPaneHostingView, NSViewAnimationTargetKey,
                           NSViewAnimationFadeOutEffect, NSViewAnimationEffectKey,
                           nil];
-    /*
+    
     NSViewAnimation* anim = [[NSViewAnimation alloc] initWithViewAnimations:[NSArray arrayWithObject:dict]];
     [anim setDuration:1.0];
     [anim setAnimationCurve:NSAnimationEaseIn];
@@ -111,8 +112,8 @@
     [anim release];
     */
     
-    [infoPaneHostingView setBackgroundFilters:nil];
     [infoPaneHostingView setHidden:YES];
+    [[infoPaneHostingView layer] setBackgroundFilters:nil];
 }
 
 @end

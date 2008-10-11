@@ -1,14 +1,8 @@
-//
-//  InfoPaneFormController.m
-//  Multiplex
-//
-//  Created by David Martorana on 10/6/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
-//
 
 #import "InfoPaneFormController.h"
 #import "Movie.h"
 #import "InfoPaneDiscsView.h"
+#import "BigPlayButtonView.h"
 #import <WebKit/WebKit.h>
 
 
@@ -71,6 +65,16 @@
 {
     NSString* content = [(id)[[[[[descriptionWebView mainFrame] DOMDocument] documentElement] getElementsByTagName:@"body"] item:0] innerHTML];
     selectedMovie.review = content;
+}
+
+- (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem
+{
+    if (tabViewItem == discsTabViewItem) {
+        [bigPlayButtonView setHidden:YES];
+    }
+    else {
+        [bigPlayButtonView setHidden:NO];
+    }
 }
 
 @end

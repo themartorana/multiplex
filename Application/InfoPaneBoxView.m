@@ -7,20 +7,35 @@
 //
 
 #import "InfoPaneBoxView.h"
+#import "InfoPaneFormController.h"
+#import "Movie.h"
+#import "NSMutableDictionary+Mothership.h"
+#import <QuartzCore/QuartzCore.h>
 
 
 @implementation InfoPaneBoxView
 
-- (id)initWithFrame:(NSRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code here.
-    }
-    return self;
+@synthesize selectedMovie;
+
+- (void) awakeFromNib
+{
+    [self setWantsLayer:YES];
+    [[self layer] setDelegate:self];
+    
+    [self bind:@"selectedMovie" toObject:controller withKeyPath:@"selectedMovie" options:nil];
 }
 
-- (void)drawRect:(NSRect)rect {
-    // Drawing code here.
+- (void) setSelectedMovie:(Movie*)movie
+{
+    selectedMovie = movie;
+    [[self layer] setNeedsDisplay];
+}
+
+- (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)c
+{
+    CGImageRef img = [NSMutableDictionary boxImageForKey:selectedMovie.gtin];
+    CGContextDrawImage(c, layer.bounds, img);
+    CGImageRelease(img);
 }
 
 @end

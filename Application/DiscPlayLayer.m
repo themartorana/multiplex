@@ -108,7 +108,7 @@
         greyPlayButtonLayer.hidden = YES;
     }
     else {
-        self.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.5);
+        self.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.8);
         self.borderWidth = 0.0;
 
         discNumberTitle.foregroundColor = CGColorCreateGenericRGB(0.6, 0.6, 0.6, 1.0);

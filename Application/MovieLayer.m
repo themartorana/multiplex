@@ -4,6 +4,7 @@
 #import "Media.h"
 #import "IndeterminateProgressIndicatorLayer.h"
 #import "Activity.h"
+#import "NSMutableDictionary+Mothership.h"
 
 @interface MovieLayer (Private)
 - (void) _terminateActivity;
@@ -73,6 +74,7 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
 - (void) setBoxImage:(CGImageRef)_boxImage
 {
     boxImage = _boxImage;
+    [NSMutableDictionary addBoxImage:boxImage forKey:movie.gtin];
     [self setNeedsDisplay];
 }
 

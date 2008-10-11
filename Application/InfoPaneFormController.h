@@ -11,6 +11,7 @@
 
 @class Movie;
 @class InfoPaneDiscsView;
+@class BigPlayButtonView;
 
 @interface InfoPaneFormController : NSObject {
     NSArray* selectedMovies;
@@ -20,6 +21,11 @@
     
     IBOutlet WebView* descriptionWebView;
     IBOutlet InfoPaneDiscsView* discsTabView;
+    
+    IBOutlet BigPlayButtonView* bigPlayButtonView;
+    
+    IBOutlet NSTabView* infoTabView;
+    IBOutlet NSTabViewItem* discsTabViewItem;
 }
 
 @property (retain) NSArray* selectedMovies;

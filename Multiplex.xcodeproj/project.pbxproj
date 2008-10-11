@@ -27,6 +27,7 @@
 		550D082C0E9AE14E008F0275 /* InfoPaneFormController.m in Sources */ = {isa = PBXBuildFile; fileRef = 550D082B0E9AE14E008F0275 /* InfoPaneFormController.m */; };
 		550D08700E9AFDF4008F0275 /* NSDescriptionValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 550D086F0E9AFDF4008F0275 /* NSDescriptionValueTransformer.m */; };
 		5535D98F0E4E3F5400A45761 /* EngineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5535D98E0E4E3F5400A45761 /* EngineController.m */; };
+		555E091E0EA0749900916380 /* NSMutableDictionary+Mothership.m in Sources */ = {isa = PBXBuildFile; fileRef = 555E091D0EA0749900916380 /* NSMutableDictionary+Mothership.m */; };
 		556BD78C0E9444ED00EC698A /* WorkingStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 556BD78B0E9444ED00EC698A /* WorkingStatusView.m */; };
 		556BD7900E94470600EC698A /* Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 556BD78F0E94470600EC698A /* Activity.m */; };
 		557AC76D0E5B1E1A00271113 /* MessageProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 557AC76C0E5B1E1A00271113 /* MessageProtocol.m */; };
@@ -273,6 +274,8 @@
 		550D086F0E9AFDF4008F0275 /* NSDescriptionValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDescriptionValueTransformer.m; sourceTree = "<group>"; };
 		5535D98D0E4E3F5400A45761 /* EngineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngineController.h; sourceTree = "<group>"; };
 		5535D98E0E4E3F5400A45761 /* EngineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngineController.m; sourceTree = "<group>"; };
+		555E091C0EA0749900916380 /* NSMutableDictionary+Mothership.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+Mothership.h"; sourceTree = "<group>"; };
+		555E091D0EA0749900916380 /* NSMutableDictionary+Mothership.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+Mothership.m"; sourceTree = "<group>"; };
 		556BD78A0E9444ED00EC698A /* WorkingStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WorkingStatusView.h; sourceTree = "<group>"; };
 		556BD78B0E9444ED00EC698A /* WorkingStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WorkingStatusView.m; sourceTree = "<group>"; };
 		556BD78E0E94470600EC698A /* Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Activity.h; sourceTree = "<group>"; };
@@ -590,6 +593,8 @@
 				558D1BEF0E9D52ED000F67FA /* NSColor+Mothership.m */,
 				55B81B220EA05EBD00775EAE /* NSImage+Mothership.h */,
 				55B81B230EA05EBD00775EAE /* NSImage+Mothership.m */,
+				555E091C0EA0749900916380 /* NSMutableDictionary+Mothership.h */,
+				555E091D0EA0749900916380 /* NSMutableDictionary+Mothership.m */,
 			);
 			path = Unsorted;
 			sourceTree = "<group>";
@@ -1060,6 +1065,7 @@
 				55912E230EA006B700446666 /* GreyPlayButtonLayer.m in Sources */,
 				559130570EA03F9600446666 /* BigPlayButtonView.m in Sources */,
 				55B81B240EA05EBD00775EAE /* NSImage+Mothership.m in Sources */,
+				555E091E0EA0749900916380 /* NSMutableDictionary+Mothership.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

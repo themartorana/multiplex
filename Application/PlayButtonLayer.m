@@ -32,6 +32,8 @@
 
 - (void) drawInContext:(CGContextRef)c
 {
+    //NSLog(@"Play button:\t%@", 
+    
     if (!isMouseDown)
         CGContextDrawImage(c, self.bounds, playButtonImage);
     else

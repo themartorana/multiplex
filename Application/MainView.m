@@ -1,12 +1,8 @@
 #import "MainView.h"
 #import "Movie.h"
 #import "MovieLayer.h"
-#import "Activity.h"
-#import "ImageQuery.h"
 
 #import <QuartzCore/QuartzCore.h>
-
-NSString* const kLoadingCoverArtActivityName = @"LoadingCoverArtActivity";
 
 @interface MainView (LayerStuff)
 - (MovieLayer*) layerForMovie:(Movie*)movie;

@@ -1,5 +1,7 @@
 #import <Cocoa/Cocoa.h>
 
+extern NSString* const kLoadingCoverArtActivityName;
+
 @class Engine;
 
 @interface EngineController : NSObject {

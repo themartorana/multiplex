@@ -13,6 +13,8 @@
 #import <netinet/ip.h>
 #import <netinet/ip6.h>
 
+NSString* const kLoadingCoverArtActivityName = @"LoadingCoverArtActivity";
+
 @interface EngineController (Private)
 - (void) _deleteAllMediaForEngine:(Engine*)engine;
 - (void) _deleteAllMoviesWithNoMedia;
@@ -23,6 +25,12 @@
 - (Engine*) _findEngineByNetServiceName:(NSString*)netServiceName;
 - (void) _deleteMovieIfNoMediaRemainForAnyDisc:(Movie*)movie;
 - (NSString*) _getMovieRating:(NSDictionary*)movieInfo;
+@end
+
+@interface EngineController (ImageQueryDelegate)
+- (void) _setFrontCoverForMovieUsingInfo:(NSDictionary*)info;
+- (void) imageQuery:(ImageQuery*)query didFailWithError:(NSError*)error userInfo:(id)userInfo;
+- (void) imageQuery:(ImageQuery*)query didReceiveImageSource:(CGImageSourceRef)imageSource userInfo:(id)userInfo;
 @end
 
 @interface EngineController (CoreData)
@@ -360,21 +368,7 @@
 
 
 #pragma mark -
-@implementation EngineController (CoreData)
-
-- (void) _coreDataDidSaveNotification:(NSNotification*)notification
-{
-    for (NSManagedObject* managedObject in [[notification userInfo] objectForKey:NSUpdatedObjectsKey]) {
-        NSEntityDescription* const entityDescription = [managedObject entity];
-        if (entityDescription == movieDesc) {
-            NSLog(@"%@", managedObject);
-            NSLog(@"%@", [[managedObject changedValues] allKeys]);
-        } else if (entityDescription == discDesc) {
-            NSLog(@"%@", managedObject);
-            NSLog(@"%@", [[managedObject changedValues] allKeys]);
-        }
-    }
-}
+@implementation EngineController (ImageQueryDelegate)
 
 - (void) _setFrontCoverForMovieUsingInfo:(NSDictionary*)info
 {
@@ -412,6 +406,26 @@
         }
     } @finally {
         [activity terminate];
+    }
+}
+
+@end
+
+
+#pragma mark -
+@implementation EngineController (CoreData)
+
+- (void) _coreDataDidSaveNotification:(NSNotification*)notification
+{
+    for (NSManagedObject* managedObject in [[notification userInfo] objectForKey:NSUpdatedObjectsKey]) {
+        NSEntityDescription* const entityDescription = [managedObject entity];
+        if (entityDescription == movieDesc) {
+            NSLog(@"%@", managedObject);
+            NSLog(@"%@", [[managedObject changedValues] allKeys]);
+        } else if (entityDescription == discDesc) {
+            NSLog(@"%@", managedObject);
+            NSLog(@"%@", [[managedObject changedValues] allKeys]);
+        }
     }
 }
 
@@ -596,7 +610,7 @@
                 
                 // TODO: This isn't quite right...
                 if (!movie.frontCover && disc.frontCoverURL) {
-                    [ImageQuery imageQueryWithURL:[NSURL URLWithString:disc.frontCoverURL] delegate:self userInfo:[Activity activityWithName:@""/*kLoadingCoverArtActivityName*/ userInfo:movie] startImmediately:YES];
+                    [ImageQuery imageQueryWithURL:[NSURL URLWithString:disc.frontCoverURL] delegate:self userInfo:[Activity activityWithName:kLoadingCoverArtActivityName userInfo:movie] startImmediately:YES];
                 }
             }
         }

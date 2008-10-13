@@ -1,26 +1,25 @@
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/QuartzCore.h>
 
+@class CATextLayer;
+@class CATiledLayer;
 @class Movie;
 @class IndeterminateProgressIndicatorLayer;
 @class Activity;
 
 @interface MovieLayer : CALayer {
-    Movie* movie;
-    NSMutableData* imageData;
-    
     CATextLayer* titleLayer;
-    
     CATiledLayer* boxImageLayer; 
+    /**/
+    Movie* movie;
     CGImageRef boxImage;
-    
-    BOOL isHovered;
-    
-    Activity* activity;
 }
 
-@property (retain) Movie* movie;
-@property (readwrite) BOOL isHovered;
+@property (readonly) Movie* movie;
 @property CGImageRef boxImage;
+
++ (id) layerWithMovie:(Movie*)movie;
+
+- (id) initWithMovie:(Movie*)movie;
 
 @end

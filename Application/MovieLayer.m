@@ -4,11 +4,6 @@
 #import "Media.h"
 #import "IndeterminateProgressIndicatorLayer.h"
 #import "Activity.h"
-#import "NSMutableDictionary+Mothership.h"
-
-@interface MovieLayer (Private)
-- (void) _terminateActivity;
-@end
 
 static void glossInterpolation(void *info, const float *input, float *output);
 static float perceptualGlossFractionForColor(float *inputComponents);
@@ -17,203 +12,101 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
 
 
 @implementation MovieLayer
-
 @synthesize movie;
-@synthesize isHovered;
 @synthesize boxImage;
 
-- (MovieLayer*) init
+
++ (id) layerWithMovie:(Movie*)movie
+{
+    return [[[MovieLayer alloc] initWithMovie:movie] autorelease];
+}
+
+- (MovieLayer*) initWithMovie:(Movie*)_movie
 {    
+    NSAssert(_movie, @"wtf?");
     if (self = [super init]) {
-        self.isHovered = NO;
-        
+        movie = [_movie retain];
         self.layoutManager = [CAConstraintLayoutManager layoutManager];
-        [self setNeedsDisplay];
-        
         self.borderColor = CGColorCreateGenericRGB(231.0/255.0, 111.0/255.0, 52.0/255.0, 1.0);
-        
+
+        /*  Box Image 
+         */
         boxImageLayer = [CATiledLayer layer];
         boxImageLayer.delegate = self;
         boxImageLayer.levelsOfDetail = 5;
         boxImageLayer.levelsOfDetailBias = 2;
         boxImageLayer.constraints = [NSArray arrayWithObjects:
-                                     [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
-                                     [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
-                                     [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth],
-                                     [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight],
-                                     nil
-                                     ];
+            [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
+            [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
+            [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth],
+            [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight],
+            nil
+        ];
         [self addSublayer:boxImageLayer];
-        
-        // Set up the text layer
+
+        /*  Title Layer
+         */
         titleLayer = [CATextLayer layer];
         titleLayer.alignmentMode = kCAAlignmentCenter;
+        titleLayer.string = movie.title;
         titleLayer.font = [NSFont systemFontOfSize:14.0];
         titleLayer.constraints = [NSArray arrayWithObjects:
-                                  [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
-                                  [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
-                                  [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth],
-                                  [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight],
-                                  nil
-                                  ];
+            [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
+            [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
+            [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth],
+            [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight],
+            nil
+        ];
         titleLayer.foregroundColor = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 1.0);
         titleLayer.wrapped = YES;
-        [self addSublayer:titleLayer];
+        [self addSublayer:titleLayer];                
+
+        [movie addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
+        [movie addObserver:self forKeyPath:@"frontCover" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
+        
+        [self setNeedsDisplay];
     }
     return self;
 }
 
 - (void) dealloc
 {
+    [movie removeObserver:self forKeyPath:@"title"];
+    [movie removeObserver:self forKeyPath:@"frontCover"];
+    [movie release];
     if (boxImage) {
-        CFRelease(boxImage);
+        CGImageRelease(boxImage);
     }
     [super dealloc];
-}
-
-- (void) setBoxImage:(CGImageRef)_boxImage
-{
-    boxImage = _boxImage;
-    [NSMutableDictionary addBoxImage:boxImage forKey:movie.gtin];
-    [self setNeedsDisplay];
-}
-
-
-- (void) setMovie:(Movie*)_movie 
-{
-    movie = _movie;
-    
-    titleLayer.string = movie.title;
-    
-    BOOL fullBreak = false;
-    
-    // Look for the first instance of a cover
-    NSArray* discs = [movie.allDiscs allObjects];
-
-    for (Disc* disc in discs) {
-        NSArray* discMedia = [disc.allMedia allObjects];
-
-        for (Media* media in discMedia) {
-            NSString* url = media.frontCoverURL;
-            if ([url length]) {
-                NSURL* imageURL = [NSURL URLWithString:url];
-                NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:imageURL];
-                [request setTimeoutInterval:5.0];
-                if ([NSURLConnection canHandleRequest:request]) {
-                    [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
-                    activity = [[Activity alloc] initWithActivityName:@"Loading box images" andShowInUI:YES];
-                    fullBreak = YES;
-                    break;
-                }
-            }
-        }
-        
-        if (fullBreak) {
-            break;
-        }
-    }
-}
-
-- (void) drawInContext:(CGContextRef)c
-{
-    drawGlossGradient(c, [NSColor colorWithDeviceRed:0.05f green:0.05f blue:0.05f alpha:1.0], NSRectFromCGRect(self.bounds));
-    
-    // TODO: Temporary fix, seems to get box images drawing more consistently
-    [self drawLayer:boxImageLayer inContext:c];
 }
 
 - (void) drawLayer:(CALayer*)layer inContext:(CGContextRef)c
 {
     if (layer == boxImageLayer) {
-        if (boxImage) {
-            CGContextDrawImage(c, layer.bounds, boxImage);
-            [self performSelectorOnMainThread:@selector(_hideTitle) withObject:nil waitUntilDone:NO];
+        CGContextDrawImage(c, self.bounds, boxImage);
+    }
+}
+
+- (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
+{
+    if ([keyPath isEqualToString:@"title"]) {
+        titleLayer.string = [change objectForKey:NSKeyValueChangeNewKey];
+    } else if ([keyPath isEqualToString:@"frontCover"]) {
+        id frontCover = [change objectForKey:NSKeyValueChangeNewKey];
+        if ([frontCover isKindOfClass:[NSNull class]]) {
+            frontCover = nil;
         }
+        self.boxImage = (CGImageRef)frontCover;
     }
+
+    [titleLayer setHidden:boxImage != nil];
+    [boxImageLayer setHidden:boxImage == nil];
+    [boxImageLayer setNeedsDisplay];
 }
 
-- (void) setIsHovered:(BOOL)hovered
+- (void) drawInContext:(CGContextRef)c
 {
-    [CATransaction begin];
-    
-    isHovered = hovered;
-    if (hovered) {
-        self.borderWidth = 0.0;
-    }
-    else {
-        self.borderWidth = 0.0;
-    }
-    
-    [CATransaction commit];
-}
-
-#pragma mark Private Methods
-
-- (void) _terminateActivity
-{
-    if (activity) {
-        [activity terminate];
-        [activity release];
-        activity = nil;
-    }
-}
-
-- (void) _hideTitle
-{
-    if (titleLayer) {
-        titleLayer.hidden = YES;
-        [titleLayer removeFromSuperlayer];
-        titleLayer = nil;
-    }
-}
-
-
-#pragma mark BoxImageLayer delegate
-
-- (void) boxImageLayerDidDisplayBox
-{
-    if (titleLayer && titleLayer.superlayer) {
-        [titleLayer removeFromSuperlayer];
-        titleLayer = nil;
-    }
-}
-
-
-#pragma mark NSURLConnection Delegate Methods
-
-- (void) connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-    NSAssert(!imageData, @"why isn't this nil?");
-    imageData = [[NSMutableData alloc] init];
-}
-
-- (void) connection:(NSURLConnection *)connection didFailWithError:(NSError*)error
-{
-    [self _terminateActivity];
-    [imageData release];
-    imageData = nil;
-}
-
-- (void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-    [imageData appendData:data];
-}
-
-
-- (void) connectionDidFinishLoading:(NSURLConnection *)connection
-{
-    CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)imageData, nil);
-    if (imageSource) {
-        self.boxImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil);
-        CFRelease(imageSource);
-    }
-    
-    [self _terminateActivity];
-         
-    [imageData release];
-    imageData = nil;
-    [connection release];
-    connection = nil;
+    drawGlossGradient(c, [NSColor colorWithDeviceRed:0.05f green:0.05f blue:0.05f alpha:1.0], NSRectFromCGRect(self.bounds));
 }
 
 @end

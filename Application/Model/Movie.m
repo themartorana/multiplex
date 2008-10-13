@@ -15,6 +15,7 @@
 @dynamic theatricalReleaseDate;
 @dynamic title;
 @dynamic rating;
+@dynamic frontCover;
 
 @dynamic allDiscs;
 

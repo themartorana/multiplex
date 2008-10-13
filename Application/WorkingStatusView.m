@@ -31,9 +31,9 @@
     
     activityDictionary = [[NSMutableDictionary dictionary] retain];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(activityStarted:) name:@"ActivityStarted" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(activityTerminated:) name:@"ActivityTerminated" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(activityPercentCompleteUpdated:) name:@"ActivityPercentCompleteUpdated" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(activityStarted:) name:ActivityStartedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(activityTerminated:) name:ActivityTerminatedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(activityPercentCompleteUpdated:) name:ActivityPercentCompleteUpdatedNotification object:nil];
 }
 
 - (void) dealloc
@@ -44,13 +44,12 @@
 
 - (void) activityStarted:(NSNotification*)notification
 {
-    NSString* activityString = ((Activity*)[notification object]).activityName;
+    NSString* activityString = ((Activity*)[notification object]).name;
  
     // Look in the dictionary for this activity
     NSMutableArray* activityArray = nil;
     if (activityArray = [activityDictionary objectForKey:activityString]) {
         [activityArray addObject:[notification object]];
-        NSLog(@"Activity Array Count: %d", [activityArray count]);
     }
     else {
         // There is a new activity!
@@ -65,21 +64,18 @@
 
 - (void) activityTerminated:(NSNotification*)notification
 {
-    NSString* activityString = ((Activity*)[notification object]).activityName;
+    NSString* activityString = ((Activity*)[notification object]).name;
 
     // Look in the dictionary for this activity
     NSMutableArray* activityArray = nil;
     if (activityArray = [activityDictionary objectForKey:activityString]) {
         [activityArray removeObject:[notification object]];
-        
-        NSLog(@"Activity Array Count: %d", [activityArray count]);
-        
-        if ([activityArray count] == 0) {
+        if (![activityArray count]) {
             [activityDictionary removeObjectForKey:activityString];
         }
     }
     
-    if ([activityDictionary count] == 0) {
+    if (![activityDictionary count]) {
         [self _stopSpinner];
         [self setHidden:YES];
     }
@@ -94,8 +90,7 @@
 
 - (void) _startSpinner
 {
-    if (!_spinnerLayer)
-    {
+    if (!_spinnerLayer) {
         _spinnerLayer = [[IndeterminateProgressIndicatorLayer layer] retain];
         _spinnerLayer.constraints = [NSArray arrayWithObjects:
                                      [CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX],

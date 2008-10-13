@@ -1,34 +1,30 @@
-//
-//  Activity.h
-//  Multiplex
-//
-//  Created by David Martorana on 10/1/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
-//
-
 #import <Cocoa/Cocoa.h>
 
+extern NSString* const ActivityStartedNotification;
+extern NSString* const ActivityTerminatedNotification;
+extern NSString* const ActivityPercentCompleteUpdatedNotification;
 
 @interface Activity : NSObject {
-    NSString* activityUUID;
-    NSString* activityName;
+    NSString* UUID;
+    NSString* name;
     
-    BOOL showActivity;
-    BOOL terminated;
-    
+    BOOL isComplete;
     float percentComplete;
-
     id delegate;
+    id userInfo;
 }
 
-@property (retain) NSString* activityName;
-@property (retain) NSString* activityUUID;
+@property (retain) NSString* name;
+@property (retain) NSString* UUID;
 @property (retain) id delegate;
-@property float percentComplete;
-@property BOOL showActivity;
-@property BOOL terminated;
+@property (readonly) float percentComplete;
+@property (retain) id userInfo;
+@property (readonly) BOOL isComplete;
 
-- (Activity*) initWithActivityName:(NSString*)_activityName andShowInUI:(BOOL)_show;
++ (id) activityWithName:(NSString*)activityName userInfo:(id)userInfo;
+
+- (id) initWithName:(NSString*)activityName userInfo:(id)userInfo;
+
 - (void) terminate;
 
 @end

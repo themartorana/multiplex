@@ -5,7 +5,6 @@
 @dynamic disc;
 @dynamic url;
 @dynamic engine;
-@dynamic frontCoverURL;
 @dynamic isAvailable;
 
 @end

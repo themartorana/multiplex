@@ -12,15 +12,15 @@
 @synthesize ean;
 @synthesize userInfo;
 
-+ (id) queryWithAccessKey:(NSString*)accessKey ean:(NSString*)ean
++ (id) amazonQueryWithAccessKey:(NSString*)accessKey ean:(NSString*)ean
 {
     return [[[AmazonQuery alloc] initWithAccessKey:accessKey ean:ean] autorelease];
 }
 
-+ (id) queryWithAccessKey:(NSString*)accessKey ean:(NSString*)ean delegate:(id)delegate userInfo:(void*)userInfo startImmediately:(BOOL)startImmediately
++ (id) amazonQueryWithAccessKey:(NSString*)accessKey ean:(NSString*)ean delegate:(id)delegate userInfo:(id)userInfo startImmediately:(BOOL)startImmediately
 {
     NSAssert(delegate, @"The delegate must not be nil.");
-    AmazonQuery* query = [AmazonQuery queryWithAccessKey:accessKey ean:ean];
+    AmazonQuery* query = [AmazonQuery amazonQueryWithAccessKey:accessKey ean:ean];
     query.delegate = delegate;
     query.userInfo = userInfo;
     if (startImmediately) {
@@ -48,6 +48,7 @@
     [connection release];
     [request release];
     [receivedData release];
+    [userInfo release];
     [super dealloc];
 }
 

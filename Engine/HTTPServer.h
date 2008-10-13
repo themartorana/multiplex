@@ -1,10 +1,11 @@
 #import <Cocoa/Cocoa.h>
 
 @interface HTTPConnection : NSObject {
+    BOOL replySent;
     NSFileHandle *fileHandle;
     id delegate;
     NSString *address;
-    CFHTTPMessageRef message;
+    CFHTTPMessageRef httpMessage;
     BOOL isMessageComplete;
 }
 

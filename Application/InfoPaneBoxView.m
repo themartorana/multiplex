@@ -1,15 +1,6 @@
-//
-//  InfoPaneBoxView.m
-//  Multiplex
-//
-//  Created by David Martorana on 10/8/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
-//
-
 #import "InfoPaneBoxView.h"
 #import "InfoPaneFormController.h"
 #import "Movie.h"
-#import "NSMutableDictionary+Mothership.h"
 #import <QuartzCore/QuartzCore.h>
 
 
@@ -31,11 +22,12 @@
     [[self layer] setNeedsDisplay];
 }
 
-- (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)c
+- (void) drawLayer:(CALayer *)layer inContext:(CGContextRef)c
 {
-    CGImageRef img = [NSMutableDictionary boxImageForKey:selectedMovie.gtin];
-    CGContextDrawImage(c, layer.bounds, img);
-    CGImageRelease(img);
+    CGImageRef frontCover = (CGImageRef)selectedMovie.frontCover;
+    if (frontCover) {
+        CGContextDrawImage(c, layer.bounds, frontCover);
+    }
 }
 
 @end

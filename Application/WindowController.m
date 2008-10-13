@@ -11,16 +11,14 @@
 
 - (void) awakeFromNib
 {
-    // TODO: Move this somewhere appropriate!!
-    [infoPaneHostingView setHidden:YES];
-    [infoPaneHostingView setFrame:[[[mainView window] contentView] frame]];
-    [[[mainView window] contentView] addSubview:infoPaneHostingView];
-    
     NSView* contentView = self.window.contentView;
     contentView.wantsLayer = YES;
-    
-    CALayer* background = contentView.layer;
-    background.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 1.0);
+    contentView.layer.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 1.0);
+
+    // TODO: Move this somewhere appropriate!!
+    [infoPaneHostingView setHidden:YES];
+    [infoPaneHostingView setFrame:NSInsetRect([[[mainView window] contentView] frame], -10, -10)];
+    [[[mainView window] contentView] addSubview:infoPaneHostingView positioned:NSWindowAbove relativeTo:nil];
     
     [mainView setContent:movies];
     
@@ -85,14 +83,8 @@
     [anim release];
     */
     
-    /*
-    CIFilter* blurFilter = [CIFilter filterWithName:@"CIBoxBlur"];
-    [blurFilter setDefaults];
-    [blurFilter setValue:[NSNumber numberWithInt:4.0] forKey:@"inputRadius"];
-    [[infoPaneHostingView layer] setBackgroundFilters:[NSArray arrayWithObject:blurFilter]];
-    */
-     
     [infoPaneHostingView setHidden:NO];
+    [self.window makeFirstResponder:infoPaneHostingView];
 }
 
 - (void) closeInfoView:(NSNotification*)notification
@@ -111,9 +103,8 @@
     [anim startAnimation];
     [anim release];
     */
-    
+
     [infoPaneHostingView setHidden:YES];
-    [[infoPaneHostingView layer] setBackgroundFilters:nil];
 }
 
 @end

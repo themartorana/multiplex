@@ -4,7 +4,7 @@
 #import "PhysicalMediaSource.h"
 #import "DiscIdentQuery.h"
 #import "AmazonQuery.h"
-#import "CoverArtQuery.h"
+#import "ImageQuery.h"
 #import "MessageProtocol.h"
 #import "NSDictionary+KeyPaths.h"
 #import "NSString+UUID.h"
@@ -265,8 +265,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                 }
                 [adds setObject:[NSDictionary dictionaryWithObjectsAndKeys:urls, @"urls", [self _frontCoverURLForFingerprint:fingerprint], @"frontCoverURL", nil] forKey:fingerprint];
             }
-            [protocol sendMessage:[NSDictionary dictionaryWithObjectsAndKeys:adds, @"add", nil]];
-            [protocol sendMessage:[NSDictionary dictionaryWithObjectsAndKeys:infoDictionariesByFingerprint, @"update", nil]];
+            [protocol sendMessage:[NSDictionary dictionaryWithObjectsAndKeys:adds, @"add", infoDictionariesByFingerprint, @"update", nil]];
         }
         [protocols addObject:protocol];
     } @catch (id exception) {
@@ -395,7 +394,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (void) sendMessage:(NSDictionary*)message
 {
-#if 0
+#ifdef DEBUG
     NSLog(@"%@", [NSDictionary dictionaryWithJSON:[NSString stringWithObjectAsJSON:message]]);
 #endif
     for (MessageProtocol* protocol in protocols) {
@@ -505,6 +504,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             [NSTask launchedTaskWithLaunchPath:pathToMDImport arguments:[NSArray arrayWithObjects:pathToMDImport, [media pathToFile], nil]];
         }
 
+#ifdef INCREMENTAL
         /*  Build and send the message.
          */
         if (([addsByFingerprint count] + [updatesByFingerprint count]) >= 5) {
@@ -519,6 +519,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             [addsByFingerprint removeAllObjects];
             [updatesByFingerprint removeAllObjects];
         }
+#endif
     }
 
     /*  Build and send the message.
@@ -633,6 +634,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             }
         }
 
+#ifdef INCREMENTAL
         /*  Build and send the message.
          */
         if (([addsByFingerprint count] + [updatesByFingerprint count] + [deletesByFingerprint count]) >= 5) {
@@ -651,6 +653,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             [updatesByFingerprint removeAllObjects];
             [deletesByFingerprint removeAllObjects];
         }
+#endif
     }
 
     /*  Build and send the message.
@@ -761,7 +764,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     
     NSString* gtin = [newKeyPathsAndObjects objectForKey:@"meta.discident.gtin"];
     if ([gtin characterAtIndex:0] == '0') {
-        [AmazonQuery queryWithAccessKey:kAmazonAccessKey ean:[gtin substringFromIndex:1] delegate:self userInfo:[disc retain] startImmediately:YES];
+        [AmazonQuery amazonQueryWithAccessKey:kAmazonAccessKey ean:[gtin substringFromIndex:1] delegate:self userInfo:disc startImmediately:YES];
     }
 
     [disc release];
@@ -770,13 +773,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 #pragma mark AmazonQueryDelegate
 
-- (void) amazonQuery:(AmazonQuery*)query didFailWithError:(NSError*)error userInfo:(void*)userInfo
-{
-    Disc* disc = (Disc*)userInfo;
-    [disc release];
-}
-
-- (void) amazonQuery:(AmazonQuery*)query didReceiveResponse:(NSDictionary*)response userInfo:(void*)userInfo
+- (void) amazonQuery:(AmazonQuery*)query didReceiveResponse:(NSDictionary*)response userInfo:(id)userInfo
 {
     Disc* disc = (Disc*)userInfo;
     NSMutableDictionary* newKeyPathsAndObjects = nil;
@@ -790,7 +787,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     
     NSString* coverImageURL = [newKeyPathsAndObjects objectForKey:@"meta.amazon._coverImageURL"];
     if (coverImageURL) @try {
-        [CoverArtQuery queryWithURL:[NSURL URLWithString:coverImageURL] delegate:self userInfo:[disc retain] startImmediately:YES];
+        [ImageQuery imageQueryWithURL:[NSURL URLWithString:coverImageURL] delegate:self userInfo:disc startImmediately:YES];
     } @catch (id exception) {
         /* Ignored */
     }
@@ -801,13 +798,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 #pragma mark CoverArtQueryDelegate
 
-- (void) coverArtQuery:(CoverArtQuery*)query didFailWithError:(NSError*)error userInfo:(void*)userInfo
-{
-    Disc* disc = (Disc*)userInfo;
-    [disc release];
-}
-
-- (void) coverArtQuery:(CoverArtQuery*)query didReceiveResponse:(NSImage*)response userInfo:(void*)userInfo
+- (void) imageQuery:(ImageQuery*)query didReceiveImage:(NSImage*)response userInfo:(id)userInfo
 {
     Disc* disc = (Disc*)userInfo;
 
@@ -816,8 +807,6 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     for (Media* media in disc.allMedia) {
         [media setFrontCover:[response PNGRepresentation]];
     }
-
-    [disc release];
 }
 
 @end

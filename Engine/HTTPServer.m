@@ -79,7 +79,7 @@
         delegate = [_delegate retain];
         address = [_address retain];
         isMessageComplete = YES;
-        message = NULL;
+        httpMessage = NULL;
         
         // Register for notification when data arrives
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
@@ -91,8 +91,8 @@
 
 - (void) dealloc
 {
-    if (message) {
-        CFRelease(message);
+    if (httpMessage) {
+        CFRelease(httpMessage);
     }
     [delegate release];
     [fileHandle release];
@@ -119,32 +119,33 @@
         [self _close];
     } else {
         [fileHandle readInBackgroundAndNotify];
-        
         if (isMessageComplete) {
-            message = CFHTTPMessageCreateEmpty(kCFAllocatorDefault, TRUE);
+            httpMessage = CFHTTPMessageCreateEmpty(kCFAllocatorDefault, TRUE);
         }
-        BOOL success = CFHTTPMessageAppendBytes(message, [data bytes], [data length]);
+        BOOL success = CFHTTPMessageAppendBytes(httpMessage, [data bytes], [data length]);
         if (success) {
-            if (isMessageComplete = CFHTTPMessageIsHeaderComplete(message)) {
-                CFURLRef url = CFHTTPMessageCopyRequestURL(message);
+            if (isMessageComplete = CFHTTPMessageIsHeaderComplete(httpMessage)) {
+                CFURLRef url = CFHTTPMessageCopyRequestURL(httpMessage);
                 @try {
                     [delegate processURL:(NSURL*)url connection:self];
                 } @catch (id exception) {
-                    /* ignored */
+                    if (!replySent) {
+                        [self replyWithStatusCode:404 message:nil];
+                    }
                 }
                 CFRelease(url);
-                CFRelease(message);
-                message = NULL;
+                CFRelease(httpMessage);
+                httpMessage = NULL;
+                [self _close];
             }
-        } else {
-            NSLog(@"Incomming message not a HTTP header, ignored.");
-            [self _close];
         }
     }
 }
 
 - (void) replyWithStatusCode:(int)code headers:(NSDictionary*)headers body:(NSData*)body
 {
+    NSAssert(!replySent, @"Reply already sent!");
+    replySent = YES;
     CFHTTPMessageRef msg = CFHTTPMessageCreateResponse(kCFAllocatorDefault, code, NULL, kCFHTTPVersion1_1);
     
     for (NSString* key in headers) {
@@ -171,7 +172,6 @@
     @catch (NSException* exception) {
         NSLog(@"Error while sending response: %@", [exception  reason]);
     }
-    [self _close];
     
     CFRelease(msgData);
     CFRelease(msg);
@@ -179,13 +179,18 @@
 
 - (void) replyWithData:(NSData*)data MIMEType:(NSString*)type
 {
+    NSAssert(!replySent, @"Reply already sent!");
     NSDictionary* headers = [NSDictionary dictionaryWithObject:type forKey:@"Content-Type"];
     [self replyWithStatusCode:200 headers:headers body:data];  // 200 = 'OK'
 }
 
 - (void) replyWithStatusCode:(int)code message:(NSString*)_message
 {
-    NSData* body = [_message dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSAssert(!replySent, @"Reply already sent!");
+    NSData* body = nil;
+    if ([_message length]) {
+        body = [_message dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    }
     [self replyWithStatusCode:code headers:nil body:body];
 }
 

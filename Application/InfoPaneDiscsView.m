@@ -1,11 +1,3 @@
-//
-//  InfoPaneDisksView.m
-//  Multiplex
-//
-//  Created by David Martorana on 10/8/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
-//
-
 #import <QuartzCore/QuartzCore.h>
 #import "InfoPaneDiscsView.h"
 #import "PageNumberLayer.h"

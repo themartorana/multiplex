@@ -9,7 +9,8 @@
 @property (retain) NSString* fingerprint;
 @property (retain) NSNumber* number;
 @property (retain) NSString* side;
-@property (retain) NSString* description;
+@property (retain) NSString* synopsis;
+@property (retain) NSString* frontCoverURL;
 
 @property (readonly) NSSet* allMedia;
 

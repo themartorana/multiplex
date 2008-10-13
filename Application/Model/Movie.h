@@ -16,6 +16,7 @@
 @property (retain) NSDate* releaseDate;
 @property (retain) NSDate* theatricalReleaseDate;
 @property (retain) NSString* rating;
+@property (retain) id frontCover;
 
 @property (readonly) NSSet* allDiscs;
 

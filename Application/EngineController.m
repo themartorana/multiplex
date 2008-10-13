@@ -6,6 +6,9 @@
 #import "Engine.h"
 #import "NSString+UUID.h"
 
+#import "Activity.h"
+#import "ImageQuery.h"
+
 #import <unistd.h>
 #import <netinet/ip.h>
 #import <netinet/ip6.h>
@@ -373,6 +376,45 @@
     }
 }
 
+- (void) _setFrontCoverForMovieUsingInfo:(NSDictionary*)info
+{
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    @try {
+        Movie* movie = [info objectForKey:@"movie"];
+        NSAssert(movie, @"wtf?");
+        
+        CGImageRef frontCover = (CGImageRef)[info objectForKey:@"frontCover"];
+        NSAssert(frontCover, @"wtf?");
+        
+        movie.frontCover = (id)frontCover;
+        [movie.managedObjectContext save:nil];
+    } @finally {
+        [pool release];
+    }
+}
+
+- (void) imageQuery:(ImageQuery*)query didFailWithError:(NSError*)error userInfo:(id)userInfo
+{
+    Activity* activity = userInfo;
+    [activity terminate];
+}
+
+- (void) imageQuery:(ImageQuery*)query didReceiveImageSource:(CGImageSourceRef)imageSource userInfo:(id)userInfo
+{
+    Activity* activity = userInfo;
+    @try {
+        CGImageRef image = CGImageSourceCreateImageAtIndex(imageSource, 0, nil);
+        if (image) {
+            [self performSelectorOnMainThread:@selector(_setFrontCoverForMovieUsingInfo:) 
+                                   withObject:[NSDictionary dictionaryWithObjectsAndKeys:activity.userInfo, @"movie", image, @"frontCover", nil] 
+                                waitUntilDone:NO];
+            CGImageRelease(image);
+        }
+    } @finally {
+        [activity terminate];
+    }
+}
+
 @end
 
 
@@ -415,6 +457,9 @@
             }
             
             NSString* frontCoverURL = [info objectForKey:@"frontCoverURL"];
+            if (frontCoverURL) {
+                disc.frontCoverURL = frontCoverURL;
+            }
             
             /*  For each URL provided, create a media object to represent it,
              *  and attached it to our disc.
@@ -424,9 +469,6 @@
                 media.url = url;
                 media.engine = engine;
                 media.disc = disc;
-                if (frontCoverURL) {
-                    media.frontCoverURL = frontCoverURL;
-                }
                 [media release];
             }
         }
@@ -540,9 +582,9 @@
                     }
                     disc.side = [tag substringFromIndex:1];
                 }
-                NSString* description = [otherDiscInfo objectForKey:@"description"];
-                if ([description length]) {
-                    disc.description = description;
+                NSString* synopsis = [otherDiscInfo objectForKey:@"description"];
+                if ([synopsis length]) {
+                    disc.synopsis = synopsis;
                 }
                 Movie* movieForDisc = disc.movie;
                 if (movie != movieForDisc) {
@@ -550,6 +592,11 @@
                     if (movieForDisc) {
                         [self _deleteMovieIfNoMediaRemainForAnyDisc:movieForDisc];
                     }
+                }
+                
+                // TODO: This isn't quite right...
+                if (!movie.frontCover && disc.frontCoverURL) {
+                    [ImageQuery imageQueryWithURL:[NSURL URLWithString:disc.frontCoverURL] delegate:self userInfo:[Activity activityWithName:@""/*kLoadingCoverArtActivityName*/ userInfo:movie] startImmediately:YES];
                 }
             }
         }

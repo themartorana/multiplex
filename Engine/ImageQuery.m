@@ -1,26 +1,25 @@
-#import "CoverArtQuery.h"
+#import "ImageQuery.h"
 
 #pragma mark -
-@interface CoverArtQuery (Private)
+@interface ImageQuery (Private)
 - (void) _fireDidFailWithError:(NSError*)error;
-- (void) _fireDidReceiveResponse:(NSImage*)response;
 @end
 
 #pragma mark -
-@implementation CoverArtQuery
+@implementation ImageQuery
 @synthesize delegate;
 @synthesize URL;
 @synthesize userInfo;
 
-+ (id) queryWithURL:(NSURL*)url
++ (id) imageQueryWithURL:(NSURL*)url
 {
-    return [[[CoverArtQuery alloc] initWithURL:url] autorelease];
+    return [[[ImageQuery alloc] initWithURL:url] autorelease];
 }
 
-+ (id) queryWithURL:(NSURL*)url delegate:(id)delegate userInfo:(void*)userInfo startImmediately:(BOOL)startImmediately
++ (id) imageQueryWithURL:(NSURL*)url delegate:(id)delegate userInfo:(id)userInfo startImmediately:(BOOL)startImmediately
 {
     NSAssert(delegate, @"The delegate must not be nil.");
-    CoverArtQuery* query = [CoverArtQuery queryWithURL:url];
+    ImageQuery* query = [ImageQuery imageQueryWithURL:url];
     query.delegate = delegate;
     query.userInfo = userInfo;
     if (startImmediately) {
@@ -44,6 +43,7 @@
     [connection release];
     [request release];
     [receivedData release];
+    [userInfo release];
     [super dealloc];
 }
 
@@ -62,7 +62,7 @@
 @end
 
 #pragma mark -
-@implementation CoverArtQuery (NSURLConnectionDelegate)
+@implementation ImageQuery (NSURLConnectionDelegate)
 
 - (void) connection:(NSURLConnection*)connection didReceiveResponse:(NSURLResponse*)response 
 {
@@ -83,42 +83,47 @@
 
 - (void) connectionDidFinishLoading:(NSURLConnection *)connection 
 {
-    NSImage* response = nil;
-    NSError* error = nil;
-    if ([receivedData length] > 0) {
-        response = [[[NSImage alloc] initWithData:receivedData] autorelease];
+    if (![receivedData length]) {
+        [self _fireDidFailWithError:nil];
+        return;
+    }
+
+    if ([delegate respondsToSelector:@selector(imageQuery:didReceiveImage:userInfo:)]) {
+        NSImage* image = nil;
+        @try {
+            image = [[NSImage alloc] initWithData:receivedData];
+            [delegate imageQuery:self didReceiveImage:image userInfo:userInfo];
+        } @catch (id _exception) {
+            NSLog(@"CoverArtQuery: Exception during coverArtQuery:didReceiveImage: -- %@", _exception);
+        }
+        [image release];
     }
     
-    if (!response || error) {
-        [self _fireDidFailWithError:error];
-    } else {
-        [self _fireDidReceiveResponse:response];
+    if ([delegate respondsToSelector:@selector(imageQuery:didReceiveImageSource:userInfo:)]) {
+        CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)receivedData, nil);
+        if (imageSource) {
+            @try {
+                [delegate imageQuery:self didReceiveImageSource:imageSource userInfo:userInfo];
+            } @catch (id _exception) {
+                NSLog(@"CoverArtQuery: Exception during coverArtQuery:didReceiveImageSource: -- %@", _exception);
+            }
+            CFRelease(imageSource);
+        }
     }
 }
 
 @end
 
 #pragma mark -
-@implementation CoverArtQuery (Private)
+@implementation ImageQuery (Private)
 
 - (void) _fireDidFailWithError:(NSError*)error
 {
-    if ([delegate respondsToSelector:@selector(coverArtQuery:didFailWithError:userInfo:)]) {
+    if ([delegate respondsToSelector:@selector(imageQuery:didFailWithError:userInfo:)]) {
         @try {
-            [delegate coverArtQuery:self didFailWithError:error userInfo:userInfo];
+            [delegate imageQuery:self didFailWithError:error userInfo:userInfo];
         } @catch (id _exception) {
             NSLog(@"CoverArtQuery: Exception during coverArtQuery:didFailWithError: -- %@", _exception);
-        }
-    }
-}
-
-- (void) _fireDidReceiveResponse:(NSImage*)response  
-{
-    if ([delegate respondsToSelector:@selector(coverArtQuery:didReceiveResponse:userInfo:)]) {
-        @try {
-            [delegate coverArtQuery:self didReceiveResponse:response userInfo:userInfo];
-        } @catch (id _exception) {
-            NSLog(@"CoverArtQuery: Exception during coverArtQuery:didReceiveResponse: -- %@", _exception);
         }
     }
 }

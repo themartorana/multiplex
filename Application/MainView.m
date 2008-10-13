@@ -1,7 +1,12 @@
 #import "MainView.h"
 #import "Movie.h"
 #import "MovieLayer.h"
+#import "Activity.h"
+#import "ImageQuery.h"
+
 #import <QuartzCore/QuartzCore.h>
+
+NSString* const kLoadingCoverArtActivityName = @"LoadingCoverArtActivity";
 
 @interface MainView (LayerStuff)
 - (MovieLayer*) layerForMovie:(Movie*)movie;
@@ -218,7 +223,7 @@
                 [layersInOrder addObject:layer];
             }
             for (id keyOfLayerToDelete in keySet) {
-                CALayer* layerToDelete = [layersByID objectForKey:keyOfLayerToDelete];
+                MovieLayer* layerToDelete = [layersByID objectForKey:keyOfLayerToDelete];
                 [layerToDelete removeFromSuperlayer];
                 [layersByID removeObjectForKey:keyOfLayerToDelete];
             } 
@@ -278,18 +283,17 @@
 @end
 
 
-#pragma mark -
-@implementation MainView (LayerStuff)
-
 CGFloat WS = 75.0;
 CGFloat W = 280.0;
 CGFloat H = 400.0;
 CGFloat HS = 75.0;
 
+#pragma mark -
+@implementation MainView (LayerStuff)
+
 - (MovieLayer*) layerForMovie:(Movie*)movie
 {
-    MovieLayer* layer = [MovieLayer layer];
-    layer.movie = movie;
+    MovieLayer* layer = [MovieLayer layerWithMovie:movie];
     layer.frame = CGRectMake(0.0, 0.0, W, H);
     layer.position = CGPointZero;
     return layer;

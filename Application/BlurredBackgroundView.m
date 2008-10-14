@@ -32,5 +32,8 @@
     NSRectFill(self.frame);
 }
 
+- (BOOL) mouseDownCanMoveWindow {
+    return NO;
+}
 
 @end

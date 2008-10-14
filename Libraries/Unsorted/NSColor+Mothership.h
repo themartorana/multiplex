@@ -11,6 +11,8 @@
 
 @interface NSColor (Mothership)
 
++ (NSColor*) colorWithRGBIn0To255ValuesForRed:(int)red green:(int)green blue:(int)blue alpha:(int)alpha;
+
 - (CGColorRef) colorAsCGColorRef;
 
 @end

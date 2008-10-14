@@ -11,6 +11,8 @@
 
 @interface MainView (Private)
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context;
+- (void) hoverTimerTicked:(NSTimer*)timer;
+- (void) stopHoverTimer;
 @end
 
 @implementation MainView
@@ -60,6 +62,11 @@
     highlightLayer.cornerRadius = 10.0;
     highlightLayer.hidden = YES;
     [floorLayer addSublayer:highlightLayer];
+    
+    hoverPlayLayer = [HoverPlayLayer layer];
+    hoverPlayLayer.hidden = YES;
+    [rootLayer addSublayer:hoverPlayLayer];
+    [hoverPlayLayer bind:@"hoveredMovie" toObject:self withKeyPath:@"hoveredMovie" options:nil];
 }
 
 
@@ -67,6 +74,7 @@
 {
     [layersByID release];
     [listOfLayersInOrder release];
+    [hoverPlayLayer release];
     [super dealloc];
 }
 
@@ -128,28 +136,56 @@
         [(NSArrayController*)content setSelectedObjects:[NSArray arrayWithObject:m]];
         
         if ([theEvent clickCount] == 2) {
+            hoverPlayLayer.hidden = YES;
+            [self stopHoverTimer];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexShowMovieDialog" object:nil];
+        } else {
+            if (![hoverPlayLayer hitTest:p]) {
+                if (hoverPlayLayer.hidden) {
+                    [self stopHoverTimer];
+                    hoverTimer = [NSTimer scheduledTimerWithTimeInterval:0.2 
+                                                                  target:self 
+                                                                selector:@selector(hoverTimerTicked:) 
+                                                                userInfo:nil repeats:NO];
+                } else {
+                    hoverPlayLayer.hidden = YES;
+                }                
+            }
         }
     }
 }
 
 - (void) mouseMoved:(NSEvent*)theEvent
 {    
+    lastKnownMouseCoordinates = [theEvent locationInWindow];
+    
     CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
+    CGPoint hoverLayerPosition = CGPointMake(p.x - 20.0, 
+                                            p.y - hoverPlayLayer.bounds.size.height + 20.0);
+    if ([hoverPlayLayer hitTest:p])
+        return;
+    
     CALayer* layer = [floorLayer hitTest:p];
     
     if (!layer) {
         highlightLayer.hidden = YES;
+        hoverPlayLayer.hidden = YES;
         self.hoveredMovie = nil;
+        [self stopHoverTimer];
     } 
     else while (layer) {
         if (layer == radialGradientLayer) {
+            [self stopHoverTimer];
             self.hoveredMovie = nil;
             highlightLayer.hidden = YES;
+            hoverPlayLayer.hidden = YES;
             break;
         } else if ([layer isKindOfClass:[MovieLayer class]]) {
             
             MovieLayer* mLayer = (MovieLayer*)layer;
+            
+            if (hoverPlayLayer.hidden)
+                hoverPlayLayer.position = hoverLayerPosition;
             
             [CATransaction begin];
             [CATransaction setValue:[NSNumber numberWithDouble:0.0] forKey:kCATransactionAnimationDuration];
@@ -161,8 +197,14 @@
             highlightLayer.transform = mLayer.transform;
             [CATransaction commit];
             
-            self.hoveredMovie = [(MovieLayer*)layer movie];
-            break;
+            if (hoveredMovie != [(MovieLayer*)layer movie]) {
+                hoverPlayLayer.hidden = YES;
+                self.hoveredMovie = [(MovieLayer*)layer movie];
+                [self stopHoverTimer];
+                NSLog(@"Setting up timer");
+                hoverTimer = [[NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(hoverTimerTicked:) userInfo:nil repeats:YES] retain];
+                NSLog(@"%f", [hoverTimer timeInterval]);
+            }
         }
         layer = layer.superlayer;
     }
@@ -170,6 +212,7 @@
 
 - (void) mouseExited:(NSEvent*)theEvent
 {
+    [self stopHoverTimer];
     self.hoveredMovie = nil;
 }
 
@@ -274,6 +317,25 @@
          */
         [floorLayer setNeedsLayout];
     }
+}
+
+- (void) stopHoverTimer
+{
+    if (hoverTimer && [hoverTimer isValid]) {
+        [hoverTimer invalidate];
+        //[hoverTimer release];
+        hoverTimer = nil;
+    }
+}
+
+- (void) hoverTimerTicked:(NSTimer*)timer
+{
+    [self stopHoverTimer];
+    
+    [CATransaction begin];
+    [CATransaction setValue:[NSNumber numberWithFloat:0.75] forKey:kCATransactionAnimationDuration];
+    hoverPlayLayer.hidden = NO;
+    [CATransaction commit];
 }
 
 @end

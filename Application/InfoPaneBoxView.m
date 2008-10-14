@@ -10,6 +10,10 @@
 
 - (void) awakeFromNib
 {
+    CALayer* layer = [CALayer layer];
+    layer.anchorPoint = [self layer].anchorPoint;
+    layer.frame = [self layer].frame;
+    [self setLayer:layer];
     [self setWantsLayer:YES];
     [[self layer] setDelegate:self];
     

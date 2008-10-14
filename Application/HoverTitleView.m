@@ -13,8 +13,6 @@
 #import "InfoButtonLayer.h"
 #import "CALayer+Mothership.h"
 
-void MaskDataRelease(void* info, const void* data, size_t size);
-
 @implementation HoverTitleView
 
 @synthesize hoveredMovie;

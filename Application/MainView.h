@@ -1,6 +1,8 @@
 #import <Cocoa/Cocoa.h>
 #import "Movie.h"
 #import "MovieLayer.h"
+#import "HoverPlayLayer.h"
+
 
 @interface MainView : NSView {
     NSMutableDictionary* layersByID;
@@ -10,11 +12,17 @@
     
     CALayer* highlightLayer;
     
+    HoverPlayLayer* hoverPlayLayer;
+    
     NSTrackingArea* mouseTrackingArea;
     
     id content;
     
     Movie* hoveredMovie;
+    
+    NSTimer* hoverTimer;
+    
+    NSPoint lastKnownMouseCoordinates;
 }
 
 @property (retain) id content;

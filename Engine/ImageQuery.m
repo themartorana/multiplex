@@ -50,7 +50,8 @@
 - (void) start
 {
     NSAssert(!connection, @"This query has already been started.");
-    request = [[NSURLRequest requestWithURL:URL] retain];
+    request = [[NSMutableURLRequest requestWithURL:URL] retain];
+    [request setTimeoutInterval:5.0];
     connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
 }
 

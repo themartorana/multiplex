@@ -2,7 +2,7 @@
 
 @interface ImageQuery : NSObject {
     NSMutableData* receivedData;
-    NSURLRequest* request;
+    NSMutableURLRequest* request;
     NSURLConnection* connection;
     /**/
     NSURL* URL;

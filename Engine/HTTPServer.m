@@ -129,13 +129,14 @@
                 @try {
                     [delegate processURL:(NSURL*)url connection:self];
                 } @catch (id exception) {
-                    if (!replySent) {
-                        [self replyWithStatusCode:404 message:nil];
-                    }
+                    NSLog(@"Error while calling delegate's processURL:connection: -- %@", [exception reason]);
                 }
                 CFRelease(url);
                 CFRelease(httpMessage);
                 httpMessage = NULL;
+                if (!replySent) {
+                    [self replyWithStatusCode:404 message:nil];
+                }
                 [self _close];
             }
         }
@@ -170,7 +171,7 @@
         [fileHandle writeData:(NSData *)msgData];
     }
     @catch (NSException* exception) {
-        NSLog(@"Error while sending response: %@", [exception  reason]);
+        NSLog(@"Error while sending response: %@", [exception reason]);
     }
     
     CFRelease(msgData);

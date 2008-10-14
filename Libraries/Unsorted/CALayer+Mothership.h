@@ -2,6 +2,8 @@
 
 @interface CALayer (Mothership)
 
++ (CALayer*) maskLayer;
+
 - (void) removeAllSublayers;
 
 @end

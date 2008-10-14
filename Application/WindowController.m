@@ -4,7 +4,7 @@
 #import "Movie.h"
 #import "Disc.h"
 #import "Media.h"
-#import "BasicInfoView.h"
+#import "HoverTitleView.h"
 #import "InfoPaneHostingView.h"
 
 @implementation WindowController
@@ -25,7 +25,6 @@
     [mainView setContent:movies];
     
     // Do some bindings
-    [basicInfoView bind:@"selectedMovies" toObject:movies withKeyPath:@"selectedObjects" options:nil];
     [basicInfoView bind:@"hoveredMovie" toObject:mainView withKeyPath:@"hoveredMovie" options:nil];
     
     [infoPaneFormController bind:@"selectedMovies" toObject:movies withKeyPath:@"selectedObjects" options:nil];

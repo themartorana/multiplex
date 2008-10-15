@@ -12,6 +12,7 @@
 #import "Media.h"
 #import "InfoButtonLayer.h"
 #import "CALayer+Mothership.h"
+#import "CGColorFactory.h"
 
 @implementation HoverTitleView
 
@@ -70,7 +71,7 @@
     titleReflectionLayer.alignmentMode = kCAAlignmentCenter;
     titleReflectionLayer.font = [NSFont systemFontOfSize:40.0];
     titleReflectionLayer.fontSize = 40.0;
-    titleReflectionLayer.foregroundColor = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 1.0);
+    titleReflectionLayer.foregroundColor = [CGColorFactory white];
     titleReflectionLayer.name = @"titleReflectionLayer";
     titleReflectionLayer.transform = CATransform3DMakeScale(1.0, -1.0, 1.0);
     titleReflectionLayer.constraints = [NSArray arrayWithObjects:

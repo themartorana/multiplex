@@ -30,8 +30,6 @@
     [discsHostingLayer addSublayer:scrollingLayer];
     discsHostingLayer.masksToBounds = YES;
     discsHostingLayer.anchorPoint = CGPointZero;
-    //discsHostingLayer.borderColor = CGColorCreateGenericRGB(1.0, 0.0, 0.0, 1.0);
-    //discsHostingLayer.borderWidth = 2.0;
     
     discsHostingLayer.frame = CGRectMake(20.0, 
                                          30.0, 

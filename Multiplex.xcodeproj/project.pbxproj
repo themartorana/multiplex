@@ -29,6 +29,8 @@
 		551554A00EA456C8006F2674 /* SoftEditTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5515549F0EA456C8006F2674 /* SoftEditTextFieldCell.m */; };
 		551555040EA45D84006F2674 /* SoftEditTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 551555030EA45D84006F2674 /* SoftEditTextField.m */; };
 		551555610EA46220006F2674 /* HoverPlayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 551555600EA46220006F2674 /* HoverPlayLayer.m */; };
+		551558440EA53C1D006F2674 /* CGColorFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 551558430EA53C1D006F2674 /* CGColorFactory.m */; };
+		551559380EA6554E006F2674 /* VerticalScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 551559370EA6554E006F2674 /* VerticalScroller.m */; };
 		5534774D0EA3A9CA00436A8C /* ImageQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 5534774C0EA3A9CA00436A8C /* ImageQuery.m */; };
 		553477520EA3A9E400436A8C /* ImageQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 5534774C0EA3A9CA00436A8C /* ImageQuery.m */; };
 		553477710EA3AAB700436A8C /* BlurredBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 553477700EA3AAB700436A8C /* BlurredBackgroundView.m */; };
@@ -96,7 +98,6 @@
 		F9A1D6EB0E83594200AB691D /* NSDictionary+KeyPaths.m in Sources */ = {isa = PBXBuildFile; fileRef = F93B042B0E6F4FD6006CB915 /* NSDictionary+KeyPaths.m */; };
 		F9A1D8D10E83699200AB691D /* Engine in Copy Files to Resources */ = {isa = PBXBuildFile; fileRef = F9A1D6220E8350C100AB691D /* Engine */; };
 		F9A1D9550E83701200AB691D /* NSImage+DmgCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = F9E3F8890E7587C000DCA2A8 /* NSImage+DmgCtrl.m */; };
-		F9A9A9970EA648420091FD5E /* VerticalScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A9A9960EA648420091FD5E /* VerticalScroller.m */; };
 		F9AD7DB20E65AD5D0087E5E7 /* NSString+UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AD7DB10E65AD5D0087E5E7 /* NSString+UUID.m */; };
 		F9C2B0300E7B919B00474D97 /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
 		F9CA172A0E7C727C0049CD3E /* Movie.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CA17290E7C727C0049CD3E /* Movie.m */; };
@@ -283,6 +284,10 @@
 		551555030EA45D84006F2674 /* SoftEditTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoftEditTextField.m; sourceTree = "<group>"; };
 		5515555F0EA46220006F2674 /* HoverPlayLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HoverPlayLayer.h; sourceTree = "<group>"; };
 		551555600EA46220006F2674 /* HoverPlayLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HoverPlayLayer.m; sourceTree = "<group>"; };
+		551558420EA53C1D006F2674 /* CGColorFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGColorFactory.h; sourceTree = "<group>"; };
+		551558430EA53C1D006F2674 /* CGColorFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGColorFactory.m; sourceTree = "<group>"; };
+		551559360EA6554E006F2674 /* VerticalScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticalScroller.h; sourceTree = "<group>"; };
+		551559370EA6554E006F2674 /* VerticalScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticalScroller.m; sourceTree = "<group>"; };
 		5534774B0EA3A9CA00436A8C /* ImageQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageQuery.h; sourceTree = "<group>"; };
 		5534774C0EA3A9CA00436A8C /* ImageQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageQuery.m; sourceTree = "<group>"; };
 		5534776F0EA3AAB700436A8C /* BlurredBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlurredBackgroundView.h; sourceTree = "<group>"; };
@@ -373,8 +378,6 @@
 		F9A1D5170E8342C700AB691D /* HTTPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPServer.m; sourceTree = "<group>"; };
 		F9A1D6220E8350C100AB691D /* Engine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Engine; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9A1D66D0E8353C900AB691D /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
-		F9A9A9950EA648420091FD5E /* VerticalScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticalScroller.h; sourceTree = "<group>"; };
-		F9A9A9960EA648420091FD5E /* VerticalScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticalScroller.m; sourceTree = "<group>"; };
 		F9AD7DAF0E65AD200087E5E7 /* NSString+UUID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+UUID.h"; sourceTree = "<group>"; };
 		F9AD7DB10E65AD5D0087E5E7 /* NSString+UUID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+UUID.m"; sourceTree = "<group>"; };
 		F9AFE3E40B65CC6D0035DA65 /* ScratchPad */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ScratchPad; sourceTree = "<group>"; };
@@ -510,6 +513,8 @@
 				5535D98E0E4E3F5400A45761 /* EngineController.m */,
 				556BD78E0E94470600EC698A /* Activity.h */,
 				556BD78F0E94470600EC698A /* Activity.m */,
+				551558420EA53C1D006F2674 /* CGColorFactory.h */,
+				551558430EA53C1D006F2674 /* CGColorFactory.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -675,6 +680,8 @@
 		F967AFF30E7E13D400C12B92 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				551559360EA6554E006F2674 /* VerticalScroller.h */,
+				551559370EA6554E006F2674 /* VerticalScroller.m */,
 				5534776F0EA3AAB700436A8C /* BlurredBackgroundView.h */,
 				553477700EA3AAB700436A8C /* BlurredBackgroundView.m */,
 				559130550EA03F9600446666 /* BigPlayButtonView.m */,
@@ -693,8 +700,6 @@
 				558D1A800E9C6FED000F67FA /* InfoPaneBoxView.m */,
 				558D1AEE0E9D186B000F67FA /* InfoPaneDiscsView.h */,
 				558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */,
-				F9A9A9950EA648420091FD5E /* VerticalScroller.h */,
-				F9A9A9960EA648420091FD5E /* VerticalScroller.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1097,7 +1102,8 @@
 				551554A00EA456C8006F2674 /* SoftEditTextFieldCell.m in Sources */,
 				551555040EA45D84006F2674 /* SoftEditTextField.m in Sources */,
 				551555610EA46220006F2674 /* HoverPlayLayer.m in Sources */,
-				F9A9A9970EA648420091FD5E /* VerticalScroller.m in Sources */,
+				551558440EA53C1D006F2674 /* CGColorFactory.m in Sources */,
+				551559380EA6554E006F2674 /* VerticalScroller.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

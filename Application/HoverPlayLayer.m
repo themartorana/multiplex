@@ -11,6 +11,16 @@
 #import "NSColor+Mothership.h"
 #import "PlayButtonLayer.h"
 #import <QuartzCore/QuartzCore.h>
+#import "CGColorFactory.h"
+
+@interface HoverPlayLayer (Private)
+
+- (NSString*) getAdditionalMovieInfoString;
+- (void) setUpLayerLayout;
+- (void) putLayersIntoDefaultPosition;
+- (void) putLayersIntoAlternatePosition;
+
+@end
 
 
 @implementation HoverPlayLayer
@@ -38,7 +48,7 @@
     orangeBoxLayer.backgroundColor = [[NSColor colorWithRGBIn0To255ValuesForRed:230 
                                                                           green:112 
                                                                            blue:51
-                                                                          alpha:240] colorAsCGColorRef];
+                                                                          alpha:220] colorAsCGColorRef];
     orangeBoxLayer.borderColor = [[NSColor colorWithRGBIn0To255ValuesForRed:230 
                                                                       green:112 
                                                                        blue:51 
@@ -55,20 +65,18 @@
     titleLayer = [CATextLayer layer];
     titleLayer.anchorPoint = CGPointZero;
     titleLayer.bounds = CGRectMake(0.0, 0.0, 220.0, 32.0);
-    titleLayer.borderColor = CGColorCreateGenericRGB(0.0, 0.0, 1.0, 1.0);
-    titleLayer.borderWidth = 1.0;
-    titleLayer.font = [NSFont boldSystemFontOfSize:12.0];
-    titleLayer.fontSize = 12.0;
+    titleLayer.font = [NSFont boldSystemFontOfSize:13.0];
+    titleLayer.fontSize = 13.0;
     titleLayer.wrapped = YES;
     [orangeBoxLayer addSublayer:titleLayer];
     
-    runningTimeLayer = [CATextLayer layer];
-    runningTimeLayer.anchorPoint = CGPointZero;
-    [orangeBoxLayer addSublayer:runningTimeLayer];
-    
-    ratingsLayer = [CATextLayer layer];
-    ratingsLayer.anchorPoint = CGPointZero;
-    [orangeBoxLayer addSublayer:ratingsLayer];
+    additionalInfoLayer = [CATextLayer layer];
+    additionalInfoLayer.anchorPoint = CGPointZero;
+    additionalInfoLayer.bounds = CGRectMake(0.0, 0.0, 220.0, 16.0);
+    additionalInfoLayer.font = [NSFont boldSystemFontOfSize:13.0];
+    additionalInfoLayer.fontSize = 13.0;
+    additionalInfoLayer.foregroundColor = [CGColorFactory white];
+    [orangeBoxLayer addSublayer:additionalInfoLayer];
     
     // There are two ways to position the layers.  
     // We'll go with the default at first.
@@ -103,6 +111,7 @@
                                   nil];
     
     titleLayer.position = CGPointMake(50.0, 30.0);
+    additionalInfoLayer.position = titleLayer.position;//CGPointMake(50.0, 5.0);
     
     [self setNeedsLayout];
 }
@@ -131,8 +140,35 @@
     
     if (hoveredMovie) {
         titleLayer.string = hoveredMovie.title;
+        additionalInfoLayer.string = [self getAdditionalMovieInfoString];
+    }
+}
+
+- (NSString*) getAdditionalMovieInfoString
+{
+    NSMutableString* ms = [[NSMutableString string] retain];
+    
+    if (hoveredMovie.runningTime && [hoveredMovie.runningTime intValue] >= 0) {
+        [ms appendFormat:@"%d mins", [hoveredMovie.runningTime intValue]];
+    }
+        
+    if (hoveredMovie.rating && hoveredMovie.rating != @"") {
+        if ([ms length] > 0) {
+            [ms appendString:@"  |  "];
+        }
+        
+        NSString* rating = [hoveredMovie.rating substringToIndex:[hoveredMovie.rating rangeOfString:@" "].location];
+        if ([rating length] > 0) {
+            [ms appendFormat:@"Rated %@", rating];
+        }
+        else {
+            [ms appendFormat:@"Rated %@", hoveredMovie.rating];
+        }
     }
     
+    NSString* stringToReturn = [NSString stringWithString:ms];
+    [ms release];
+    return stringToReturn;
 }
 
 @end

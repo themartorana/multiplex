@@ -18,9 +18,7 @@
     PlayButtonLayer* playButtonLayer; 
     
     CATextLayer* titleLayer;
-    CATextLayer* runningTimeLayer;
-    CATextLayer* ratingsLayer;
-    CATextLayer* starsLayer;
+    CATextLayer* additionalInfoLayer;
     
     Movie* hoveredMovie;
     
@@ -28,10 +26,5 @@
 }
 
 @property (retain) Movie* hoveredMovie;
-//@property BOOL isInAlternatePosition;
-
-- (void) setUpLayerLayout;
-- (void) putLayersIntoDefaultPosition;
-- (void) putLayersIntoAlternatePosition;
 
 @end

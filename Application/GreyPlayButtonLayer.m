@@ -16,7 +16,6 @@
 
 - (void) dealloc
 {
-    CGImageRelease(playButtonImage);
     [super dealloc];
 }
 

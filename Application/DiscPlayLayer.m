@@ -4,6 +4,7 @@
 #import "Disc.h"
 #import "Movie.h"
 #import "Media.h"
+#import "CGColorFactory.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation DiscPlayLayer
@@ -15,7 +16,7 @@
 {
     if (self = [super init]) {
         [self setUpPlayLayer];
-        self.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.5);
+        self.backgroundColor = [CGColorFactory blackHalfTransparent];
         self.borderColor = CGColorGetConstantColor(kCGColorWhite);
         self.cornerRadius = 10.0;
     }
@@ -30,7 +31,7 @@
     self.anchorPoint = CGPointZero;
     self.bounds = CGRectMake(0.0, 0.0, 370.0, 109.0);
     
-    playButtonLayer = [[PlayButtonLayer layer] retain];
+    playButtonLayer = [PlayButtonLayer layer];
     playButtonLayer.anchorPoint = CGPointZero;
     playButtonLayer.frame = CGRectMake(370.0 - 76.0 - universalPadding, 
                                        (109.0/2.0) - (76.0/2.0), 
@@ -38,7 +39,7 @@
                                        76.0);
     [self addSublayer:playButtonLayer];
  
-    greyPlayButtonLayer = [[GreyPlayButtonLayer layer] retain];
+    greyPlayButtonLayer = [GreyPlayButtonLayer layer];
     greyPlayButtonLayer.anchorPoint = CGPointZero;
     greyPlayButtonLayer.frame = CGRectMake(370.0 - 76.0 - universalPadding, 
                                        (109.0/2.0) - (76.0/2.0), 
@@ -47,10 +48,10 @@
     [self addSublayer:greyPlayButtonLayer];
     
     
-    discNumberTitle = [[CATextLayer layer] retain];
+    discNumberTitle = [CATextLayer layer];
     discNumberTitle.font = [NSFont boldSystemFontOfSize:28.0];
     discNumberTitle.fontSize = 28.0;
-    discNumberTitle.foregroundColor = CGColorCreateGenericRGB(0.6, 0.6, 0.6, 1.0);
+    discNumberTitle.foregroundColor = [CGColorFactory discPlayLayerUnhoveredForegroundColor];
     discNumberTitle.anchorPoint = CGPointZero;
     discNumberTitle.frame = CGRectMake(universalPadding, 
                                        109.0 - 28.0 - (universalPadding/2), 
@@ -58,11 +59,11 @@
                                        32.0);
     [self addSublayer:discNumberTitle];
     
-    descriptionLayer = [[CATextLayer layer] retain];
-    descriptionLayer = [[CATextLayer layer] retain];
+    descriptionLayer = [CATextLayer layer];
+    descriptionLayer = [CATextLayer layer];
     descriptionLayer.font = [NSFont boldSystemFontOfSize:13.0];
     descriptionLayer.fontSize = 13.0;
-    descriptionLayer.foregroundColor = CGColorCreateGenericRGB(0.6, 0.6, 0.6, 1.0);
+    descriptionLayer.foregroundColor = [CGColorFactory discPlayLayerUnhoveredForegroundColor];
     descriptionLayer.anchorPoint = CGPointZero;
     descriptionLayer.frame = CGRectMake(universalPadding,
                                         discNumberTitle.frame.origin.y - (universalPadding / 2) - 55.0,
@@ -100,7 +101,7 @@
     hovered = isHovered;
     
     if (isHovered) {
-        self.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 1.0);
+        self.backgroundColor = [CGColorFactory black];
         self.borderWidth = 2.0;
         
         discNumberTitle.foregroundColor = CGColorCreateGenericRGB(231.0/255.0, 111.0/255.0, 52.0/255.0, 1.0);
@@ -108,11 +109,11 @@
         greyPlayButtonLayer.hidden = YES;
     }
     else {
-        self.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.8);
+        self.backgroundColor = [CGColorFactory blackOneQuarterTransparent];
         self.borderWidth = 0.0;
 
-        discNumberTitle.foregroundColor = CGColorCreateGenericRGB(0.6, 0.6, 0.6, 1.0);
-        descriptionLayer.foregroundColor = CGColorCreateGenericRGB(0.6, 0.6, 0.6, 1.0);
+        discNumberTitle.foregroundColor = [CGColorFactory discPlayLayerUnhoveredForegroundColor];
+        descriptionLayer.foregroundColor = [CGColorFactory discPlayLayerUnhoveredForegroundColor];
         greyPlayButtonLayer.hidden = NO;
     }
 }

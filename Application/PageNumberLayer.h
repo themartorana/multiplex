@@ -12,7 +12,6 @@
 @interface PageNumberLayer : CALayer {
     int pageNumber;
     CATextLayer* pageNumberTextLayer;
-    NSColor* pageNumberColor;
 }
 
 @property int pageNumber;

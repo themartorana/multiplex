@@ -1,7 +1,7 @@
 #import "InfoPaneView.h"
 #import "PlayButtonLayer.h"
 #import "CloseButtonLayer.h"
-
+#import "CGColorFactory.h"
 
 @implementation InfoPaneView
 
@@ -11,10 +11,10 @@
     [self layer].layoutManager = [CAConstraintLayoutManager layoutManager];
     [self layer].masksToBounds = NO;
     [self layer].cornerRadius = 20.0;
-    [self layer].backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.8);
+    [self layer].backgroundColor = [CGColorFactory blackOneQuarterTransparent];
     
     CALayer* borderLayer = [CALayer layer];
-    borderLayer.borderColor = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 0.6);
+    borderLayer.borderColor = [CGColorFactory whiteOneQuarterTransparent];
     borderLayer.borderWidth = 2.0;
     borderLayer.cornerRadius = 20.0;
     borderLayer.constraints = [NSArray arrayWithObjects:

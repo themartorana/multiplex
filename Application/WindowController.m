@@ -6,6 +6,7 @@
 #import "Media.h"
 #import "HoverTitleView.h"
 #import "InfoPaneHostingView.h"
+#import "CGColorFactory.h"
 
 @implementation WindowController
 
@@ -20,14 +21,15 @@
     contentView.wantsLayer = YES;
     
     CALayer* background = contentView.layer;
-    background.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 1.0);
-
+    
     /*  Sort the movies alphabetically
      */
     NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES];
     [movies setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     [sortDescriptor release];
 
+    background.backgroundColor = [CGColorFactory black];
+    
     [mainView setContent:movies];
         
     // Do some bindings

@@ -19,8 +19,6 @@
 
 - (void) dealloc
 {
-    CGImageRelease(closeButtonImage);
-    CGImageRelease(closeButtonImageDown);
     [super dealloc];
 }
 

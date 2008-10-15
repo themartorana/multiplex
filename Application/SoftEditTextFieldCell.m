@@ -1,4 +1,5 @@
 #import "SoftEditTextFieldCell.h"
+#import "CGColorFactory.h"
 #import <Quartz/Quartz.h>
 
 @implementation SoftEditTextFieldCell
@@ -42,8 +43,8 @@
         CALayer* viewLayer = [controlView layer];
         
         backgroundLayer = [[CALayer alloc] init];
-        [backgroundLayer setBackgroundColor:CGColorCreateGenericRGB(0.7, 0.7, 0.7, 0.25)];
-        [backgroundLayer setBorderColor:CGColorCreateGenericRGB(0.7, 0.7, 0.7, 1.0)];
+        [backgroundLayer setBackgroundColor:[CGColorFactory softEditTextFieldBGColor]];
+        [backgroundLayer setBorderColor:[CGColorFactory softEditTextFieldBorderColor]];
         [backgroundLayer setCornerRadius:3.0];
         [backgroundLayer setBorderWidth:1.0];
         [viewLayer addSublayer:backgroundLayer];

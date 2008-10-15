@@ -136,7 +136,7 @@
             
             NSColor* lightGrey = [NSColor colorWithDeviceRed:154.0/255.0 green:154.0/255.0 blue:154.0/255.0 alpha:1.0];
             NSColor* darkGrey = [NSColor colorWithDeviceRed:154.0/255.0 green:154.0/255.0 blue:154.0/255.0 alpha:0.0];
-            NSGradient* gradient = [[NSGradient alloc] initWithColorsAndLocations:lightGrey, 0.0, darkGrey, 1.0, 1.0];
+            NSGradient* gradient = [[NSGradient alloc] initWithColorsAndLocations:lightGrey, (CGFloat)0.0, darkGrey, (CGFloat)1.0, nil];
             [gradient drawFromCenter:center radius:0 toCenter:center radius:MIN(bounds.size.width, bounds.size.height)/2.0 options:0];
             [gradient release];
         }

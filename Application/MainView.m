@@ -328,7 +328,7 @@
         hoverTimer = nil;
         
         [CATransaction begin];
-        [CATransaction setValue:[NSNumber numberWithFloat:0.75] forKey:kCATransactionAnimationDuration];
+        [CATransaction setValue:[NSNumber numberWithFloat:0.25] forKey:kCATransactionAnimationDuration];
         hoverPlayLayer.hidden = NO;
         [CATransaction commit];
     }

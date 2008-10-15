@@ -10,8 +10,7 @@
     CALayer* floorLayer; // NR
     CALayer* radialGradientLayer; // NR
     
-    CALayer* highlightLayer;
-    
+    CALayer* hoverHighlightLayer;
     HoverPlayLayer* hoverPlayLayer;
     
     NSTrackingArea* mouseTrackingArea;
@@ -19,10 +18,7 @@
     id content;
     
     Movie* hoveredMovie;
-    
     NSTimer* hoverTimer;
-    
-    NSPoint lastKnownMouseCoordinates;
 }
 
 @property (retain) id content;

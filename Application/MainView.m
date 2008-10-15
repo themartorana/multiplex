@@ -5,14 +5,15 @@
 #import <QuartzCore/QuartzCore.h>
 
 @interface MainView (LayerStuff)
-- (MovieLayer*) layerForMovie:(Movie*)movie;
+- (MovieLayer*) newLayerForMovie:(Movie*)movie;
 - (void) layoutSublayersOfLayer:(CALayer*)layer;
 @end
 
 @interface MainView (Private)
+- (void) cancelHoverTimer;
+- (MovieLayer*) movieLayerForPoint:(CGPoint)p;
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context;
 - (void) hoverTimerTicked:(NSTimer*)timer;
-- (void) stopHoverTimer;
 @end
 
 @implementation MainView
@@ -54,12 +55,12 @@
     // Set up our mouse tracking area
     [self resumeTracking];
     
-    highlightLayer = [[CALayer layer] retain];
-    highlightLayer.borderColor = CGColorCreateGenericRGB(231.0/255.0, 111.0/255.0, 52.0/255.0, 1.0);
-    highlightLayer.borderWidth = 10.0;
-    highlightLayer.cornerRadius = 10.0;
-    highlightLayer.hidden = YES;
-    [floorLayer addSublayer:highlightLayer];
+    hoverHighlightLayer = [[CALayer layer] retain];
+    hoverHighlightLayer.borderColor = CGColorCreateGenericRGB(231.0/255.0, 111.0/255.0, 52.0/255.0, 1.0);
+    hoverHighlightLayer.borderWidth = 10.0;
+    hoverHighlightLayer.cornerRadius = 10.0;
+    hoverHighlightLayer.hidden = YES;
+    [floorLayer addSublayer:hoverHighlightLayer];
     
     hoverPlayLayer = [HoverPlayLayer layer];
     hoverPlayLayer.hidden = YES;
@@ -70,6 +71,7 @@
 
 - (void) dealloc
 {
+    [self cancelHoverTimer];
     [layersByID release];
     [listOfLayersInOrder release];
     [hoverPlayLayer release];
@@ -90,6 +92,37 @@
             [NSException raise:NSInvalidArgumentException format:@"content must be of type NSArrayController."];
         }
     }
+}
+
+- (void) setHoveredMovie:(Movie*)movie
+{
+    [CATransaction begin];
+    [CATransaction setValue:[NSNumber numberWithDouble:0.0] forKey:kCATransactionAnimationDuration];
+    if (movie != hoveredMovie) {
+        [hoveredMovie release];
+        hoveredMovie = [movie retain];
+
+        hoverPlayLayer.hidden = YES;
+        
+        [self cancelHoverTimer];
+
+        if (movie) {
+            MovieLayer* movieLayer = [layersByID objectForKey:hoveredMovie.objectID];
+
+            hoverHighlightLayer.hidden = NO;
+            hoverHighlightLayer.anchorPoint = movieLayer.anchorPoint;
+            hoverHighlightLayer.bounds = CGRectInset(movieLayer.bounds, -20, -20);
+            hoverHighlightLayer.position = movieLayer.position;
+            hoverHighlightLayer.zPosition = movieLayer.zPosition - 1;
+            hoverHighlightLayer.transform = movieLayer.transform;
+            
+            hoverTimer = [[NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(hoverTimerTicked:) userInfo:nil repeats:NO] retain];
+        } else {
+            hoverHighlightLayer.hidden = YES;
+        }
+
+    }
+    [CATransaction commit];
 }
 
 - (void) drawLayer:(CALayer*)layer inContext:(CGContextRef)c
@@ -115,36 +148,18 @@
 - (void) mouseUp:(NSEvent*)theEvent
 {
     CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
-    CALayer* layer = [floorLayer hitTest:p];
-
-    while (layer && ![layer isKindOfClass:[MovieLayer class]]) {
-        if (layer.superlayer) {
-            layer = layer.superlayer;
-        }
-        else {
-            return;
-        }
-    }
-    
-    if (layer) {
-        Movie* m = [(MovieLayer*)layer movie];
-        [(NSArrayController*)content setSelectedObjects:[NSArray arrayWithObject:m]];
+    MovieLayer* movieLayer = [self movieLayerForPoint:p];
+    if (movieLayer) {
+        Movie* movie = [movieLayer movie];
+        [(NSArrayController*)content setSelectedObjects:[NSArray arrayWithObject:movie]];
         
         if ([theEvent clickCount] == 2) {
             hoverPlayLayer.hidden = YES;
-            [self stopHoverTimer];
+            [self cancelHoverTimer];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexShowMovieDialog" object:nil];
         } else {
             if (![hoverPlayLayer hitTest:p]) {
-                if (hoverPlayLayer.hidden) {
-                    [self stopHoverTimer];
-                    hoverTimer = [NSTimer scheduledTimerWithTimeInterval:0.2 
-                                                                  target:self 
-                                                                selector:@selector(hoverTimerTicked:) 
-                                                                userInfo:nil repeats:NO];
-                } else {
-                    hoverPlayLayer.hidden = YES;
-                }                
+                [self setHoveredMovie:movieLayer.movie];
             }
         }
     }
@@ -152,61 +167,19 @@
 
 - (void) mouseMoved:(NSEvent*)theEvent
 {    
-    lastKnownMouseCoordinates = [theEvent locationInWindow];
-    
     CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
-    CGPoint hoverLayerPosition = CGPointMake(p.x - 20.0, 
-                                            p.y - hoverPlayLayer.bounds.size.height + 20.0);
-    if ([hoverPlayLayer hitTest:p])
+    MovieLayer* movieLayer = [self movieLayerForPoint:p];
+    Movie* movie = movieLayer.movie;
+    if ([hoverPlayLayer hitTest:p] || movie == hoveredMovie) {
         return;
-    
-    CALayer* layer = [floorLayer hitTest:p];
-    
-    if (!layer) {
-        highlightLayer.hidden = YES;
-        hoverPlayLayer.hidden = YES;
-        self.hoveredMovie = nil;
-        [self stopHoverTimer];
-    } 
-    else while (layer) {
-        if (layer == radialGradientLayer) {
-            [self stopHoverTimer];
-            self.hoveredMovie = nil;
-            highlightLayer.hidden = YES;
-            hoverPlayLayer.hidden = YES;
-            break;
-        } else if ([layer isKindOfClass:[MovieLayer class]]) {
-            
-            MovieLayer* mLayer = (MovieLayer*)layer;
-            
-            if (hoverPlayLayer.hidden)
-                hoverPlayLayer.position = hoverLayerPosition;
-            
-            [CATransaction begin];
-            [CATransaction setValue:[NSNumber numberWithDouble:0.0] forKey:kCATransactionAnimationDuration];
-            highlightLayer.hidden = NO;
-            highlightLayer.anchorPoint = mLayer.anchorPoint;
-            highlightLayer.bounds = CGRectInset(mLayer.bounds, -20, -20);
-            highlightLayer.position = mLayer.position;
-            highlightLayer.zPosition = mLayer.zPosition - 1;
-            highlightLayer.transform = mLayer.transform;
-            [CATransaction commit];
-            
-            if (hoveredMovie != [(MovieLayer*)layer movie]) {
-                hoverPlayLayer.hidden = YES;
-                self.hoveredMovie = [(MovieLayer*)layer movie];
-                [self stopHoverTimer];
-                hoverTimer = [[NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(hoverTimerTicked:) userInfo:nil repeats:YES] retain];
-            }
-        }
-        layer = layer.superlayer;
     }
+    hoverPlayLayer.position = CGPointMake(p.x - 20.0, p.y - hoverPlayLayer.bounds.size.height + 20.0);
+    [self setHoveredMovie:movie];
 }
 
 - (void) mouseExited:(NSEvent*)theEvent
 {
-    [self stopHoverTimer];
-    self.hoveredMovie = nil;
+    [self setHoveredMovie:nil];
 }
 
 - (void) pauseTracking
@@ -236,6 +209,7 @@
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
     if ([@"content.@count" isEqualToString:keyPath]) {
+        self.hoveredMovie = nil;
         NSMutableArray* allLayers = [listOfLayersInOrder objectAtIndex:0];
         int oldCount = [allLayers count];
         NSArray* allObjects = [object content];
@@ -247,7 +221,7 @@
                 NSManagedObjectID* objectID = [movie objectID];
                 MovieLayer* layer = [layersByID objectForKey:objectID];
                 if (!layer) {
-                    layer = [self layerForMovie:movie];
+                    layer = [self newLayerForMovie:movie];
                     [floorLayer addSublayer:layer];
                     [layersByID setObject:layer forKey:objectID];
                 }
@@ -263,6 +237,7 @@
             [floorLayer setNeedsLayout];
         }
     } else if ([@"arrangedObjects" isEqualToString:keyPath]) {
+        self.hoveredMovie = nil;
         NSArray* arrangedObjects = [object arrangedObjects];
 
         int count = [arrangedObjects count];
@@ -282,7 +257,7 @@
             NSManagedObjectID* objectID = [movie objectID];
             MovieLayer* layer = [layersByID objectForKey:objectID];
             if (!layer) {
-                layer = [self layerForMovie:movie];
+                layer = [self newLayerForMovie:movie];
                 [floorLayer addSublayer:layer];
                 [layersByID setObject:layer forKey:objectID];
             }
@@ -312,13 +287,24 @@
     }
 }
 
-- (void) stopHoverTimer
+- (MovieLayer*) movieLayerForPoint:(CGPoint)p
 {
-    if (hoverTimer && [hoverTimer isValid]) {
-        if ([hoverTimer isValid]) {
-            [hoverTimer invalidate];
+    CALayer* layer = [floorLayer hitTest:p];
+    while (layer) {
+        if (layer == radialGradientLayer) {
+            break;
+        } else if ([layer isKindOfClass:[MovieLayer class]]) {
+            return (MovieLayer*)layer;
         }
-        
+        layer = layer.superlayer;
+    }
+    return nil;
+}
+
+- (void) cancelHoverTimer 
+{
+    if (hoverTimer) @synchronized (hoverTimer) {
+        [hoverTimer invalidate];
         [hoverTimer release];
         hoverTimer = nil;
     }
@@ -326,12 +312,15 @@
 
 - (void) hoverTimerTicked:(NSTimer*)timer
 {
-    [self stopHoverTimer];
-    
-    [CATransaction begin];
-    [CATransaction setValue:[NSNumber numberWithFloat:0.75] forKey:kCATransactionAnimationDuration];
-    hoverPlayLayer.hidden = NO;
-    [CATransaction commit];
+    @synchronized (hoverTimer) {
+        [hoverTimer release];
+        hoverTimer = nil;
+        
+        [CATransaction begin];
+        [CATransaction setValue:[NSNumber numberWithFloat:0.75] forKey:kCATransactionAnimationDuration];
+        hoverPlayLayer.hidden = NO;
+        [CATransaction commit];
+    }
 }
 
 @end
@@ -345,7 +334,7 @@ CGFloat HS = 75.0;
 #pragma mark -
 @implementation MainView (LayerStuff)
 
-- (MovieLayer*) layerForMovie:(Movie*)movie
+- (MovieLayer*) newLayerForMovie:(Movie*)movie
 {
     MovieLayer* layer = [MovieLayer layerWithMovie:movie];
     layer.frame = CGRectMake(0.0, 0.0, W, H);
@@ -504,7 +493,7 @@ CGFloat HS = 75.0;
         p = CATransform3DRotate(p, 0.1, 1.0, 0.0, 0.0);
         floorLayer.sublayerTransform = p;
     }
-
+    
     [CATransaction commit];
 }
 

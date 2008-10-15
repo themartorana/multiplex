@@ -101,7 +101,7 @@
     return color;
 }
 
-+ (CGColorRef) discPlayLayerUnhoveredForegroundColor;
++ (CGColorRef) discPlayLayerUnhoveredForegroundColor
 {
     static CGColorRef color = NULL;
     if (!color) {
@@ -109,5 +109,24 @@
     }
     return color;
 }
+
++ (CGColorRef) multiplexOrange
+{
+    static CGColorRef color = NULL;
+    if (!color) {
+        color = CGColorCreateGenericRGB(230.0/255.0, 111.0/255.0, 51.0/255.0, 1.0);
+    }
+    return color;
+}
+
++ (CGColorRef) multiplexOrangeSlightlyTransparent
+{
+    static CGColorRef color = NULL;
+    if (!color) {
+        color = CGColorCreateGenericRGB(230.0/255.0, 111.0/255.0, 51.0/255.0, 0.9);
+    }
+    return color;
+}
+
 
 @end

@@ -145,6 +145,17 @@
     }
 }
 
+- (void) mouseDown:(NSEvent*)theEvent
+{
+    /*if (!hoverPlayLayer.hidden) {
+        CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
+        CALayer *layer = [hoverPlayLayer hitTest:p];
+        if (layer && [layer isKindOfClass:[PlayButtonLayer class]]) {
+            hoverPlayLayer.isMouseDown = YES;
+        }
+    }*/
+}
+
 - (void) mouseUp:(NSEvent*)theEvent
 {
     CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
@@ -173,7 +184,7 @@
     if ([hoverPlayLayer hitTest:p] || movie == hoveredMovie) {
         return;
     }
-    hoverPlayLayer.position = CGPointMake(p.x - 20.0, p.y - hoverPlayLayer.bounds.size.height + 20.0);
+    hoverPlayLayer.position = CGPointMake(p.x, p.y - hoverPlayLayer.bounds.size.height + 20.0);
     [self setHoveredMovie:movie];
 }
 

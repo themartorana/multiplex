@@ -23,8 +23,10 @@
     Movie* hoveredMovie;
     
     BOOL isInAlternatePosition;
+    BOOL isMouseDown;
 }
 
 @property (retain) Movie* hoveredMovie;
+@property BOOL isMouseDown;
 
 @end

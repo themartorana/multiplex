@@ -26,13 +26,17 @@
 @implementation HoverPlayLayer
 
 @synthesize hoveredMovie;
+@synthesize isMouseDown;
 
 - (HoverPlayLayer*) init
 {
     if (self = [super init]) {
-        [self setUpLayerLayout];        
+        isMouseDown = NO;
+        [self setUpLayerLayout];
     }
 
+    [playButtonLayer bind:@"isMouseDown" toObject:self withKeyPath:@"isMouseDown" options:nil];
+    
     return self;
 }
 
@@ -45,14 +49,8 @@
     orangeBoxLayer = [CALayer layer];
     orangeBoxLayer.anchorPoint = CGPointZero;
     orangeBoxLayer.bounds = CGRectMake(0.0, 0.0, 285.0, 70.0);
-    orangeBoxLayer.backgroundColor = [[NSColor colorWithRGBIn0To255ValuesForRed:230 
-                                                                          green:112 
-                                                                           blue:51
-                                                                          alpha:220] colorAsCGColorRef];
-    orangeBoxLayer.borderColor = [[NSColor colorWithRGBIn0To255ValuesForRed:230 
-                                                                      green:112 
-                                                                       blue:51 
-                                                                      alpha:255] colorAsCGColorRef];
+    orangeBoxLayer.backgroundColor = [CGColorFactory multiplexOrangeSlightlyTransparent];
+    orangeBoxLayer.borderColor = [CGColorFactory multiplexOrange];
     orangeBoxLayer.borderWidth = 2.0;
     orangeBoxLayer.cornerRadius = 10.0;
     [self addSublayer:orangeBoxLayer];
@@ -65,8 +63,8 @@
     titleLayer = [CATextLayer layer];
     titleLayer.anchorPoint = CGPointZero;
     titleLayer.bounds = CGRectMake(0.0, 0.0, 220.0, 32.0);
-    titleLayer.font = [NSFont boldSystemFontOfSize:13.0];
-    titleLayer.fontSize = 13.0;
+    titleLayer.font = [NSFont boldSystemFontOfSize:14.0];
+    titleLayer.fontSize = 14.0;
     titleLayer.wrapped = YES;
     [orangeBoxLayer addSublayer:titleLayer];
     
@@ -87,11 +85,11 @@
 {
     if (position.x + self.bounds.size.width < [[NSApp keyWindow] frame].size.width) {
         [self putLayersIntoDefaultPosition];
-        [super setPosition:position];
+        [super setPosition:CGPointMake(position.x - 20.0, position.y)];
     }
     else {
         [self putLayersIntoAlternatePosition];
-        [super setPosition:CGPointMake(position.x - self.bounds.size.width, position.y)];
+        [super setPosition:CGPointMake(position.x - self.bounds.size.width + 20.0, position.y)];
     }
 }
 
@@ -111,7 +109,7 @@
                                   nil];
     
     titleLayer.position = CGPointMake(50.0, 30.0);
-    additionalInfoLayer.position = titleLayer.position;//CGPointMake(50.0, 5.0);
+    additionalInfoLayer.position = CGPointMake(50.0, 10.0);
     
     [self setNeedsLayout];
 }
@@ -130,6 +128,9 @@
                                   [CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX scale:1.0 offset:-46.0],
                                   [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
                                   nil];
+    
+    titleLayer.position = CGPointMake(20.0, 30.0);
+    additionalInfoLayer.position = CGPointMake(20.0, 10.0);
     
     [self setNeedsLayout];
 }

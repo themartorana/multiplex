@@ -157,8 +157,9 @@
             [ms appendString:@"  |  "];
         }
         
-        NSString* rating = [hoveredMovie.rating substringToIndex:[hoveredMovie.rating rangeOfString:@" "].location];
-        if ([rating length] > 0) {
+        NSRange range = [hoveredMovie.rating rangeOfString:@" "];
+        if (range.location != NSNotFound) {
+            NSString* rating = [hoveredMovie.rating substringToIndex:[hoveredMovie.rating rangeOfString:@" "].location];
             [ms appendFormat:@"Rated %@", rating];
         }
         else {

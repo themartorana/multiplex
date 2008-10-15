@@ -111,6 +111,9 @@
             CFRelease(imageSource);
         }
     }
+
+    [receivedData release];
+    receivedData = nil;
 }
 
 @end

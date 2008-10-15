@@ -4,6 +4,7 @@ body
     padding: 0;
     color: white;
     
+    overflow-x: hidden;
     font-family: "Lucida Grande";
     font-size: 13px;
     line-height: 22px;

@@ -12,11 +12,11 @@
     CATiledLayer* boxImageLayer; 
     /**/
     Movie* movie;
-    CGImageRef boxImage;
+    id boxImage;
 }
 
 @property (readonly) Movie* movie;
-@property CGImageRef boxImage;
+@property (retain) id boxImage;
 
 + (id) layerWithMovie:(Movie*)movie;
 

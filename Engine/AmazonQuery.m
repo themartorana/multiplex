@@ -233,7 +233,10 @@
         [numberFormatter release];
         [xml release];
     }
-
+    
+    [receivedData release];
+    receivedData = nil;
+    
     if (![response count] || error) {
         [self _fireDidFailWithError:error];
     } else {

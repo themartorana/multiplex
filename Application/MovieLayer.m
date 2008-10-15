@@ -74,16 +74,14 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
     [movie removeObserver:self forKeyPath:@"title"];
     [movie removeObserver:self forKeyPath:@"frontCover"];
     [movie release];
-    if (boxImage) {
-        CGImageRelease(boxImage);
-    }
+    [boxImage release];
     [super dealloc];
 }
 
 - (void) drawLayer:(CALayer*)layer inContext:(CGContextRef)c
 {
-    if (layer == boxImageLayer) {
-        CGContextDrawImage(c, self.bounds, boxImage);
+    if (layer == boxImageLayer && boxImage != nil) {
+        CGContextDrawImage(c, self.bounds, (CGImageRef)boxImage);
     }
 }
 
@@ -96,7 +94,7 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
         if ([frontCover isKindOfClass:[NSNull class]]) {
             frontCover = nil;
         }
-        self.boxImage = (CGImageRef)frontCover;
+        self.boxImage = frontCover;
     }
 
     [titleLayer setHidden:boxImage != nil];

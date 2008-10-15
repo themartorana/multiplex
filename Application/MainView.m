@@ -83,12 +83,9 @@
         content = [_content retain];
         
         if ([content isKindOfClass:[NSArrayController class]]) {
-            [content addObserver:self forKeyPath:@"content.@count" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
-            [content addObserver:self forKeyPath:@"arrangedObjects" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
-            
-            // For bindings
-            [(NSArrayController*)content setSelectionIndexes:[NSIndexSet indexSet]];
-            
+            NSArrayController* arrayController = content;
+            [arrayController addObserver:self forKeyPath:@"content.@count" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+            [arrayController addObserver:self forKeyPath:@"arrangedObjects" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
         } else {
             [NSException raise:NSInvalidArgumentException format:@"content must be of type NSArrayController."];
         }

@@ -3,8 +3,14 @@
 #import "Movie.h"
 #import "InfoPaneDiscsView.h"
 #import "BigPlayButtonView.h"
+#import "VerticalScroller.h"
+
 #import <WebKit/WebKit.h>
 
+@interface NSScrollView (NSScrollViewWebKitPrivate)
+- (void) setAllowsHorizontalScrolling:(BOOL)allow;
+- (void) setHorizontalScrollingModeLocked:(BOOL)locked;
+@end
 
 @implementation InfoPaneFormController
 
@@ -25,9 +31,10 @@
 {
     // Set up the appropriate things for the web view
     [descriptionWebView setEditingDelegate:self];
+    [descriptionWebView setFrameLoadDelegate:self];
     [descriptionWebView setEditable:YES];
     [descriptionWebView setDrawsBackground:NO];
-    
+        
     WebPreferences* prefs = [descriptionWebView preferences];
     [prefs setUserStyleSheetEnabled:YES];
     [prefs setUserStyleSheetLocation:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"default" ofType:@"css"]]];
@@ -41,8 +48,7 @@
     
     if (selectedMovies && [selectedMovies count] > 0) {
         self.selectedMovie = (Movie*)[selectedMovies objectAtIndex:0];
-    }
-    else {
+    } else {
         self.selectedMovie = nil;
     }
 }
@@ -55,9 +61,26 @@
     if (selectedMovie) {
         // Send to web kit
         [[descriptionWebView mainFrame] loadHTMLString:selectedMovie.review baseURL:url];
-    }
-    else {
+    } else {
         [[descriptionWebView mainFrame] loadHTMLString:@"" baseURL:url];
+    }
+}
+
+- (void) webView:(WebView*)sender didFinishLoadForFrame:(WebFrame*)frame
+{
+    if (sender != descriptionWebView) {
+        return;
+    }
+
+    NSScrollView* scrollView = [[[[descriptionWebView mainFrame] frameView] documentView] enclosingScrollView];
+    
+    VerticalScroller* scroller = (VerticalScroller*)[scrollView verticalScroller];
+    if (![scroller isMemberOfClass:[VerticalScroller class]]) {
+        NSRect scrollerFrame = [[scrollView verticalScroller] frame];
+        NSScroller* oldScroller = scroller;
+        scroller = [[[VerticalScroller alloc] initWithFrame:scrollerFrame] autorelease];
+        [scroller setFloatValue:[oldScroller floatValue] knobProportion:[oldScroller knobProportion]];
+        [scrollView setVerticalScroller:scroller];
     }
 }
 
@@ -67,12 +90,11 @@
     selectedMovie.review = content;
 }
 
-- (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem
+- (void) tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem
 {
     if (tabViewItem == discsTabViewItem) {
         [bigPlayButtonView setHidden:YES];
-    }
-    else {
+    } else {
         [bigPlayButtonView setHidden:NO];
     }
 }

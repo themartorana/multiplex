@@ -39,8 +39,6 @@
         nil
     ];
     [rootLayer insertSublayer:floorLayer atIndex:0];
-    /*floorLayer.borderColor = CGColorCreateGenericRGB(1.0, 0.0, 0.0, 1.0);
-    floorLayer.borderWidth = 2.0;*/
     
     radialGradientLayer = [CALayer layer];
     radialGradientLayer.hidden = YES;
@@ -201,9 +199,7 @@
                 hoverPlayLayer.hidden = YES;
                 self.hoveredMovie = [(MovieLayer*)layer movie];
                 [self stopHoverTimer];
-                NSLog(@"Setting up timer");
                 hoverTimer = [[NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(hoverTimerTicked:) userInfo:nil repeats:YES] retain];
-                NSLog(@"%f", [hoverTimer timeInterval]);
             }
         }
         layer = layer.superlayer;
@@ -322,8 +318,11 @@
 - (void) stopHoverTimer
 {
     if (hoverTimer && [hoverTimer isValid]) {
-        [hoverTimer invalidate];
-        //[hoverTimer release];
+        if ([hoverTimer isValid]) {
+            [hoverTimer invalidate];
+        }
+        
+        [hoverTimer release];
         hoverTimer = nil;
     }
 }

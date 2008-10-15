@@ -8,8 +8,9 @@
     IBOutlet NSArrayController* movies;
     IBOutlet MainView* mainView;
     
-    IBOutlet HoverTitleView* basicInfoView;
-    IBOutlet NSView* infoPaneHostingView;
+    IBOutlet HoverTitleView* hoverTitleView;
+    IBOutlet NSView* infoPaneView;
+    IBOutlet NSView* searchView;
     
     IBOutlet InfoPaneFormController* infoPaneFormController;
 }

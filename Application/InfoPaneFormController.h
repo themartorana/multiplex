@@ -14,7 +14,6 @@
 @class BigPlayButtonView;
 
 @interface InfoPaneFormController : NSObject {
-    NSArray* selectedMovies;
     Movie* selectedMovie;
     
     NSColor* labelColor;
@@ -28,7 +27,6 @@
     IBOutlet NSTabViewItem* discsTabViewItem;
 }
 
-@property (retain) NSArray* selectedMovies;
 @property (retain) Movie* selectedMovie;
 @property (readonly) NSColor* labelColor;
 

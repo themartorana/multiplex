@@ -22,7 +22,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		550D07A00E9A7A95008F0275 /* InfoPaneHostingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 550D079F0E9A7A95008F0275 /* InfoPaneHostingView.m */; };
 		550D07A30E9A7AF4008F0275 /* InfoPaneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 550D07A20E9A7AF4008F0275 /* InfoPaneView.m */; };
 		550D082C0E9AE14E008F0275 /* InfoPaneFormController.m in Sources */ = {isa = PBXBuildFile; fileRef = 550D082B0E9AE14E008F0275 /* InfoPaneFormController.m */; };
 		550D08700E9AFDF4008F0275 /* NSDescriptionValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 550D086F0E9AFDF4008F0275 /* NSDescriptionValueTransformer.m */; };
@@ -42,7 +41,7 @@
 		557B69740E4CD0790009919E /* DebugWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B69730E4CD0790009919E /* DebugWindowController.m */; };
 		5583D1640E51D82700EB7AE6 /* Multiplex.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */; };
 		558D19CF0E9C606E000F67FA /* CloseButtonLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D19CE0E9C606E000F67FA /* CloseButtonLayer.m */; };
-		558D1A810E9C6FED000F67FA /* InfoPaneBoxView.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1A800E9C6FED000F67FA /* InfoPaneBoxView.m */; };
+		558D1A810E9C6FED000F67FA /* InfoPaneBasicInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1A800E9C6FED000F67FA /* InfoPaneBasicInfoView.m */; };
 		558D1AF00E9D186B000F67FA /* InfoPaneDiscsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */; };
 		558D1B030E9D3F37000F67FA /* PageNumberLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1B020E9D3F37000F67FA /* PageNumberLayer.m */; };
 		558D1C3E0E9D5562000F67FA /* DiscPlayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1C3D0E9D5562000F67FA /* DiscPlayLayer.m */; };
@@ -295,8 +294,6 @@
 /* Begin PBXFileReference section */
 		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		550D079E0E9A7A95008F0275 /* InfoPaneHostingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPaneHostingView.h; sourceTree = "<group>"; };
-		550D079F0E9A7A95008F0275 /* InfoPaneHostingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoPaneHostingView.m; sourceTree = "<group>"; };
 		550D07A10E9A7AF4008F0275 /* InfoPaneView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPaneView.h; sourceTree = "<group>"; };
 		550D07A20E9A7AF4008F0275 /* InfoPaneView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoPaneView.m; sourceTree = "<group>"; };
 		550D082A0E9AE14E008F0275 /* InfoPaneFormController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPaneFormController.h; sourceTree = "<group>"; };
@@ -331,8 +328,8 @@
 		5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Multiplex.xcdatamodel; sourceTree = "<group>"; };
 		558D19CD0E9C606E000F67FA /* CloseButtonLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloseButtonLayer.h; sourceTree = "<group>"; };
 		558D19CE0E9C606E000F67FA /* CloseButtonLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloseButtonLayer.m; sourceTree = "<group>"; };
-		558D1A7F0E9C6FED000F67FA /* InfoPaneBoxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPaneBoxView.h; sourceTree = "<group>"; };
-		558D1A800E9C6FED000F67FA /* InfoPaneBoxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoPaneBoxView.m; sourceTree = "<group>"; };
+		558D1A7F0E9C6FED000F67FA /* InfoPaneBasicInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPaneBasicInfoView.h; sourceTree = "<group>"; };
+		558D1A800E9C6FED000F67FA /* InfoPaneBasicInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoPaneBasicInfoView.m; sourceTree = "<group>"; };
 		558D1AEE0E9D186B000F67FA /* InfoPaneDiscsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPaneDiscsView.h; sourceTree = "<group>"; };
 		558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoPaneDiscsView.m; sourceTree = "<group>"; };
 		558D1B010E9D3F37000F67FA /* PageNumberLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageNumberLayer.h; sourceTree = "<group>"; };
@@ -709,12 +706,10 @@
 				5598E6030E91C5C6005FCC91 /* HoverTitleView.m */,
 				556BD78A0E9444ED00EC698A /* WorkingStatusView.h */,
 				556BD78B0E9444ED00EC698A /* WorkingStatusView.m */,
-				550D079E0E9A7A95008F0275 /* InfoPaneHostingView.h */,
-				550D079F0E9A7A95008F0275 /* InfoPaneHostingView.m */,
 				550D07A10E9A7AF4008F0275 /* InfoPaneView.h */,
 				550D07A20E9A7AF4008F0275 /* InfoPaneView.m */,
-				558D1A7F0E9C6FED000F67FA /* InfoPaneBoxView.h */,
-				558D1A800E9C6FED000F67FA /* InfoPaneBoxView.m */,
+				558D1A7F0E9C6FED000F67FA /* InfoPaneBasicInfoView.h */,
+				558D1A800E9C6FED000F67FA /* InfoPaneBasicInfoView.m */,
 				558D1AEE0E9D186B000F67FA /* InfoPaneDiscsView.h */,
 				558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */,
 			);
@@ -1177,12 +1172,11 @@
 				55D957A40E94202500E35FF4 /* InfoButtonLayer.m in Sources */,
 				556BD78C0E9444ED00EC698A /* WorkingStatusView.m in Sources */,
 				556BD7900E94470600EC698A /* Activity.m in Sources */,
-				550D07A00E9A7A95008F0275 /* InfoPaneHostingView.m in Sources */,
 				550D07A30E9A7AF4008F0275 /* InfoPaneView.m in Sources */,
 				550D082C0E9AE14E008F0275 /* InfoPaneFormController.m in Sources */,
 				550D08700E9AFDF4008F0275 /* NSDescriptionValueTransformer.m in Sources */,
 				558D19CF0E9C606E000F67FA /* CloseButtonLayer.m in Sources */,
-				558D1A810E9C6FED000F67FA /* InfoPaneBoxView.m in Sources */,
+				558D1A810E9C6FED000F67FA /* InfoPaneBasicInfoView.m in Sources */,
 				558D1AF00E9D186B000F67FA /* InfoPaneDiscsView.m in Sources */,
 				558D1B030E9D3F37000F67FA /* PageNumberLayer.m in Sources */,
 				558D1C3E0E9D5562000F67FA /* DiscPlayLayer.m in Sources */,

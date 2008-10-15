@@ -5,7 +5,6 @@
 #import "Disc.h"
 #import "Media.h"
 #import "HoverTitleView.h"
-#import "InfoPaneHostingView.h"
 #import "CGColorFactory.h"
 
 @implementation WindowController
@@ -13,9 +12,9 @@
 - (void) awakeFromNib
 {
     // TODO: Move this somewhere appropriate!!
-    [infoPaneHostingView setHidden:YES];
-    [infoPaneHostingView setFrame:[[[mainView window] contentView] frame]];
-    [[[mainView window] contentView] addSubview:infoPaneHostingView];
+    [infoPaneView setHidden:YES];
+    [infoPaneView setFrame:[[[mainView window] contentView] frame]];
+    [[[mainView window] contentView] addSubview:infoPaneView];
     
     NSView* contentView = self.window.contentView;
     contentView.wantsLayer = YES;
@@ -33,10 +32,10 @@
     [mainView setContent:movies];
         
     // Do some bindings
-    [basicInfoView bind:@"hoveredMovie" toObject:mainView withKeyPath:@"hoveredMovie" options:nil];
+    [hoverTitleView bind:@"hoveredMovie" toObject:mainView withKeyPath:@"hoveredMovie" options:nil];
     
     NSDictionary* options = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption];
-    [infoPaneFormController bind:@"selectedMovies" toObject:movies withKeyPath:@"selectedObjects" options:options];
+    [infoPaneFormController bind:@"selectedMovie" toObject:movies withKeyPath:@"selection.self" options:options];
     
     // Listen for play requests
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playDiscRequest:) name:@"MultiplexPlayDisc" object:nil];
@@ -72,7 +71,7 @@
     }
     else if ([movie.allDiscs count] > 1) {
         // We want to show the dialog
-        [infoPaneHostingView setHidden:NO];    
+        [infoPaneView setHidden:NO];    
     }
 }
 
@@ -100,7 +99,8 @@
     [[infoPaneHostingView layer] setBackgroundFilters:[NSArray arrayWithObject:blurFilter]];
     */
      
-    [infoPaneHostingView setHidden:NO];
+    [searchView setHidden:YES];
+    [infoPaneView setHidden:NO];
 }
 
 - (void) closeInfoView:(NSNotification*)notification
@@ -120,8 +120,9 @@
     [anim release];
     */
     
-    [infoPaneHostingView setHidden:YES];
-    [[infoPaneHostingView layer] setBackgroundFilters:nil];
+    [searchView setHidden:NO];
+    [infoPaneView setHidden:YES];
+    [[infoPaneView layer] setBackgroundFilters:nil];
 }
 
 @end

@@ -15,7 +15,6 @@
 @implementation InfoPaneFormController
 
 @synthesize selectedMovie;
-@synthesize selectedMovies;
 @synthesize labelColor;
 
 - (InfoPaneFormController*) init
@@ -41,20 +40,6 @@
     
     NSDictionary* options = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption];
     [infoPaneDiscsView bind:@"selectedMovie" toObject:self withKeyPath:@"selectedMovie" options:options];
-}
-
-- (void) setSelectedMovies:(NSArray*)_selectedMovies
-{
-    if (selectedMovies != _selectedMovies) {
-        [selectedMovies release];
-        selectedMovies = [_selectedMovies retain];
-    }
-    
-    if (selectedMovies && [selectedMovies count] > 0) {
-        [self setSelectedMovie:(Movie*)[selectedMovies objectAtIndex:0]];
-    } else {
-        [self setSelectedMovie:nil];
-    }
 }
 
 - (void) setSelectedMovie:(Movie*)_selectedMovie

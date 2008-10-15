@@ -14,8 +14,8 @@
 
 @implementation InfoPaneFormController
 
-@synthesize selectedMovies;
 @synthesize selectedMovie;
+@synthesize selectedMovies;
 @synthesize labelColor;
 
 - (InfoPaneFormController*) init
@@ -39,23 +39,30 @@
     [prefs setUserStyleSheetEnabled:YES];
     [prefs setUserStyleSheetLocation:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"default" ofType:@"css"]]];
     
-    [discsTabView bind:@"selectedMovie" toObject:self withKeyPath:@"selectedMovie" options:nil];
+    NSDictionary* options = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption];
+    [infoPaneDiscsView bind:@"selectedMovie" toObject:self withKeyPath:@"selectedMovie" options:options];
 }
 
 - (void) setSelectedMovies:(NSArray*)_selectedMovies
 {
-    selectedMovies = _selectedMovies;
+    if (selectedMovies != _selectedMovies) {
+        [selectedMovies release];
+        selectedMovies = [_selectedMovies retain];
+    }
     
     if (selectedMovies && [selectedMovies count] > 0) {
-        self.selectedMovie = (Movie*)[selectedMovies objectAtIndex:0];
+        [self setSelectedMovie:(Movie*)[selectedMovies objectAtIndex:0]];
     } else {
-        self.selectedMovie = nil;
+        [self setSelectedMovie:nil];
     }
 }
 
-- (void) setSelectedMovie:(Movie*)_movie
+- (void) setSelectedMovie:(Movie*)_selectedMovie
 {
-    selectedMovie = _movie;
+    if (selectedMovie != _selectedMovie) {
+        [selectedMovie release];
+        selectedMovie = [_selectedMovie retain];
+    }
     NSURL* url = [NSURL URLWithString:@""];
     
     if (selectedMovie) {

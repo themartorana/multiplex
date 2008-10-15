@@ -20,7 +20,7 @@
     NSColor* labelColor;
     
     IBOutlet WebView* descriptionWebView;
-    IBOutlet InfoPaneDiscsView* discsTabView;
+    IBOutlet InfoPaneDiscsView* infoPaneDiscsView;
     
     IBOutlet BigPlayButtonView* bigPlayButtonView;
     

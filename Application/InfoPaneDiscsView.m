@@ -52,7 +52,10 @@
 
 - (void) setSelectedMovie:(Movie*)_selectedMovie
 {
-    selectedMovie = _selectedMovie;
+    if (selectedMovie != _selectedMovie) {
+        [selectedMovie release];
+        selectedMovie = [_selectedMovie retain];
+    }
     [self setUpDiscLayers];
 }
 
@@ -66,10 +69,14 @@
     [pageNumbersLayer removeAllSublayers];
     [discsHostingLayer addSublayer:scrollingLayer];
     
-    int numDiscs = [selectedMovie.allDiscs count];
-    
-    if (!selectedMovie || numDiscs <1)
+    if (!selectedMovie) {
         return;
+    }
+    
+    int numDiscs = [selectedMovie.allDiscs count];
+    if (numDiscs <= 1) {
+        return;
+    }
     
     // Create page layers
     // Determine how many pages we need

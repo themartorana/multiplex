@@ -8,8 +8,6 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1181"/>
-			<integer value="1150"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2174,7 +2172,7 @@
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{1000, 700}</string>
 				<object class="NSView" key="NSWindowView" id="384445475">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2268,7 +2266,6 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{1000, 700}</string>
-					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1600, 1178}}</string>
 				<string key="NSMinSize">{1000, 722}</string>
@@ -2278,7 +2275,7 @@
 				<string key="NSClassName">WindowController</string>
 			</object>
 			<object class="NSCustomView" id="727293528">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2980,7 +2977,6 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{1128, 786}</string>
-				<reference key="NSSuperview"/>
 				<string key="NSClassName">BlurredBackgroundView</string>
 			</object>
 			<object class="NSCustomObject" id="62536199">
@@ -4296,14 +4292,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">discsTabView</string>
-						<reference key="source" ref="62536199"/>
-						<reference key="destination" ref="8453729"/>
-					</object>
-					<int key="connectionID">1352</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">infoPaneHostingView</string>
 						<reference key="source" ref="623785332"/>
 						<reference key="destination" ref="727293528"/>
@@ -4365,6 +4353,14 @@
 						</object>
 					</object>
 					<int key="connectionID">1381</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">infoPaneDiscsView</string>
+						<reference key="source" ref="62536199"/>
+						<reference key="destination" ref="8453729"/>
+					</object>
+					<int key="connectionID">1391</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -7030,7 +7026,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1390</int>
+			<int key="maxID">1391</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -7136,16 +7132,16 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>bigPlayButtonView</string>
 							<string>descriptionWebView</string>
-							<string>discsTabView</string>
 							<string>discsTabViewItem</string>
+							<string>infoPaneDiscsView</string>
 							<string>infoTabView</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>BigPlayButtonView</string>
 							<string>WebView</string>
-							<string>InfoPaneDiscsView</string>
 							<string>NSTabViewItem</string>
+							<string>InfoPaneDiscsView</string>
 							<string>NSTabView</string>
 						</object>
 					</object>

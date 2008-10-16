@@ -5,7 +5,7 @@
 #import <IOKit/storage/IODVDMedia.h>
 #import <sys/mount.h>
 
-#import "NSImage+DmgCtrl.h"
+#import <Toolkit/Toolkit.h>
 #import <JSONKit/JSONKit.h>
 
 @interface NSApplication (Extras)

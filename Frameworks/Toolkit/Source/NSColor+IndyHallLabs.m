@@ -1,15 +1,6 @@
-//
-//  NSColor+Mothership.m
-//  Multiplex
-//
-//  Created by David Martorana on 10/8/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
-//
+#import "NSColor+IndyHallLabs.h"
 
-#import "NSColor+Mothership.h"
-
-
-@implementation NSColor (Mothership)
+@implementation NSColor (IndyHallLabs)
 
 - (CGColorRef) colorAsCGColorRef
 {

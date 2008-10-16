@@ -5,11 +5,8 @@
 #import "DiscIdentQuery.h"
 #import "AmazonQuery.h"
 #import "ImageQuery.h"
-#import "MessageProtocol.h"
-#import "NSDictionary+KeyPaths.h"
-#import "NSString+UUID.h"
-#import "NSImage+DmgCtrl.h"
 
+#import <Toolkit/Toolkit.h>
 #import <JSONKit/JSONKit.h>
 
 #import <netinet/ip.h>

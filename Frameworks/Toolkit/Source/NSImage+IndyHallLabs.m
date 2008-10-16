@@ -1,6 +1,6 @@
-#import "NSImage+DmgCtrl.h"
+#import "Toolkit.h"
 
-@implementation NSImage (DmgCtrl)
+@implementation NSImage (IndyHallLabs)
 
 - (NSData*) PNGRepresentation
 {

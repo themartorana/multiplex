@@ -1,6 +1,6 @@
 #import <QuartzCore/QuartzCore.h>
 
-@interface CALayer (Mothership)
+@interface CALayer (IndyHallLabs)
 
 + (CALayer*) maskLayer;
 

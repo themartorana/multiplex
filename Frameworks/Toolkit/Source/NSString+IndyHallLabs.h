@@ -1,6 +1,6 @@
 #import <Cocoa/Cocoa.h>
 
-@interface NSString (UUID)
+@interface NSString (IndyHallLabs)
 
 + (id) stringWithUUID;
 

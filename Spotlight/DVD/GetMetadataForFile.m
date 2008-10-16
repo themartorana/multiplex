@@ -5,7 +5,7 @@
 #import <sys/stat.h>
 #import <openssl/md5.h>
 #import <sys/syslimits.h>
-#import "NSDate+Mothership.h"
+#import <Toolkit/Toolkit.h>
 #import <JSONKit/JSONKit.h>
 
 const static NSString* kMDItemDiscIdentFingerprint = @"com_discident_fingerprint";

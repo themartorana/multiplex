@@ -1,13 +1,11 @@
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/QuartzCore.h>
 
-@class PlayButtonLayer;
-@class InfoButtonLayer;
-@class CloseButtonLayer;
+@class ButtonLayer;
 
 @interface InfoPaneView : NSView {
-    InfoButtonLayer* infoButtonLayer;
-    CloseButtonLayer* closeButtonLayer;
+    ButtonLayer* infoButtonLayer;
+    ButtonLayer* closeButtonLayer;
 }
 
 @end

@@ -9,13 +9,13 @@
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/QuartzCore.h>
 
-@class PlayButtonLayer;
+@class ButtonLayer;
 @class Movie;
 
 @interface HoverPlayLayer : CALayer {
     CALayer* surroundingLayer;
     CALayer* orangeBoxLayer;
-    PlayButtonLayer* playButtonLayer; 
+    ButtonLayer* playButtonLayer; 
     
     CATextLayer* titleLayer;
     CATextLayer* additionalInfoLayer;

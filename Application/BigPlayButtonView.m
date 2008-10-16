@@ -1,5 +1,6 @@
 #import "BigPlayButtonView.h"
-#import "PlayButtonLayer.h"
+#import "ButtonLayer.h"
+#import "ApplicationResources.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -9,7 +10,7 @@
 {
     [self setWantsLayer:YES];
     
-    playButtonLayer = [PlayButtonLayer layer];
+    playButtonLayer = [ButtonLayer buttonLayerWithUpState:[ApplicationResources playButton] downState:[ApplicationResources playButtonDown]];
     playButtonLayer.anchorPoint = CGPointZero;
     playButtonLayer.frame = NSRectToCGRect([self bounds]);
     [[self layer] addSublayer:playButtonLayer];

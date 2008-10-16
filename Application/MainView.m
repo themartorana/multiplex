@@ -66,6 +66,7 @@
     hoverPlayLayer.hidden = YES;
     [rootLayer addSublayer:hoverPlayLayer];
     [hoverPlayLayer bind:@"hoveredMovie" toObject:self withKeyPath:@"hoveredMovie" options:nil];
+    [self setHoveredMovie:nil];
 }
 
 

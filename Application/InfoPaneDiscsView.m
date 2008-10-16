@@ -2,10 +2,10 @@
 #import "InfoPaneDiscsView.h"
 #import "PageNumberLayer.h"
 #import "DiscPlayLayer.h"
-#import "PlayButtonLayer.h"
+#import "ButtonLayer.h"
 #import "Movie.h"
 #import "Disc.h"
-#import "CALayer+Mothership.h"
+#import <Toolkit/Toolkit.h>
 
 @implementation InfoPaneDiscsView
 
@@ -183,9 +183,9 @@
     CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
     CALayer* layer = [discsHostingLayer hitTest:p];
     
-    if ([layer isKindOfClass:[PlayButtonLayer class]]) {
-        ((PlayButtonLayer*)layer).isMouseDown = YES;
-        playButtonDownLayer = (PlayButtonLayer*)layer;
+    if ([layer isKindOfClass:[ButtonLayer class]]) {
+        playButtonDownLayer = (ButtonLayer*)layer;
+        playButtonDownLayer.isMouseDown = YES;
     }
 }
 
@@ -195,7 +195,7 @@
     CALayer* layer = [discsHostingLayer hitTest:p];
     
     if (layer) {
-        if ([layer isKindOfClass:[PlayButtonLayer class]] && layer == playButtonDownLayer) {
+        if ([layer isKindOfClass:[ButtonLayer class]] && layer == playButtonDownLayer) {
             DiscPlayLayer* dpLayer = (DiscPlayLayer*)layer.superlayer;
             Disc* disc = dpLayer.disc;
             
@@ -217,7 +217,7 @@
     }
 }
 
-- (void)mouseExited:(NSEvent *)theEvent
+- (void) mouseExited:(NSEvent *)theEvent
 {
     [self unhoverHoveredLayer];
     if (playButtonDownLayer) {

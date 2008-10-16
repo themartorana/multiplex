@@ -2,7 +2,7 @@
 
 @class Movie;
 @class DiscPlayLayer;
-@class PlayButtonLayer;
+@class ButtonLayer;
 
 @interface InfoPaneDiscsView : NSView {
     Movie* selectedMovie;
@@ -15,7 +15,7 @@
     NSTrackingArea* mouseTrackingArea;
     
     DiscPlayLayer* hoveredLayer;
-    PlayButtonLayer* playButtonDownLayer;
+    ButtonLayer* playButtonDownLayer;
 }
 
 @property (retain) Movie* selectedMovie;

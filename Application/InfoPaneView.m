@@ -1,6 +1,6 @@
 #import "InfoPaneView.h"
-#import "PlayButtonLayer.h"
-#import "CloseButtonLayer.h"
+#import "ButtonLayer.h"
+#import "ApplicationResources.h"
 #import "CGColorFactory.h"
 
 @implementation InfoPaneView
@@ -38,7 +38,7 @@
     [[self layer] addSublayer:playButtonLayer];
     */
     
-    closeButtonLayer = [CloseButtonLayer layer];
+    closeButtonLayer = [ButtonLayer buttonLayerWithUpState:[ApplicationResources closeButton] downState:[ApplicationResources closeButtonDown]];
     closeButtonLayer.anchorPoint = CGPointZero;
     closeButtonLayer.zPosition = 1;
     closeButtonLayer.constraints = [NSArray arrayWithObjects:

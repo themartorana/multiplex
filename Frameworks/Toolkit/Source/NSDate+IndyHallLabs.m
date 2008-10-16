@@ -1,15 +1,6 @@
-//
-//  NSDate+Mothership.m
-//  Library
-//
-//  Created by David Martorana on 8/7/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
-//
+#import "NSDate+IndyHallLabs.h"
 
-#import "NSDate+Mothership.h"
-
-
-@implementation NSDate (Mothership)
+@implementation NSDate (IndyHallLabs)
 
 ///
 /// Take in yyyy-mm-dd or mm/dd/yyyy and return an NSDate

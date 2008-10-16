@@ -1,6 +1,6 @@
-#import "NSString+UUID.h"
+#import "Toolkit.h"
 
-@implementation NSString (UUID)
+@implementation NSString (IndyHallLabs)
 
 + (id) stringWithUUID
 {

@@ -1,10 +1,10 @@
 #import "DiscPlayLayer.h"
-#import "PlayButtonLayer.h"
-#import "GreyPlayButtonLayer.h"
+#import "ButtonLayer.h"
 #import "Disc.h"
 #import "Movie.h"
 #import "Media.h"
 #import "CGColorFactory.h"
+#import "ApplicationResources.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation DiscPlayLayer
@@ -31,7 +31,7 @@
     self.anchorPoint = CGPointZero;
     self.bounds = CGRectMake(0.0, 0.0, 370.0, 109.0);
     
-    playButtonLayer = [PlayButtonLayer layer];
+    playButtonLayer = [ButtonLayer buttonLayerWithUpState:[ApplicationResources playButton] downState:[ApplicationResources playButtonDown]];
     playButtonLayer.anchorPoint = CGPointZero;
     playButtonLayer.frame = CGRectMake(370.0 - 76.0 - universalPadding, 
                                        (109.0/2.0) - (76.0/2.0), 
@@ -39,7 +39,7 @@
                                        76.0);
     [self addSublayer:playButtonLayer];
  
-    greyPlayButtonLayer = [GreyPlayButtonLayer layer];
+    greyPlayButtonLayer = [ButtonLayer buttonLayerWithUpState:[ApplicationResources playButtonInactive] downState:[ApplicationResources playButton]];
     greyPlayButtonLayer.anchorPoint = CGPointZero;
     greyPlayButtonLayer.frame = CGRectMake(370.0 - 76.0 - universalPadding, 
                                        (109.0/2.0) - (76.0/2.0), 

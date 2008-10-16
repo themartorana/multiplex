@@ -1,6 +1,6 @@
 #import <Cocoa/Cocoa.h>
 
-@interface NSImage (DmgCtrl) 
+@interface NSImage (IndyHallLabs) 
 
 - (NSData*) PNGRepresentation;
 

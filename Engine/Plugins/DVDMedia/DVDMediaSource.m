@@ -1,6 +1,6 @@
 #import "DVDMediaSource.h"
 #import <JSONKit/JSONKit.h>
-#import "NSImage+DmgCtrl.h"
+#import <Toolkit/Toolkit.h>
 #import <sys/stat.h>
 
 @interface NSDictionary (PlusPlus)

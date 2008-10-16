@@ -1,6 +1,6 @@
-#import "NSDictionary+KeyPaths.h"
+#import "NSDictionary+IndyHallLabs.h"
 
-@implementation NSDictionary (KeyPaths)
+@implementation NSDictionary (IndyHallLabs)
 
 + (id) dictionaryWithExpandedKeyPathsAndObjects:(NSDictionary*)keyPathsAndObjects
 {

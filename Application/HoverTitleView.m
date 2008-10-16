@@ -1,17 +1,8 @@
-//
-//  InfoView.m
-//  Multiplex
-//
-//  Created by David Martorana on 9/29/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
-//
-
 #import "HoverTitleView.h"
-#import "PlayButtonLayer.h"
+#import "ButtonLayer.h"
 #import "Disc.h"
 #import "Media.h"
-#import "InfoButtonLayer.h"
-#import "CALayer+Mothership.h"
+#import <Toolkit/Toolkit.h>
 #import "CGColorFactory.h"
 
 @implementation HoverTitleView

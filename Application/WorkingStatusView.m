@@ -7,7 +7,7 @@
 //
 
 #import "WorkingStatusView.h"
-#import "NSString+UUID.h"
+#import <Toolkit/Toolkit.h>
 #import "Activity.h"
 
 @interface WorkingStatusView(Private)

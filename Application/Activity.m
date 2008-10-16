@@ -1,5 +1,5 @@
 #import "Activity.h"
-#import "NSString+UUID.h"
+#import <Toolkit/Toolkit.h>
 
 NSString* const ActivityStartedNotification = @"ActivityStarted";
 NSString* const ActivityTerminatedNotification = @"ActivityTerminated";

@@ -1,17 +1,10 @@
-//
-//  HoverPlayLayer.m
-//  Multiplex
-//
-//  Created by David Martorana on 10/14/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
-//
-
 #import "HoverPlayLayer.h"
 #import "Movie.h"
-#import "NSColor+Mothership.h"
-#import "PlayButtonLayer.h"
-#import <QuartzCore/QuartzCore.h>
+#import "ButtonLayer.h"
 #import "CGColorFactory.h"
+#import "ApplicationResources.h"
+#import <Toolkit/Toolkit.h>
+#import <QuartzCore/QuartzCore.h>
 
 @interface HoverPlayLayer (Private)
 
@@ -55,7 +48,7 @@
     orangeBoxLayer.cornerRadius = 10.0;
     [self addSublayer:orangeBoxLayer];
     
-    playButtonLayer = [PlayButtonLayer layer];
+    playButtonLayer = [ButtonLayer buttonLayerWithUpState:[ApplicationResources playButton] downState:[ApplicationResources playButtonDown]];
     playButtonLayer.anchorPoint = CGPointZero;
     playButtonLayer.bounds = CGRectMake(0.0, 0.0, 92.0, 92.0);
     [self addSublayer:playButtonLayer];

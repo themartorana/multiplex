@@ -1,7 +1,7 @@
 #import <Cocoa/Cocoa.h>
-#import "CALayer+Mothership.h"
+#import "Toolkit.h"
 
-@implementation CALayer (Mothership)
+@implementation CALayer (IndyHallLabs)
 
 + (CALayer*) maskLayer
 {
@@ -42,7 +42,6 @@
     
     return mask;
 }
-
 
 - (void) removeAllSublayers
 {

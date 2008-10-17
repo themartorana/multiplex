@@ -2259,7 +2259,7 @@
 											<string key="NSClassName">WorkingStatusView</string>
 										</object>
 									</object>
-									<string key="NSFrame">{{-5, 0}, {1010, 232}}</string>
+									<string key="NSFrame">{{-5, 0}, {1010, 173}}</string>
 									<reference key="NSSuperview" ref="572135655"/>
 									<string key="NSClassName">HoverTitleView</string>
 								</object>

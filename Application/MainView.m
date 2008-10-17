@@ -249,7 +249,8 @@
 
 - (NSView*) hitTest:(NSPoint)point
 {
-    if (self != [[self window] firstResponder]) {
+    id fr = [[self window] firstResponder];
+    if (self != fr && ![fr isKindOfClass:[NSTextView class]]) {
         return nil;
     } else {
         return [super hitTest:point];

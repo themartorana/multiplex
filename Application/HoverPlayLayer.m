@@ -10,8 +10,6 @@
 
 - (NSString*) getAdditionalMovieInfoString;
 - (void) setUpLayerLayout;
-- (void) putLayersIntoDefaultPosition;
-- (void) putLayersIntoAlternatePosition;
 
 @end
 
@@ -28,9 +26,15 @@
         [self setUpLayerLayout];
     }
 
-    [playButtonLayer bind:@"isMouseDown" toObject:self withKeyPath:@"isMouseDown" options:nil];
+    //[playButtonLayer bind:@"isMouseDown" toObject:self withKeyPath:@"isMouseDown" options:nil];
     
     return self;
+}
+
+- (void) setIsMouseDown:(BOOL)mouseDown
+{
+    isMouseDown = mouseDown;
+    [playButtonLayer setIsMouseDown:mouseDown];
 }
 
 - (void) setUpLayerLayout
@@ -72,18 +76,6 @@
     // There are two ways to position the layers.  
     // We'll go with the default at first.
     [self putLayersIntoDefaultPosition];
-}
-
-- (void) setPosition:(CGPoint)position
-{
-    if (position.x + self.bounds.size.width < [[NSApp keyWindow] frame].size.width) {
-        [self putLayersIntoDefaultPosition];
-        [super setPosition:CGPointMake(position.x - 20.0, position.y)];
-    }
-    else {
-        [self putLayersIntoAlternatePosition];
-        [super setPosition:CGPointMake(position.x - self.bounds.size.width + 20.0, position.y)];
-    }
 }
 
 - (void) putLayersIntoDefaultPosition

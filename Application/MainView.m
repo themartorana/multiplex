@@ -1,6 +1,7 @@
 #import "MainView.h"
 #import "Movie.h"
 #import "MovieLayer.h"
+#import "ButtonLayer.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -117,7 +118,7 @@
             hoverHighlightLayer.zPosition = movieLayer.zPosition - 1;
             hoverHighlightLayer.transform = movieLayer.transform;
             
-            hoverTimer = [[NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(hoverTimerTicked:) userInfo:nil repeats:NO] retain];
+            hoverTimer = [[NSTimer scheduledTimerWithTimeInterval:0.75 target:self selector:@selector(hoverTimerTicked:) userInfo:nil repeats:NO] retain];
         } else {
             hoverHighlightLayer.hidden = YES;
         }
@@ -148,18 +149,21 @@
 
 - (void) mouseDown:(NSEvent*)theEvent
 {
-    /*if (!hoverPlayLayer.hidden) {
+    if (!hoverPlayLayer.hidden) {
         CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
         CALayer *layer = [hoverPlayLayer hitTest:p];
-        if (layer && [layer isKindOfClass:[PlayButtonLayer class]]) {
+        if (layer && [layer isKindOfClass:[ButtonLayer class]]) {
             hoverPlayLayer.isMouseDown = YES;
         }
-    }*/
+    }
 }
 
 - (void) mouseUp:(NSEvent*)theEvent
 {
+    hoverPlayLayer.isMouseDown = NO;
+    
     CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
+    
     MovieLayer* movieLayer = [self movieLayerForPoint:p];
     if (movieLayer) {
         Movie* movie = [movieLayer movie];
@@ -170,8 +174,14 @@
             [self cancelHoverTimer];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexShowMovieDialog" object:nil];
         } else {
-            if (![hoverPlayLayer hitTest:p]) {
+            CALayer* playButtonLayer = [hoverPlayLayer hitTest:p];
+            if (!playButtonLayer) {
                 [self setHoveredMovie:movieLayer.movie];
+            }
+            else {
+                if ([playButtonLayer isKindOfClass:[ButtonLayer class]]) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayButtonClicked" object:nil];
+                }
             }
         }
     }
@@ -179,13 +189,30 @@
 
 - (void) mouseMoved:(NSEvent*)theEvent
 {    
-    CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
-    MovieLayer* movieLayer = [self movieLayerForPoint:p];
+    CGPoint position = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
+    MovieLayer* movieLayer = [self movieLayerForPoint:position];
     Movie* movie = movieLayer.movie;
-    if ([hoverPlayLayer hitTest:p] || movie == hoveredMovie) {
+    
+    if (hoverPlayLayer.hidden) {
+        CGPoint pMove;
+        float pY = position.y - hoverPlayLayer.bounds.size.height + 10.0;
+        
+        if (position.x + hoverPlayLayer.bounds.size.width < [[self window] frame].size.width) {
+            [hoverPlayLayer putLayersIntoDefaultPosition];
+            pMove = CGPointMake(position.x - 20.0, pY);
+        }
+        else {
+            [hoverPlayLayer putLayersIntoAlternatePosition];
+            pMove = CGPointMake(position.x - hoverPlayLayer.bounds.size.width + 20.0, pY);
+        }
+        
+        [hoverPlayLayer setPosition:pMove];
+    }
+    
+    if ([hoverPlayLayer hitTest:position] || movie == hoveredMovie) {
         return;
     }
-    hoverPlayLayer.position = CGPointMake(p.x, p.y - hoverPlayLayer.bounds.size.height + 20.0);
+    
     [self setHoveredMovie:movie];
 }
 

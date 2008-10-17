@@ -29,4 +29,7 @@
 @property (retain) Movie* hoveredMovie;
 @property BOOL isMouseDown;
 
+- (void) putLayersIntoDefaultPosition;
+- (void) putLayersIntoAlternatePosition;
+
 @end

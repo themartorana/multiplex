@@ -60,6 +60,7 @@ NSString* const kLoadingCoverArtActivityName = @"LoadingCoverArtActivity";
     if (self = [super init]) {
         netServiceByName = [[NSMutableDictionary alloc] init];
         protocolsByUUID = [[NSMutableDictionary alloc] init];
+        discsByFingerprint = [[NSMutableDictionary alloc] init];
         managedObjectContext = [_managedObjectContext retain];
         dateFormatter = [[NSDateFormatter alloc] initWithDateFormat:@"%Y-%m-%d" allowNaturalLanguage:NO];
 
@@ -108,6 +109,7 @@ NSString* const kLoadingCoverArtActivityName = @"LoadingCoverArtActivity";
     NSAssert(0 == [protocolsByUUID count], @"shutdown not called before dealloc");
     [protocolsByUUID release];
     [netServiceByName release];
+    [discsByFingerprint release];
     /**/
     [dateFormatter release];
     [browser release];
@@ -262,7 +264,7 @@ NSString* const kLoadingCoverArtActivityName = @"LoadingCoverArtActivity";
 
 - (Disc*) _findDiscByFingerprint:(NSString*)fingerprint
 {
-    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    /*NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:discDesc];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"fingerprint == %@", fingerprint]];
     NSError* error = nil;
@@ -271,7 +273,8 @@ NSString* const kLoadingCoverArtActivityName = @"LoadingCoverArtActivity";
     if (!error && [results count]) {
         return [results objectAtIndex:0];
     }
-    return nil;
+    return nil;*/
+    return [discsByFingerprint objectForKey:fingerprint];
 }
 
 - (Movie*) _findMovieByGTIN:(NSString*)gtin
@@ -473,6 +476,8 @@ NSString* const kLoadingCoverArtActivityName = @"LoadingCoverArtActivity";
             if (!disc) {
                 disc = [[[Disc alloc] initWithEntity:discDesc insertIntoManagedObjectContext:managedObjectContext] autorelease];
                 disc.fingerprint = fingerprint;
+                
+                [discsByFingerprint  setObject:disc forKey:fingerprint];
             }
             
             NSString* frontCoverURL = [info objectForKey:@"frontCoverURL"];
@@ -641,6 +646,7 @@ NSString* const kLoadingCoverArtActivityName = @"LoadingCoverArtActivity";
                         total++;
                     }
                     if (zeroCount == total) {
+                        [discsByFingerprint removeObjectForKey:disc.fingerprint];
                         [managedObjectContext deleteObject:movie];
                     }
                 }

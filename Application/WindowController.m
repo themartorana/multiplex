@@ -94,7 +94,12 @@
     [mainView setHoveredMovie:nil];
     [searchView setHidden:YES];
     [infoPaneFormController showHomeTab];
-    [infoPaneView setHidden:NO];
+
+    [NSAnimationContext beginGrouping];
+    [[NSAnimationContext currentContext] setDuration:0.5];
+    [[infoPaneView animator] setHidden:NO];
+    [NSAnimationContext endGrouping];
+    
     [[self window] makeFirstResponder:infoPaneView];
 }
 

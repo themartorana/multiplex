@@ -7,8 +7,6 @@ extern NSString* const kLoadingCoverArtActivityName;
 @interface EngineController : NSObject {
     NSMutableDictionary* netServiceByName;
     NSMutableDictionary* protocolsByUUID;
-    
-    NSMutableDictionary* discsByFingerprint;
     /**/
     NSDateFormatter* dateFormatter;
     NSManagedObjectContext* managedObjectContext;

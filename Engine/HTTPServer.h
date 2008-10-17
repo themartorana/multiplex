@@ -6,7 +6,7 @@
     id delegate;
     NSString *address;
     CFHTTPMessageRef httpMessage;
-    BOOL isMessageComplete;
+    BOOL processingMessage;
 }
 
 - (id) initWithFileHandle:(NSFileHandle*)_fileHandle address:(NSString*)address delegate:(id)_delegate;

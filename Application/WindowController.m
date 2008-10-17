@@ -112,7 +112,7 @@
     [[infoPaneView animator] setHidden:YES];
     [NSAnimationContext endGrouping];
     
-    [[self window] makeFirstResponder:mainView];
+    [[self window] makeFirstResponder:searchView];
 }
 
 @end

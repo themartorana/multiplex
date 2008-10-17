@@ -110,14 +110,15 @@
 - (void) _processMessage
 {
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    CFURLRef url = CFHTTPMessageCopyRequestURL(httpMessage);
+    CFURLRef url = nil;
     @try {
+        url = CFHTTPMessageCopyRequestURL(httpMessage);
         [delegate processURL:(NSURL*)url connection:self];
     } @catch (id exception) {
         NSLog(@"Error while calling delegate's processURL:connection: -- %@", [exception reason]);
     } @finally {
         if (!replySent) {
-            [self replyWithStatusCode:404 message:nil];
+            [self replyWithStatusCode:500 message:nil];
         }
         [self _close];
         if (url) {
@@ -167,6 +168,8 @@
     
     CFDataRef msgData = CFHTTPMessageCopySerializedMessage(msg);
     @try {
+        size_t sendBufferSize = 512 * 0x400;
+        setsockopt([fileHandle fileDescriptor], SOL_SOCKET, SO_SNDBUF, (void*)&sendBufferSize, sizeof(sendBufferSize));
         [fileHandle writeData:(NSData *)msgData];
     }
     @catch (NSException* exception) {

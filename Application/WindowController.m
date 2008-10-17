@@ -9,6 +9,10 @@
 
 #import <QuartzCore/QuartzCore.h>
 
+@interface WindowController (Private)
+- (void) openInfoView:(NSNotification*)notification;
+@end
+
 @implementation WindowController
 
 - (void) awakeFromNib

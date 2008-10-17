@@ -188,7 +188,7 @@
 }
 
 - (void) mouseMoved:(NSEvent*)theEvent
-{    
+{
     CGPoint position = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
     MovieLayer* movieLayer = [self movieLayerForPoint:position];
     Movie* movie = movieLayer.movie;
@@ -221,7 +221,7 @@
     [self setHoveredMovie:nil];
 }
 
-- (void) pauseTracking
+- (void) stopTracking
 {
     if (mouseTrackingArea) {
         [self removeTrackingArea:mouseTrackingArea];
@@ -232,11 +232,25 @@
 
 - (void) resumeTracking
 {
-    mouseTrackingArea = [[NSTrackingArea alloc] initWithRect:NSRectFromCGRect([self layer].bounds) 
-                                                     options:(NSTrackingMouseMoved|NSTrackingActiveAlways|NSTrackingInVisibleRect|NSTrackingMouseEnteredAndExited) 
+    mouseTrackingArea = [[NSTrackingArea alloc] initWithRect:[self frame] 
+                                                     options:(NSTrackingActiveWhenFirstResponder|NSTrackingInVisibleRect|NSTrackingMouseEnteredAndExited) 
                                                        owner:self 
                                                     userInfo:nil];
     [self addTrackingArea:mouseTrackingArea];    
+}
+
+- (BOOL) acceptsFirstResponder
+{
+    return YES;
+}
+
+- (NSView*) hitTest:(NSPoint)point
+{
+    if (self != [[self window] firstResponder]) {
+        return nil;
+    } else {
+        return [super hitTest:point];
+    }
 }
 
 @end

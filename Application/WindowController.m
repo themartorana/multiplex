@@ -14,7 +14,7 @@
     // TODO: Move this somewhere appropriate!!
     [infoPaneView setHidden:YES];
     [infoPaneView setFrame:[[[mainView window] contentView] frame]];
-    [[[mainView window] contentView] addSubview:infoPaneView];
+    [[[mainView window] contentView] addSubview:infoPaneView positioned:NSWindowAbove relativeTo:nil];
     
     NSView* contentView = self.window.contentView;
     contentView.wantsLayer = YES;
@@ -68,8 +68,7 @@
     if ([movie.allDiscs count] == 1) {
         Disc* d = (Disc*)[[movie.allDiscs allObjects] objectAtIndex:0];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayDisc" object:d];
-    }
-    else if ([movie.allDiscs count] > 1) {
+    } else if ([movie.allDiscs count] > 1) {
         // We want to show the dialog
         [infoPaneView setHidden:NO];    
     }
@@ -77,52 +76,17 @@
 
 - (void) openInfoView:(NSNotification*)notification
 {
-    [mainView pauseTracking];
-    
-    /*
-    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                         infoPaneHostingView, NSViewAnimationTargetKey,
-                         NSViewAnimationFadeInEffect, NSViewAnimationEffectKey,
-                         nil];
-    
-    NSViewAnimation* anim = [[NSViewAnimation alloc] initWithViewAnimations:[NSArray arrayWithObject:dict]];
-    [anim setDuration:1.0];
-    [anim setAnimationCurve:NSAnimationEaseIn];
-    [anim startAnimation];
-    [anim release];
-    */
-    
-    /*
-    CIFilter* blurFilter = [CIFilter filterWithName:@"CIBoxBlur"];
-    [blurFilter setDefaults];
-    [blurFilter setValue:[NSNumber numberWithInt:4.0] forKey:@"inputRadius"];
-    [[infoPaneHostingView layer] setBackgroundFilters:[NSArray arrayWithObject:blurFilter]];
-    */
-     
+    [mainView setHoveredMovie:nil];
     [searchView setHidden:YES];
     [infoPaneView setHidden:NO];
+    [[self window] makeFirstResponder:infoPaneView];
 }
 
 - (void) closeInfoView:(NSNotification*)notification
 {
-    [mainView resumeTracking];
-    
-    /*
-    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                          infoPaneHostingView, NSViewAnimationTargetKey,
-                          NSViewAnimationFadeOutEffect, NSViewAnimationEffectKey,
-                          nil];
-    
-    NSViewAnimation* anim = [[NSViewAnimation alloc] initWithViewAnimations:[NSArray arrayWithObject:dict]];
-    [anim setDuration:1.0];
-    [anim setAnimationCurve:NSAnimationEaseIn];
-    [anim startAnimation];
-    [anim release];
-    */
-    
     [searchView setHidden:NO];
     [infoPaneView setHidden:YES];
-    [[infoPaneView layer] setBackgroundFilters:nil];
+    [[self window] makeFirstResponder:mainView];
 }
 
 @end

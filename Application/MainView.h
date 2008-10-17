@@ -24,7 +24,7 @@
 @property (retain) id content;
 @property (retain) Movie* hoveredMovie;
 
-- (void) pauseTracking;
+- (void) stopTracking;
 - (void) resumeTracking;
 
 @end

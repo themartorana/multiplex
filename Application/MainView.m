@@ -7,7 +7,7 @@
 
 @interface MainView (LayerStuff)
 - (MovieLayer*) newLayerForMovie:(Movie*)movie;
-- (void) layoutSublayersOfLayer:(CALayer*)layer;
+- (void) layoutSublayersOfFloorLayer;
 @end
 
 @interface MainView (Private)
@@ -24,14 +24,16 @@
 
 - (void) awakeFromNib
 {
-    [self setWantsLayer:YES];
-    CALayer* rootLayer = self.layer;
+    CALayer* rootLayer = [self layer];
+    rootLayer.anchorPoint = CGPointZero;
+    rootLayer.frame = [[self layer] frame];
     rootLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
     rootLayer.delegate = self;
+    [self setLayer:rootLayer];
+    [self setWantsLayer:YES];
     
     floorLayer = [CALayer layer];
     floorLayer.delegate = self;
-    floorLayer.layoutManager = self;
     floorLayer.position = CGPointZero;
     floorLayer.constraints = [NSArray arrayWithObjects:
         [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY],
@@ -83,16 +85,16 @@
 - (void) setContent:(id)_content
 {
     if (content != _content) {
-        [content release];
-        content = [_content retain];
-        
-        if ([content isKindOfClass:[NSArrayController class]]) {
-            NSArrayController* arrayController = content;
-            [arrayController addObserver:self forKeyPath:@"content.@count" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
-            [arrayController addObserver:self forKeyPath:@"arrangedObjects" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
-        } else {
-            [NSException raise:NSInvalidArgumentException format:@"content must be of type NSArrayController."];
+        NSAssert([_content isKindOfClass:[NSArrayController class]], @"content must be of type NSArrayController.");
+        if (content) {
+            [content removeObserver:self forKeyPath:@"arrangedObjects"];
+            [content release];
         }
+        if (_content) {
+            [_content addObserver:self forKeyPath:@"arrangedObjects" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+            [_content retain];
+        }
+        content = _content;
     }
 }
 
@@ -262,36 +264,8 @@
 
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
-    if ([@"content.@count" isEqualToString:keyPath]) {
-        self.hoveredMovie = nil;
-        NSMutableArray* allLayers = [listOfLayersInOrder objectAtIndex:0];
-        int oldCount = [allLayers count];
-        NSArray* allObjects = [object content];
-        int count = [[object content] count];
-        if (oldCount != count) {
-            NSMutableArray* layersInOrder = [NSMutableArray arrayWithCapacity:count];
-            NSMutableSet* keySet = [NSMutableSet setWithArray:[layersByID allKeys]];
-            for (Movie* movie in allObjects) {
-                NSManagedObjectID* objectID = [movie objectID];
-                MovieLayer* layer = [layersByID objectForKey:objectID];
-                if (!layer) {
-                    layer = [self newLayerForMovie:movie];
-                    [floorLayer addSublayer:layer];
-                    [layersByID setObject:layer forKey:objectID];
-                }
-                [keySet removeObject:objectID];
-                [layersInOrder addObject:layer];
-            }
-            for (id keyOfLayerToDelete in keySet) {
-                MovieLayer* layerToDelete = [layersByID objectForKey:keyOfLayerToDelete];
-                [layerToDelete removeFromSuperlayer];
-                [layersByID removeObjectForKey:keyOfLayerToDelete];
-            } 
-            [listOfLayersInOrder replaceObjectAtIndex:0 withObject:layersInOrder];
-            [floorLayer setNeedsLayout];
-        }
-    } else if ([@"arrangedObjects" isEqualToString:keyPath]) {
-        self.hoveredMovie = nil;
+    if ([@"arrangedObjects" isEqualToString:keyPath]) {
+        [self setHoveredMovie:nil];
         NSArray* arrangedObjects = [object arrangedObjects];
 
         int count = [arrangedObjects count];
@@ -335,9 +309,7 @@
             opacity *= 0.2;
         }
         
-        /*  Tell the root layer to re-layout.
-         */
-        [floorLayer setNeedsLayout];
+        [self layoutSublayersOfFloorLayer];
     }
 }
 
@@ -444,9 +416,8 @@ CGFloat HS = 75.0;
     ];
 }
 
-- (void) layoutSublayersOfLayer:(CALayer*)layer
+- (void) layoutSublayersOfFloorLayer
 {
-    NSAssert(layer == floorLayer, @"wtf?");
     [CATransaction begin];
     [CATransaction setValue:[NSNumber numberWithFloat:0.5] forKey:kCATransactionAnimationDuration];
     

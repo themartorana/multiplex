@@ -13,8 +13,7 @@
 
 - (void) awakeFromNib
 {
-    
-    viewLayer = [[CALayer layer] retain];
+    viewLayer = [CALayer layer];
     viewLayer.anchorPoint = CGPointZero;
     viewLayer.frame = [[self layer] frame];
     [self setLayer:viewLayer];
@@ -22,8 +21,8 @@
     
     [viewLayer bind:@"bounds" toObject:self withKeyPath:@"bounds" options:nil];
 
-    scrollingLayer = [[CALayer layer] retain];
-    discsHostingLayer = [[CALayer layer] retain];
+    scrollingLayer = [CALayer layer];
+    discsHostingLayer = [CALayer layer];
     [self layer].anchorPoint = CGPointZero;
     [[self layer] addSublayer:discsHostingLayer];
     

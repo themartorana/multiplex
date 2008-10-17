@@ -82,6 +82,7 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
 - (void) drawLayer:(CALayer*)layer inContext:(CGContextRef)c
 {
     if (layer == boxImageLayer && boxImage != nil) {
+        //CGContextSetInterpolationQuality(c, kCGInterpolationLow);
         CGContextDrawImage(c, self.bounds, (CGImageRef)boxImage);
     }
 }

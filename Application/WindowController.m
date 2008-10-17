@@ -95,10 +95,7 @@
     [searchView setHidden:YES];
     [infoPaneFormController showHomeTab];
 
-    [NSAnimationContext beginGrouping];
-    [[NSAnimationContext currentContext] setDuration:0.5];
-    [[infoPaneView animator] setHidden:NO];
-    [NSAnimationContext endGrouping];
+    [infoPaneView setHidden:NO];
     
     [[self window] makeFirstResponder:infoPaneView];
 }

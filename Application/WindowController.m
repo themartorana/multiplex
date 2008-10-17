@@ -4,7 +4,7 @@
 #import "Disc.h"
 #import "Media.h"
 #import "HoverTitleView.h"
-#import "CGColorFactory.h"
+#import "MultiplexColorFactory.h"
 #import "InfoPaneFormController.h"
 
 #import <QuartzCore/QuartzCore.h>
@@ -33,7 +33,7 @@
     [movies setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     [sortDescriptor release];
 
-    background.backgroundColor = [CGColorFactory black];
+    background.backgroundColor = [MultiplexColorFactory black];
     
     [mainView setContent:movies];
         
@@ -95,7 +95,10 @@
     [searchView setHidden:YES];
     [infoPaneFormController showHomeTab];
 
-    [infoPaneView setHidden:NO];
+    [NSAnimationContext beginGrouping];
+    [[NSAnimationContext currentContext] setDuration:1.0];
+    [[infoPaneView animator] setHidden:NO];
+    [NSAnimationContext endGrouping];
     
     [[self window] makeFirstResponder:infoPaneView];
 }
@@ -103,7 +106,12 @@
 - (void) closeInfoView:(NSNotification*)notification
 {
     [searchView setHidden:NO];
-    [infoPaneView setHidden:YES];
+
+    [NSAnimationContext beginGrouping];
+    [[NSAnimationContext currentContext] setDuration:1.0];
+    [[infoPaneView animator] setHidden:YES];
+    [NSAnimationContext endGrouping];
+    
     [[self window] makeFirstResponder:mainView];
 }
 

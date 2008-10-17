@@ -1,7 +1,7 @@
 #import "HoverPlayLayer.h"
 #import "Movie.h"
 #import "ButtonLayer.h"
-#import "CGColorFactory.h"
+#import "MultiplexColorFactory.h"
 #import "ApplicationResources.h"
 #import <Toolkit/Toolkit.h>
 #import <QuartzCore/QuartzCore.h>
@@ -46,8 +46,8 @@
     orangeBoxLayer = [CALayer layer];
     orangeBoxLayer.anchorPoint = CGPointZero;
     orangeBoxLayer.bounds = CGRectMake(0.0, 0.0, 285.0, 70.0);
-    orangeBoxLayer.backgroundColor = [CGColorFactory multiplexOrangeSlightlyTransparent];
-    orangeBoxLayer.borderColor = [CGColorFactory multiplexOrange];
+    orangeBoxLayer.backgroundColor = [MultiplexColorFactory multiplexOrangeSlightlyTransparent];
+    orangeBoxLayer.borderColor = [MultiplexColorFactory multiplexOrange];
     orangeBoxLayer.borderWidth = 2.0;
     orangeBoxLayer.cornerRadius = 10.0;
     [self addSublayer:orangeBoxLayer];
@@ -70,7 +70,7 @@
     additionalInfoLayer.bounds = CGRectMake(0.0, 0.0, 220.0, 16.0);
     additionalInfoLayer.font = [NSFont boldSystemFontOfSize:13.0];
     additionalInfoLayer.fontSize = 13.0;
-    additionalInfoLayer.foregroundColor = [CGColorFactory white];
+    additionalInfoLayer.foregroundColor = [MultiplexColorFactory white];
     [orangeBoxLayer addSublayer:additionalInfoLayer];
     
     // There are two ways to position the layers.  

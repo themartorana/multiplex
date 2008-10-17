@@ -4,7 +4,7 @@
 #import "Media.h"
 #import "IndeterminateProgressIndicatorLayer.h"
 #import "Activity.h"
-#import "CGColorFactory.h"
+#import "MultiplexColorFactory.h"
 
 static void glossInterpolation(void *info, const float *input, float *output);
 static float perceptualGlossFractionForColor(float *inputComponents);
@@ -28,7 +28,7 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
     if (self = [super init]) {
         movie = [_movie retain];
         self.layoutManager = [CAConstraintLayoutManager layoutManager];
-        self.borderColor = [CGColorFactory moveLayerBorderColor];
+        self.borderColor = [MultiplexColorFactory moveLayerBorderColor];
 
         /*  Box Image 
          */
@@ -58,7 +58,7 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
             [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0.8 offset:0],
             nil
         ];
-        titleLayer.foregroundColor = [CGColorFactory white];
+        titleLayer.foregroundColor = [MultiplexColorFactory white];
         titleLayer.wrapped = YES;
         [self addSublayer:titleLayer];                
 
@@ -82,7 +82,6 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
 - (void) drawLayer:(CALayer*)layer inContext:(CGContextRef)c
 {
     if (layer == boxImageLayer && boxImage != nil) {
-        //CGContextSetInterpolationQuality(c, kCGInterpolationLow);
         CGContextDrawImage(c, self.bounds, (CGImageRef)boxImage);
     }
 }

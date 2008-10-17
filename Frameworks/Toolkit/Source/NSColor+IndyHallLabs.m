@@ -22,8 +22,8 @@
     
     return [NSColor colorWithDeviceRed:((float)red)/255.0 
                                      green:((float)green)/255.0 
-                                      blue:((float)blue)/255 
-                                     alpha:((float)alpha)/255];
+                                      blue:((float)blue)/255.0
+                                     alpha:((float)alpha)/255.0];
 }
 
 @end

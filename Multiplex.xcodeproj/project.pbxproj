@@ -28,7 +28,7 @@
 		551554A00EA456C8006F2674 /* SoftEditTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5515549F0EA456C8006F2674 /* SoftEditTextFieldCell.m */; };
 		551555040EA45D84006F2674 /* SoftEditTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 551555030EA45D84006F2674 /* SoftEditTextField.m */; };
 		551555610EA46220006F2674 /* HoverPlayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 551555600EA46220006F2674 /* HoverPlayLayer.m */; };
-		551558440EA53C1D006F2674 /* CGColorFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 551558430EA53C1D006F2674 /* CGColorFactory.m */; };
+		551558440EA53C1D006F2674 /* MultiplexColorFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 551558430EA53C1D006F2674 /* MultiplexColorFactory.m */; };
 		551559380EA6554E006F2674 /* VerticalScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 551559370EA6554E006F2674 /* VerticalScroller.m */; };
 		5534774D0EA3A9CA00436A8C /* ImageQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 5534774C0EA3A9CA00436A8C /* ImageQuery.m */; };
 		553477520EA3A9E400436A8C /* ImageQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 5534774C0EA3A9CA00436A8C /* ImageQuery.m */; };
@@ -303,8 +303,8 @@
 		551555030EA45D84006F2674 /* SoftEditTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoftEditTextField.m; sourceTree = "<group>"; };
 		5515555F0EA46220006F2674 /* HoverPlayLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HoverPlayLayer.h; sourceTree = "<group>"; };
 		551555600EA46220006F2674 /* HoverPlayLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HoverPlayLayer.m; sourceTree = "<group>"; };
-		551558420EA53C1D006F2674 /* CGColorFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGColorFactory.h; sourceTree = "<group>"; };
-		551558430EA53C1D006F2674 /* CGColorFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGColorFactory.m; sourceTree = "<group>"; };
+		551558420EA53C1D006F2674 /* MultiplexColorFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiplexColorFactory.h; sourceTree = "<group>"; };
+		551558430EA53C1D006F2674 /* MultiplexColorFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiplexColorFactory.m; sourceTree = "<group>"; };
 		551559360EA6554E006F2674 /* VerticalScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticalScroller.h; sourceTree = "<group>"; };
 		551559370EA6554E006F2674 /* VerticalScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticalScroller.m; sourceTree = "<group>"; };
 		5534774B0EA3A9CA00436A8C /* ImageQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageQuery.h; sourceTree = "<group>"; };
@@ -539,8 +539,8 @@
 				5535D98E0E4E3F5400A45761 /* EngineController.m */,
 				556BD78E0E94470600EC698A /* Activity.h */,
 				556BD78F0E94470600EC698A /* Activity.m */,
-				551558420EA53C1D006F2674 /* CGColorFactory.h */,
-				551558430EA53C1D006F2674 /* CGColorFactory.m */,
+				551558420EA53C1D006F2674 /* MultiplexColorFactory.h */,
+				551558430EA53C1D006F2674 /* MultiplexColorFactory.m */,
 				F9CE85D20EA7E2D400602750 /* ApplicationResources.h */,
 				F9CE85D30EA7E2D400602750 /* ApplicationResources.m */,
 			);
@@ -1169,7 +1169,7 @@
 				551554A00EA456C8006F2674 /* SoftEditTextFieldCell.m in Sources */,
 				551555040EA45D84006F2674 /* SoftEditTextField.m in Sources */,
 				551555610EA46220006F2674 /* HoverPlayLayer.m in Sources */,
-				551558440EA53C1D006F2674 /* CGColorFactory.m in Sources */,
+				551558440EA53C1D006F2674 /* MultiplexColorFactory.m in Sources */,
 				551559380EA6554E006F2674 /* VerticalScroller.m in Sources */,
 				F9CE85D40EA7E2D400602750 /* ApplicationResources.m in Sources */,
 			);

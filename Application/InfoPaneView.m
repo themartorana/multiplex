@@ -1,7 +1,7 @@
 #import "InfoPaneView.h"
 #import "ButtonLayer.h"
 #import "ApplicationResources.h"
-#import "CGColorFactory.h"
+#import "MultiplexColorFactory.h"
 
 @implementation InfoPaneView
 
@@ -11,10 +11,10 @@
     [self layer].layoutManager = [CAConstraintLayoutManager layoutManager];
     [self layer].masksToBounds = NO;
     [self layer].cornerRadius = 20.0;
-    [self layer].backgroundColor = [CGColorFactory blackOneQuarterTransparent];
+    [self layer].backgroundColor = [MultiplexColorFactory blackOneQuarterTransparent];
     
     CALayer* borderLayer = [CALayer layer];
-    borderLayer.borderColor = [CGColorFactory whiteOneQuarterTransparent];
+    borderLayer.borderColor = [MultiplexColorFactory whiteOneQuarterTransparent];
     borderLayer.borderWidth = 2.0;
     borderLayer.cornerRadius = 20.0;
     borderLayer.constraints = [NSArray arrayWithObjects:

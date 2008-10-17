@@ -4,6 +4,7 @@
 #import "InfoPaneDiscsView.h"
 #import "BigPlayButtonView.h"
 #import "VerticalScroller.h"
+#import "MultiplexColorFactory.h"
 
 #import <WebKit/WebKit.h>
 
@@ -20,7 +21,7 @@
 - (InfoPaneFormController*) init
 {
     if (self = [super init]) {
-        labelColor = [NSColor colorWithCalibratedRed:231.0/255.0 green:111.0/255.0 blue:52.0/255.0 alpha:1.0];
+        labelColor = [MultiplexColorFactory multiplexYellowOrange];
     }
     
     return self;

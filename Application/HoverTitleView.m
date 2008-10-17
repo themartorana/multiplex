@@ -3,7 +3,7 @@
 #import "Disc.h"
 #import "Media.h"
 #import <Toolkit/Toolkit.h>
-#import "CGColorFactory.h"
+#import "MultiplexColorFactory.h"
 
 @implementation HoverTitleView
 
@@ -62,7 +62,7 @@
     titleReflectionLayer.alignmentMode = kCAAlignmentCenter;
     titleReflectionLayer.font = [NSFont systemFontOfSize:40.0];
     titleReflectionLayer.fontSize = 40.0;
-    titleReflectionLayer.foregroundColor = [CGColorFactory white];
+    titleReflectionLayer.foregroundColor = [MultiplexColorFactory white];
     titleReflectionLayer.name = @"titleReflectionLayer";
     titleReflectionLayer.transform = CATransform3DMakeScale(1.0, -1.0, 1.0);
     titleReflectionLayer.constraints = [NSArray arrayWithObjects:

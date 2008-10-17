@@ -1,11 +1,13 @@
 #import "WindowController.h"
 #import "MainView.h"
-#import <QuartzCore/QuartzCore.h>
 #import "Movie.h"
 #import "Disc.h"
 #import "Media.h"
 #import "HoverTitleView.h"
 #import "CGColorFactory.h"
+#import "InfoPaneFormController.h"
+
+#import <QuartzCore/QuartzCore.h>
 
 @implementation WindowController
 
@@ -55,6 +57,7 @@
                 if ([media.isAvailable boolValue]) {
                     // Play
                     [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:media.url]];
+                    break;
                 }
             } 
         }
@@ -63,14 +66,22 @@
 
 - (void) playSelectedMovie:(NSNotification*)notification
 {
-    Movie* movie = (Movie*)[[movies selectedObjects] objectAtIndex:0];
+    Movie* movie = nil;
     
-    if ([movie.allDiscs count] == 1) {
+    if ([notification object] && [[notification object] isKindOfClass:[Movie class]]) {
+        movie = (Movie*)[notification object];
+    }
+    else {
+        movie = (Movie*)[[movies selectedObjects] objectAtIndex:0];
+    }
+    
+    if (movie && [movie.allDiscs count] == 1) {
         Disc* d = (Disc*)[[movie.allDiscs allObjects] objectAtIndex:0];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayDisc" object:d];
-    } else if ([movie.allDiscs count] > 1) {
+    } else if (movie && [movie.allDiscs count] > 1) {
         // We want to show the dialog
-        [infoPaneView setHidden:NO];    
+        [self openInfoView:nil];
+        [infoPaneFormController showDiscsTab];
     }
 }
 
@@ -78,6 +89,7 @@
 {
     [mainView setHoveredMovie:nil];
     [searchView setHidden:YES];
+    [infoPaneFormController showHomeTab];
     [infoPaneView setHidden:NO];
     [[self window] makeFirstResponder:infoPaneView];
 }

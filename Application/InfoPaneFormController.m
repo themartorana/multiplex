@@ -91,4 +91,14 @@
     }
 }
 
+- (void) showHomeTab
+{
+    [infoTabView selectTabViewItem:[[infoTabView tabViewItems] objectAtIndex:0]];
+}
+
+- (void) showDiscsTab
+{
+    [infoTabView selectTabViewItem:discsTabViewItem];
+}
+
 @end

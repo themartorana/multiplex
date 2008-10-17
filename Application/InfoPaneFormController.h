@@ -30,4 +30,7 @@
 @property (retain) Movie* selectedMovie;
 @property (readonly) NSColor* labelColor;
 
+- (void) showHomeTab;
+- (void) showDiscsTab;
+
 @end

@@ -31,7 +31,7 @@
     self.anchorPoint = CGPointZero;
     self.bounds = CGRectMake(0.0, 0.0, 370.0, 109.0);
     
-    playButtonLayer = [ButtonLayer buttonLayerWithUpState:[ApplicationResources playButton] downState:[ApplicationResources playButtonDown]];
+    playButtonLayer = [[ButtonLayer buttonLayerWithUpState:[ApplicationResources playButton] downState:[ApplicationResources playButtonDown]] retain];
     playButtonLayer.anchorPoint = CGPointZero;
     playButtonLayer.frame = CGRectMake(370.0 - 76.0 - universalPadding, 
                                        (109.0/2.0) - (76.0/2.0), 
@@ -72,13 +72,18 @@
     [self addSublayer:descriptionLayer];
 }
 
+- (void) dealloc {
+    [playButtonLayer release];
+    [super dealloc];
+}
+
 - (void) setDisc:(Disc*)_disc
 {
     disc = _disc;
     
     if (disc) {
         discNumberTitle.string = [NSString stringWithFormat:@"Disc %@", disc.number];
-        descriptionLayer.string = [NSString stringWithFormat:@"Disc %@ of %d", disc.number, [disc.movie.allDiscs count]];
+        descriptionLayer.string = [NSString stringWithFormat:@"Disc %@ of   %d", disc.number, [disc.movie.allDiscs count]];
         
         BOOL shouldHide = YES;
         
@@ -91,9 +96,9 @@
             }
         }
         
-        playButtonLayer.hidden = shouldHide;
+        greyPlayButtonLayer.hidden = shouldHide;
+        playButtonLayer.hidden = shouldHide; 
     }
-    
 }
 
 - (void) setHovered:(BOOL)isHovered
@@ -106,7 +111,8 @@
         
         discNumberTitle.foregroundColor = CGColorCreateGenericRGB(231.0/255.0, 111.0/255.0, 52.0/255.0, 1.0);
         descriptionLayer.foregroundColor = CGColorGetConstantColor(kCGColorWhite);
-        greyPlayButtonLayer.hidden = YES;
+
+        greyPlayButtonLayer.hidden = YES;            
     }
     else {
         self.backgroundColor = [CGColorFactory blackOneQuarterTransparent];
@@ -114,7 +120,10 @@
 
         discNumberTitle.foregroundColor = [CGColorFactory discPlayLayerUnhoveredForegroundColor];
         descriptionLayer.foregroundColor = [CGColorFactory discPlayLayerUnhoveredForegroundColor];
-        greyPlayButtonLayer.hidden = NO;
+        
+        if (disc && [[disc allMedia] count] > 0 ) {
+            greyPlayButtonLayer.hidden = NO;
+        }
     }
 }
 

@@ -110,20 +110,19 @@
 - (void) _processMessage
 {
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    CFURLRef url = CFHTTPMessageCopyRequestURL(httpMessage);
     @try {
-        CFURLRef url = CFHTTPMessageCopyRequestURL(httpMessage);
-        @try {
-            NSLog(@"%08x", [NSThread currentThread]);
-            [delegate processURL:(NSURL*)url connection:self];
-        } @catch (id exception) {
-            NSLog(@"Error while calling delegate's processURL:connection: -- %@", [exception reason]);
-        }
-        CFRelease(url);
+        [delegate processURL:(NSURL*)url connection:self];
+    } @catch (id exception) {
+        NSLog(@"Error while calling delegate's processURL:connection: -- %@", [exception reason]);
+    } @finally {
         if (!replySent) {
             [self replyWithStatusCode:404 message:nil];
         }
         [self _close];
-    } @finally {
+        if (url) {
+            CFRelease(url);
+        }
         [pool release];
     }
 }

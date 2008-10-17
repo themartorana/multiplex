@@ -74,8 +74,10 @@
     if (fileHandleForReading != _fileHandleForReading) {
         NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
 
-        [notificationCenter removeObserver:self name:NSFileHandleReadCompletionNotification object:fileHandleForReading];
-        [fileHandleForReading autorelease];
+        if (fileHandleForReading) {
+            [notificationCenter removeObserver:self name:NSFileHandleReadCompletionNotification object:fileHandleForReading];
+            [fileHandleForReading release];
+        }
 
         if (_fileHandleForReading) {
             // Set up listener

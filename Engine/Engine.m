@@ -251,6 +251,12 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     NSFileHandle* connection = [[notification userInfo] objectForKey:NSFileHandleNotificationFileHandleItem];
     MessageProtocol* protocol = nil;
     @try {
+        size_t sendBufferSize = 512 * 0x400;
+        size_t receiveBufferSize = 512 * 0x400;
+        int fd = [connection fileDescriptor];
+        setsockopt(fd, SOL_SOCKET, SO_SNDBUF, (void*)&sendBufferSize, sizeof(sendBufferSize));
+        setsockopt(fd, SOL_SOCKET, SO_RCVBUF, (void*)&receiveBufferSize, sizeof(receiveBufferSize));
+        
         protocol = [MessageProtocol protocolWithDelegate:self fileHandleForReading:connection fileHandleForWriting:connection];
         if ([infoDictionariesByFingerprint count]) {
             NSMutableDictionary* adds = [NSMutableDictionary dictionary];

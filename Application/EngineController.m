@@ -165,17 +165,22 @@ NSString* const kLoadingCoverArtActivityName = @"LoadingCoverArtActivity";
     MessageProtocol* protocol = nil;
     for (NSData* address in [netService addresses]) {
         const struct sockaddr* a = [address bytes];
-        int s = socket(a->sa_family, SOCK_STREAM, 0);
-        if (s >= 0) {
-            if (0 == connect(s, a, a->sa_len)) {
-                NSFileHandle* fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:s closeOnDealloc:YES];
+        int fd = socket(a->sa_family, SOCK_STREAM, 0);
+        if (fd >= 0) {
+            if (0 == connect(fd, a, a->sa_len)) {
+                size_t sendBufferSize = 512 * 0x400;
+                size_t receiveBufferSize = 512 * 0x400;
+                setsockopt(fd, SOL_SOCKET, SO_SNDBUF, (void*)&sendBufferSize, sizeof(sendBufferSize));
+                setsockopt(fd, SOL_SOCKET, SO_RCVBUF, (void*)&receiveBufferSize, sizeof(receiveBufferSize));
+
+                NSFileHandle* fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:fd closeOnDealloc:YES];
                 protocol = [MessageProtocol protocolWithDelegate:self fileHandleForReading:fileHandle fileHandleForWriting:fileHandle];
                 protocol.userInfo = [engine.uuid retain];
                 [protocolsByUUID setObject:protocol forKey:engine.uuid];
                 [fileHandle release];
                 break;
             } else {
-                close(s);
+                close(fd);
             }
         }
     }

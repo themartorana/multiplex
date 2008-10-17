@@ -78,10 +78,8 @@
         fileHandle = [_fileHandle retain];
         delegate = [_delegate retain];
         address = [_address retain];
-        isMessageComplete = YES;
-        httpMessage = NULL;
-        
-        // Register for notification when data arrives
+        httpMessage = CFHTTPMessageCreateEmpty(kCFAllocatorDefault, TRUE);
+ 
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         [nc addObserver:self selector:@selector(_dataReceivedNotification:) name:NSFileHandleReadCompletionNotification object:fileHandle];
         [fileHandle readInBackgroundAndNotify];
@@ -104,42 +102,44 @@
     @try {
         [fileHandle closeFile];
     } @finally {
-        [fileHandle release];
-        fileHandle = nil;
+        /* IGNORED */
     }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void) _processMessage
+{
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    @try {
+        CFURLRef url = CFHTTPMessageCopyRequestURL(httpMessage);
+        @try {
+            NSLog(@"%08x", [NSThread currentThread]);
+            [delegate processURL:(NSURL*)url connection:self];
+        } @catch (id exception) {
+            NSLog(@"Error while calling delegate's processURL:connection: -- %@", [exception reason]);
+        }
+        CFRelease(url);
+        if (!replySent) {
+            [self replyWithStatusCode:404 message:nil];
+        }
+        [self _close];
+    } @finally {
+        [pool release];
+    }
 }
 
 - (void) _dataReceivedNotification:(NSNotification*)notification
 {
     NSData* data = [[notification userInfo] objectForKey:NSFileHandleNotificationDataItem];
-    
     if (![data length]) {
         // NSFileHandle's way of telling us that the client closed the connection
         [self _close];
     } else {
         [fileHandle readInBackgroundAndNotify];
-        if (isMessageComplete) {
-            httpMessage = CFHTTPMessageCreateEmpty(kCFAllocatorDefault, TRUE);
-        }
-        BOOL success = CFHTTPMessageAppendBytes(httpMessage, [data bytes], [data length]);
-        if (success) {
-            if (isMessageComplete = CFHTTPMessageIsHeaderComplete(httpMessage)) {
-                CFURLRef url = CFHTTPMessageCopyRequestURL(httpMessage);
-                @try {
-                    [delegate processURL:(NSURL*)url connection:self];
-                } @catch (id exception) {
-                    NSLog(@"Error while calling delegate's processURL:connection: -- %@", [exception reason]);
-                }
-                CFRelease(url);
-                CFRelease(httpMessage);
-                httpMessage = NULL;
-                if (!replySent) {
-                    [self replyWithStatusCode:404 message:nil];
-                }
-                [self _close];
-            }
-        }
+    }
+    if (!processingMessage && data && CFHTTPMessageAppendBytes(httpMessage, [data bytes], [data length]) && CFHTTPMessageIsHeaderComplete(httpMessage)) {
+        processingMessage = YES;
+        [self performSelectorInBackground:@selector(_processMessage) withObject:nil];
     }
 }
 

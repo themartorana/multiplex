@@ -250,7 +250,12 @@
 - (NSView*) hitTest:(NSPoint)point
 {
     id fr = [[self window] firstResponder];
-    if (self != fr && ![fr isKindOfClass:[NSTextView class]]) {
+    if (self != fr) {
+        while (fr = [fr superview]) {
+            if (self == fr) {
+                return [super hitTest:point];
+            }
+        }
         return nil;
     } else {
         return [super hitTest:point];

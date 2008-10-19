@@ -69,4 +69,42 @@
     }
 }
 
+- (CALayer*) hitTest:(CGPoint)point
+{
+    CALayer* layer = [super hitTest:point];
+    if (!layer || layer != self) {
+        return layer;
+    }
+    
+    CGImageRef image = isMouseDown ? downState : upState;
+    if (!image) {
+        return self;
+    }
+
+    /*  Create 1x1 BitmapContext
+     */
+    UInt32 thePixel = 0;
+    CGColorSpaceRef colorspace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
+    CGContextRef bmpCtx = CGBitmapContextCreate(&thePixel, 1, 1, 8, 4, colorspace, kCGImageAlphaPremultipliedFirst);
+    
+    /*  Move it to "where"
+     */
+    CGRect frame = self.frame;
+    CGContextTranslateCTM(bmpCtx, -(point.x - frame.origin.x), -(point.y - frame.origin.y));
+    CGContextDrawImage(bmpCtx, CGRectMake(0, 0, frame.size.width, frame.size.height), image);
+    
+#if 0
+    NSLog(@"%@: %08x", NSStringFromPoint(NSPointFromCGPoint(adjustedPoint)), thePixel);
+#endif
+
+    /*  Cleanup 
+     */
+    CGColorSpaceRelease(colorspace);
+    CGContextRelease(bmpCtx);
+
+    /*  Did we hit a pixel with a less-than completely opaque alpha-channel?
+     */
+    return ((thePixel & 0xFF) == 0xFF) ? self : nil;
+}
+
 @end

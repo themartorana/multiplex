@@ -3,6 +3,7 @@
 @class MainView;
 @class HoverTitleView;
 @class InfoPaneFormController;
+@class UserVoiceFeedbackPanel;
 
 @interface WindowController : NSWindowController {
     IBOutlet NSArrayController* movies;
@@ -13,6 +14,10 @@
     IBOutlet NSView* searchView;
     
     IBOutlet InfoPaneFormController* infoPaneFormController;
+    
+    IBOutlet UserVoiceFeedbackPanel* userVoiceFeedbackPanel;
 }
+
+- (IBAction) showUserVoiceFeedbackSheet:(id)sender;
 
 @end

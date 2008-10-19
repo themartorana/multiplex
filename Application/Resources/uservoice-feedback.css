@@ -1,0 +1,28 @@
+body 
+{
+    width: auto !important;
+}
+
+h2
+{    
+    display: block !important;
+    width: 580px !important;
+    margin: 0px auto !important;
+    margin-top: 200px !important;
+}
+
+div#pane
+{
+    display: block !important;
+    width: 580px !important;
+    margin: 0px auto !important;
+}
+
+a#powered-by
+{
+    clear:left !important;
+    display:block !important;
+    float:right !important;
+    margin-top:0px auto !important;
+    width:580px !important;
+}

@@ -37,6 +37,10 @@
 		5535D98F0E4E3F5400A45761 /* EngineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5535D98E0E4E3F5400A45761 /* EngineController.m */; };
 		556BD78C0E9444ED00EC698A /* WorkingStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 556BD78B0E9444ED00EC698A /* WorkingStatusView.m */; };
 		556BD7900E94470600EC698A /* Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 556BD78F0E94470600EC698A /* Activity.m */; };
+		55743F9E0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55743F9D0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.m */; };
+		557440660EABD786002E0B80 /* uservoice-hover.png in Resources */ = {isa = PBXBuildFile; fileRef = 557440640EABD786002E0B80 /* uservoice-hover.png */; };
+		557440670EABD786002E0B80 /* uservoice-normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 557440650EABD786002E0B80 /* uservoice-normal.png */; };
+		5574409D0EABDD54002E0B80 /* uservoice-feedback.css in Resources */ = {isa = PBXBuildFile; fileRef = 5574409C0EABDD54002E0B80 /* uservoice-feedback.css */; };
 		557B69460E4CCD3F0009919E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 557B69450E4CCD3F0009919E /* MainMenu.xib */; };
 		557B69740E4CD0790009919E /* DebugWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B69730E4CD0790009919E /* DebugWindowController.m */; };
 		5583D1640E51D82700EB7AE6 /* Multiplex.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */; };
@@ -326,6 +330,11 @@
 		556BD78B0E9444ED00EC698A /* WorkingStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WorkingStatusView.m; sourceTree = "<group>"; };
 		556BD78E0E94470600EC698A /* Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Activity.h; sourceTree = "<group>"; };
 		556BD78F0E94470600EC698A /* Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Activity.m; sourceTree = "<group>"; };
+		55743F9C0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserVoiceFeedbackPanel.h; sourceTree = "<group>"; };
+		55743F9D0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserVoiceFeedbackPanel.m; sourceTree = "<group>"; };
+		557440640EABD786002E0B80 /* uservoice-hover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "uservoice-hover.png"; sourceTree = "<group>"; };
+		557440650EABD786002E0B80 /* uservoice-normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "uservoice-normal.png"; sourceTree = "<group>"; };
+		5574409C0EABDD54002E0B80 /* uservoice-feedback.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = "uservoice-feedback.css"; sourceTree = "<group>"; };
 		557B66A20E4A2F4D0009919E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		557B69450E4CCD3F0009919E /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		557B69720E4CD0790009919E /* DebugWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugWindowController.h; sourceTree = "<group>"; };
@@ -559,6 +568,9 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5574409C0EABDD54002E0B80 /* uservoice-feedback.css */,
+				557440640EABD786002E0B80 /* uservoice-hover.png */,
+				557440650EABD786002E0B80 /* uservoice-normal.png */,
 				553477800EA3AD5100436A8C /* multiplex-mark01a.icns */,
 				558D1EAB0E9E65A8000F67FA /* close-click128x128.pdf */,
 				558D1EAC0E9E65A8000F67FA /* close128x128.pdf */,
@@ -596,6 +608,8 @@
 				5515549F0EA456C8006F2674 /* SoftEditTextFieldCell.m */,
 				551555020EA45D84006F2674 /* SoftEditTextField.h */,
 				551555030EA45D84006F2674 /* SoftEditTextField.m */,
+				55743F9C0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.h */,
+				55743F9D0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.m */,
 			);
 			name = Controls;
 			sourceTree = "<group>";
@@ -1081,6 +1095,9 @@
 				55912E250EA0083C00446666 /* play-button-inactive.pdf in Resources */,
 				55B81A490EA049D500775EAE /* default.css in Resources */,
 				553477810EA3AD5100436A8C /* multiplex-mark01a.icns in Resources */,
+				557440660EABD786002E0B80 /* uservoice-hover.png in Resources */,
+				557440670EABD786002E0B80 /* uservoice-normal.png in Resources */,
+				5574409D0EABDD54002E0B80 /* uservoice-feedback.css in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1182,6 +1199,7 @@
 				551558440EA53C1D006F2674 /* MultiplexColorFactory.m in Sources */,
 				551559380EA6554E006F2674 /* VerticalScroller.m in Sources */,
 				F9CE85D40EA7E2D400602750 /* ApplicationResources.m in Sources */,
+				55743F9E0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

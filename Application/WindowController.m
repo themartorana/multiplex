@@ -6,6 +6,7 @@
 #import "HoverTitleView.h"
 #import "MultiplexColorFactory.h"
 #import "InfoPaneFormController.h"
+#import "UserVoiceFeedbackPanel.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -113,6 +114,23 @@
     [NSAnimationContext endGrouping];
     
     [[self window] makeFirstResponder:searchView];
+}
+
+- (IBAction) showUserVoiceFeedbackSheet:(id)sender
+{
+    [userVoiceFeedbackPanel setFrame:[mainView frame] display:YES];
+        
+    [NSApp beginSheet:(NSWindow*)userVoiceFeedbackPanel 
+       modalForWindow:[mainView window] 
+        modalDelegate:self 
+       didEndSelector:@selector(userVoicePanelDidEnd:returnCode:contextInfo:) 
+          contextInfo:nil];
+}
+
+- (void)userVoicePanelDidEnd:(NSPanel*)panel returnCode:(int)returnCode contextInfo:(void*)contextInfo
+{
+    [panel orderOut:self];
+    [userVoiceFeedbackPanel resetFeedbackPage];
 }
 
 @end

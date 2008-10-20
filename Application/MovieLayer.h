@@ -1,13 +1,12 @@
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/QuartzCore.h>
 
-@class CATextLayer;
-@class CATiledLayer;
 @class Movie;
 @class IndeterminateProgressIndicatorLayer;
 @class Activity;
 
 @interface MovieLayer : CALayer {
+    CALayer* gradientLayer;
     CATextLayer* titleLayer;
     CATiledLayer* boxImageLayer; 
     /**/

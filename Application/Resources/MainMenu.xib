@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1152"/>
+			<integer value="1166"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2255,7 +2255,7 @@
 							</object>
 							<string key="NSFrame">{{0, -6}, {1000, 56}}</string>
 							<reference key="NSSuperview" ref="384445475"/>
-							<string key="NSClassName">HoverTitleView</string>
+							<string key="NSClassName">NSView</string>
 						</object>
 						<object class="NSCustomView" id="572135655">
 							<reference key="NSNextResponder" ref="384445475"/>
@@ -7437,14 +7437,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">HoverTitleView</string>
-					<string key="superclassName">NSView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Application/HoverTitleView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

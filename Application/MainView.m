@@ -17,6 +17,7 @@
 - (MovieLayer*) movieLayerForPoint:(CGPoint)p;
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context;
 - (void) hoverTimerTicked:(NSTimer*)timer;
+- (void) _restartMouseTracking;
 @end
 
 @implementation MainView
@@ -57,9 +58,6 @@
     listOfLayersInOrder = [[NSMutableArray alloc] initWithObjects:[NSMutableArray array], nil];
     layersByID = [[NSMutableDictionary alloc] init];
     
-    // Set up our mouse tracking area
-    [self resumeTracking];
-    
     hoverHighlightLayer = [[CALayer layer] retain];
     hoverHighlightLayer.borderColor = CGColorCreateGenericRGB(231.0/255.0, 111.0/255.0, 52.0/255.0, 1.0);
     hoverHighlightLayer.borderWidth = 10.0;
@@ -73,7 +71,6 @@
     [hoverPlayLayer bind:@"hoveredMovie" toObject:self withKeyPath:@"hoveredMovie" options:nil];
     [self setHoveredMovie:nil];
     
-
     // To hold the title and its reflection
     titleContainerLayer = [CALayer layer];
     titleContainerLayer.anchorPoint = CGPointZero;
@@ -121,8 +118,8 @@
     [titleContainerLayer addSublayer:titleReflectionLayer];
     
     [titleReflectionLayer bind:@"string" toObject:titleLayer withKeyPath:@"string" options:nil];
+    [self _restartMouseTracking];
 }
-
 
 - (void) dealloc
 {
@@ -151,9 +148,10 @@
     }
 }
 
-- (void)setFrame:(NSRect)frameRect
+- (void) setFrame:(NSRect)frameRect
 {
     [super setFrame:frameRect];
+    [self _restartMouseTracking];
     [self layoutSublayersOfFloorLayer];
 }
 
@@ -285,42 +283,9 @@
     [self setHoveredMovie:nil];
 }
 
-- (void) stopTracking
-{
-    if (mouseTrackingArea) {
-        [self removeTrackingArea:mouseTrackingArea];
-        [mouseTrackingArea release];
-        mouseTrackingArea = nil;
-    }
-}
-
-- (void) resumeTracking
-{
-    mouseTrackingArea = [[NSTrackingArea alloc] initWithRect:[self frame] 
-                                                     options:(NSTrackingActiveWhenFirstResponder|NSTrackingInVisibleRect|NSTrackingMouseEnteredAndExited) 
-                                                       owner:self 
-                                                    userInfo:nil];
-    [self addTrackingArea:mouseTrackingArea];    
-}
-
 - (BOOL) acceptsFirstResponder
 {
     return YES;
-}
-
-- (NSView*) hitTest:(NSPoint)point
-{
-    id fr = [[self window] firstResponder];
-    if (self != fr) {
-        while (fr = [fr superview]) {
-            if (self == fr) {
-                return [super hitTest:point];
-            }
-        }
-        return nil;
-    } else {
-        return [super hitTest:point];
-    }
 }
 
 @end
@@ -328,6 +293,17 @@
 
 #pragma mark -
 @implementation MainView (Private)
+
+- (void) _restartMouseTracking
+{
+    if (mouseTrackingArea) {
+        [self removeTrackingArea:mouseTrackingArea];
+        [mouseTrackingArea release];
+        mouseTrackingArea = nil;
+    }
+    mouseTrackingArea = [[NSTrackingArea alloc] initWithRect:[self frame] options:(NSTrackingActiveInKeyWindow | NSTrackingInVisibleRect | NSTrackingMouseMoved | NSTrackingMouseEnteredAndExited) owner:self userInfo:nil];
+    [self addTrackingArea:mouseTrackingArea];    
+}
 
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {

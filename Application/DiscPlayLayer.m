@@ -20,7 +20,7 @@
     if (self = [super init]) {
         [self setUpPlayLayer];
         self.backgroundColor = [MultiplexColorFactory blackHalfTransparent];
-        self.borderColor = CGColorGetConstantColor(kCGColorWhite);
+        self.borderColor = [MultiplexColorFactory black];
         self.cornerRadius = 10.0;
     }
     
@@ -109,7 +109,8 @@
     hovered = isHovered;
     
     if (isHovered) {
-        self.backgroundColor = [MultiplexColorFactory black];
+        //self.backgroundColor = [MultiplexColorFactory black];
+        
         self.borderWidth = 2.0;
         
         discNumberTitle.foregroundColor = [[MultiplexColorFactory multiplexYellowOrange] colorAsCGColorRef];
@@ -118,7 +119,7 @@
         greyPlayButtonLayer.hidden = YES;            
     }
     else {
-        self.backgroundColor = [MultiplexColorFactory blackOneQuarterTransparent];
+        //self.backgroundColor = [MultiplexColorFactory blackOneQuarterTransparent];
         self.borderWidth = 0.0;
 
         discNumberTitle.foregroundColor = [MultiplexColorFactory discPlayLayerUnhoveredForegroundColor];

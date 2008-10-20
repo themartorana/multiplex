@@ -88,10 +88,12 @@
         NSAssert([_content isKindOfClass:[NSArrayController class]], @"content must be of type NSArrayController.");
         if (content) {
             [content removeObserver:self forKeyPath:@"arrangedObjects"];
+            [content removeObserver:self forKeyPath:@"content.@count"];
             [content release];
         }
         if (_content) {
             [_content addObserver:self forKeyPath:@"arrangedObjects" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+            [_content addObserver:self forKeyPath:@"content.@count" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
             [_content retain];
         }
         content = _content;
@@ -271,7 +273,36 @@
 
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
-    if ([@"arrangedObjects" isEqualToString:keyPath]) {
+    if ([@"content.@count" isEqualToString:keyPath]) {
+        [self setHoveredMovie:nil];
+        NSMutableArray* allLayers = [listOfLayersInOrder objectAtIndex:0];
+        int oldCount = [allLayers count];
+        NSArray* allObjects = [object content];
+        int count = [[object content] count];
+        if (oldCount != count) {
+            NSMutableArray* layersInOrder = [NSMutableArray arrayWithCapacity:count];
+            NSMutableSet* keySet = [NSMutableSet setWithArray:[layersByID allKeys]];
+            for (Movie* movie in allObjects) {
+                NSManagedObjectID* objectID = [movie objectID];
+                MovieLayer* layer = [layersByID objectForKey:objectID];
+                if (!layer) {
+                    layer = [self newLayerForMovie:movie];
+                    [floorLayer addSublayer:layer];
+                    [layersByID setObject:layer forKey:objectID];
+                }
+                [keySet removeObject:objectID];
+                [layersInOrder addObject:layer];
+            }
+            for (id keyOfLayerToDelete in keySet) {
+                MovieLayer* layerToDelete = [layersByID objectForKey:keyOfLayerToDelete];
+                [layerToDelete removeFromSuperlayer];
+                [layersByID removeObjectForKey:keyOfLayerToDelete];
+            } 
+            [listOfLayersInOrder replaceObjectAtIndex:0 withObject:layersInOrder];
+
+            [self layoutSublayersOfFloorLayer];
+        }
+    } else if ([@"arrangedObjects" isEqualToString:keyPath]) {
         [self setHoveredMovie:nil];
         NSArray* arrangedObjects = [object arrangedObjects];
 

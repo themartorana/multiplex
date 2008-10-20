@@ -67,7 +67,7 @@
     ];
     [url appendFormat:@"&ItemId=%@", ean];
     request = [[NSURLRequest requestWithURL:[NSURL URLWithString:url]] retain];
-    connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
+    connection = [[NSURLConnection alloc] initWithRequest:request delegate:[self retain] startImmediately:YES];
 }
 
 - (void) cancel
@@ -95,6 +95,7 @@
     [receivedData release];
     receivedData = nil;
     [self _fireDidFailWithError:error];
+    [self autorelease];
 }
 
 - (void) connectionDidFinishLoading:(NSURLConnection *)connection 
@@ -242,6 +243,7 @@
     } else {
         [self _fireDidReceiveResponse:response];
     }
+    [self autorelease];
 }
 
 @end

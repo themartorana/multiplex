@@ -8,6 +8,7 @@
 
 #import <Toolkit/Toolkit.h>
 #import <JSONKit/JSONKit.h>
+#import <SystemConfiguration/SCDynamicStore.h>
 
 #import <netinet/ip.h>
 #import <netinet/ip6.h>
@@ -102,7 +103,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             sin6.sin6_addr = in6addr_any;
             NSSocketPort* serverSocket = [[NSSocketPort alloc] initWithProtocolFamily:PF_INET6 socketType:SOCK_STREAM protocol:0 address:[NSData dataWithBytesNoCopy:&sin6 length:sizeof(sin6) freeWhenDone:NO]];
             struct sockaddr_in6* psin6 = (struct sockaddr_in6*)[[serverSocket address] bytes];
-            baseImageURL = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"http://%@:%d/", [[NSHost currentHost] name], ntohs(psin6->sin6_port)]];
+            baseImageURL = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"http://%@.local:%d/", SCDynamicStoreCopyLocalHostName(NULL,NULL), ntohs(psin6->sin6_port)]];
             NSLog(@"%@", baseImageURL);
             imageServer = [[HTTPServer alloc] initWithSocketPort:serverSocket delegate:self];
         }

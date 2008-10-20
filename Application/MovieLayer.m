@@ -34,8 +34,6 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
          */
         boxImageLayer = [CATiledLayer layer];
         boxImageLayer.delegate = self;
-        boxImageLayer.levelsOfDetail = 5;
-        boxImageLayer.levelsOfDetailBias = 2;
         boxImageLayer.constraints = [NSArray arrayWithObjects:
             [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
             [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],

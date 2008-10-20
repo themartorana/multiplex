@@ -2285,14 +2285,11 @@
 								<reference key="NSControlView" ref="141152956"/>
 								<int key="NSButtonFlags">-2042347265</int>
 								<int key="NSButtonFlags2">2</int>
-								<object class="NSCustomResource" key="NSNormalImage">
-									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">uservoice-normal</string>
-								</object>
-								<object class="NSCustomResource" key="NSAlternateImage">
+								<object class="NSCustomResource" key="NSNormalImage" id="185598624">
 									<string key="NSClassName">NSImage</string>
 									<string key="NSResourceName">uservoice-hover</string>
 								</object>
+								<reference key="NSAlternateImage" ref="185598624"/>
 								<string key="NSAlternateContents"/>
 								<string key="NSKeyEquivalent"/>
 								<int key="NSPeriodicDelay">400</int>

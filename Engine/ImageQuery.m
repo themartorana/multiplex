@@ -52,7 +52,7 @@
     NSAssert(!connection, @"This query has already been started.");
     request = [[NSMutableURLRequest requestWithURL:URL] retain];
     [request setTimeoutInterval:5.0];
-    connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
+    connection = [[NSURLConnection alloc] initWithRequest:request delegate:[self retain] startImmediately:YES];
 }
 
 - (void) cancel
@@ -80,6 +80,7 @@
     [receivedData release];
     receivedData = nil;
     [self _fireDidFailWithError:error];
+    [self autorelease];
 }
 
 - (void) connectionDidFinishLoading:(NSURLConnection *)connection 
@@ -114,6 +115,7 @@
 
     [receivedData release];
     receivedData = nil;
+    [self autorelease];
 }
 
 @end

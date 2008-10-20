@@ -92,18 +92,17 @@
 
 - (void) openInfoView:(NSNotification*)notification
 {
-    [mainView setHoveredMovie:nil];
-    [searchView setHidden:YES];
-    [infoPaneFormController showHomeTab];
-    
     [CATransaction begin];
     [CATransaction setValue:[NSNumber numberWithDouble:0.25] forKey:kCATransactionAnimationDuration];
     {
         CIFilter* blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
         [blurFilter setDefaults];
         [blurFilter setValue:[NSNumber numberWithInt:2.0] forKey:@"inputRadius"];
-        [mainView setContentFilters:[NSArray arrayWithObject:blurFilter]];
-
+        [infoPaneFormController showHomeTab]; 
+        
+        [mainView setHoveredMovie:nil];
+        [[searchView animator] setHidden:YES];
+        [[mainView animator] setContentFilters:[NSArray arrayWithObject:blurFilter]];
         [[infoPaneView animator] setHidden:NO];
     }
     [CATransaction commit];
@@ -113,12 +112,11 @@
 
 - (void) closeInfoView:(NSNotification*)notification
 {
-    [searchView setHidden:NO];
-
     [CATransaction begin];
     [CATransaction setValue:[NSNumber numberWithDouble:0.25] forKey:kCATransactionAnimationDuration];
     {
-        [mainView setContentFilters:nil];
+        [[searchView animator] setHidden:NO];
+        [[mainView animator] setContentFilters:nil];
         [[infoPaneView animator] setHidden:YES];
     }
     [CATransaction commit];

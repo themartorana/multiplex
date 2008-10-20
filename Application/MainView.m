@@ -38,8 +38,8 @@
     floorLayer.constraints = [NSArray arrayWithObjects:
         [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY],
         [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
-        [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.90 offset:0.0],
-        [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0.85 offset:0.0],
+        [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.95 offset:0.0],
+        [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0.90 offset:0.0],
         nil
     ];
     [rootLayer insertSublayer:floorLayer atIndex:0];
@@ -96,6 +96,12 @@
         }
         content = _content;
     }
+}
+
+- (void)setFrame:(NSRect)frameRect
+{
+    [super setFrame:frameRect];
+    [self layoutSublayersOfFloorLayer];
 }
 
 - (void) setHoveredMovie:(Movie*)movie
@@ -521,7 +527,7 @@ CGFloat HS = 75.0;
         p = CATransform3DScale(p, scale, scale, 1.0);
         p = CATransform3DTranslate(p, 0.0, -height / 2.0, 0.0);
         p.m34 = 1.0 / -MAX(width, 2000);
-        p = CATransform3DRotate(p, 0.1, 1.0, 0.0, 0.0);
+        p = CATransform3DRotate(p, 0.075, 1.0, 0.0, 0.0);
         floorLayer.sublayerTransform = p;
     }
     

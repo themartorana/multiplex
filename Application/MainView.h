@@ -19,6 +19,8 @@
     
     Movie* hoveredMovie;
     NSTimer* hoverTimer;
+    
+    BOOL needsLayout;
 }
 
 @property (retain) id content;

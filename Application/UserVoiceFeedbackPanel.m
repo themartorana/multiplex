@@ -1,11 +1,3 @@
-//
-//  UserVoiceFeedbackPanel.m
-//  Multiplex
-//
-//  Created by David Martorana on 10/19/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
-//
-
 #import "UserVoiceFeedbackPanel.h"
 #import <WebKit/WebKit.h>
 
@@ -22,9 +14,14 @@
     [userVoiceFeedbackWebView setFrameLoadDelegate:self];
     [userVoiceFeedbackWebView setPolicyDelegate:self];    
 
-    WebPreferences* prefs = [userVoiceFeedbackWebView preferences];
+    id style = [userVoiceFeedbackWebView styleDeclarationWithText:[NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"uservoice-feedback" ofType:@"css"]]];
+    [userVoiceFeedbackWebView applyStyle:style];
+
+    WebPreferences* prefs = [[WebPreferences alloc] init];
     [prefs setUserStyleSheetEnabled:YES];
-    [prefs setUserStyleSheetLocation:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"uservoice-feedback" ofType:@"css"]]];   
+    [prefs setUserStyleSheetLocation:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"uservoice-feedback" ofType:@"css"]]];   
+    [userVoiceFeedbackWebView setPreferences:prefs];
+    [prefs release];
     
     [self resetFeedbackPage];
 }
@@ -36,18 +33,18 @@
 
 - (IBAction) closeSheet:(id)sender
 {
-    [NSApp endSheet:(NSWindow*)self];
+    [NSApp endSheet:self];
 }
 
-- (void)webView:(WebView *)sender decidePolicyForNewWindowAction:(NSDictionary *)actionInformation request:(NSURLRequest *)request newFrameName:(NSString *)frameName decisionListener:(id < WebPolicyDecisionListener >)listener
+- (void) webView:(WebView*)sender decidePolicyForNewWindowAction:(NSDictionary*)actionInformation request:(NSURLRequest*)request newFrameName:(NSString*)frameName decisionListener:(id<WebPolicyDecisionListener>)listener
 {
     [[NSWorkspace sharedWorkspace] openURL:[request URL]];
 }
 
-- (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame
+- (void) webView:(WebView*)sender didFinishLoadForFrame:(WebFrame *)frame
 {
-    // We only have one frame
 }
 
 
 @end
+

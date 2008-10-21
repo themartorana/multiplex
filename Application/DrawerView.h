@@ -13,4 +13,7 @@
 
 - (IBAction) toggle:(id)sender;
 
+- (void) openDrawer;
+- (void) closeDrawer;
+
 @end

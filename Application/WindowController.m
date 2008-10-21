@@ -1,5 +1,7 @@
 #import "WindowController.h"
+#import "EngineController.h"
 #import "MainView.h"
+#import "DrawerView.h"
 #import "Movie.h"
 #import "Disc.h"
 #import "Media.h"
@@ -14,18 +16,37 @@
 @end
 
 @implementation WindowController
+@synthesize managedObjectContext;
+
+- (id) init 
+{
+    if (self == [super init]) {
+        managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
+        
+        persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
+        [persistentStoreCoordinator addPersistentStoreWithType:NSInMemoryStoreType configuration:nil URL:nil options:nil error:nil];
+        
+        managedObjectContext = [[NSManagedObjectContext alloc] init];
+        [managedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
+        
+        engineController = [[EngineController alloc] initWithManagedObjectContext:managedObjectContext];
+    }
+    return self;
+}
+
+- (void) dealloc 
+{
+    [managedObjectModel release];
+    [persistentStoreCoordinator release];
+    [managedObjectContext release];
+    [engineController release];
+    [super dealloc];
+}
 
 - (void) awakeFromNib
 {
-    // TODO: Move this somewhere appropriate!!
-    [infoPaneView setHidden:YES];
-    [infoPaneView setFrame:[[[mainView window] contentView] frame]];
-    [[[mainView window] contentView] addSubview:infoPaneView positioned:NSWindowAbove relativeTo:nil];
-    
     NSView* contentView = self.window.contentView;
-    contentView.wantsLayer = YES;
-    
-    CALayer* background = contentView.layer;
+    contentView.layer.backgroundColor = [MultiplexColorFactory black];
     
     /*  Sort the movies alphabetically
      */
@@ -33,18 +54,27 @@
     [movies setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     [sortDescriptor release];
 
-    background.backgroundColor = [MultiplexColorFactory black];
-    
+    /*  Give the MainView movies to play with.
+     */
     [mainView setContent:movies];
         
-    NSDictionary* options = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption];
-    [infoPaneFormController bind:@"selectedMovie" toObject:movies withKeyPath:@"selection.self" options:options];
+    [infoPaneFormController bind:@"selectedMovie" toObject:movies withKeyPath:@"selection.self" options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption]];
     
     // Listen for play requests
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playDiscRequest:) name:@"MultiplexPlayDisc" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openInfoView:) name:@"MultiplexShowMovieDialog" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeInfoView:) name:@"MultiplexCloseMovieDialog" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playSelectedMovie:) name:@"MultiplexPlayButtonClicked" object:nil];
+}
+
+- (void) applicationDidFinishLaunching:(NSNotification*)notification
+{
+    [self.window makeKeyAndOrderFront:nil];
+}
+
+- (void) applicationWillTerminate:(NSNotification*)notification
+{
+    [engineController shutdown];
 }
 
 - (void) playDiscRequest:(NSNotification*)notification
@@ -86,43 +116,15 @@
     }
 }
 
-- (IBAction) toggleDrawerView:(id)sender
-{
-    [sender setFrameCenterRotation:M_PI/4.0];
-}
-
-
 - (void) openInfoView:(NSNotification*)notification
 {
-    [CATransaction begin];
-    [CATransaction setValue:[NSNumber numberWithDouble:0.25] forKey:kCATransactionAnimationDuration];
-    {
-        CIFilter* blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
-        [blurFilter setDefaults];
-        [blurFilter setValue:[NSNumber numberWithInt:2.0] forKey:@"inputRadius"];
-        [infoPaneFormController showHomeTab]; 
-        
-        [mainView setHoveredMovie:nil];
-        [[searchView animator] setHidden:YES];
-        [[mainView animator] setContentFilters:[NSArray arrayWithObject:blurFilter]];
-        [[infoPaneView animator] setHidden:NO];
-    }
-    [CATransaction commit];
-
+    [drawerView openDrawer];
     [[self window] makeFirstResponder:infoPaneView];
 }
 
 - (void) closeInfoView:(NSNotification*)notification
 {
-    [CATransaction begin];
-    [CATransaction setValue:[NSNumber numberWithDouble:0.25] forKey:kCATransactionAnimationDuration];
-    {
-        [[searchView animator] setHidden:NO];
-        [[mainView animator] setContentFilters:nil];
-        [[infoPaneView animator] setHidden:YES];
-    }
-    [CATransaction commit];
-    
+    [drawerView closeDrawer];
     [[self window] makeFirstResponder:searchView];
 }
 

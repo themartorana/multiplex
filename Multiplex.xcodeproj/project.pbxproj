@@ -22,7 +22,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		550D07A30E9A7AF4008F0275 /* InfoPaneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 550D07A20E9A7AF4008F0275 /* InfoPaneView.m */; };
 		550D082C0E9AE14E008F0275 /* InfoPaneFormController.m in Sources */ = {isa = PBXBuildFile; fileRef = 550D082B0E9AE14E008F0275 /* InfoPaneFormController.m */; };
 		550D08700E9AFDF4008F0275 /* NSDescriptionValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 550D086F0E9AFDF4008F0275 /* NSDescriptionValueTransformer.m */; };
 		551554A00EA456C8006F2674 /* SoftEditTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5515549F0EA456C8006F2674 /* SoftEditTextFieldCell.m */; };
@@ -42,7 +41,6 @@
 		557440670EABD786002E0B80 /* uservoice-normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 557440650EABD786002E0B80 /* uservoice-normal.png */; };
 		5574409D0EABDD54002E0B80 /* uservoice-feedback.css in Resources */ = {isa = PBXBuildFile; fileRef = 5574409C0EABDD54002E0B80 /* uservoice-feedback.css */; };
 		557B69460E4CCD3F0009919E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 557B69450E4CCD3F0009919E /* MainMenu.xib */; };
-		557B69740E4CD0790009919E /* DebugWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B69730E4CD0790009919E /* DebugWindowController.m */; };
 		5583D1640E51D82700EB7AE6 /* Multiplex.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */; };
 		558D1A810E9C6FED000F67FA /* InfoPaneBasicInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1A800E9C6FED000F67FA /* InfoPaneBasicInfoView.m */; };
 		558D1AF00E9D186B000F67FA /* InfoPaneDiscsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */; };
@@ -306,8 +304,6 @@
 /* Begin PBXFileReference section */
 		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		550D07A10E9A7AF4008F0275 /* InfoPaneView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPaneView.h; sourceTree = "<group>"; };
-		550D07A20E9A7AF4008F0275 /* InfoPaneView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoPaneView.m; sourceTree = "<group>"; };
 		550D082A0E9AE14E008F0275 /* InfoPaneFormController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPaneFormController.h; sourceTree = "<group>"; };
 		550D082B0E9AE14E008F0275 /* InfoPaneFormController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoPaneFormController.m; sourceTree = "<group>"; };
 		550D086E0E9AFDF4008F0275 /* NSDescriptionValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDescriptionValueTransformer.h; sourceTree = "<group>"; };
@@ -340,8 +336,6 @@
 		5574409C0EABDD54002E0B80 /* uservoice-feedback.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = "uservoice-feedback.css"; sourceTree = "<group>"; };
 		557B66A20E4A2F4D0009919E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		557B69450E4CCD3F0009919E /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
-		557B69720E4CD0790009919E /* DebugWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugWindowController.h; sourceTree = "<group>"; };
-		557B69730E4CD0790009919E /* DebugWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebugWindowController.m; sourceTree = "<group>"; };
 		5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Multiplex.xcdatamodel; sourceTree = "<group>"; };
 		558D1A7F0E9C6FED000F67FA /* InfoPaneBasicInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPaneBasicInfoView.h; sourceTree = "<group>"; };
 		558D1A800E9C6FED000F67FA /* InfoPaneBasicInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoPaneBasicInfoView.m; sourceTree = "<group>"; };
@@ -668,8 +662,6 @@
 		557B69710E4CD0660009919E /* UI Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				557B69720E4CD0790009919E /* DebugWindowController.h */,
-				557B69730E4CD0790009919E /* DebugWindowController.m */,
 				F967B02B0E7E16DE00C12B92 /* WindowController.h */,
 				F967B02C0E7E16DE00C12B92 /* WindowController.m */,
 				550D082A0E9AE14E008F0275 /* InfoPaneFormController.h */,
@@ -727,8 +719,6 @@
 				F967AFF50E7E13ED00C12B92 /* MainView.m */,
 				556BD78A0E9444ED00EC698A /* WorkingStatusView.h */,
 				556BD78B0E9444ED00EC698A /* WorkingStatusView.m */,
-				550D07A10E9A7AF4008F0275 /* InfoPaneView.h */,
-				550D07A20E9A7AF4008F0275 /* InfoPaneView.m */,
 				558D1A7F0E9C6FED000F67FA /* InfoPaneBasicInfoView.h */,
 				558D1A800E9C6FED000F67FA /* InfoPaneBasicInfoView.m */,
 				558D1AEE0E9D186B000F67FA /* InfoPaneDiscsView.h */,
@@ -1180,7 +1170,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
-				557B69740E4CD0790009919E /* DebugWindowController.m in Sources */,
 				5535D98F0E4E3F5400A45761 /* EngineController.m in Sources */,
 				5583D1640E51D82700EB7AE6 /* Multiplex.xcdatamodel in Sources */,
 				F9CA172A0E7C727C0049CD3E /* Movie.m in Sources */,
@@ -1194,7 +1183,6 @@
 				5598E60C0E91D294005FCC91 /* ButtonLayer.m in Sources */,
 				556BD78C0E9444ED00EC698A /* WorkingStatusView.m in Sources */,
 				556BD7900E94470600EC698A /* Activity.m in Sources */,
-				550D07A30E9A7AF4008F0275 /* InfoPaneView.m in Sources */,
 				550D082C0E9AE14E008F0275 /* InfoPaneFormController.m in Sources */,
 				550D08700E9AFDF4008F0275 /* NSDescriptionValueTransformer.m in Sources */,
 				558D1A810E9C6FED000F67FA /* InfoPaneBasicInfoView.m in Sources */,

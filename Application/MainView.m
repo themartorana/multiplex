@@ -308,7 +308,6 @@
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
     if ([@"content.@count" isEqualToString:keyPath]) {
-        [self setHoveredMovie:nil];
         NSMutableArray* allLayers = [listOfLayersInOrder objectAtIndex:0];
         int oldCount = [allLayers count];
         NSArray* allObjects = [object content];
@@ -334,10 +333,11 @@
             } 
             [listOfLayersInOrder replaceObjectAtIndex:0 withObject:layersInOrder];
 
-            [self layoutSublayersOfFloorLayer];
+            NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
+            [currentRunLoop cancelPerformSelector:@selector(layoutSublayersOfFloorLayer) target:self argument:nil];
+            [currentRunLoop performSelector:@selector(layoutSublayersOfFloorLayer) target:self argument:nil order:0 modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
         }
     } else if ([@"arrangedObjects" isEqualToString:keyPath]) {
-        [self setHoveredMovie:nil];
         NSArray* arrangedObjects = [object arrangedObjects];
 
         int count = [arrangedObjects count];
@@ -368,20 +368,9 @@
          */
         [listOfLayersInOrder addObject:layersInOrder];
 
-        CGFloat opacity = 1.0;
-        NSMutableSet* tagged = [NSMutableSet set];
-        for (NSArray* layersInOrder in [listOfLayersInOrder reverseObjectEnumerator]) {
-            for (CALayer* layer in layersInOrder) {
-                if (![tagged containsObject:layer]) {
-                    layer.opaque = (opacity == 1.0);
-                    layer.opacity = opacity;
-                    [tagged addObject:layer];
-                }
-            }
-            opacity *= 0.2;
-        }
-        
-        [self layoutSublayersOfFloorLayer];
+        NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
+        [currentRunLoop cancelPerformSelector:@selector(layoutSublayersOfFloorLayer) target:self argument:nil];
+        [currentRunLoop performSelector:@selector(layoutSublayersOfFloorLayer) target:self argument:nil order:0 modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
     }
 }
 
@@ -491,8 +480,22 @@ CGFloat HS = 75.0;
 - (void) layoutSublayersOfFloorLayer
 {
     [CATransaction begin];
-    [CATransaction setValue:[NSNumber numberWithFloat:0.5] forKey:kCATransactionAnimationDuration];
+    [CATransaction setValue:[NSNumber numberWithDouble:([[NSApp currentEvent] modifierFlags] & NSShiftKeyMask) ? 3.0 : 0.3] forKey:kCATransactionAnimationDuration];
     
+    CGFloat opacity = 1.0;
+    NSMutableSet* tagged = [NSMutableSet set];
+    for (NSArray* layersInOrder in [listOfLayersInOrder reverseObjectEnumerator]) {
+        for (MovieLayer* layer in layersInOrder) {
+            if (![tagged containsObject:layer.movie.objectID]) {
+                layer.hidden = (opacity < 0.1);
+                layer.opaque = (opacity == 1.0);
+                layer.opacity = opacity;
+                [tagged addObject:layer.movie.objectID];
+            }
+        }
+        opacity *= 0.2;
+    }
+
     /*  This base transform sets up the origin (0, 0) to the center of the 
      *  layer along the X and Y axes.
      */
@@ -590,6 +593,8 @@ CGFloat HS = 75.0;
         p = CATransform3DRotate(p, 0.075, 1.0, 0.0, 0.0);
         floorLayer.sublayerTransform = p;
     }
+
+    [self setHoveredMovie:nil];
     
     [CATransaction commit];
 }

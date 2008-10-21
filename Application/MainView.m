@@ -487,9 +487,10 @@ CGFloat HS = 75.0;
     for (NSArray* layersInOrder in [listOfLayersInOrder reverseObjectEnumerator]) {
         for (MovieLayer* layer in layersInOrder) {
             if (![tagged containsObject:layer.movie.objectID]) {
-                layer.hidden = (opacity < 0.1);
-                layer.opaque = (opacity == 1.0);
-                layer.opacity = opacity;
+                if (NO == (layer.hidden = (opacity < 0.1))) {
+                    layer.opaque = (opacity == 1.0);
+                    layer.opacity = opacity;
+                }
                 [tagged addObject:layer.movie.objectID];
             }
         }

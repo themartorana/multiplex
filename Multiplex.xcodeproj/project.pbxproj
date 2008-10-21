@@ -67,7 +67,6 @@
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		F914C9C80EAD653300877991 /* plus-36x36.png in Resources */ = {isa = PBXBuildFile; fileRef = F914C9C70EAD653300877991 /* plus-36x36.png */; };
 		F914C9D00EAD657900877991 /* DrawerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F914C9CF0EAD657900877991 /* DrawerView.m */; };
-		F914CAE80EAD786000877991 /* drawer-background-pattern-128x128.gif in Resources */ = {isa = PBXBuildFile; fileRef = F914CAE70EAD786000877991 /* drawer-background-pattern-128x128.gif */; };
 		F914CB100EAD7C8700877991 /* drawer-background-pattern-96x96.gif in Resources */ = {isa = PBXBuildFile; fileRef = F914CB0F0EAD7C8700877991 /* drawer-background-pattern-96x96.gif */; };
 		F967AFF60E7E13ED00C12B92 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = F967AFF50E7E13ED00C12B92 /* MainView.m */; };
 		F967B02D0E7E16DE00C12B92 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F967B02C0E7E16DE00C12B92 /* WindowController.m */; };
@@ -375,7 +374,6 @@
 		F914C9C70EAD653300877991 /* plus-36x36.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus-36x36.png"; sourceTree = "<group>"; };
 		F914C9CE0EAD657900877991 /* DrawerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawerView.h; sourceTree = "<group>"; };
 		F914C9CF0EAD657900877991 /* DrawerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawerView.m; sourceTree = "<group>"; };
-		F914CAE70EAD786000877991 /* drawer-background-pattern-128x128.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "drawer-background-pattern-128x128.gif"; sourceTree = "<group>"; };
 		F914CB0F0EAD7C8700877991 /* drawer-background-pattern-96x96.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "drawer-background-pattern-96x96.gif"; sourceTree = "<group>"; };
 		F93B04A50E6F57CF006CB915 /* AmazonQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmazonQuery.h; sourceTree = "<group>"; };
 		F93B04A60E6F57CF006CB915 /* AmazonQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmazonQuery.m; sourceTree = "<group>"; };
@@ -578,7 +576,6 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				F914CAE70EAD786000877991 /* drawer-background-pattern-128x128.gif */,
 				F914CB0F0EAD7C8700877991 /* drawer-background-pattern-96x96.gif */,
 				5574409C0EABDD54002E0B80 /* uservoice-feedback.css */,
 				557440640EABD786002E0B80 /* uservoice-hover.png */,
@@ -1112,7 +1109,6 @@
 				557440670EABD786002E0B80 /* uservoice-normal.png in Resources */,
 				5574409D0EABDD54002E0B80 /* uservoice-feedback.css in Resources */,
 				F914C9C80EAD653300877991 /* plus-36x36.png in Resources */,
-				F914CAE80EAD786000877991 /* drawer-background-pattern-128x128.gif in Resources */,
 				F914CB100EAD7C8700877991 /* drawer-background-pattern-96x96.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

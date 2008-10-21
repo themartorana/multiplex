@@ -1,0 +1,16 @@
+#import <Cocoa/Cocoa.h>
+
+@interface DrawerView : NSView {
+    IBOutlet NSView* upperView;
+    IBOutlet NSView* contentView;
+    IBOutlet NSView* button;
+    CGFloat minHeight;
+    BOOL isOpen;
+}
+
+@property (readonly) BOOL isOpen;
+@property (retain) NSView* contentView;
+
+- (IBAction) toggle:(id)sender;
+
+@end

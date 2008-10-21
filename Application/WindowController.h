@@ -19,5 +19,6 @@
 }
 
 - (IBAction) showUserVoiceFeedbackSheet:(id)sender;
+- (IBAction) toggleDrawerView:(id)sender;
 
 @end

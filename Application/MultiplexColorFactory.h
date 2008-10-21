@@ -11,6 +11,8 @@
 
 @interface MultiplexColorFactory : NSObject 
 
++ (CGColorRef) drawerBackgroundPattern;
+
 + (CGColorRef) white;
 + (CGColorRef) black;
 

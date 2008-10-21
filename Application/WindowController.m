@@ -86,6 +86,12 @@
     }
 }
 
+- (IBAction) toggleDrawerView:(id)sender
+{
+    [sender setFrameCenterRotation:M_PI/4.0];
+}
+
+
 - (void) openInfoView:(NSNotification*)notification
 {
     [CATransaction begin];

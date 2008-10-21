@@ -1,16 +1,28 @@
-//
-//  CGColorManager.m
-//  Multiplex
-//
-//  Created by David Martorana on 10/14/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
-//
-
 #import "MultiplexColorFactory.h"
 
 #import <Toolkit/NSColor+IndyHallLabs.h>
 
+static void _drawPatternImage(void* info, CGContextRef ctx);
+static void _releasePatternImage(void* info);
+static CGPatternRef _createImagePattern(CGImageRef image);
+static CGImageRef _createCGImageFromFile(NSString* path);
+
 @implementation MultiplexColorFactory
+
++ (CGColorRef) drawerBackgroundPattern
+{
+    static CGColorRef color = NULL;
+    if (!color) {
+        CGPatternRef pattern = _createImagePattern(_createCGImageFromFile([[NSBundle mainBundle] pathForResource:@"drawer-background-pattern-96x96" ofType:@"gif"]));
+        CGColorSpaceRef space = CGColorSpaceCreatePattern(NULL);
+        CGFloat components[1] = { 1.0 };
+        color = CGColorCreateWithPattern(space, pattern, components);
+        CGColorSpaceRelease(space);
+        CGPatternRelease(pattern);
+    }
+    return color;
+}
+
 
 + (CGColorRef) white
 {
@@ -139,3 +151,48 @@
 }
 
 @end
+
+#pragma mark -
+
+static void _drawPatternImage(void* info, CGContextRef ctx)
+{
+    CGImageRef image = (CGImageRef)info;
+    CGContextDrawImage(ctx, CGRectMake(0,0, CGImageGetWidth(image), CGImageGetHeight(image)), image);
+}
+
+static void _releasePatternImage(void* info)
+{
+    CGImageRelease((CGImageRef)info);
+}
+
+static CGPatternRef _createImagePattern(CGImageRef image)
+{
+    NSCParameterAssert(image);
+    int width = CGImageGetWidth(image);
+    int height = CGImageGetHeight(image);
+    static const CGPatternCallbacks callbacks = { 0, &_drawPatternImage, &_releasePatternImage };
+    return CGPatternCreate(image,
+        CGRectMake (0, 0, width, height),
+        CGAffineTransformMake (1, 0, 0, 1, 0, 0),
+        width,
+        height,
+        kCGPatternTilingConstantSpacing,
+        true,
+        &callbacks
+    );
+}
+        
+static CGImageRef _createCGImageFromFile(NSString *path)
+{
+    CGImageRef image = NULL;
+    CGImageSourceRef src = CGImageSourceCreateWithURL((CFURLRef)[NSURL fileURLWithPath:path], NULL);
+    if (src) {
+        image = CGImageSourceCreateImageAtIndex(src, 0, NULL);
+        CFRelease(src);
+        if (!image) {
+            NSLog(@"Warning: CGImageSourceCreateImageAtIndex failed on file %@ (ptr size=%u)", path, sizeof(void*));
+        }
+    }
+    return image;
+}
+

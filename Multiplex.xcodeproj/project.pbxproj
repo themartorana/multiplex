@@ -65,6 +65,10 @@
 		55F815360E94082A005EF5DE /* button-play.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55F815350E94082A005EF5DE /* button-play.pdf */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		F914C9C80EAD653300877991 /* plus-36x36.png in Resources */ = {isa = PBXBuildFile; fileRef = F914C9C70EAD653300877991 /* plus-36x36.png */; };
+		F914C9D00EAD657900877991 /* DrawerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F914C9CF0EAD657900877991 /* DrawerView.m */; };
+		F914CAE80EAD786000877991 /* drawer-background-pattern-128x128.gif in Resources */ = {isa = PBXBuildFile; fileRef = F914CAE70EAD786000877991 /* drawer-background-pattern-128x128.gif */; };
+		F914CB100EAD7C8700877991 /* drawer-background-pattern-96x96.gif in Resources */ = {isa = PBXBuildFile; fileRef = F914CB0F0EAD7C8700877991 /* drawer-background-pattern-96x96.gif */; };
 		F967AFF60E7E13ED00C12B92 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = F967AFF50E7E13ED00C12B92 /* MainView.m */; };
 		F967B02D0E7E16DE00C12B92 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F967B02C0E7E16DE00C12B92 /* WindowController.m */; };
 		F967B0800E7E1F3100C12B92 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F967B07F0E7E1F3100C12B92 /* QuartzCore.framework */; };
@@ -368,6 +372,11 @@
 		55F815350E94082A005EF5DE /* button-play.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "button-play.pdf"; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* Multiplex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Multiplex.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F914C9C70EAD653300877991 /* plus-36x36.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus-36x36.png"; sourceTree = "<group>"; };
+		F914C9CE0EAD657900877991 /* DrawerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawerView.h; sourceTree = "<group>"; };
+		F914C9CF0EAD657900877991 /* DrawerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawerView.m; sourceTree = "<group>"; };
+		F914CAE70EAD786000877991 /* drawer-background-pattern-128x128.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "drawer-background-pattern-128x128.gif"; sourceTree = "<group>"; };
+		F914CB0F0EAD7C8700877991 /* drawer-background-pattern-96x96.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "drawer-background-pattern-96x96.gif"; sourceTree = "<group>"; };
 		F93B04A50E6F57CF006CB915 /* AmazonQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmazonQuery.h; sourceTree = "<group>"; };
 		F93B04A60E6F57CF006CB915 /* AmazonQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmazonQuery.m; sourceTree = "<group>"; };
 		F94A05FD0E7B9B5800C8A8B7 /* DiscIdentKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DiscIdentKit.xcodeproj; path = Frameworks/DiscIdentKit/DiscIdentKit.xcodeproj; sourceTree = "<group>"; };
@@ -569,11 +578,14 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F914CAE70EAD786000877991 /* drawer-background-pattern-128x128.gif */,
+				F914CB0F0EAD7C8700877991 /* drawer-background-pattern-96x96.gif */,
 				5574409C0EABDD54002E0B80 /* uservoice-feedback.css */,
 				557440640EABD786002E0B80 /* uservoice-hover.png */,
 				557440650EABD786002E0B80 /* uservoice-normal.png */,
 				553477800EA3AD5100436A8C /* multiplex-mark01a.icns */,
 				558D1EAB0E9E65A8000F67FA /* close-click128x128.pdf */,
+				F914C9C70EAD653300877991 /* plus-36x36.png */,
 				558D1EAC0E9E65A8000F67FA /* close128x128.pdf */,
 				55912E240EA0083C00446666 /* play-button-inactive.pdf */,
 				558D1EAD0E9E65A8000F67FA /* info-click128x128.pdf */,
@@ -724,6 +736,8 @@
 				558D1A800E9C6FED000F67FA /* InfoPaneBasicInfoView.m */,
 				558D1AEE0E9D186B000F67FA /* InfoPaneDiscsView.h */,
 				558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */,
+				F914C9CE0EAD657900877991 /* DrawerView.h */,
+				F914C9CF0EAD657900877991 /* DrawerView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1097,6 +1111,9 @@
 				557440660EABD786002E0B80 /* uservoice-hover.png in Resources */,
 				557440670EABD786002E0B80 /* uservoice-normal.png in Resources */,
 				5574409D0EABDD54002E0B80 /* uservoice-feedback.css in Resources */,
+				F914C9C80EAD653300877991 /* plus-36x36.png in Resources */,
+				F914CAE80EAD786000877991 /* drawer-background-pattern-128x128.gif in Resources */,
+				F914CB100EAD7C8700877991 /* drawer-background-pattern-96x96.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1198,6 +1215,7 @@
 				551559380EA6554E006F2674 /* VerticalScroller.m in Sources */,
 				F9CE85D40EA7E2D400602750 /* ApplicationResources.m in Sources */,
 				55743F9E0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.m in Sources */,
+				F914C9D00EAD657900877991 /* DrawerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

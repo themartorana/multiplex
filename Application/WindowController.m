@@ -130,7 +130,7 @@
 
 - (IBAction) showUserVoiceFeedbackSheet:(id)sender
 {
-    [userVoiceFeedbackPanel setFrame:[mainView frame] display:YES];
+    [userVoiceFeedbackPanel setFrame:[self.window.contentView frame] display:YES];
         
     [NSApp beginSheet:(NSWindow*)userVoiceFeedbackPanel 
        modalForWindow:[mainView window] 

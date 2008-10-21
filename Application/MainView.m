@@ -148,9 +148,10 @@
     }
 }
 
-- (void) setFrame:(NSRect)frameRect
+- (void) setFrameSize:(NSSize)frameSize
 {
-    [super setFrame:frameRect];
+    NSLog(@"yo");
+    [super setFrameSize:frameSize];
     [self _restartMouseTracking];
     [self layoutSublayersOfFloorLayer];
 }

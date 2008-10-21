@@ -8,6 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="1182"/>
 			<integer value="1151"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -2325,8 +2326,8 @@
 				<string key="NSClassName">WindowController</string>
 			</object>
 			<object class="NSCustomView" id="88515557">
-				<nil key="NSNextResponder"/>
-				<int key="NSvFlags">301</int>
+				<reference key="NSNextResponder"/>
+				<int key="NSvFlags">261</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<object class="NSTabView" id="561973019">
@@ -3059,7 +3060,8 @@
 						</object>
 					</object>
 				</object>
-				<string key="NSFrame">{{60, 62}, {800, 500}}</string>
+				<string key="NSFrameSize">{800, 500}</string>
+				<reference key="NSSuperview"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomObject" id="62536199">
@@ -6572,6 +6574,7 @@
 					<string>1162.IBPluginDependency</string>
 					<string>1166.IBPluginDependency</string>
 					<string>1177.IBPluginDependency</string>
+					<string>1182.IBEditorWindowLastContentRect</string>
 					<string>1182.IBPluginDependency</string>
 					<string>1183.IBPluginDependency</string>
 					<string>1184.IBPluginDependency</string>
@@ -6977,6 +6980,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>{{115, 273}, {800, 500}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

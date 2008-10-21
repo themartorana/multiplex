@@ -2,20 +2,14 @@
 #import "Movie.h"
 #import "MovieLayer.h"
 #import "HoverPlayLayer.h"
-
+#import "MultiplexLayoutManager.h"
 
 @interface MainView : NSView {
     NSMutableDictionary* layersByID;
     NSMutableArray* listOfLayersInOrder;
+    
     CALayer* floorLayer; // NR
-    CALayer* radialGradientLayer; // NR
-    
-    CALayer* hoverHighlightLayer;
     HoverPlayLayer* hoverPlayLayer;
-    
-    CALayer* titleContainerLayer;
-    CATextLayer* titleLayer;
-    CATextLayer* titleReflectionLayer;
     
     NSTrackingArea* mouseTrackingArea;
     
@@ -25,6 +19,8 @@
     NSTimer* hoverTimer;
     
     BOOL needsLayout;
+    
+    id<MultiplexLayoutManager> moviesLayoutManager;
 }
 
 @property (retain) id content;

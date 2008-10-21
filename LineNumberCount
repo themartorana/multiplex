@@ -1,1 +1,1 @@
-find . -name '*.?' -print0 | xargs -0 wc -l | tail -1 | awk '{print $1}'
+find [A-Z]* -name '*.?' -print0 | xargs -0 wc -l | tail -1 | awk '{print $1}'

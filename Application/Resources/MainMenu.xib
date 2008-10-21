@@ -2183,35 +2183,6 @@
 							<reference key="NSSuperview" ref="384445475"/>
 							<string key="NSClassName">MainView</string>
 						</object>
-						<object class="NSButton" id="141152956">
-							<reference key="NSNextResponder" ref="384445475"/>
-							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{0, 557}, {26, 99}}</string>
-							<reference key="NSSuperview" ref="384445475"/>
-							<bool key="NSEnabled">YES</bool>
-							<object class="NSButtonCell" key="NSCell" id="514235780">
-								<int key="NSCellFlags">67239424</int>
-								<int key="NSCellFlags2">134217728</int>
-								<string key="NSContents"/>
-								<object class="NSFont" key="NSSupport">
-									<string key="NSName">LucidaGrande</string>
-									<double key="NSSize">1.000000e+01</double>
-									<int key="NSfFlags">16</int>
-								</object>
-								<reference key="NSControlView" ref="141152956"/>
-								<int key="NSButtonFlags">-2042347265</int>
-								<int key="NSButtonFlags2">2</int>
-								<object class="NSCustomResource" key="NSNormalImage" id="185598624">
-									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">uservoice-hover</string>
-								</object>
-								<reference key="NSAlternateImage" ref="185598624"/>
-								<string key="NSAlternateContents"/>
-								<string key="NSKeyEquivalent"/>
-								<int key="NSPeriodicDelay">400</int>
-								<int key="NSPeriodicInterval">75</int>
-							</object>
-						</object>
 						<object class="NSCustomView" id="243160278">
 							<reference key="NSNextResponder" ref="384445475"/>
 							<int key="NSvFlags">290</int>
@@ -2314,6 +2285,35 @@
 							<reference key="NSSuperview" ref="384445475"/>
 							<bool key="NSViewIsLayerTreeHost">YES</bool>
 							<string key="NSClassName">DrawerView</string>
+						</object>
+						<object class="NSButton" id="141152956">
+							<reference key="NSNextResponder" ref="384445475"/>
+							<int key="NSvFlags">268</int>
+							<string key="NSFrame">{{0, 557}, {26, 99}}</string>
+							<reference key="NSSuperview" ref="384445475"/>
+							<bool key="NSEnabled">YES</bool>
+							<object class="NSButtonCell" key="NSCell" id="514235780">
+								<int key="NSCellFlags">67239424</int>
+								<int key="NSCellFlags2">134217728</int>
+								<string key="NSContents"/>
+								<object class="NSFont" key="NSSupport">
+									<string key="NSName">LucidaGrande</string>
+									<double key="NSSize">1.000000e+01</double>
+									<int key="NSfFlags">16</int>
+								</object>
+								<reference key="NSControlView" ref="141152956"/>
+								<int key="NSButtonFlags">-2042347265</int>
+								<int key="NSButtonFlags2">2</int>
+								<object class="NSCustomResource" key="NSNormalImage" id="185598624">
+									<string key="NSClassName">NSImage</string>
+									<string key="NSResourceName">uservoice-hover</string>
+								</object>
+								<reference key="NSAlternateImage" ref="185598624"/>
+								<string key="NSAlternateContents"/>
+								<string key="NSKeyEquivalent"/>
+								<int key="NSPeriodicDelay">400</int>
+								<int key="NSPeriodicInterval">75</int>
+							</object>
 						</object>
 					</object>
 					<string key="NSFrameSize">{1000, 700}</string>

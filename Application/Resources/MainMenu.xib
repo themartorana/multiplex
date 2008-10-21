@@ -8,7 +8,6 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1182"/>
 			<integer value="1151"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -2186,7 +2185,7 @@
 						</object>
 						<object class="NSButton" id="141152956">
 							<reference key="NSNextResponder" ref="384445475"/>
-							<int key="NSvFlags">292</int>
+							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{0, 557}, {26, 99}}</string>
 							<reference key="NSSuperview" ref="384445475"/>
 							<bool key="NSEnabled">YES</bool>
@@ -2329,7 +2328,7 @@
 				<string key="NSClassName">WindowController</string>
 			</object>
 			<object class="NSCustomView" id="88515557">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">261</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3062,7 +3061,6 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{800, 500}</string>
-				<reference key="NSSuperview"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomObject" id="62536199">

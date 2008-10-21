@@ -49,11 +49,12 @@
     if (!isOpen) {
         NSRect frame = [self frame];
         NSRect viewFrame = [contentView frame];
+        NSRect superViewFrame = [self.superview frame];
         NSRect upperViewFrame = [upperView frame];
         
         NSRect newFrame = NSMakeRect(0, -viewFrame.size.height, frame.size.width, viewFrame.size.height + minHeight);
         NSRect newViewFrame = NSMakeRect(round((frame.size.width / 2.0) - (viewFrame.size.width / 2.0)), 0, viewFrame.size.width, viewFrame.size.height);
-        NSRect newUpperViewFrame = NSMakeRect(upperViewFrame.origin.x, upperViewFrame.origin.y + viewFrame.size.height, upperViewFrame.size.width, upperViewFrame.size.height - viewFrame.size.height);
+        NSRect newUpperViewFrame = NSMakeRect(upperViewFrame.origin.x, viewFrame.size.height + minHeight, upperViewFrame.size.width, superViewFrame.size.height - (viewFrame.size.height + minHeight));
         
         [self setFrame:newFrame];
         [contentView setFrame:newViewFrame];
@@ -76,8 +77,9 @@
     if (isOpen) {
         NSRect frame = [self frame];
         NSRect viewFrame = [contentView frame];
+        NSRect superViewFrame = [self.superview frame];
         NSRect upperViewFrame = [upperView frame];
-        NSRect newUpperViewFrame = NSMakeRect(upperViewFrame.origin.x, upperViewFrame.origin.y - viewFrame.size.height, upperViewFrame.size.width, upperViewFrame.size.height + viewFrame.size.height);
+        NSRect newUpperViewFrame = NSMakeRect(upperViewFrame.origin.x, minHeight, upperViewFrame.size.width, superViewFrame.size.height - minHeight);
 
         [NSAnimationContext beginGrouping];
         if ([[NSApp currentEvent] modifierFlags] & NSShiftKeyMask) {

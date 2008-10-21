@@ -28,10 +28,8 @@
 		551555040EA45D84006F2674 /* SoftEditTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 551555030EA45D84006F2674 /* SoftEditTextField.m */; };
 		551555610EA46220006F2674 /* HoverPlayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 551555600EA46220006F2674 /* HoverPlayLayer.m */; };
 		551558440EA53C1D006F2674 /* MultiplexColorFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 551558430EA53C1D006F2674 /* MultiplexColorFactory.m */; };
-		551559380EA6554E006F2674 /* VerticalScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 551559370EA6554E006F2674 /* VerticalScroller.m */; };
 		5534774D0EA3A9CA00436A8C /* ImageQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 5534774C0EA3A9CA00436A8C /* ImageQuery.m */; };
 		553477520EA3A9E400436A8C /* ImageQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 5534774C0EA3A9CA00436A8C /* ImageQuery.m */; };
-		553477710EA3AAB700436A8C /* BlurredBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 553477700EA3AAB700436A8C /* BlurredBackgroundView.m */; };
 		553477810EA3AD5100436A8C /* multiplex-mark01a.icns in Resources */ = {isa = PBXBuildFile; fileRef = 553477800EA3AD5100436A8C /* multiplex-mark01a.icns */; };
 		5535D98F0E4E3F5400A45761 /* EngineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5535D98E0E4E3F5400A45761 /* EngineController.m */; };
 		556BD78C0E9444ED00EC698A /* WorkingStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 556BD78B0E9444ED00EC698A /* WorkingStatusView.m */; };
@@ -316,12 +314,8 @@
 		551555600EA46220006F2674 /* HoverPlayLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HoverPlayLayer.m; sourceTree = "<group>"; };
 		551558420EA53C1D006F2674 /* MultiplexColorFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiplexColorFactory.h; sourceTree = "<group>"; };
 		551558430EA53C1D006F2674 /* MultiplexColorFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiplexColorFactory.m; sourceTree = "<group>"; };
-		551559360EA6554E006F2674 /* VerticalScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticalScroller.h; sourceTree = "<group>"; };
-		551559370EA6554E006F2674 /* VerticalScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticalScroller.m; sourceTree = "<group>"; };
 		5534774B0EA3A9CA00436A8C /* ImageQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageQuery.h; sourceTree = "<group>"; };
 		5534774C0EA3A9CA00436A8C /* ImageQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageQuery.m; sourceTree = "<group>"; };
-		5534776F0EA3AAB700436A8C /* BlurredBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlurredBackgroundView.h; sourceTree = "<group>"; };
-		553477700EA3AAB700436A8C /* BlurredBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlurredBackgroundView.m; sourceTree = "<group>"; };
 		553477800EA3AD5100436A8C /* multiplex-mark01a.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "multiplex-mark01a.icns"; sourceTree = "<group>"; };
 		5535D98D0E4E3F5400A45761 /* EngineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngineController.h; sourceTree = "<group>"; };
 		5535D98E0E4E3F5400A45761 /* EngineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngineController.m; sourceTree = "<group>"; };
@@ -709,10 +703,6 @@
 		F967AFF30E7E13D400C12B92 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				551559360EA6554E006F2674 /* VerticalScroller.h */,
-				551559370EA6554E006F2674 /* VerticalScroller.m */,
-				5534776F0EA3AAB700436A8C /* BlurredBackgroundView.h */,
-				553477700EA3AAB700436A8C /* BlurredBackgroundView.m */,
 				559130560EA03F9600446666 /* BigPlayButtonView.h */,
 				559130550EA03F9600446666 /* BigPlayButtonView.m */,
 				F967AFF40E7E13ED00C12B92 /* MainView.h */,
@@ -1191,12 +1181,10 @@
 				558D1C3E0E9D5562000F67FA /* DiscPlayLayer.m in Sources */,
 				559130570EA03F9600446666 /* BigPlayButtonView.m in Sources */,
 				5534774D0EA3A9CA00436A8C /* ImageQuery.m in Sources */,
-				553477710EA3AAB700436A8C /* BlurredBackgroundView.m in Sources */,
 				551554A00EA456C8006F2674 /* SoftEditTextFieldCell.m in Sources */,
 				551555040EA45D84006F2674 /* SoftEditTextField.m in Sources */,
 				551555610EA46220006F2674 /* HoverPlayLayer.m in Sources */,
 				551558440EA53C1D006F2674 /* MultiplexColorFactory.m in Sources */,
-				551559380EA6554E006F2674 /* VerticalScroller.m in Sources */,
 				F9CE85D40EA7E2D400602750 /* ApplicationResources.m in Sources */,
 				55743F9E0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.m in Sources */,
 				F914C9D00EAD657900877991 /* DrawerView.m in Sources */,

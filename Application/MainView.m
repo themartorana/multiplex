@@ -150,7 +150,6 @@
 
 - (void) setFrameSize:(NSSize)frameSize
 {
-    NSLog(@"yo");
     [super setFrameSize:frameSize];
     [self _restartMouseTracking];
     [self layoutSublayersOfFloorLayer];

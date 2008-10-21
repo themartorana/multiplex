@@ -14,7 +14,7 @@
     [root setLayoutManager:[CAConstraintLayoutManager layoutManager]];
 
     CALayer* solidLayer = [CALayer layer];
-    solidLayer.backgroundColor = [MultiplexColorFactory blackOneQuarterTransparent];
+    solidLayer.backgroundColor = [MultiplexColorFactory drawerBackgroundBaseColor];
     solidLayer.constraints = [NSArray arrayWithObjects:
         [CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX],
         [CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY],

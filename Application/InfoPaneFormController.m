@@ -3,7 +3,6 @@
 #import "Movie.h"
 #import "InfoPaneDiscsView.h"
 #import "BigPlayButtonView.h"
-#import "VerticalScroller.h"
 #import "MultiplexColorFactory.h"
 
 #import <WebKit/WebKit.h>
@@ -56,24 +55,6 @@
         [[descriptionWebView mainFrame] loadHTMLString:selectedMovie.review baseURL:url];
     } else {
         [[descriptionWebView mainFrame] loadHTMLString:@"" baseURL:url];
-    }
-}
-
-- (void) webView:(WebView*)sender didFinishLoadForFrame:(WebFrame*)frame
-{
-    if (sender != descriptionWebView) {
-        return;
-    }
-
-    NSScrollView* scrollView = [[[[descriptionWebView mainFrame] frameView] documentView] enclosingScrollView];
-    
-    VerticalScroller* scroller = (VerticalScroller*)[scrollView verticalScroller];
-    if (![scroller isMemberOfClass:[VerticalScroller class]]) {
-        NSRect scrollerFrame = [[scrollView verticalScroller] frame];
-        NSScroller* oldScroller = scroller;
-        scroller = [[[VerticalScroller alloc] initWithFrame:scrollerFrame] autorelease];
-        [scroller setFloatValue:[oldScroller floatValue] knobProportion:[oldScroller knobProportion]];
-        [scrollView setVerticalScroller:scroller];
     }
 }
 

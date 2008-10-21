@@ -11,13 +11,6 @@
 #import "Movie.h"
 
 @interface HoverTitleView : NSView {
-    Movie* hoveredMovie;
-    CATextLayer* titleLayer;
-    CATextLayer* titleReflectionLayer;
 }
-
-@property (retain) Movie* hoveredMovie;
-
-- (void) setUpHoverTitleLayer;
 
 @end

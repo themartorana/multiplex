@@ -39,7 +39,7 @@
     [mainView setContent:movies];
         
     // Do some bindings
-    [hoverTitleView bind:@"hoveredMovie" toObject:mainView withKeyPath:@"hoveredMovie" options:nil];
+    //[hoverTitleView bind:@"hoveredMovie" toObject:mainView withKeyPath:@"hoveredMovie" options:nil];
     
     NSDictionary* options = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption];
     [infoPaneFormController bind:@"selectedMovie" toObject:movies withKeyPath:@"selection.self" options:options];

@@ -2,7 +2,9 @@
 #import "Movie.h"
 #import "MovieLayer.h"
 #import "ButtonLayer.h"
+#import "MultiplexColorFactory.h"
 
+#import <Toolkit/Toolkit.h>
 #import <QuartzCore/QuartzCore.h>
 
 @interface MainView (LayerStuff)
@@ -70,6 +72,55 @@
     [rootLayer addSublayer:hoverPlayLayer];
     [hoverPlayLayer bind:@"hoveredMovie" toObject:self withKeyPath:@"hoveredMovie" options:nil];
     [self setHoveredMovie:nil];
+    
+
+    // To hold the title and its reflection
+    titleContainerLayer = [CALayer layer];
+    titleContainerLayer.anchorPoint = CGPointZero;
+    titleContainerLayer.frame = CGRectMake(0.0, 100.0, rootLayer.frame.size.width, 100.0);
+    titleContainerLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
+    //titleContainerLayer.borderColor = [MultiplexColorFactory multiplexOrange];
+    //titleContainerLayer.borderWidth = 2.0;
+    titleContainerLayer.autoresizingMask = kCALayerWidthSizable;
+    [rootLayer addSublayer:titleContainerLayer];
+    
+    titleLayer = [CATextLayer layer];
+    titleLayer.anchorPoint = CGPointZero;
+    titleLayer.wrapped = NO;
+    titleLayer.alignmentMode = kCAAlignmentCenter;
+    titleLayer.font = [NSFont systemFontOfSize:40.0];
+    titleLayer.fontSize = 40.0;
+    titleLayer.name = @"titleLayer";
+    titleLayer.constraints = [NSArray arrayWithObjects:
+                              [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
+                              [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY scale:1.0 offset:-9.0],
+                              [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.0 offset:900.0],
+                              nil];
+    titleLayer.name = @"titleLayer";
+    titleLayer.truncationMode = kCATruncationEnd;
+    [titleContainerLayer addSublayer:titleLayer];
+    
+    titleReflectionLayer = [[CATextLayer layer] retain];
+    titleReflectionLayer.anchorPoint = CGPointZero;
+    titleReflectionLayer.wrapped = NO;
+    titleReflectionLayer.alignmentMode = kCAAlignmentCenter;
+    titleReflectionLayer.font = [NSFont systemFontOfSize:40.0];
+    titleReflectionLayer.fontSize = 40.0;
+    titleReflectionLayer.foregroundColor = [MultiplexColorFactory white];
+    titleReflectionLayer.name = @"titleReflectionLayer";
+    titleReflectionLayer.transform = CATransform3DMakeScale(1.0, -1.0, 1.0);
+    titleReflectionLayer.constraints = [NSArray arrayWithObjects:
+                                        [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
+                                        [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"titleLayer" attribute:kCAConstraintMinY scale:1.0 offset:14.0],
+                                        [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.0 offset:900.0],
+                                        nil];
+    titleReflectionLayer.name = @"titleReflectionLayer";
+    titleReflectionLayer.truncationMode = kCATruncationEnd;
+    
+    [titleReflectionLayer setMask:[CALayer maskLayer]];
+    [titleContainerLayer addSublayer:titleReflectionLayer];
+    
+    [titleReflectionLayer bind:@"string" toObject:titleLayer withKeyPath:@"string" options:nil];
 }
 
 
@@ -110,6 +161,13 @@
 {
     [CATransaction begin];
     [CATransaction setValue:[NSNumber numberWithDouble:0.0] forKey:kCATransactionAnimationDuration];
+    
+    if (movie){
+        titleLayer.string = movie.title;
+    } else {
+        titleLayer.string = @" ";
+    }
+    
     if (movie != hoveredMovie) {
         [hoveredMovie release];
         hoveredMovie = [movie retain];

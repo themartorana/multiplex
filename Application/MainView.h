@@ -13,6 +13,10 @@
     CALayer* hoverHighlightLayer;
     HoverPlayLayer* hoverPlayLayer;
     
+    CALayer* titleContainerLayer;
+    CATextLayer* titleLayer;
+    CATextLayer* titleReflectionLayer;
+    
     NSTrackingArea* mouseTrackingArea;
     
     id content;

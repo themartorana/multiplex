@@ -6,8 +6,10 @@
 
 - (void) viewWillMoveToSuperview:(NSView*)newSuperview
 {
+    CALayer* layer = [CALayer layer];
+    [layer setDelegate:self];
+    [self setLayer:layer];
     [self setWantsLayer:YES];
-    [self.layer setDelegate:self];
 }
 
 - (id) image

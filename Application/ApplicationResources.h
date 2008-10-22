@@ -4,7 +4,9 @@
 }
 
 + (CGImageRef) CGImageFromPDF:(NSString*)path;
++ (CGImageRef) CGImageFromFile:(NSString*)path;
 
++ (CGImageRef) editIcon;
 + (CGImageRef) playButton;
 + (CGImageRef) playButtonDown;
 + (CGImageRef) playButtonInactive;

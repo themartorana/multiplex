@@ -1,4 +1,5 @@
 #import "MultiplexColorFactory.h"
+#import "ApplicationResources.h"
 
 #import <Toolkit/NSColor+IndyHallLabs.h>
 
@@ -13,7 +14,7 @@ static CGImageRef _createCGImageFromFile(NSString* path);
 {
     static CGColorRef color = NULL;
     if (!color) {
-        CGPatternRef pattern = _createImagePattern(_createCGImageFromFile([[NSBundle mainBundle] pathForResource:@"drawer-background-pattern-96x96" ofType:@"gif"]));
+        CGPatternRef pattern = _createImagePattern([ApplicationResources CGImageFromFile:[[NSBundle mainBundle] pathForResource:@"drawer-background-pattern-96x96" ofType:@"gif"]]);
         CGColorSpaceRef space = CGColorSpaceCreatePattern(NULL);
         CGFloat components[1] = { 1.0 };
         color = CGColorCreateWithPattern(space, pattern, components);
@@ -190,18 +191,3 @@ static CGPatternRef _createImagePattern(CGImageRef image)
         &callbacks
     );
 }
-        
-static CGImageRef _createCGImageFromFile(NSString *path)
-{
-    CGImageRef image = NULL;
-    CGImageSourceRef src = CGImageSourceCreateWithURL((CFURLRef)[NSURL fileURLWithPath:path], NULL);
-    if (src) {
-        image = CGImageSourceCreateImageAtIndex(src, 0, NULL);
-        CFRelease(src);
-        if (!image) {
-            NSLog(@"Warning: CGImageSourceCreateImageAtIndex failed on file %@ (ptr size=%u)", path, sizeof(void*));
-        }
-    }
-    return image;
-}
-

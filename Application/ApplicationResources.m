@@ -1,13 +1,21 @@
 #import "ApplicationResources.h"
 #import <Quartz/Quartz.h>
 
-static CGImageRef _playButton;
-static CGImageRef _playButtonDown;
-static CGImageRef _playButtonInactive;
-static CGImageRef _closeButton;
-static CGImageRef _closeButtonDown;
-
 @implementation ApplicationResources
+
++ (CGImageRef) CGImageFromFile:(NSString*)path
+{
+    CGImageRef image = NULL;
+    CGImageSourceRef src = CGImageSourceCreateWithURL((CFURLRef)[NSURL fileURLWithPath:path], NULL);
+    if (src) {
+        image = CGImageSourceCreateImageAtIndex(src, 0, NULL);
+        CFRelease(src);
+        if (!image) {
+            NSLog(@"Warning: CGImageSourceCreateImageAtIndex failed on file %@ (ptr size=%u)", path, sizeof(void*));
+        }
+    }
+    return image;
+}
 
 + (CGImageRef) CGImageFromPDF:(NSString*)path
 {
@@ -19,44 +27,58 @@ static CGImageRef _closeButtonDown;
     return [ciContext createCGImage:image fromRect:[image extent]];
 }
 
++ (CGImageRef) editIcon 
+{
+    static CGImageRef image = NULL;
+    if (!image) {
+        image = [self CGImageFromFile:[[NSBundle mainBundle] pathForResource:@"edit-icon-16x16" ofType:@"png"]];
+    }
+    return image;
+}
+
 + (CGImageRef) playButton 
 {
-    if (!_playButton) {
-        _playButton = [self CGImageFromPDF:[[NSBundle mainBundle] pathForResource:@"button-play" ofType:@"pdf"]];
+    static CGImageRef image = NULL;
+    if (!image) {
+        image = [self CGImageFromPDF:[[NSBundle mainBundle] pathForResource:@"button-play" ofType:@"pdf"]];
     }
-    return _playButton;
+    return image;
 }
 
 + (CGImageRef) playButtonDown 
 {
-    if (!_playButtonDown) {
-        _playButtonDown = [self CGImageFromPDF:[[NSBundle mainBundle] pathForResource:@"button-play-down" ofType:@"pdf"]];
+    static CGImageRef image = NULL;
+    if (!image) {
+        image = [self CGImageFromPDF:[[NSBundle mainBundle] pathForResource:@"button-play-down" ofType:@"pdf"]];
     }
-    return _playButtonDown;
+    return image;
 }
 
 + (CGImageRef) playButtonInactive 
 {
-    if (!_playButtonInactive) {
-        _playButtonInactive = [self CGImageFromPDF:[[NSBundle mainBundle] pathForResource:@"play-button-inactive" ofType:@"pdf"]];
+    static CGImageRef image = NULL;
+    if (!image) {
+        image = [self CGImageFromPDF:[[NSBundle mainBundle] pathForResource:@"play-button-inactive" ofType:@"pdf"]];
     }
-    return _playButtonInactive;
+    return image;
 }
 
 + (CGImageRef) closeButton 
 {
-    if (!_closeButton) {
-        _closeButton = [self CGImageFromPDF:[[NSBundle mainBundle] pathForResource:@"close128x128" ofType:@"pdf"]];
+    static CGImageRef image = NULL;
+    if (!image) {
+        image = [self CGImageFromPDF:[[NSBundle mainBundle] pathForResource:@"close128x128" ofType:@"pdf"]];
     }
-    return _closeButton;
+    return image;
 }
 
 + (CGImageRef) closeButtonDown 
 {
-    if (!_closeButtonDown) {
-        _closeButtonDown = [self CGImageFromPDF:[[NSBundle mainBundle] pathForResource:@"close-click128x128" ofType:@"pdf"]];
+    static CGImageRef image = NULL;
+    if (!image) {
+        image = [self CGImageFromPDF:[[NSBundle mainBundle] pathForResource:@"close-click128x128" ofType:@"pdf"]];
     }
-    return _closeButtonDown;
+    return image;
 }
 
 @end

@@ -95,7 +95,6 @@
     if (!typeIdentifiers) {
         typeIdentifiers = (NSArray*)CGImageSourceCopyTypeIdentifiers();
     }
-    NSLog(@"%@", fileType);
     return [typeIdentifiers containsObject:fileType];
 }
 

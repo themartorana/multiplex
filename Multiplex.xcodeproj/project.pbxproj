@@ -67,6 +67,7 @@
 		F966E4BC0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.h in Headers */ = {isa = PBXBuildFile; fileRef = F966E4BA0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F966E4BD0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.m in Sources */ = {isa = PBXBuildFile; fileRef = F966E4BB0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.m */; };
 		F966E5270EAF9A53001D0B3B /* CoverArtImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F966E5260EAF9A53001D0B3B /* CoverArtImageView.m */; };
+		F966E6890EAFB38B001D0B3B /* drag-drop-no-image.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F966E6880EAFB38B001D0B3B /* drag-drop-no-image.pdf */; };
 		F967AFF60E7E13ED00C12B92 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = F967AFF50E7E13ED00C12B92 /* MainView.m */; };
 		F967B02D0E7E16DE00C12B92 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F967B02C0E7E16DE00C12B92 /* WindowController.m */; };
 		F967B0800E7E1F3100C12B92 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F967B07F0E7E1F3100C12B92 /* QuartzCore.framework */; };
@@ -381,6 +382,7 @@
 		F966E4BB0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+IndyHallLabs.m"; sourceTree = "<group>"; };
 		F966E5250EAF9A53001D0B3B /* CoverArtImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverArtImageView.h; sourceTree = "<group>"; };
 		F966E5260EAF9A53001D0B3B /* CoverArtImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoverArtImageView.m; sourceTree = "<group>"; };
+		F966E6880EAFB38B001D0B3B /* drag-drop-no-image.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "drag-drop-no-image.pdf"; sourceTree = "<group>"; };
 		F967AFF40E7E13ED00C12B92 /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
 		F967AFF50E7E13ED00C12B92 /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
 		F967B02B0E7E16DE00C12B92 /* WindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowController.h; sourceTree = "<group>"; };
@@ -572,6 +574,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F966E6880EAFB38B001D0B3B /* drag-drop-no-image.pdf */,
 				F914CB0F0EAD7C8700877991 /* drawer-background-pattern-96x96.gif */,
 				5574409C0EABDD54002E0B80 /* uservoice-feedback.css */,
 				557440640EABD786002E0B80 /* uservoice-hover.png */,
@@ -1112,6 +1115,7 @@
 				5574409D0EABDD54002E0B80 /* uservoice-feedback.css in Resources */,
 				F914C9C80EAD653300877991 /* plus-36x36.png in Resources */,
 				F914CB100EAD7C8700877991 /* drawer-background-pattern-96x96.gif in Resources */,
+				F966E6890EAFB38B001D0B3B /* drag-drop-no-image.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

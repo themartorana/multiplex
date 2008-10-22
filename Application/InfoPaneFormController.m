@@ -2,7 +2,6 @@
 #import "InfoPaneFormController.h"
 #import "Movie.h"
 #import "InfoPaneDiscsView.h"
-#import "BigPlayButtonView.h"
 #import "MultiplexColorFactory.h"
 
 #import <WebKit/WebKit.h>
@@ -14,7 +13,7 @@
 
 @implementation InfoPaneFormController
 
-@synthesize selectedMovie;
+@synthesize movie;
 @synthesize labelColor;
 
 - (InfoPaneFormController*) init
@@ -37,22 +36,19 @@
     WebPreferences* prefs = [descriptionWebView preferences];
     [prefs setUserStyleSheetEnabled:YES];
     [prefs setUserStyleSheetLocation:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"default" ofType:@"css"]]];
-    
-    NSDictionary* options = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption];
-    [infoPaneDiscsView bind:@"selectedMovie" toObject:self withKeyPath:@"selectedMovie" options:options];
 }
 
-- (void) setSelectedMovie:(Movie*)_selectedMovie
+- (void) setMovie:(Movie*)_selectedMovie
 {
-    if (selectedMovie != _selectedMovie) {
-        [selectedMovie release];
-        selectedMovie = [_selectedMovie retain];
+    if (movie != _selectedMovie) {
+        [movie release];
+        movie = [_selectedMovie retain];
     }
     NSURL* url = [NSURL URLWithString:@""];
     
-    if (selectedMovie) {
+    if (movie) {
         // Send to web kit
-        [[descriptionWebView mainFrame] loadHTMLString:selectedMovie.review baseURL:url];
+        [[descriptionWebView mainFrame] loadHTMLString:movie.review baseURL:url];
     } else {
         [[descriptionWebView mainFrame] loadHTMLString:@"" baseURL:url];
     }
@@ -61,16 +57,18 @@
 - (void) webViewDidEndEditing:(NSNotification*)notification
 {
     NSString* content = [(id)[[[[[descriptionWebView mainFrame] DOMDocument] documentElement] getElementsByTagName:@"body"] item:0] innerHTML];
-    selectedMovie.review = content;
+    movie.review = content;
 }
 
 - (void) tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem
 {
+#if 0
     if (tabViewItem == discsTabViewItem) {
         [bigPlayButtonView setHidden:YES];
     } else {
         [bigPlayButtonView setHidden:NO];
     }
+#endif
 }
 
 - (void) showHomeTab

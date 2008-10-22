@@ -118,7 +118,7 @@
         MovieLayer* movieLayer = [self movieLayerForPoint:p];
         if (movieLayer) {
             Movie* movie = [movieLayer movie];
-            [content setSelectedObjects:[NSArray arrayWithObject:movie]];
+            [content setSelectionIndex:[[content arrangedObjects] indexOfObjectIdenticalTo:movie]];
         }
         
         hoverPlayLayer.hidden = YES;

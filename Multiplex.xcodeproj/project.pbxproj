@@ -41,7 +41,6 @@
 		5574409D0EABDD54002E0B80 /* uservoice-feedback.css in Resources */ = {isa = PBXBuildFile; fileRef = 5574409C0EABDD54002E0B80 /* uservoice-feedback.css */; };
 		557B69460E4CCD3F0009919E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 557B69450E4CCD3F0009919E /* MainMenu.xib */; };
 		5583D1640E51D82700EB7AE6 /* Multiplex.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */; };
-		558D1A810E9C6FED000F67FA /* InfoPaneBasicInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1A800E9C6FED000F67FA /* InfoPaneBasicInfoView.m */; };
 		558D1AF00E9D186B000F67FA /* InfoPaneDiscsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */; };
 		558D1B030E9D3F37000F67FA /* PageNumberLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1B020E9D3F37000F67FA /* PageNumberLayer.m */; };
 		558D1C3E0E9D5562000F67FA /* DiscPlayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1C3D0E9D5562000F67FA /* DiscPlayLayer.m */; };
@@ -52,7 +51,6 @@
 		558D1EB50E9E65A8000F67FA /* search-click128x128.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 558D1EAF0E9E65A8000F67FA /* search-click128x128.pdf */; };
 		558D1EB60E9E65A8000F67FA /* search128x128.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 558D1EB00E9E65A8000F67FA /* search128x128.pdf */; };
 		55912E250EA0083C00446666 /* play-button-inactive.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55912E240EA0083C00446666 /* play-button-inactive.pdf */; };
-		559130570EA03F9600446666 /* BigPlayButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 559130550EA03F9600446666 /* BigPlayButtonView.m */; };
 		5598E60C0E91D294005FCC91 /* ButtonLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5598E60B0E91D294005FCC91 /* ButtonLayer.m */; };
 		55A8E81D0E9BE18200DC9F35 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55A8E81C0E9BE18200DC9F35 /* WebKit.framework */; };
 		55B81A490EA049D500775EAE /* default.css in Resources */ = {isa = PBXBuildFile; fileRef = 55B81A480EA049D500775EAE /* default.css */; };
@@ -335,8 +333,6 @@
 		557B66A20E4A2F4D0009919E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		557B69450E4CCD3F0009919E /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Multiplex.xcdatamodel; sourceTree = "<group>"; };
-		558D1A7F0E9C6FED000F67FA /* InfoPaneBasicInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPaneBasicInfoView.h; sourceTree = "<group>"; };
-		558D1A800E9C6FED000F67FA /* InfoPaneBasicInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoPaneBasicInfoView.m; sourceTree = "<group>"; };
 		558D1AEE0E9D186B000F67FA /* InfoPaneDiscsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPaneDiscsView.h; sourceTree = "<group>"; };
 		558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoPaneDiscsView.m; sourceTree = "<group>"; };
 		558D1B010E9D3F37000F67FA /* PageNumberLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageNumberLayer.h; sourceTree = "<group>"; };
@@ -350,8 +346,6 @@
 		558D1EAF0E9E65A8000F67FA /* search-click128x128.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "search-click128x128.pdf"; sourceTree = "<group>"; };
 		558D1EB00E9E65A8000F67FA /* search128x128.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = search128x128.pdf; sourceTree = "<group>"; };
 		55912E240EA0083C00446666 /* play-button-inactive.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "play-button-inactive.pdf"; sourceTree = "<group>"; };
-		559130550EA03F9600446666 /* BigPlayButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BigPlayButtonView.m; sourceTree = "<group>"; };
-		559130560EA03F9600446666 /* BigPlayButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigPlayButtonView.h; sourceTree = "<group>"; };
 		5598E60A0E91D294005FCC91 /* ButtonLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonLayer.h; sourceTree = "<group>"; };
 		5598E60B0E91D294005FCC91 /* ButtonLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtonLayer.m; sourceTree = "<group>"; };
 		55A8E81C0E9BE18200DC9F35 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
@@ -717,14 +711,10 @@
 		F967AFF30E7E13D400C12B92 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				559130560EA03F9600446666 /* BigPlayButtonView.h */,
-				559130550EA03F9600446666 /* BigPlayButtonView.m */,
 				F967AFF40E7E13ED00C12B92 /* MainView.h */,
 				F967AFF50E7E13ED00C12B92 /* MainView.m */,
 				556BD78A0E9444ED00EC698A /* WorkingStatusView.h */,
 				556BD78B0E9444ED00EC698A /* WorkingStatusView.m */,
-				558D1A7F0E9C6FED000F67FA /* InfoPaneBasicInfoView.h */,
-				558D1A800E9C6FED000F67FA /* InfoPaneBasicInfoView.m */,
 				558D1AEE0E9D186B000F67FA /* InfoPaneDiscsView.h */,
 				558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */,
 				F914C9CE0EAD657900877991 /* DrawerView.h */,
@@ -1191,11 +1181,9 @@
 				556BD7900E94470600EC698A /* Activity.m in Sources */,
 				550D082C0E9AE14E008F0275 /* InfoPaneFormController.m in Sources */,
 				550D08700E9AFDF4008F0275 /* NSDescriptionValueTransformer.m in Sources */,
-				558D1A810E9C6FED000F67FA /* InfoPaneBasicInfoView.m in Sources */,
 				558D1AF00E9D186B000F67FA /* InfoPaneDiscsView.m in Sources */,
 				558D1B030E9D3F37000F67FA /* PageNumberLayer.m in Sources */,
 				558D1C3E0E9D5562000F67FA /* DiscPlayLayer.m in Sources */,
-				559130570EA03F9600446666 /* BigPlayButtonView.m in Sources */,
 				5534774D0EA3A9CA00436A8C /* ImageQuery.m in Sources */,
 				551554A00EA456C8006F2674 /* SoftEditTextFieldCell.m in Sources */,
 				551555040EA45D84006F2674 /* SoftEditTextField.m in Sources */,

@@ -3,7 +3,7 @@
 
 @class Movie;
 @class InfoPaneDiscsView;
-@class BigPlayButtonView;
+@class CoverArtImageView;
 
 @interface InfoPaneFormController : NSObject {
     Movie* movie;
@@ -12,6 +12,7 @@
     
     IBOutlet WebView* descriptionWebView;
     IBOutlet InfoPaneDiscsView* infoPaneDiscsView;
+    IBOutlet CoverArtImageView* coverArtImageView;
     
     IBOutlet NSTabView* infoTabView;
     IBOutlet NSTabViewItem* discsTabViewItem;

@@ -3,6 +3,7 @@
 #import "Movie.h"
 #import "InfoPaneDiscsView.h"
 #import "MultiplexColorFactory.h"
+#import "DragDropTargetView.h"
 
 #import <WebKit/WebKit.h>
 
@@ -36,21 +37,18 @@
     WebPreferences* prefs = [descriptionWebView preferences];
     [prefs setUserStyleSheetEnabled:YES];
     [prefs setUserStyleSheetLocation:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"default" ofType:@"css"]]];
+
+    [coverArtImageView bind:@"image" toObject:self withKeyPath:@"movie.frontCover" options:nil];
 }
 
-- (void) setMovie:(Movie*)_selectedMovie
+- (void) setMovie:(Movie*)_movie
 {
-    if (movie != _selectedMovie) {
+    if (movie != _movie) {
+        [self willChangeValueForKey:@"movie"];
         [movie release];
-        movie = [_selectedMovie retain];
-    }
-    NSURL* url = [NSURL URLWithString:@""];
-    
-    if (movie) {
-        // Send to web kit
-        [[descriptionWebView mainFrame] loadHTMLString:movie.review baseURL:url];
-    } else {
-        [[descriptionWebView mainFrame] loadHTMLString:@"" baseURL:url];
+        movie = [_movie retain];
+        [[descriptionWebView mainFrame] loadHTMLString:movie ? movie.review : @"" baseURL:[NSURL URLWithString:@""]];
+        [self didChangeValueForKey:@"movie"];
     }
 }
 
@@ -79,6 +77,43 @@
 - (void) showDiscsTab
 {
     [infoTabView selectTabViewItem:discsTabViewItem];
+}
+
+- (BOOL) dragDropTargetView:(DragDropTargetView*)sender allowDragForPasteboard:(NSPasteboard*)pasteBoard
+{
+    NSArray* fileNames = [pasteBoard propertyListForType:NSFilenamesPboardType];
+    if ([fileNames count] > 1) {
+        return NO;
+    }
+    NSError* error = nil;
+    NSString* fileType = [[NSWorkspace sharedWorkspace] typeOfFile:[fileNames objectAtIndex:0] error:&error];
+    if (error || !fileType) {
+        return NO;
+    }
+    static NSArray* typeIdentifiers = nil;
+    if (!typeIdentifiers) {
+        typeIdentifiers = (NSArray*)CGImageSourceCopyTypeIdentifiers();
+    }
+    NSLog(@"%@", fileType);
+    return [typeIdentifiers containsObject:fileType];
+}
+
+- (BOOL) dragDropTargetView:(DragDropTargetView*)sender acceptDragForPasteboard:(NSPasteboard*)pasteBoard
+{
+    NSString* fileName = [[pasteBoard propertyListForType:NSFilenamesPboardType] objectAtIndex:0];
+    CGImageRef image = nil;
+    CGImageSourceRef imageSource = CGImageSourceCreateWithURL((CFURLRef)[NSURL fileURLWithPath:fileName], nil);
+    if (imageSource) {
+        image = CGImageSourceCreateImageAtIndex(imageSource, 0, nil);
+        CFRelease(imageSource);
+    }
+    if (image) {
+        [movie setFrontCover:(id)image];
+        CGImageRelease(image);
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 @end

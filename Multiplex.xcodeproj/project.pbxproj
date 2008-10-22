@@ -63,6 +63,10 @@
 		F914C9C80EAD653300877991 /* plus-36x36.png in Resources */ = {isa = PBXBuildFile; fileRef = F914C9C70EAD653300877991 /* plus-36x36.png */; };
 		F914C9D00EAD657900877991 /* DrawerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F914C9CF0EAD657900877991 /* DrawerView.m */; };
 		F914CB100EAD7C8700877991 /* drawer-background-pattern-96x96.gif in Resources */ = {isa = PBXBuildFile; fileRef = F914CB0F0EAD7C8700877991 /* drawer-background-pattern-96x96.gif */; };
+		F966E49C0EAF9215001D0B3B /* DragDropTargetView.m in Sources */ = {isa = PBXBuildFile; fileRef = F966E49B0EAF9215001D0B3B /* DragDropTargetView.m */; };
+		F966E4BC0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.h in Headers */ = {isa = PBXBuildFile; fileRef = F966E4BA0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F966E4BD0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.m in Sources */ = {isa = PBXBuildFile; fileRef = F966E4BB0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.m */; };
+		F966E5270EAF9A53001D0B3B /* CoverArtImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F966E5260EAF9A53001D0B3B /* CoverArtImageView.m */; };
 		F967AFF60E7E13ED00C12B92 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = F967AFF50E7E13ED00C12B92 /* MainView.m */; };
 		F967B02D0E7E16DE00C12B92 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F967B02C0E7E16DE00C12B92 /* WindowController.m */; };
 		F967B0800E7E1F3100C12B92 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F967B07F0E7E1F3100C12B92 /* QuartzCore.framework */; };
@@ -371,6 +375,12 @@
 		F94EA3770E4CA58D00438E14 /* Media.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Media.m; sourceTree = "<group>"; };
 		F94EA6FA0E4E290B00438E14 /* Disc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Disc.h; sourceTree = "<group>"; };
 		F94EA6FB0E4E290B00438E14 /* Disc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Disc.m; sourceTree = "<group>"; };
+		F966E49A0EAF9215001D0B3B /* DragDropTargetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragDropTargetView.h; sourceTree = "<group>"; };
+		F966E49B0EAF9215001D0B3B /* DragDropTargetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragDropTargetView.m; sourceTree = "<group>"; };
+		F966E4BA0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+IndyHallLabs.h"; sourceTree = "<group>"; };
+		F966E4BB0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+IndyHallLabs.m"; sourceTree = "<group>"; };
+		F966E5250EAF9A53001D0B3B /* CoverArtImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverArtImageView.h; sourceTree = "<group>"; };
+		F966E5260EAF9A53001D0B3B /* CoverArtImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoverArtImageView.m; sourceTree = "<group>"; };
 		F967AFF40E7E13ED00C12B92 /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
 		F967AFF50E7E13ED00C12B92 /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
 		F967B02B0E7E16DE00C12B92 /* WindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowController.h; sourceTree = "<group>"; };
@@ -711,14 +721,18 @@
 		F967AFF30E7E13D400C12B92 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F966E5250EAF9A53001D0B3B /* CoverArtImageView.h */,
+				F966E5260EAF9A53001D0B3B /* CoverArtImageView.m */,
+				F966E49A0EAF9215001D0B3B /* DragDropTargetView.h */,
+				F966E49B0EAF9215001D0B3B /* DragDropTargetView.m */,
+				F914C9CE0EAD657900877991 /* DrawerView.h */,
+				F914C9CF0EAD657900877991 /* DrawerView.m */,
+				558D1AEE0E9D186B000F67FA /* InfoPaneDiscsView.h */,
+				558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */,
 				F967AFF40E7E13ED00C12B92 /* MainView.h */,
 				F967AFF50E7E13ED00C12B92 /* MainView.m */,
 				556BD78A0E9444ED00EC698A /* WorkingStatusView.h */,
 				556BD78B0E9444ED00EC698A /* WorkingStatusView.m */,
-				558D1AEE0E9D186B000F67FA /* InfoPaneDiscsView.h */,
-				558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */,
-				F914C9CE0EAD657900877991 /* DrawerView.h */,
-				F914C9CF0EAD657900877991 /* DrawerView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -809,6 +823,8 @@
 				F9CE84CA0EA7D3D900602750 /* Toolkit.h */,
 				F9CE81A20EA68BED00602750 /* CALayer+IndyHallLabs.h */,
 				F9CE81A30EA68BED00602750 /* CALayer+IndyHallLabs.m */,
+				F966E4BA0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.h */,
+				F966E4BB0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.m */,
 				F9CE81A60EA68BED00602750 /* NSColor+IndyHallLabs.h */,
 				F9CE81A70EA68BED00602750 /* NSColor+IndyHallLabs.m */,
 				F9CE81A80EA68BED00602750 /* NSDate+IndyHallLabs.h */,
@@ -885,6 +901,7 @@
 				F9CE84CB0EA7D3D900602750 /* Toolkit.h in Headers */,
 				F9CE81B30EA68BED00602750 /* CALayer+IndyHallLabs.h in Headers */,
 				F9CE81B50EA68BED00602750 /* MessageProtocol.h in Headers */,
+				F966E4BC0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.h in Headers */,
 				F9CE81B70EA68BED00602750 /* NSColor+IndyHallLabs.h in Headers */,
 				F9CE81B90EA68BED00602750 /* NSDate+IndyHallLabs.h in Headers */,
 				F9CE81BB0EA68BED00602750 /* NSDictionary+IndyHallLabs.h in Headers */,
@@ -1192,6 +1209,8 @@
 				F9CE85D40EA7E2D400602750 /* ApplicationResources.m in Sources */,
 				55743F9E0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.m in Sources */,
 				F914C9D00EAD657900877991 /* DrawerView.m in Sources */,
+				F966E49C0EAF9215001D0B3B /* DragDropTargetView.m in Sources */,
+				F966E5270EAF9A53001D0B3B /* CoverArtImageView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1222,8 +1241,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9CE81B40EA68BED00602750 /* CALayer+IndyHallLabs.m in Sources */,
 				F9CE81B60EA68BED00602750 /* MessageProtocol.m in Sources */,
+				F9CE81B40EA68BED00602750 /* CALayer+IndyHallLabs.m in Sources */,
+				F966E4BD0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.m in Sources */,
 				F9CE81B80EA68BED00602750 /* NSColor+IndyHallLabs.m in Sources */,
 				F9CE81BA0EA68BED00602750 /* NSDate+IndyHallLabs.m in Sources */,
 				F9CE81BC0EA68BED00602750 /* NSDictionary+IndyHallLabs.m in Sources */,

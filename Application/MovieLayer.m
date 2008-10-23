@@ -92,24 +92,10 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
 {
     if (layer == boxImageLayer) {
         CGContextDrawImage(c, layer.bounds, (CGImageRef)boxImage);
-//        [self performSelectorOnMainThread:@selector(_hideTitleAndGradient) withObject:nil waitUntilDone:NO];
     } else if (layer == gradientLayer) {
         drawGlossGradient(c, [NSColor colorWithDeviceRed:0.05f green:0.05f blue:0.05f alpha:1.0], NSRectFromCGRect(self.bounds));
         drawTitleLayer(c, NSRectFromCGRect(self.bounds), movieTitle);
     }
-    else if (layer == titleLayer) {
-        if (movie) {
-            drawTitleLayer(c, NSRectFromCGRect(self.bounds), movieTitle);
-        }
-    }
-}
-
-- (void) _hideTitleAndGradient
-{
-    [titleLayer removeFromSuperlayer];
-    titleLayer = nil;
-    [gradientLayer removeFromSuperlayer];
-    gradientLayer = nil;
 }
 
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context

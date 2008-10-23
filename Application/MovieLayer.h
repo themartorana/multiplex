@@ -7,11 +7,13 @@
 
 @interface MovieLayer : CALayer {
     CALayer* gradientLayer;
-    CATextLayer* titleLayer;
+    CATiledLayer* titleLayer;
     CATiledLayer* boxImageLayer; 
     /**/
     Movie* movie;
     id boxImage;
+    
+    NSString* movieTitle;
 }
 
 @property (readonly) Movie* movie;

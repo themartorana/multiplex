@@ -1,11 +1,3 @@
-//
-//  NSStringToAndFromNSAttributedString.m
-//  Multiplex
-//
-//  Created by David Martorana on 10/6/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
-//
-
 #import "NSDescriptionValueTransformer.h"
 
 @implementation NSDescriptionValueTransformer

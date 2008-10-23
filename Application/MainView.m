@@ -104,6 +104,32 @@
     }
 }
 
+- (void) setHoveredMovie:(Movie*)movie
+{
+    if (movie != hoveredMovie) {
+        [hoveredMovie release];
+        hoveredMovie = movie;
+        hoverPlayLayer.hidden = YES;
+    }
+    hoveredMovie = [movie retain];
+    [self cancelHoverTimer];
+
+    if (movie) {
+        /*
+        MovieLayer* movieLayer = [layersByID objectForKey:hoveredMovie.objectID];
+
+        hoverHighlightLayer.hidden = NO;
+        hoverHighlightLayer.anchorPoint = movieLayer.anchorPoint;
+        hoverHighlightLayer.bounds = CGRectInset(movieLayer.bounds, 20, 20);
+        hoverHighlightLayer.position = movieLayer.position;
+        hoverHighlightLayer.zPosition = movieLayer.zPosition  1;
+        hoverHighlightLayer.transform = movieLayer.transform;
+        */
+        hoverTimer = [[NSTimer scheduledTimerWithTimeInterval:0.75 target:self selector:@selector(hoverTimerTicked:) userInfo:nil repeats:NO] retain];
+    }
+}
+
+
 - (void) setFrameSize:(NSSize)frameSize
 {
     [super setFrameSize:frameSize];
@@ -152,8 +178,6 @@
     MovieLayer* movieLayer = [self movieLayerForPoint:position];
     Movie* movie = movieLayer.movie;
 
-    [((id<MultiplexLayoutManager>)floorLayer.layoutManager) setHoveredMovieLayer:movieLayer];
-    
     if (hoverPlayLayer.hidden) {
         CGPoint pMove;
         float pY = position.y - hoverPlayLayer.bounds.size.height + 10.0;
@@ -169,11 +193,12 @@
         
         [hoverPlayLayer setPosition:pMove];
     }
-    
-    if ([hoverPlayLayer hitTest:position] || movie == hoveredMovie) {
+
+    if ( movie == hoveredMovie || [hoverPlayLayer hitTest:position]) {
         return;
     }
     else {
+        [floorLayer.layoutManager setHoveredMovieLayer:movieLayer];
         [self setHoveredMovie:movie];
     }
 }
@@ -238,8 +263,9 @@
         }
     } else if ([@"arrangedObjects" isEqualToString:keyPath]) {
         NSArray* arrangedObjects = [object arrangedObjects];
-        
         [((id<MultiplexLayoutManager>)floorLayer.layoutManager) setListOfArrangedObjects:arrangedObjects];
+        
+        [self setHoveredMovie:nil];
         
         int count = [arrangedObjects count];
         for (int i = [listOfLayersInOrder count] - 1; i > 0; i--) {

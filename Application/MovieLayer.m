@@ -97,17 +97,12 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
         drawGlossGradient(c, [NSColor colorWithDeviceRed:0.05f green:0.05f blue:0.05f alpha:1.0], NSRectFromCGRect(self.bounds));
         drawTitleLayer(c, NSRectFromCGRect(self.bounds), movieTitle);
     }
-    else if (layer == titleLayer) {
-        if (movie) {
-            drawTitleLayer(c, NSRectFromCGRect(self.bounds), movieTitle);
-        }
-    }
 }
 
 - (void) _hideTitleAndGradient
 {
-    [titleLayer removeFromSuperlayer];
-    titleLayer = nil;
+    //[titleLayer removeFromSuperlayer];
+    //titleLayer = nil;
     [gradientLayer removeFromSuperlayer];
     gradientLayer = nil;
 }
@@ -265,8 +260,8 @@ void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
     
     float width = (CGFloat)inRect.size.width * 0.9;
     float height = (CGFloat)inRect.size.height * 0.9;
-    NSRect titleRect = NSMakeRect(((CGFloat)inRect.size.height - height) / 2.0, 
-                                  ((CGFloat)inRect.size.width - width) / 2.0, 
+    NSRect titleRect = NSMakeRect(((CGFloat)inRect.size.width - width) / 2.0, 
+                                  ((CGFloat)inRect.size.height - height) / 2.0,
                                   width, 
                                   height);
     

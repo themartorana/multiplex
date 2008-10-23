@@ -109,6 +109,8 @@
     }
     arrangedListOfObjects = [_arrangedListOfObjects copy];
     
+    [self setHoveredMovieLayer:nil];
+    
     radialGradientLayer.hidden = (!arrangedListOfObjects || [arrangedListOfObjects count] == 0);
 }
 
@@ -117,10 +119,7 @@
     [CATransaction begin];
     [CATransaction setValue:[NSNumber numberWithDouble:0.0] forKey:kCATransactionAnimationDuration];
     
-    Movie* movie = nil;
-    if (movieLayer) {
-        movie = movieLayer.movie;
-    }
+    Movie* movie = movieLayer.movie;
     
     if (movie){
         titleLayer.string = movie.title;
@@ -131,21 +130,20 @@
     if (movieLayer != hoveredMovieLayer) {
         [hoveredMovieLayer release];
         hoveredMovieLayer = [movieLayer retain];
-        
-        if (movieLayer) {
-            
-            hoverHighlightLayer.hidden = NO;
-            hoverHighlightLayer.anchorPoint = movieLayer.anchorPoint;
-            hoverHighlightLayer.bounds = CGRectInset(movieLayer.bounds, -20, -20);
-            hoverHighlightLayer.position = movieLayer.position;
-            hoverHighlightLayer.zPosition = movieLayer.zPosition - 1;
-            hoverHighlightLayer.transform = movieLayer.transform;
-            
-        } else {
-            hoverHighlightLayer.hidden = YES;
-        }
-        
     }
+    
+    if (movieLayer) {
+        hoverHighlightLayer.hidden = NO;
+        hoverHighlightLayer.anchorPoint = movieLayer.anchorPoint;
+        hoverHighlightLayer.bounds = CGRectInset(movieLayer.bounds, -20, -20);
+        hoverHighlightLayer.position = movieLayer.position;
+        hoverHighlightLayer.zPosition = movieLayer.zPosition - 1;
+        hoverHighlightLayer.transform = movieLayer.transform;
+    } else {
+        hoverHighlightLayer.hidden = YES;
+    }
+    
+    
     [CATransaction commit];
 }
 
@@ -226,7 +224,7 @@ static const CGFloat HS = 75.0;
         }
         opacity *= 0.2;
     }
-    NSLog(@"%d == %d", ZZ, [[floorLayer sublayers] count]);
+    //NSLog(@"%d == %d", ZZ, [[floorLayer sublayers] count]);
     
     /*  This base transform sets up the origin (0, 0) to the center of the 
      *  layer along the X and Y axes.
@@ -326,13 +324,14 @@ static const CGFloat HS = 75.0;
         floorLayer.sublayerTransform = p;
     }
     
-    [self setHoveredMovieLayer:nil];
+//    [self setHoveredMovieLayer:nil];
     
     [CATransaction commit];
 }
 
 - (void) drawLayer:(CALayer*)layer inContext:(CGContextRef)c
 {
+    NSLog(@"Drawing radialGradientLayer");
     if (layer == radialGradientLayer) {
         [NSGraphicsContext saveGraphicsState];
         [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:c flipped:YES]];

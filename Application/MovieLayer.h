@@ -7,7 +7,6 @@
 
 @interface MovieLayer : CALayer {
     CALayer* gradientLayer;
-    //CALayer* titleLayer;
     CATiledLayer* boxImageLayer; 
     /**/
     Movie* movie;

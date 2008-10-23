@@ -44,20 +44,6 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
         [self addSublayer:gradientLayer];
         [gradientLayer setNeedsDisplay];
         
-        /*  Title Layer
-         */
-        /*titleLayer = [CALayer layer];
-        titleLayer.delegate = self;
-        titleLayer.constraints = [NSArray arrayWithObjects:
-            [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
-            [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
-            [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth],
-            [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight],
-            nil
-        ];
-        [self addSublayer:titleLayer];   
-        [titleLayer setNeedsDisplay];
-        */
         /*  Box Image 
          */
         boxImageLayer = [CATiledLayer layer];
@@ -92,19 +78,10 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
 {
     if (layer == boxImageLayer) {
         CGContextDrawImage(c, layer.bounds, (CGImageRef)boxImage);
-//        [self performSelectorOnMainThread:@selector(_hideTitleAndGradient) withObject:nil waitUntilDone:NO];
     } else if (layer == gradientLayer) {
         drawGlossGradient(c, [NSColor colorWithDeviceRed:0.05f green:0.05f blue:0.05f alpha:1.0], NSRectFromCGRect(self.bounds));
         drawTitleLayer(c, NSRectFromCGRect(self.bounds), movieTitle);
     }
-}
-
-- (void) _hideTitleAndGradient
-{
-    //[titleLayer removeFromSuperlayer];
-    //titleLayer = nil;
-    [gradientLayer removeFromSuperlayer];
-    gradientLayer = nil;
 }
 
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context

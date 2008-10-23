@@ -155,12 +155,12 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
 
 - (BOOL) connectEngine:(Engine*)engine
 {
-    MessageProtocol* protocol = nil;
+    NSAssert(engine, @"no engine?");
+    MessageProtocol* protocol = [protocolsByUUID objectForKey:engine.uuid];
+    if (protocol) {
+        return YES;
+    }
     @synchronized (managedObjectContext) {
-        NSAssert(engine, @"no engine?");
-        if ([protocolsByUUID objectForKey:engine.uuid]) {
-            return NO;
-        }
         NSNetService* netService = [netServiceByName objectForKey:engine.netServiceName];
         NSAssert(netService, @"no net service?");
         
@@ -200,8 +200,8 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
 
 - (void) disconnectEngine:(Engine*)engine
 {
+    NSAssert(engine, @"no engine?");
     @synchronized (managedObjectContext) {
-        NSAssert(engine, @"no engine?");
         engine.status = @"Disconnecting";
         [managedObjectContext save:nil];
         
@@ -221,7 +221,7 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
             [self _deleteAllMediaForEngine:engine];
             [self _deleteAllMoviesWithNoMedia];
         } @catch (NSException* ex) {
-            /* Ignored */
+            NSLog(@"%s -- %@", __PRETTY_FUNCTION__, ex);
         } @finally {
             engine.status = @"Not Connected";
             [managedObjectContext save:nil];
@@ -756,14 +756,10 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
     @synchronized (managedObjectContext) {
         engine = [self _findEngineByNetServiceName:[netService name]];
         NSAssert(engine, @"no engine?");
-        @try {
-            [self disconnectEngine:engine];
-        } @finally {
-            [managedObjectContext deleteObject:engine];
-            NSError* error = nil;
-            [managedObjectContext save:&error];
-            NSLog(@"%@ - %@", error, error.userInfo);
-        }
+        [managedObjectContext deleteObject:engine];
+        NSError* error = nil;
+        [managedObjectContext save:&error];
+        NSLog(@"%@ - %@", error, error.userInfo);
     }
 }
 

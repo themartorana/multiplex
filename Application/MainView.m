@@ -221,10 +221,9 @@
 
             NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
             [moviesLayoutManager setListOfLayersInOrder:listOfLayersInOrder];
-            [currentRunLoop cancelPerformSelector:@selector(layoutSublayersOfFloorLayer) target:moviesLayoutManager argument:nil];
-            [currentRunLoop performSelector:@selector(layoutSublayersOfFloorLayer) target:moviesLayoutManager argument:nil order:0 modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
+            [currentRunLoop cancelPerformSelector:@selector(doTheLayout) target:self argument:nil];
+            [currentRunLoop performSelector:@selector(doTheLayout) target:self argument:nil order:0 modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
         }
-    
     } else if ([@"arrangedObjects" isEqualToString:keyPath]) {
         NSArray* arrangedObjects = [object arrangedObjects];
         
@@ -259,9 +258,14 @@
 
         NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
         [moviesLayoutManager setListOfLayersInOrder:listOfLayersInOrder];
-        [currentRunLoop cancelPerformSelector:@selector(layoutSublayersOfFloorLayer) target:moviesLayoutManager argument:nil];
-        [currentRunLoop performSelector:@selector(layoutSublayersOfFloorLayer) target:moviesLayoutManager argument:nil order:0 modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
+        [currentRunLoop cancelPerformSelector:@selector(doTheLayout) target:self argument:nil];
+        [currentRunLoop performSelector:@selector(doTheLayout) target:self argument:nil order:0 modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
     }
+}
+
+- (void) doTheLayout
+{
+    [moviesLayoutManager layoutSublayersOfFloorLayer];
 }
 
 - (MovieLayer*) movieLayerForPoint:(CGPoint)p

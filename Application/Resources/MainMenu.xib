@@ -2258,6 +2258,7 @@
 					<string>releaseDate</string>
 					<string>theatricalReleaseDate</string>
 				</object>
+				<string key="NSObjectClassName">Movie</string>
 				<bool key="NSEditable">YES</bool>
 				<bool key="NSAutomaticallyPreparesContent">YES</bool>
 				<object class="_NSManagedProxy" key="_NSManagedProxy">
@@ -2265,7 +2266,6 @@
 				</object>
 				<bool key="_NSIsUsingManagedProxy">YES</bool>
 				<bool key="NSPreservesSelection">YES</bool>
-				<bool key="NSSelectsInsertedObjects">YES</bool>
 				<bool key="NSFilterRestrictsInsertion">YES</bool>
 				<bool key="NSAutomaticallyRearrangesObjects">YES</bool>
 			</object>
@@ -4899,22 +4899,6 @@
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">managedObjectContext: managedObjectContext</string>
-						<reference key="source" ref="697403151"/>
-						<reference key="destination" ref="623785332"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="697403151"/>
-							<reference key="NSDestination" ref="623785332"/>
-							<string key="NSLabel">managedObjectContext: managedObjectContext</string>
-							<string key="NSBinding">managedObjectContext</string>
-							<string key="NSKeyPath">managedObjectContext</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1447</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">managedObjectContext: managedObjectContext</string>
 						<reference key="source" ref="782886067"/>
 						<reference key="destination" ref="623785332"/>
 						<object class="NSNibBindingConnector" key="connector">
@@ -5083,6 +5067,22 @@
 						</object>
 					</object>
 					<int key="connectionID">1622</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">managedObjectContext: managedObjectContext</string>
+						<reference key="source" ref="697403151"/>
+						<reference key="destination" ref="623785332"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="697403151"/>
+							<reference key="NSDestination" ref="623785332"/>
+							<string key="NSLabel">managedObjectContext: managedObjectContext</string>
+							<string key="NSBinding">managedObjectContext</string>
+							<string key="NSKeyPath">managedObjectContext</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">1626</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -8431,7 +8431,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1622</int>
+			<int key="maxID">1626</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

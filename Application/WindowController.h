@@ -22,6 +22,8 @@
     NSManagedObjectModel* managedObjectModel;
     NSPersistentStoreCoordinator* persistentStoreCoordinator;
     NSManagedObjectContext* managedObjectContext;
+    
+    NSEntityDescription* movieDesc;
 }
 
 @property (readonly) NSManagedObjectContext* managedObjectContext;

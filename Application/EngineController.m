@@ -16,6 +16,7 @@
 NSString* const kLoadingCoverArtActivityName = @"LoadingCoverArtActivity";
 
 @interface EngineController (Private)
+- (void) _save;
 - (void) _deleteAllMediaForEngine:(Engine*)engine;
 - (void) _deleteAllMoviesWithNoMedia;
 - (Disc*) _findDiscByFingerprint:(NSString*)fingerprint;
@@ -98,6 +99,9 @@ NSString* const kLoadingCoverArtActivityName = @"LoadingCoverArtActivity";
         } else {
             NSLog(@"Local engine may already be running.");
         }
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_coreDataDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:nil];
+        payAttention = YES;
     }
     
     return self;
@@ -223,6 +227,18 @@ NSString* const kLoadingCoverArtActivityName = @"LoadingCoverArtActivity";
 
 #pragma mark -
 @implementation EngineController (Private)
+
+- (void) _save
+{
+    payAttention = NO;
+    NSError* error = nil;
+    [managedObjectContext save:&error];
+    if (error) {
+        NSLog(@"%@", error);
+        NSLog(@"%@", [error userInfo]);
+    }
+    payAttention = YES;
+}
 
 - (void) _deleteAllMediaForEngine:(Engine*)engine
 {
@@ -386,7 +402,7 @@ NSString* const kLoadingCoverArtActivityName = @"LoadingCoverArtActivity";
         NSAssert(frontCover, @"wtf?");
         
         movie.frontCover = (id)frontCover;
-        [movie.managedObjectContext save:nil];
+        [self _save];
     } @finally {
         [pool release];
     }
@@ -422,14 +438,16 @@ NSString* const kLoadingCoverArtActivityName = @"LoadingCoverArtActivity";
 
 - (void) _coreDataDidSaveNotification:(NSNotification*)notification
 {
-    for (NSManagedObject* managedObject in [[notification userInfo] objectForKey:NSUpdatedObjectsKey]) {
-        NSEntityDescription* const entityDescription = [managedObject entity];
-        if (entityDescription == movieDesc) {
-            NSLog(@"%@", managedObject);
-            NSLog(@"%@", [[managedObject changedValues] allKeys]);
-        } else if (entityDescription == discDesc) {
-            NSLog(@"%@", managedObject);
-            NSLog(@"%@", [[managedObject changedValues] allKeys]);
+    if (payAttention) {
+        for (NSManagedObject* managedObject in [[notification userInfo] objectForKey:NSUpdatedObjectsKey]) {
+            NSEntityDescription* const entityDescription = [managedObject entity];
+            if (entityDescription == movieDesc) {
+                NSLog(@"%@", managedObject);
+                NSLog(@"%@", [[managedObject changedValues] allKeys]);
+            } else if (entityDescription == discDesc) {
+                NSLog(@"%@", managedObject);
+                NSLog(@"%@", [[managedObject changedValues] allKeys]);
+            }
         }
     }
 }
@@ -650,10 +668,7 @@ NSString* const kLoadingCoverArtActivityName = @"LoadingCoverArtActivity";
     
     /*  Persist out our changes.
      */
-    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter removeObserver:self name:NSManagedObjectContextDidSaveNotification object:managedObjectContext];
-    [managedObjectContext save:nil];
-    [notificationCenter addObserver:self selector:@selector(_coreDataDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:managedObjectContext];
+    [self _save];
 }
 
 @end

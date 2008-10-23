@@ -17,6 +17,8 @@ extern NSString* const kLoadingCoverArtActivityName;
     NSEntityDescription* mediaDesc;
     NSEntityDescription* discDesc;
     NSEntityDescription* movieDesc;
+    /**/
+    BOOL payAttention;
 }
 
 - (id) initWithManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;

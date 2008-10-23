@@ -28,8 +28,6 @@
         
         managedObjectContext = [[NSManagedObjectContext alloc] init];
         [managedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
-        
-        engineController = [[EngineController alloc] initWithManagedObjectContext:managedObjectContext];
     }
     return self;
 }
@@ -60,12 +58,19 @@
         
     [infoPaneFormController bind:@"movie" toObject:movies withKeyPath:@"selection.self" options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption]];
     
+    movieDesc = [[NSEntityDescription entityForName:@"Movie" inManagedObjectContext:managedObjectContext] retain];
+    
     // Listen for play requests
     NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(playDiscRequest:) name:@"MultiplexPlayDisc" object:nil];
     [notificationCenter addObserver:self selector:@selector(openInfoView:) name:@"MultiplexShowMovieDialog" object:nil];
     [notificationCenter addObserver:self selector:@selector(closeInfoView:) name:@"MultiplexCloseMovieDialog" object:nil];
     [notificationCenter addObserver:self selector:@selector(playSelectedMovie:) name:@"MultiplexPlayButtonClicked" object:nil];
+#if 0
+    [notificationCenter addObserver:self selector:@selector(_coreDataDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:nil];
+#endif
+    
+    engineController = [[EngineController alloc] initWithManagedObjectContext:managedObjectContext];
 }
 
 - (void) applicationDidFinishLaunching:(NSNotification*)notification
@@ -145,6 +150,44 @@
     [panel orderOut:self];
     [userVoiceFeedbackPanel resetFeedbackPage];
 }
+
+#if 0
+- (void) _coreDataDidSaveNotification:(NSNotification*)notification
+{
+    NSDictionary* userInfo = [notification userInfo];
+    
+    NSMutableArray* insertedMovies = nil;
+    for (NSManagedObject* object in [userInfo objectForKey:NSInsertedObjectsKey]) {
+        if ([object entity] == movieDesc) {
+            if (!insertedMovies) {
+                insertedMovies = [NSMutableArray array];
+            }
+            [insertedMovies addObject:object];
+        }
+    }
+    if (insertedMovies) {
+        [movies addObjects:insertedMovies];
+    }
+    
+    NSMutableArray* deletedMovies = nil;
+    for (NSManagedObject* object in [userInfo objectForKey:NSDeletedObjectsKey]) {
+        if ([object entity] == movieDesc) {
+            if (!deletedMovies) {
+                deletedMovies = [NSMutableArray array];
+            }
+            [deletedMovies addObject:object];
+        }
+    }
+    if (deletedMovies) {
+        @try {
+            [movies removeObjects:deletedMovies];
+        }
+        @catch (NSException* exception) {
+            NSLog(@"%@", exception);
+        }
+    }    
+}
+#endif
 
 @end
 

@@ -755,11 +755,12 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
     Engine* engine = nil;
     @synchronized (managedObjectContext) {
         engine = [self _findEngineByNetServiceName:[netService name]];
-        NSAssert(engine, @"no engine?");
-        [managedObjectContext deleteObject:engine];
-        NSError* error = nil;
-        [managedObjectContext save:&error];
-        NSLog(@"%@ - %@", error, error.userInfo);
+        if (engine) {
+            [managedObjectContext deleteObject:engine];
+            NSError* error = nil;
+            [managedObjectContext save:&error];
+            NSLog(@"%@ - %@", error, error.userInfo);
+        }
     }
 }
 

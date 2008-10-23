@@ -246,6 +246,7 @@ static const CGFloat HS = 75.0;
     /*  Process the rows, back-to-front.
      */
     CGFloat base = 0;
+    CGFloat zBias = [listOfLayersInOrder count];
     for (NSArray* layersInOrder in listOfLayersInOrder) {
         int count = [layersInOrder count];
         lastWasEmpty = !count;
@@ -279,11 +280,11 @@ static const CGFloat HS = 75.0;
              */
             if (columns < 4) {
                 width = length;
-                t = CATransform3DTranslate(t, chord - (length / 2.0), 0.0, -columns);
+                t = CATransform3DTranslate(t, chord - (length / 2.0), 0.0, -(columns + zBias));
             } else {
                 width = radius * 2.0;
                 CGFloat theta = -chord / radius;
-                t = CATransform3DTranslate(t, radius * -cos(theta), 0.0, radius * sin(theta));
+                t = CATransform3DTranslate(t, radius * -cos(theta), 0.0, (radius + zBias) * sin(theta));
                 
                 if (y > (columns / 2)) {
                     t = CATransform3DRotate(t, theta - M_PI/2.0, 0.0, 1.0, 0.0);
@@ -301,6 +302,8 @@ static const CGFloat HS = 75.0;
                 y = rows;
             }
         }
+        
+        zBias -= 1.0;
     }
     
     if (!lastWasEmpty) {

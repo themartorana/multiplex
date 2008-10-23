@@ -44,21 +44,6 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
         [self addSublayer:gradientLayer];
         [gradientLayer setNeedsDisplay];
         
-        /*  Box Image 
-         */
-        boxImageLayer = [CATiledLayer layer];
-        boxImageLayer.levelsOfDetail = 5;
-        boxImageLayer.levelsOfDetailBias = 1;
-        boxImageLayer.delegate = self;
-        boxImageLayer.constraints = [NSArray arrayWithObjects:
-            [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
-            [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
-            [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth],
-            [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight],
-            nil
-        ];
-        [self addSublayer:boxImageLayer];
-
         /*  Title Layer
          */
         titleLayer = [CATextLayer layer];
@@ -75,10 +60,24 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
         titleLayer.foregroundColor = [MultiplexColorFactory white];
         titleLayer.wrapped = YES;
         [self addSublayer:titleLayer];                
+        
+        /*  Box Image 
+         */
+        boxImageLayer = [CATiledLayer layer];
+        boxImageLayer.levelsOfDetail = 5;
+        boxImageLayer.levelsOfDetailBias = 1;
+        boxImageLayer.delegate = self;
+        boxImageLayer.constraints = [NSArray arrayWithObjects:
+            [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
+            [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
+            [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth],
+            [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight],
+            nil
+        ];
+        [self addSublayer:boxImageLayer];
 
         [movie addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
         [movie addObserver:self forKeyPath:@"frontCover" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
-        
     }
     return self;
 }
@@ -95,13 +94,19 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
 - (void) drawLayer:(CALayer*)layer inContext:(CGContextRef)c
 {
     if (layer == boxImageLayer && boxImage != nil) {
-        CGContextDrawImage(c, self.bounds, (CGImageRef)boxImage);
-        [titleLayer setHidden:boxImage != nil];
-        [gradientLayer setHidden:boxImage != nil];
-        [boxImageLayer setHidden:boxImage == nil];
+        CGContextDrawImage(c, layer.bounds, (CGImageRef)boxImage);
+        [self performSelectorOnMainThread:@selector(_hideTitleAndGradient) withObject:nil waitUntilDone:NO];
     } else if (layer == gradientLayer) {
         drawGlossGradient(c, [NSColor colorWithDeviceRed:0.05f green:0.05f blue:0.05f alpha:1.0], NSRectFromCGRect(self.bounds));
     }
+}
+
+- (void) _hideTitleAndGradient
+{
+    [titleLayer removeFromSuperlayer];
+    titleLayer = nil;
+    [gradientLayer removeFromSuperlayer];
+    gradientLayer = nil;
 }
 
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
@@ -113,7 +118,7 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
         if ([frontCover isKindOfClass:[NSNull class]]) {
             frontCover = nil;
         }
-        self.boxImage = frontCover;
+        [self setBoxImage:(id)frontCover];
         [boxImageLayer setNeedsDisplay];
     }
 }

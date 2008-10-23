@@ -136,9 +136,11 @@
         hoverHighlightLayer.hidden = NO;
         hoverHighlightLayer.anchorPoint = movieLayer.anchorPoint;
         hoverHighlightLayer.bounds = CGRectInset(movieLayer.bounds, -20, -20);
-        hoverHighlightLayer.position = movieLayer.position;
+        //hoverHighlightLayer.position = movieLayer.position;
         hoverHighlightLayer.zPosition = movieLayer.zPosition - 1;
-        hoverHighlightLayer.transform = movieLayer.transform;
+        CATransform3D t3d = movieLayer.transform;
+        [hoverHighlightLayer setTransform:t3d];
+        dontLayoutBecauseOfHighlight = YES;
     } else {
         hoverHighlightLayer.hidden = YES;
     }
@@ -203,6 +205,12 @@ static const CGFloat HS = 75.0;
 
 - (void) layoutSublayersOfLayer:(CALayer*)floorLayer
 {
+    // TODO: THERE MUST A BETTER WAY!
+    if (dontLayoutBecauseOfHighlight) {
+        dontLayoutBecauseOfHighlight = NO;
+        return;
+    }
+    
     NSLog(@"laying out");
     
     [CATransaction begin];

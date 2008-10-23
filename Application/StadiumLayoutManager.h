@@ -15,6 +15,8 @@
     
     NSArray* listOfLayersInOrder;
     NSArray* arrangedListOfObjects;
+    
+    BOOL dontLayoutBecauseOfHighlight;
 }
 
 @property (copy) NSArray* listOfLayersInOrder;

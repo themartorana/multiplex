@@ -16,35 +16,33 @@
 
 @implementation StadiumLayoutManager
 
-- (id<MultiplexLayoutManager>) initWithFloorLayer:(CALayer*)_floorLayer
+- (id<MultiplexLayoutManager>) initWithManagingLayer:(CALayer*)_floorLayer
 {
     if (self == [super init]) {
-        floorLayer = _floorLayer;
-    
         radialGradientLayer = [CALayer layer];
         radialGradientLayer.hidden = YES;
         radialGradientLayer.delegate = self;
         radialGradientLayer.position = CGPointZero;
         radialGradientLayer.frame = CGRectMake(0, 0, 100, 100);
         [radialGradientLayer setNeedsDisplay];
-        [floorLayer addSublayer:radialGradientLayer];
+        [_floorLayer addSublayer:radialGradientLayer];
         
         hoverHighlightLayer = [[CALayer layer] retain];
         hoverHighlightLayer.borderColor = [MultiplexColorFactory multiplexOrange];
         hoverHighlightLayer.borderWidth = 10.0;
         hoverHighlightLayer.cornerRadius = 10.0;
         hoverHighlightLayer.hidden = YES;
-        [floorLayer addSublayer:hoverHighlightLayer];
+        [_floorLayer addSublayer:hoverHighlightLayer];
         
         // To hold the title and its reflection
         titleContainerLayer = [CALayer layer];
         titleContainerLayer.anchorPoint = CGPointZero;
-        titleContainerLayer.frame = CGRectMake(0.0, 100.0, floorLayer.superlayer.frame.size.width, 100.0);
+        titleContainerLayer.frame = CGRectMake(0.0, 100.0, _floorLayer.superlayer.frame.size.width, 100.0);
         titleContainerLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
         //titleContainerLayer.borderColor = [MultiplexColorFactory multiplexOrange];
         //titleContainerLayer.borderWidth = 2.0;
         titleContainerLayer.autoresizingMask = kCALayerWidthSizable;
-        [floorLayer addSublayer:titleContainerLayer];
+        [_floorLayer addSublayer:titleContainerLayer];
         
         titleLayer = [CATextLayer layer];
         titleLayer.anchorPoint = CGPointZero;
@@ -86,6 +84,11 @@
     }
     
     return self;
+}
+
+- (void) clearManagingLayerOfExtras
+{
+    
 }
 
 - (void) setListOfLayersInOrder:(NSArray*)_listOfLayersInOrder
@@ -201,8 +204,10 @@ static const CGFloat HS = 75.0;
             ];
 }
 
-- (void) layoutSublayersOfFloorLayer
+- (void)layoutSublayersOfLayer:(CALayer *)floorLayer
 {
+    NSLog(@"laying out");
+    
     [CATransaction begin];
     [CATransaction setValue:[NSNumber numberWithDouble:([[NSApp currentEvent] modifierFlags] & NSShiftKeyMask) ? 3.0 : 0.3] forKey:kCATransactionAnimationDuration];
     

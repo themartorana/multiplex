@@ -3,14 +3,13 @@
 @class Movie;
 @class MovieLayer;
 
-@protocol MultiplexLayoutManager
+@protocol MultiplexLayoutManager <NSObject>
 
-- (id<MultiplexLayoutManager>) initWithFloorLayer:(CALayer*)layer;
+- (id<MultiplexLayoutManager>) initWithManagingLayer:(CALayer*)layer;
+- (void) clearManagingLayerOfExtras;
 
 - (void) setHoveredMovieLayer:(MovieLayer*)layer;
 - (void) setListOfLayersInOrder:(NSArray*)listOfLayersInOrder;
 - (void) setListOfArrangedObjects:(NSArray*)arrangedObjects;
-
-- (void) layoutSublayersOfFloorLayer;
 
 @end

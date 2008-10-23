@@ -24,6 +24,7 @@
 
 @synthesize content;
 @synthesize hoveredMovie;
+@synthesize floorLayerLayoutManagerClass;
 
 - (void) awakeFromNib
 {    
@@ -51,8 +52,10 @@
     layersByID = [[NSMutableDictionary alloc] init];
 
     // Create our layout manager, for now
-    moviesLayoutManager = [[StadiumLayoutManager alloc] initWithFloorLayer:floorLayer];
-    [moviesLayoutManager setListOfLayersInOrder:listOfLayersInOrder];
+    floorLayerLayoutManagerClass = [StadiumLayoutManager class];
+    if (floorLayerLayoutManagerClass && !floorLayer.layoutManager) {
+        [self setFloorLayerLayoutManagerClass:floorLayerLayoutManagerClass];
+    }
     
     hoverPlayLayer = [HoverPlayLayer layer];
     hoverPlayLayer.hidden = YES;
@@ -70,6 +73,17 @@
     [listOfLayersInOrder release];
     [hoverPlayLayer release];
     [super dealloc];
+}
+
+- (void) setFloorLayerLayoutManagerClass:(Class)class
+{
+    floorLayerLayoutManagerClass = class;
+    
+    if (floorLayer) {
+        id<MultiplexLayoutManager> layoutManager = [[class alloc] initWithManagingLayer:floorLayer];
+        [floorLayer setLayoutManager:layoutManager];
+        [layoutManager release];
+    }
 }
 
 - (void) setContent:(id)_content
@@ -94,7 +108,7 @@
 {
     [super setFrameSize:frameSize];
     [self _restartMouseTracking];
-    [moviesLayoutManager layoutSublayersOfFloorLayer];
+    //[floorLayer setNeedsLayout];
 }
 
 - (void) mouseDown:(NSEvent*)theEvent
@@ -138,7 +152,7 @@
     MovieLayer* movieLayer = [self movieLayerForPoint:position];
     Movie* movie = movieLayer.movie;
 
-    [moviesLayoutManager setHoveredMovieLayer:movieLayer];
+    [((id<MultiplexLayoutManager>)floorLayer.layoutManager) setHoveredMovieLayer:movieLayer];
     
     if (hoverPlayLayer.hidden) {
         CGPoint pMove;
@@ -219,15 +233,13 @@
             } 
             [listOfLayersInOrder replaceObjectAtIndex:0 withObject:layersInOrder];
 
-            NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
-            [moviesLayoutManager setListOfLayersInOrder:listOfLayersInOrder];
-            [currentRunLoop cancelPerformSelector:@selector(doTheLayout) target:self argument:nil];
-            [currentRunLoop performSelector:@selector(doTheLayout) target:self argument:nil order:0 modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
+            [((id<MultiplexLayoutManager>)floorLayer.layoutManager) setListOfLayersInOrder:listOfLayersInOrder];
+            [floorLayer setNeedsLayout];
         }
     } else if ([@"arrangedObjects" isEqualToString:keyPath]) {
         NSArray* arrangedObjects = [object arrangedObjects];
         
-        [moviesLayoutManager setListOfArrangedObjects:arrangedObjects];
+        [((id<MultiplexLayoutManager>)floorLayer.layoutManager) setListOfArrangedObjects:arrangedObjects];
         
         int count = [arrangedObjects count];
         for (int i = [listOfLayersInOrder count] - 1; i > 0; i--) {
@@ -256,16 +268,9 @@
          */
         [listOfLayersInOrder addObject:layersInOrder];
 
-        NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
-        [moviesLayoutManager setListOfLayersInOrder:listOfLayersInOrder];
-        [currentRunLoop cancelPerformSelector:@selector(doTheLayout) target:self argument:nil];
-        [currentRunLoop performSelector:@selector(doTheLayout) target:self argument:nil order:0 modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
+        [((id<MultiplexLayoutManager>)floorLayer.layoutManager) setListOfLayersInOrder:listOfLayersInOrder];
+        [floorLayer setNeedsLayout];
     }
-}
-
-- (void) doTheLayout
-{
-    [moviesLayoutManager layoutSublayersOfFloorLayer];
 }
 
 - (MovieLayer*) movieLayerForPoint:(CGPoint)p

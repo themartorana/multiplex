@@ -46,6 +46,7 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
         
         /*  Title Layer
          */
+#if 0
         titleLayer = [CATextLayer layer];
         titleLayer.alignmentMode = kCAAlignmentCenter;
         titleLayer.string = movie.title;
@@ -60,6 +61,7 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
         titleLayer.foregroundColor = [MultiplexColorFactory white];
         titleLayer.wrapped = YES;
         [self addSublayer:titleLayer];                
+#endif
         
         /*  Box Image 
          */
@@ -93,9 +95,9 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
 
 - (void) drawLayer:(CALayer*)layer inContext:(CGContextRef)c
 {
-    if (layer == boxImageLayer && boxImage != nil) {
+    if (layer == boxImageLayer) {
         CGContextDrawImage(c, layer.bounds, (CGImageRef)boxImage);
-        [self performSelectorOnMainThread:@selector(_hideTitleAndGradient) withObject:nil waitUntilDone:NO];
+//        [self performSelectorOnMainThread:@selector(_hideTitleAndGradient) withObject:nil waitUntilDone:NO];
     } else if (layer == gradientLayer) {
         drawGlossGradient(c, [NSColor colorWithDeviceRed:0.05f green:0.05f blue:0.05f alpha:1.0], NSRectFromCGRect(self.bounds));
     }
@@ -119,7 +121,9 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
             frontCover = nil;
         }
         [self setBoxImage:(id)frontCover];
-        [boxImageLayer setNeedsDisplay];
+        if (boxImage != nil) {
+            [boxImageLayer setNeedsDisplay];
+        }
     }
 }
 

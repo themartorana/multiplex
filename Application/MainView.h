@@ -20,10 +20,11 @@
     
     BOOL needsLayout;
     
-    id<MultiplexLayoutManager> moviesLayoutManager;
+    Class <MultiplexLayoutManager> floorLayerLayoutManagerClass;
 }
 
 @property (retain) id content;
 @property (retain) Movie* hoveredMovie;
+@property Class <MultiplexLayoutManager> floorLayerLayoutManagerClass;
 
 @end

@@ -204,21 +204,26 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
         NSAssert(engine, @"no engine?");
         engine.status = @"Disconnecting";
         [managedObjectContext save:nil];
+        
         MessageProtocol* protocol = [protocolsByUUID objectForKey:engine.uuid];
         if (protocol) {
             NSString* uuid = protocol.userInfo;
             NSAssert([uuid isEqualToString:engine.uuid], @"Why don't these match?");
             @try {
                 [protocol close];
-            } @catch (NSException* ex) {
-                /* Ignored */
             } @finally {
-                [self _deleteAllMediaForEngine:engine];
-                [self _deleteAllMoviesWithNoMedia];
                 [protocolsByUUID removeObjectForKey:engine.uuid];
-                engine.status = @"Not Connected";
             }
             [uuid release];
+        }
+
+        @try {
+            [self _deleteAllMediaForEngine:engine];
+            [self _deleteAllMoviesWithNoMedia];
+        } @catch (NSException* ex) {
+            /* Ignored */
+        } @finally {
+            engine.status = @"Not Connected";
             [managedObjectContext save:nil];
         }
     }
@@ -697,7 +702,9 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
     NSDictionary* rawData = [NSNetService dictionaryFromTXTRecordData:[netService TXTRecordData]];
     NSString* uuid = [[[NSString alloc] initWithData:[rawData objectForKey:@"UUID"] encoding:NSUTF8StringEncoding] autorelease];
     NSString* name = [[[NSString alloc] initWithData:[rawData objectForKey:@"Name"] encoding:NSUTF8StringEncoding] autorelease];
-
+    NSAssert(name, @"no name?");
+    NSAssert(uuid, @"no uuid?");
+    
     Engine* engine = nil;
     @synchronized (managedObjectContext) {
         engine = [self _findEngineByNetServiceName:[netService name]];
@@ -747,13 +754,17 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
 
     Engine* engine = nil;
     @synchronized (managedObjectContext) {
-        [self _findEngineByNetServiceName:[netService name]];
+        engine = [self _findEngineByNetServiceName:[netService name]];
         NSAssert(engine, @"no engine?");
-        [managedObjectContext deleteObject:engine];
-        [managedObjectContext save:nil];
+        @try {
+            [self disconnectEngine:engine];
+        } @finally {
+            [managedObjectContext deleteObject:engine];
+            NSError* error = nil;
+            [managedObjectContext save:&error];
+            NSLog(@"%@ - %@", error, error.userInfo);
+        }
     }
-
-    [self disconnectEngine:engine];
 }
 
 @end

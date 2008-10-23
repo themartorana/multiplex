@@ -41,16 +41,20 @@
 
 - (void) engineControllerObjectContextDidSave:(NSNotification*)saveNotification 
 {
-    [appManagedObjectContext performSelectorOnMainThread:@selector(mergeChangesFromContextDidSaveNotification:)
-                                              withObject:saveNotification
-                                           waitUntilDone:NO];
+    @try {
+        [appManagedObjectContext mergeChangesFromContextDidSaveNotification:saveNotification];
+    } @catch (id exception) {
+        NSLog(@"%@", exception);
+    }
 }
 
 - (void) appControllerObjectContextDidSave:(NSNotification*)saveNotification 
 {
-    [engineManagedObjectContext performSelectorOnMainThread:@selector(mergeChangesFromContextDidSaveNotification:)
-                                                 withObject:saveNotification
-                                              waitUntilDone:NO];
+    @try {
+        [engineManagedObjectContext mergeChangesFromContextDidSaveNotification:saveNotification];
+    } @catch (id exception) {
+        NSLog(@"%@", exception);
+    }
 }
 
 - (void) dealloc 

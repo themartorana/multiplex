@@ -46,7 +46,7 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
         
         /*  Title Layer
          */
-        titleLayer = [CATiledLayer layer];
+        /*titleLayer = [CALayer layer];
         titleLayer.delegate = self;
         titleLayer.constraints = [NSArray arrayWithObjects:
             [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
@@ -57,7 +57,7 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
         ];
         [self addSublayer:titleLayer];   
         [titleLayer setNeedsDisplay];
-        
+        */
         /*  Box Image 
          */
         boxImageLayer = [CATiledLayer layer];
@@ -95,6 +95,7 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
 //        [self performSelectorOnMainThread:@selector(_hideTitleAndGradient) withObject:nil waitUntilDone:NO];
     } else if (layer == gradientLayer) {
         drawGlossGradient(c, [NSColor colorWithDeviceRed:0.05f green:0.05f blue:0.05f alpha:1.0], NSRectFromCGRect(self.bounds));
+        drawTitleLayer(c, NSRectFromCGRect(self.bounds), movieTitle);
     }
     else if (layer == titleLayer) {
         if (movie) {
@@ -325,7 +326,7 @@ void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRect)
     CGContextClipToRect(context, NSRectToCGRect(inRect));
     CGContextDrawShading(context, shading);
     CGContextRestoreGState(context);
-        
+
     CGShadingRelease(shading);
     CGColorSpaceRelease(colorspace);
     CGFunctionRelease(gradientFunction);

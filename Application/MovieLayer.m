@@ -10,7 +10,7 @@ static void glossInterpolation(void *info, const float *input, float *output);
 static float perceptualGlossFractionForColor(float *inputComponents);
 static void perceptualCausticColorForColor(float *inputComponents, float *outputComponents);
 static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRect);
-
+static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title); 
 
 @implementation MovieLayer
 @synthesize movie;
@@ -46,22 +46,17 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
         
         /*  Title Layer
          */
-#if 0
-        titleLayer = [CATextLayer layer];
-        titleLayer.alignmentMode = kCAAlignmentCenter;
-        titleLayer.string = movie.title;
-        titleLayer.font = [NSFont systemFontOfSize:14.0];
+        titleLayer = [CATiledLayer layer];
+        titleLayer.delegate = self;
         titleLayer.constraints = [NSArray arrayWithObjects:
             [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
             [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
-            [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.8 offset:0],
-            [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0.8 offset:0],
+            [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth],
+            [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight],
             nil
         ];
-        titleLayer.foregroundColor = [MultiplexColorFactory white];
-        titleLayer.wrapped = YES;
-        [self addSublayer:titleLayer];                
-#endif
+        [self addSublayer:titleLayer];   
+        [titleLayer setNeedsDisplay];
         
         /*  Box Image 
          */
@@ -101,6 +96,11 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
     } else if (layer == gradientLayer) {
         drawGlossGradient(c, [NSColor colorWithDeviceRed:0.05f green:0.05f blue:0.05f alpha:1.0], NSRectFromCGRect(self.bounds));
     }
+    else if (layer == titleLayer) {
+        if (movie) {
+            drawTitleLayer(c, NSRectFromCGRect(self.bounds), movieTitle);
+        }
+    }
 }
 
 - (void) _hideTitleAndGradient
@@ -114,7 +114,15 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
     if ([keyPath isEqualToString:@"title"]) {
-        titleLayer.string = [change objectForKey:NSKeyValueChangeNewKey];
+        if ([keyPath isEqualToString:@"title"]) {
+            if (movieTitle) {
+                [movieTitle release];
+                movieTitle = nil;
+            }
+            movieTitle = [(NSString*)[object valueForKeyPath:keyPath] retain];
+            
+            // TODO: Redraw the text layer if necessary
+        }
     } else if ([keyPath isEqualToString:@"frontCover"]) {
         id frontCover = [change objectForKey:NSKeyValueChangeNewKey];
         if ([frontCover isKindOfClass:[NSNull class]]) {
@@ -237,6 +245,36 @@ void perceptualCausticColorForColor(float *inputComponents, float *outputCompone
     [targetColor getComponents:outputComponents];
 }
 
+void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
+{
+    NSGraphicsContext *nsContext = [NSGraphicsContext graphicsContextWithGraphicsPort:context flipped:NO];
+    [NSGraphicsContext saveGraphicsState];
+    [NSGraphicsContext setCurrentContext:nsContext];
+    
+    NSMutableParagraphStyle* pStyle = [[NSMutableParagraphStyle alloc] init];
+    [pStyle setParagraphStyle:[NSParagraphStyle defaultParagraphStyle]];
+    [pStyle setAlignment:NSCenterTextAlignment];
+    
+    NSDictionary* atts = [NSDictionary dictionaryWithObjectsAndKeys:
+                          pStyle, NSParagraphStyleAttributeName,
+                          [NSColor colorWithCalibratedWhite:1.0 alpha:1.0], NSForegroundColorAttributeName,
+                          [NSFont boldSystemFontOfSize:40.0], NSFontAttributeName,
+                          nil];
+    
+    
+    float width = (CGFloat)inRect.size.width * 0.9;
+    float height = (CGFloat)inRect.size.height * 0.9;
+    NSRect titleRect = NSMakeRect(((CGFloat)inRect.size.height - height) / 2.0, 
+                                  ((CGFloat)inRect.size.width - width) / 2.0, 
+                                  width, 
+                                  height);
+    
+    [title drawInRect:titleRect withAttributes:atts];
+    [pStyle release];
+    
+    [NSGraphicsContext restoreGraphicsState];
+}
+
 void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRect)
 {
     const float EXP_COEFFICIENT = 1.2;
@@ -287,7 +325,7 @@ void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRect)
     CGContextClipToRect(context, NSRectToCGRect(inRect));
     CGContextDrawShading(context, shading);
     CGContextRestoreGState(context);
-    
+        
     CGShadingRelease(shading);
     CGColorSpaceRelease(colorspace);
     CGFunctionRelease(gradientFunction);

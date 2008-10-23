@@ -8,8 +8,6 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1151"/>
-			<integer value="1510"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1092,7 +1090,7 @@
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{1000, 700}</string>
 				<object class="NSView" key="NSWindowView" id="384445475">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1257,7 +1255,6 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{1000, 700}</string>
-					<reference key="NSSuperview"/>
 					<bool key="NSViewIsLayerTreeHost">YES</bool>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1600, 1178}}</string>
@@ -2332,7 +2329,7 @@
 				<bool key="NSClearsFilterPredicateOnInsertion">YES</bool>
 			</object>
 			<object class="NSView" id="162150624">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">261</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3819,7 +3816,6 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{800, 500}</string>
-				<reference key="NSSuperview"/>
 			</object>
 			<object class="NSWindowTemplate" id="285385420">
 				<int key="NSWindowStyleMask">15</int>
@@ -4898,15 +4894,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">managedObjectContext: managedObjectContext</string>
+						<string key="label">managedObjectContext: appManagedObjectContext</string>
 						<reference key="source" ref="782886067"/>
 						<reference key="destination" ref="623785332"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="782886067"/>
 							<reference key="NSDestination" ref="623785332"/>
-							<string key="NSLabel">managedObjectContext: managedObjectContext</string>
+							<string key="NSLabel">managedObjectContext: appManagedObjectContext</string>
 							<string key="NSBinding">managedObjectContext</string>
-							<string key="NSKeyPath">managedObjectContext</string>
+							<string key="NSKeyPath">appManagedObjectContext</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -4914,15 +4910,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">managedObjectContext: managedObjectContext</string>
+						<string key="label">managedObjectContext: appManagedObjectContext</string>
 						<reference key="source" ref="284831240"/>
 						<reference key="destination" ref="623785332"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="284831240"/>
 							<reference key="NSDestination" ref="623785332"/>
-							<string key="NSLabel">managedObjectContext: managedObjectContext</string>
+							<string key="NSLabel">managedObjectContext: appManagedObjectContext</string>
 							<string key="NSBinding">managedObjectContext</string>
-							<string key="NSKeyPath">managedObjectContext</string>
+							<string key="NSKeyPath">appManagedObjectContext</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -4930,15 +4926,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">managedObjectContext: managedObjectContext</string>
+						<string key="label">managedObjectContext: appManagedObjectContext</string>
 						<reference key="source" ref="661566203"/>
 						<reference key="destination" ref="623785332"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="661566203"/>
 							<reference key="NSDestination" ref="623785332"/>
-							<string key="NSLabel">managedObjectContext: managedObjectContext</string>
+							<string key="NSLabel">managedObjectContext: appManagedObjectContext</string>
 							<string key="NSBinding">managedObjectContext</string>
-							<string key="NSKeyPath">managedObjectContext</string>
+							<string key="NSKeyPath">appManagedObjectContext</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
@@ -5070,15 +5066,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">managedObjectContext: managedObjectContext</string>
+						<string key="label">managedObjectContext: appManagedObjectContext</string>
 						<reference key="source" ref="697403151"/>
 						<reference key="destination" ref="623785332"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="697403151"/>
 							<reference key="NSDestination" ref="623785332"/>
-							<string key="NSLabel">managedObjectContext: managedObjectContext</string>
+							<string key="NSLabel">managedObjectContext: appManagedObjectContext</string>
 							<string key="NSBinding">managedObjectContext</string>
-							<string key="NSKeyPath">managedObjectContext</string>
+							<string key="NSKeyPath">appManagedObjectContext</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>

@@ -1,6 +1,6 @@
 #import <Cocoa/Cocoa.h>
 
-extern NSString* const kLoadingCoverArtActivityName;
+extern NSString* const kLoadingBoxArtActivityName;
 
 @class Engine;
 
@@ -13,12 +13,11 @@ extern NSString* const kLoadingCoverArtActivityName;
     NSNetServiceBrowser* browser;
     NSString* localMachineUUID;
     /**/
-    NSEntityDescription* engineDesc;
-    NSEntityDescription* mediaDesc;
-    NSEntityDescription* discDesc;
-    NSEntityDescription* movieDesc;
-    /**/
-    BOOL payAttention;
+    NSEntityDescription* engineEntity;
+    NSEntityDescription* mediaEntity;
+    NSEntityDescription* discEntity;
+    NSEntityDescription* movieEntity;
+    NSEntityDescription* boxArtEntity;
 }
 
 - (id) initWithManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;

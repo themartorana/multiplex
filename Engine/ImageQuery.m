@@ -39,6 +39,7 @@
 
 - (void) dealloc
 {
+    [response release];
     [URL release];
     [connection release];
     [request release];
@@ -65,8 +66,9 @@
 #pragma mark -
 @implementation ImageQuery (NSURLConnectionDelegate)
 
-- (void) connection:(NSURLConnection*)connection didReceiveResponse:(NSURLResponse*)response 
+- (void) connection:(NSURLConnection*)connection didReceiveResponse:(NSURLResponse*)_response 
 {
+    response = [_response retain];
     receivedData = [[NSMutableData alloc] init];
 }
 
@@ -89,6 +91,14 @@
         [self _fireDidFailWithError:nil];
         return;
     }
+    
+    if ([delegate respondsToSelector:@selector(imageQuery:didReceiveData:ofType:userInfo:)]) {
+        @try {
+            [delegate imageQuery:self didReceiveData:receivedData ofType:[[response allHeaderFields] objectForKey:@"Content-Type"] userInfo:userInfo];
+        } @catch (id _exception) {
+            NSLog(@"%@: Exception during %s -- %@", NSStringFromClass([self class]), __PRETTY_FUNCTION__, _exception);
+        }
+    }
 
     if ([delegate respondsToSelector:@selector(imageQuery:didReceiveImage:userInfo:)]) {
         NSImage* image = nil;
@@ -96,7 +106,7 @@
             image = [[NSImage alloc] initWithData:receivedData];
             [delegate imageQuery:self didReceiveImage:image userInfo:userInfo];
         } @catch (id _exception) {
-            NSLog(@"CoverArtQuery: Exception during coverArtQuery:didReceiveImage: -- %@", _exception);
+            NSLog(@"%@: Exception during %s -- %@", NSStringFromClass([self class]), __PRETTY_FUNCTION__, _exception);
         }
         [image release];
     }
@@ -107,7 +117,7 @@
             @try {
                 [delegate imageQuery:self didReceiveImageSource:imageSource userInfo:userInfo];
             } @catch (id _exception) {
-                NSLog(@"CoverArtQuery: Exception during coverArtQuery:didReceiveImageSource: -- %@", _exception);
+                NSLog(@"%@: Exception during %s -- %@", NSStringFromClass([self class]), __PRETTY_FUNCTION__, _exception);
             }
             CFRelease(imageSource);
         }
@@ -129,7 +139,7 @@
         @try {
             [delegate imageQuery:self didFailWithError:error userInfo:userInfo];
         } @catch (id _exception) {
-            NSLog(@"CoverArtQuery: Exception during coverArtQuery:didFailWithError: -- %@", _exception);
+            NSLog(@"%@: Exception during %s -- %@", NSStringFromClass([self class]), __PRETTY_FUNCTION__, _exception);
         }
     }
 }

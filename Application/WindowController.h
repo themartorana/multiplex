@@ -21,12 +21,11 @@
     EngineController* engineController;
     NSManagedObjectModel* managedObjectModel;
     NSPersistentStoreCoordinator* persistentStoreCoordinator;
-    NSManagedObjectContext* managedObjectContext;
-    
-    NSEntityDescription* movieDesc;
+    NSManagedObjectContext* appManagedObjectContext;
+    NSManagedObjectContext* engineManagedObjectContext;
 }
 
-@property (readonly) NSManagedObjectContext* managedObjectContext;
+@property (readonly) NSManagedObjectContext* appManagedObjectContext;
 
 - (IBAction) showUserVoiceFeedbackSheet:(id)sender;
 

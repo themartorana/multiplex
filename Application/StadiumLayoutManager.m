@@ -15,6 +15,7 @@
 #import <Toolkit/CALayer+IndyHallLabs.h>
 
 @implementation StadiumLayoutManager
+@synthesize listOfLayersInOrder;
 
 - (id<MultiplexLayoutManager>) initWithManagingLayer:(CALayer*)_floorLayer
 {
@@ -97,8 +98,7 @@
         [listOfLayersInOrder release];
         listOfLayersInOrder = nil;
     }
-    
-    listOfLayersInOrder = [_listOfLayersInOrder retain];
+    listOfLayersInOrder = [_listOfLayersInOrder copy];
 }
 
 - (void) setListOfArrangedObjects:(NSArray*)_arrangedListOfObjects
@@ -107,8 +107,7 @@
         [arrangedListOfObjects release];
         arrangedListOfObjects = nil;
     }
-    
-    arrangedListOfObjects = [_arrangedListOfObjects retain];
+    arrangedListOfObjects = [_arrangedListOfObjects copy];
     
     radialGradientLayer.hidden = (!arrangedListOfObjects || [arrangedListOfObjects count] == 0);
 }
@@ -204,7 +203,7 @@ static const CGFloat HS = 75.0;
             ];
 }
 
-- (void)layoutSublayersOfLayer:(CALayer *)floorLayer
+- (void) layoutSublayersOfLayer:(CALayer*)floorLayer
 {
     NSLog(@"laying out");
     
@@ -213,6 +212,7 @@ static const CGFloat HS = 75.0;
     
     CGFloat opacity = 1.0;
     NSMutableSet* tagged = [NSMutableSet set];
+    int ZZ = 0;
     for (NSArray* layersInOrder in [listOfLayersInOrder reverseObjectEnumerator]) {
         for (MovieLayer* layer in layersInOrder) {
             if (![tagged containsObject:layer.movie.objectID]) {
@@ -220,11 +220,13 @@ static const CGFloat HS = 75.0;
                     layer.opaque = (opacity == 1.0);
                     layer.opacity = opacity;
                 }
+                ZZ++;
                 [tagged addObject:layer.movie.objectID];
             }
         }
         opacity *= 0.2;
     }
+    NSLog(@"%d == %d", ZZ, [[floorLayer sublayers] count]);
     
     /*  This base transform sets up the origin (0, 0) to the center of the 
      *  layer along the X and Y axes.

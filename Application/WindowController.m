@@ -16,7 +16,7 @@
 @end
 
 @implementation WindowController
-@synthesize managedObjectContext;
+@synthesize appManagedObjectContext;
 
 - (id) init 
 {
@@ -25,18 +25,40 @@
         
         persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
         [persistentStoreCoordinator addPersistentStoreWithType:NSInMemoryStoreType configuration:nil URL:nil options:nil error:nil];
-        
-        managedObjectContext = [[NSManagedObjectContext alloc] init];
-        [managedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
+
+        engineManagedObjectContext = [[NSManagedObjectContext alloc] init];
+        [engineManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
+
+        appManagedObjectContext = [[NSManagedObjectContext alloc] init];
+        [appManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
+
+        NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+        [notificationCenter addObserver:self selector:@selector(engineControllerObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:engineManagedObjectContext];
+        [notificationCenter addObserver:self selector:@selector(appControllerObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:appManagedObjectContext];
     }
     return self;
+}
+
+- (void) engineControllerObjectContextDidSave:(NSNotification*)saveNotification 
+{
+    [appManagedObjectContext performSelectorOnMainThread:@selector(mergeChangesFromContextDidSaveNotification:)
+                                              withObject:saveNotification
+                                           waitUntilDone:NO];
+}
+
+- (void) appControllerObjectContextDidSave:(NSNotification*)saveNotification 
+{
+    [engineManagedObjectContext performSelectorOnMainThread:@selector(mergeChangesFromContextDidSaveNotification:)
+                                                 withObject:saveNotification
+                                              waitUntilDone:NO];
 }
 
 - (void) dealloc 
 {
     [managedObjectModel release];
     [persistentStoreCoordinator release];
-    [managedObjectContext release];
+    [appManagedObjectContext release];
+    [engineManagedObjectContext release];
     [engineController release];
     [super dealloc];
 }
@@ -58,8 +80,6 @@
         
     [infoPaneFormController bind:@"movie" toObject:movies withKeyPath:@"selection.self" options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption]];
     
-    movieDesc = [[NSEntityDescription entityForName:@"Movie" inManagedObjectContext:managedObjectContext] retain];
-    
     // Listen for play requests
     NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(playDiscRequest:) name:@"MultiplexPlayDisc" object:nil];
@@ -70,7 +90,7 @@
     [notificationCenter addObserver:self selector:@selector(_coreDataDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:nil];
 #endif
     
-    engineController = [[EngineController alloc] initWithManagedObjectContext:managedObjectContext];
+    engineController = [[EngineController alloc] initWithManagedObjectContext:engineManagedObjectContext];
 }
 
 - (void) applicationDidFinishLaunching:(NSNotification*)notification

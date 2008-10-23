@@ -93,6 +93,7 @@
 		F9A1D6740E8353E100AB691D /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9D313EC0E7DD8A100D99DCA /* AppKit.framework */; };
 		F9A1D8D10E83699200AB691D /* Engine in Copy Files to Resources */ = {isa = PBXBuildFile; fileRef = F9A1D6220E8350C100AB691D /* Engine */; };
 		F9B380DC0EAD029700FCAB1E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B380DB0EAD029700FCAB1E /* SystemConfiguration.framework */; };
+		F9B8D6900EB0BFCD008589F3 /* BoxArt.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B8D68F0EB0BFCD008589F3 /* BoxArt.m */; };
 		F9C2B0300E7B919B00474D97 /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
 		F9CA172A0E7C727C0049CD3E /* Movie.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CA17290E7C727C0049CD3E /* Movie.m */; };
 		F9CA172E0E7C72930049CD3E /* Disc.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CA172D0E7C72930049CD3E /* Disc.m */; };
@@ -401,6 +402,8 @@
 		F9A1D66D0E8353C900AB691D /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		F9AFE3E40B65CC6D0035DA65 /* ScratchPad */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ScratchPad; sourceTree = "<group>"; };
 		F9B380DB0EAD029700FCAB1E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
+		F9B8D68E0EB0BFCD008589F3 /* BoxArt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoxArt.h; sourceTree = "<group>"; };
+		F9B8D68F0EB0BFCD008589F3 /* BoxArt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoxArt.m; sourceTree = "<group>"; };
 		F9C2AE540E7B747B00474D97 /* JSONKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JSONKit.xcodeproj; path = Frameworks/JSONKit/JSONKit.xcodeproj; sourceTree = "<group>"; };
 		F9CA17280E7C727C0049CD3E /* Movie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Movie.h; sourceTree = "<group>"; };
 		F9CA17290E7C727C0049CD3E /* Movie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Movie.m; sourceTree = "<group>"; };
@@ -627,10 +630,12 @@
 			isa = PBXGroup;
 			children = (
 				5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */,
+				F9B8D68E0EB0BFCD008589F3 /* BoxArt.h */,
+				F9B8D68F0EB0BFCD008589F3 /* BoxArt.m */,
 				F9CA172C0E7C72930049CD3E /* Disc.h */,
+				F9CA172D0E7C72930049CD3E /* Disc.m */,
 				F9CA18F30E7CB6310049CD3E /* Engine.h */,
 				F9CA18F40E7CB6310049CD3E /* Engine.m */,
-				F9CA172D0E7C72930049CD3E /* Disc.m */,
 				F9CA17A70E7C79CE0049CD3E /* Media.h */,
 				F9CA17A80E7C79CE0049CD3E /* Media.m */,
 				F9CA17280E7C727C0049CD3E /* Movie.h */,
@@ -1215,6 +1220,7 @@
 				F914C9D00EAD657900877991 /* DrawerView.m in Sources */,
 				F966E49C0EAF9215001D0B3B /* DragDropTargetView.m in Sources */,
 				F966E5270EAF9A53001D0B3B /* CoverArtImageView.m in Sources */,
+				F9B8D6900EB0BFCD008589F3 /* BoxArt.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -17,4 +17,6 @@
     NSArray* arrangedListOfObjects;
 }
 
+@property (copy) NSArray* listOfLayersInOrder;
+
 @end

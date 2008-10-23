@@ -3,35 +3,39 @@
 
 @implementation ApplicationResources
 
-+ (CGImageRef) CGImageFromFile:(NSString*)path
++ (CGImageRef) CGImageFromFileAtPath:(NSString*)path
 {
     CGImageRef image = NULL;
-    CGImageSourceRef src = CGImageSourceCreateWithURL((CFURLRef)[NSURL fileURLWithPath:path], NULL);
+    CGImageSourceRef src = CGImageSourceCreateWithData((CFDataRef)[NSData dataWithContentsOfFile:path], NULL);
     if (src) {
-        image = CGImageSourceCreateImageAtIndex(src, 0, NULL);
+        image = CGImageSourceCreateImageAtIndex(src, 0, (CFDictionaryRef)[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], kCGImageSourceCreateThumbnailFromImageAlways, nil]);
         CFRelease(src);
         if (!image) {
-            NSLog(@"Warning: CGImageSourceCreateImageAtIndex failed on file %@ (ptr size=%u)", path, sizeof(void*));
+            NSLog(@"Warning: CGImageFromFile failed on file %@ (ptr size=%u)", path, sizeof(void*));
         }
     }
     return image;
 }
 
-+ (CGImageRef) CGImageFromPDF:(NSString*)path
++ (CGImageRef) CGImageFromResource:(NSString*)name ofType:(NSString*)type
 {
-    NSURL* url = [NSURL fileURLWithPath:path];
-    NSImage* img = [[NSImage alloc] initWithContentsOfURL:url];
-    
-    CIImage* image = [CIImage imageWithData:[img TIFFRepresentation]];
-    CIContext* ciContext = [[[NSApplication sharedApplication] context] CIContext];
-    return [ciContext createCGImage:image fromRect:[image extent]];
+    NSString* path = [[NSBundle mainBundle] pathForResource:name ofType:type];
+    if ([type isEqualToString:@"pdf"]) {
+        NSURL* url = [NSURL fileURLWithPath:path];
+        NSImage* img = [[NSImage alloc] initWithContentsOfURL:url];
+        CIImage* image = [CIImage imageWithData:[img TIFFRepresentation]];
+        CIContext* ciContext = [[[NSApplication sharedApplication] context] CIContext];
+        return [ciContext createCGImage:image fromRect:[image extent]];
+    } else {
+        return [self CGImageFromFileAtPath:path];
+    }
 }
 
 + (CGImageRef) editIcon 
 {
     static CGImageRef image = NULL;
     if (!image) {
-        image = [self CGImageFromFile:[[NSBundle mainBundle] pathForResource:@"edit-icon-16x16" ofType:@"png"]];
+        image = [self CGImageFromResource:@"edit-icon-16x16" ofType:@"png"];
     }
     return image;
 }
@@ -40,7 +44,7 @@
 {
     static CGImageRef image = NULL;
     if (!image) {
-        image = [self CGImageFromPDF:[[NSBundle mainBundle] pathForResource:@"button-play" ofType:@"pdf"]];
+        image = [self CGImageFromResource:@"button-play" ofType:@"pdf"];
     }
     return image;
 }
@@ -49,7 +53,7 @@
 {
     static CGImageRef image = NULL;
     if (!image) {
-        image = [self CGImageFromPDF:[[NSBundle mainBundle] pathForResource:@"button-play-down" ofType:@"pdf"]];
+        image = [self CGImageFromResource:@"button-play-down" ofType:@"pdf"];
     }
     return image;
 }
@@ -58,7 +62,7 @@
 {
     static CGImageRef image = NULL;
     if (!image) {
-        image = [self CGImageFromPDF:[[NSBundle mainBundle] pathForResource:@"play-button-inactive" ofType:@"pdf"]];
+        image = [self CGImageFromResource:@"play-button-inactive" ofType:@"pdf"];
     }
     return image;
 }
@@ -67,7 +71,7 @@
 {
     static CGImageRef image = NULL;
     if (!image) {
-        image = [self CGImageFromPDF:[[NSBundle mainBundle] pathForResource:@"close128x128" ofType:@"pdf"]];
+        image = [self CGImageFromResource:@"close128x128" ofType:@"pdf"];
     }
     return image;
 }
@@ -76,7 +80,7 @@
 {
     static CGImageRef image = NULL;
     if (!image) {
-        image = [self CGImageFromPDF:[[NSBundle mainBundle] pathForResource:@"close-click128x128" ofType:@"pdf"]];
+        image = [self CGImageFromResource:@"close-click128x128" ofType:@"pdf"];
     }
     return image;
 }

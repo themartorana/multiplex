@@ -39,7 +39,7 @@
     [prefs setUserStyleSheetEnabled:YES];
     [prefs setUserStyleSheetLocation:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"default" ofType:@"css"]]];
 
-    [coverArtImageView bind:@"image" toObject:self withKeyPath:@"movie.frontCover" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromPDF:[[NSBundle mainBundle] pathForResource:@"drag-drop-no-image" ofType:@"pdf"]], NSNullPlaceholderBindingOption, nil]];
+    [coverArtImageView bind:@"image" toObject:self withKeyPath:@"movie.frontCover" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
 }
 
 - (void) setMovie:(Movie*)_movie

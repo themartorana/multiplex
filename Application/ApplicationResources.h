@@ -3,8 +3,8 @@
 @interface ApplicationResources : NSObject {
 }
 
-+ (CGImageRef) CGImageFromPDF:(NSString*)path;
-+ (CGImageRef) CGImageFromFile:(NSString*)path;
++ (CGImageRef) CGImageFromFileAtPath:(NSString*)path;
++ (CGImageRef) CGImageFromResource:(NSString*)name ofType:(NSString*)type;
 
 + (CGImageRef) editIcon;
 + (CGImageRef) playButton;

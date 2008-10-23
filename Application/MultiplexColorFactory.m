@@ -14,7 +14,7 @@ static CGImageRef _createCGImageFromFile(NSString* path);
 {
     static CGColorRef color = NULL;
     if (!color) {
-        CGPatternRef pattern = _createImagePattern([ApplicationResources CGImageFromFile:[[NSBundle mainBundle] pathForResource:@"drawer-background-pattern-96x96" ofType:@"gif"]]);
+        CGPatternRef pattern = _createImagePattern([ApplicationResources CGImageFromFileAtPath:[[NSBundle mainBundle] pathForResource:@"drawer-background-pattern-96x96" ofType:@"gif"]]);
         CGColorSpaceRef space = CGColorSpaceCreatePattern(NULL);
         CGFloat components[1] = { 1.0 };
         color = CGColorCreateWithPattern(space, pattern, components);

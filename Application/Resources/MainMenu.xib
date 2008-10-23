@@ -8,8 +8,8 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1472"/>
 			<integer value="1151"/>
+			<integer value="1510"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2371,7 +2371,7 @@
 							<object class="NSTabViewItem" id="966988208">
 								<string key="NSIdentifier">1</string>
 								<object class="NSView" key="NSView" id="259575740">
-									<reference key="NSNextResponder" ref="124333960"/>
+									<nil key="NSNextResponder"/>
 									<int key="NSvFlags">256</int>
 									<object class="NSMutableArray" key="NSSubviews">
 										<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2528,7 +2528,6 @@
 										</object>
 									</object>
 									<string key="NSFrame">{{10, 33}, {754, 388}}</string>
-									<reference key="NSSuperview" ref="124333960"/>
 								</object>
 								<string key="NSLabel">Basic Info</string>
 								<reference key="NSColor" ref="288047085"/>
@@ -2548,7 +2547,7 @@
 							<object class="NSTabViewItem" id="723910753">
 								<string key="NSIdentifier">2</string>
 								<object class="NSView" key="NSView" id="220476942">
-									<nil key="NSNextResponder"/>
+									<reference key="NSNextResponder" ref="124333960"/>
 									<int key="NSvFlags">274</int>
 									<object class="NSMutableArray" key="NSSubviews">
 										<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3319,6 +3318,7 @@
 										</object>
 									</object>
 									<string key="NSFrame">{{10, 33}, {754, 388}}</string>
+									<reference key="NSSuperview" ref="124333960"/>
 								</object>
 								<string key="NSLabel">Detailed Info</string>
 								<reference key="NSColor" ref="288047085"/>
@@ -3783,14 +3783,14 @@
 								<reference key="NSTabView" ref="124333960"/>
 							</object>
 						</object>
-						<reference key="NSSelectedTabViewItem" ref="966988208"/>
+						<reference key="NSSelectedTabViewItem" ref="723910753"/>
 						<reference key="NSFont" ref="707745533"/>
 						<int key="NSTvFlags">0</int>
 						<bool key="NSAllowTruncatedLabels">YES</bool>
 						<bool key="NSDrawsBackground">YES</bool>
 						<object class="NSMutableArray" key="NSSubviews">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="259575740"/>
+							<reference ref="220476942"/>
 						</object>
 					</object>
 					<object class="NSButton" id="178774230">
@@ -5047,6 +5047,42 @@
 						<reference key="destination" ref="62536199"/>
 					</object>
 					<int key="connectionID">1615</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: movie.title</string>
+						<reference key="source" ref="32848502"/>
+						<reference key="destination" ref="62536199"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="32848502"/>
+							<reference key="NSDestination" ref="62536199"/>
+							<string key="NSLabel">value: movie.title</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">movie.title</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">1618</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: movie.aspectRatio</string>
+						<reference key="source" ref="134714013"/>
+						<reference key="destination" ref="62536199"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="134714013"/>
+							<reference key="NSDestination" ref="62536199"/>
+							<string key="NSLabel">value: movie.aspectRatio</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">movie.aspectRatio</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSNullPlaceholder</string>
+								<string key="NS.object.0">1:69, 4:3, 1.85:1, 2.35:1, etc.</string>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">1622</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -7681,6 +7717,7 @@
 					<string>1595.IBPluginDependency</string>
 					<string>1596.IBPluginDependency</string>
 					<string>1597.IBPluginDependency</string>
+					<string>1607.IBPluginDependency</string>
 					<string>1608.IBPluginDependency</string>
 					<string>1609.IBPluginDependency</string>
 					<string>1610.IBPluginDependency</string>
@@ -8000,7 +8037,7 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{737, 190}, {800, 500}}</string>
+					<string>{{433, 231}, {800, 500}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -8136,6 +8173,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.WebKitIBPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -8393,7 +8431,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1615</int>
+			<int key="maxID">1622</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

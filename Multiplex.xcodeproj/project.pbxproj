@@ -54,11 +54,12 @@
 		5598E60C0E91D294005FCC91 /* ButtonLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5598E60B0E91D294005FCC91 /* ButtonLayer.m */; };
 		55A8E81D0E9BE18200DC9F35 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55A8E81C0E9BE18200DC9F35 /* WebKit.framework */; };
 		55B81A490EA049D500775EAE /* default.css in Resources */ = {isa = PBXBuildFile; fileRef = 55B81A480EA049D500775EAE /* default.css */; };
+		55C9F6260EB26A15001B9BCD /* HalfTransparentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C9F6250EB26A15001B9BCD /* HalfTransparentView.m */; };
+		55C9F6430EB26C5A001B9BCD /* LayerBackedButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C9F6420EB26C5A001B9BCD /* LayerBackedButtonView.m */; };
 		55D390750E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D390740E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m */; };
 		55D390770E82DE72007413C5 /* Progress.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55D390760E82DE72007413C5 /* Progress.pdf */; };
 		55D9581B0E942EB300E35FF4 /* button-play-down.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55D9581A0E942EB300E35FF4 /* button-play-down.pdf */; };
 		55F815360E94082A005EF5DE /* button-play.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55F815350E94082A005EF5DE /* button-play.pdf */; };
-		55FB44670EB11CF800CAF01F /* CoverFlowLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 55FB44660EB11CF800CAF01F /* CoverFlowLayoutManager.m */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		F914C9C80EAD653300877991 /* plus-36x36.png in Resources */ = {isa = PBXBuildFile; fileRef = F914C9C70EAD653300877991 /* plus-36x36.png */; };
@@ -360,13 +361,15 @@
 		5598E60B0E91D294005FCC91 /* ButtonLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtonLayer.m; sourceTree = "<group>"; };
 		55A8E81C0E9BE18200DC9F35 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		55B81A480EA049D500775EAE /* default.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = default.css; sourceTree = "<group>"; };
+		55C9F6240EB26A15001B9BCD /* HalfTransparentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HalfTransparentView.h; sourceTree = "<group>"; };
+		55C9F6250EB26A15001B9BCD /* HalfTransparentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HalfTransparentView.m; sourceTree = "<group>"; };
+		55C9F6410EB26C5A001B9BCD /* LayerBackedButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerBackedButtonView.h; sourceTree = "<group>"; };
+		55C9F6420EB26C5A001B9BCD /* LayerBackedButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayerBackedButtonView.m; sourceTree = "<group>"; };
 		55D390730E82D692007413C5 /* IndeterminateProgressIndicatorLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndeterminateProgressIndicatorLayer.h; sourceTree = "<group>"; };
 		55D390740E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndeterminateProgressIndicatorLayer.m; sourceTree = "<group>"; };
 		55D390760E82DE72007413C5 /* Progress.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Progress.pdf; sourceTree = "<group>"; };
 		55D9581A0E942EB300E35FF4 /* button-play-down.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "button-play-down.pdf"; sourceTree = "<group>"; };
 		55F815350E94082A005EF5DE /* button-play.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "button-play.pdf"; sourceTree = "<group>"; };
-		55FB44650EB11CF800CAF01F /* CoverFlowLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverFlowLayoutManager.h; sourceTree = "<group>"; };
-		55FB44660EB11CF800CAF01F /* CoverFlowLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoverFlowLayoutManager.m; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* Multiplex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Multiplex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F914C9C70EAD653300877991 /* plus-36x36.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus-36x36.png"; sourceTree = "<group>"; };
@@ -660,8 +663,6 @@
 				55654E790EAD97D400265A45 /* StadiumLayoutManager.h */,
 				55654E7A0EAD97D400265A45 /* StadiumLayoutManager.m */,
 				55654E7C0EAD981000265A45 /* MultiplexLayoutManager.h */,
-				55FB44650EB11CF800CAF01F /* CoverFlowLayoutManager.h */,
-				55FB44660EB11CF800CAF01F /* CoverFlowLayoutManager.m */,
 				F9B8E1950EB25628008589F3 /* CoverFlowLayoutManager2.h */,
 				F9B8E1960EB25628008589F3 /* CoverFlowLayoutManager2.m */,
 			);
@@ -743,6 +744,10 @@
 		F967AFF30E7E13D400C12B92 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				55C9F6410EB26C5A001B9BCD /* LayerBackedButtonView.h */,
+				55C9F6420EB26C5A001B9BCD /* LayerBackedButtonView.m */,
+				55C9F6240EB26A15001B9BCD /* HalfTransparentView.h */,
+				55C9F6250EB26A15001B9BCD /* HalfTransparentView.m */,
 				F966E5250EAF9A53001D0B3B /* CoverArtImageView.h */,
 				F966E5260EAF9A53001D0B3B /* CoverArtImageView.m */,
 				F966E49A0EAF9215001D0B3B /* DragDropTargetView.h */,
@@ -1238,8 +1243,9 @@
 				F966E49C0EAF9215001D0B3B /* DragDropTargetView.m in Sources */,
 				F966E5270EAF9A53001D0B3B /* CoverArtImageView.m in Sources */,
 				F9B8D6900EB0BFCD008589F3 /* BoxArt.m in Sources */,
-				55FB44670EB11CF800CAF01F /* CoverFlowLayoutManager.m in Sources */,
 				F9B8E1970EB25628008589F3 /* CoverFlowLayoutManager2.m in Sources */,
+				55C9F6260EB26A15001B9BCD /* HalfTransparentView.m in Sources */,
+				55C9F6430EB26C5A001B9BCD /* LayerBackedButtonView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

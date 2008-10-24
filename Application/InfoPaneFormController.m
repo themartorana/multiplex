@@ -6,6 +6,7 @@
 #import "DragDropTargetView.h"
 #import "ApplicationResources.h"
 #import "BoxArt.h"
+#import "LayerBackedButtonView.h"
 
 #import <WebKit/WebKit.h>
 
@@ -35,7 +36,10 @@
     [descriptionWebView setFrameLoadDelegate:self];
     [descriptionWebView setEditable:YES];
     [descriptionWebView setDrawsBackground:NO];
-        
+    
+    [playButtonView setButtonLayerButtonWithUpState:[ApplicationResources playButton] andDownState:[ApplicationResources playButtonDown]];
+    [playButtonView setNotificationNameToPost:@"MultiplexPlayButtonClicked"];
+    
     WebPreferences* prefs = [descriptionWebView preferences];
     [prefs setUserStyleSheetEnabled:YES];
     [prefs setUserStyleSheetLocation:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"default" ofType:@"css"]]];

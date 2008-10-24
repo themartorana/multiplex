@@ -133,14 +133,13 @@
     }
     
     if (movieLayer) {
+        dontLayoutBecauseOfHighlight = YES;
         hoverHighlightLayer.hidden = NO;
         hoverHighlightLayer.anchorPoint = movieLayer.anchorPoint;
         hoverHighlightLayer.bounds = CGRectInset(movieLayer.bounds, -20, -20);
-        //hoverHighlightLayer.position = movieLayer.position;
+        hoverHighlightLayer.position = movieLayer.position;
         hoverHighlightLayer.zPosition = movieLayer.zPosition - 1;
-        CATransform3D t3d = movieLayer.transform;
-        [hoverHighlightLayer setTransform:t3d];
-        dontLayoutBecauseOfHighlight = YES;
+        hoverHighlightLayer.transform = movieLayer.transform;
     } else {
         hoverHighlightLayer.hidden = YES;
     }

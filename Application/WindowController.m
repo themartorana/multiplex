@@ -9,6 +9,9 @@
 #import "InfoPaneFormController.h"
 #import "UserVoiceFeedbackPanel.h"
 
+#import "StadiumLayoutManager.h"
+#import "CoverFlowLayoutManager.h"
+
 #import <QuartzCore/QuartzCore.h>
 
 @interface WindowController (Private)
@@ -95,6 +98,9 @@
 #endif
     
     engineController = [[EngineController alloc] initWithManagedObjectContext:engineManagedObjectContext];
+    
+    // Hook up to drawer view
+    [drawerView addObserver:self forKeyPath:@"isOpen" options:NSKeyValueObservingOptionNew context:nil];
 }
 
 - (void) applicationDidFinishLaunching:(NSNotification*)notification
@@ -173,6 +179,22 @@
 {
     [panel orderOut:self];
     [userVoiceFeedbackPanel resetFeedbackPage];
+}
+
+- (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
+{
+    if (object == drawerView) {
+        if ([@"isOpen" isEqualToString:keyPath]) {
+            BOOL isOpen = [(NSNumber*)[object valueForKeyPath:keyPath] boolValue];
+            
+            if (isOpen) {
+                [mainView setFloorLayerLayoutManagerClass:[CoverFlowLayoutManager class]];
+            }
+            else {
+                [mainView setFloorLayerLayoutManagerClass:[StadiumLayoutManager class]];
+            }
+        }
+    }
 }
 
 #if 0

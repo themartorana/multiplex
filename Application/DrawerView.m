@@ -68,7 +68,7 @@
         [[upperView animator] setFrame:newUpperViewFrame];
         [[self animator] setFrame:NSOffsetRect(newFrame, 0, viewFrame.size.height)];
         [NSAnimationContext endGrouping];
-        isOpen = YES;
+        [self setIsOpen:YES];
     }
 }
 
@@ -90,7 +90,7 @@
         [[self animator] setFrame:NSOffsetRect(frame, 0, -viewFrame.size.height)];
         [NSAnimationContext endGrouping];
         [contentView removeFromSuperview];
-        isOpen = NO;
+        [self setIsOpen:NO];
     }
 }
 

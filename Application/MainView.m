@@ -37,6 +37,7 @@
     [self setWantsLayer:YES];
     
     floorLayer = [CALayer layer];
+    //[floorLayer setScrollMode:kCAScrollVertically];
     floorLayer.delegate = self;
     floorLayer.position = CGPointZero;
     floorLayer.constraints = [NSArray arrayWithObjects:
@@ -80,9 +81,26 @@
     floorLayerLayoutManagerClass = class;
     
     if (floorLayer) {
+        
+        if (floorLayer.layoutManager) {
+            [floorLayer.layoutManager clearManagingLayerOfExtras];
+        }
+        
         id<MultiplexLayoutManager> layoutManager = [[class alloc] initWithManagingLayer:floorLayer];
+        
+        [layoutManager setListOfLayersInOrder:listOfLayersInOrder];
+        [layoutManager setListOfArrangedObjects:[content arrangedObjects]];
         [floorLayer setLayoutManager:layoutManager];
         [layoutManager release];
+
+        if (content && [[content arrangedObjects] count] > 0) {
+            id a = [content valueForKeyPath:@"selection.self"];
+            if ([a isKindOfClass:[Movie class]]) {
+                [floorLayer.layoutManager setSelectedMovie:(Movie*)a];
+            }
+        }
+        
+        [floorLayer setNeedsLayout];
     }
 }
 
@@ -93,11 +111,13 @@
         if (content) {
             [content removeObserver:self forKeyPath:@"arrangedObjects"];
             [content removeObserver:self forKeyPath:@"content.@count"];
+            [content removeObserver:self forKeyPath:@"selection.self"];
             [content release];
         }
         if (_content) {
             [_content addObserver:self forKeyPath:@"arrangedObjects" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
             [_content addObserver:self forKeyPath:@"content.@count" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+            [_content addObserver:self forKeyPath:@"selection.self" options:NSKeyValueObservingOptionNew context:nil];
             [_content retain];
         }
         content = _content;
@@ -232,6 +252,14 @@
 
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
+    if ([@"selection.self" isEqualToString:keyPath]) {
+        if (object && [[object arrangedObjects] count] > 0) {
+            id a = [object valueForKeyPath:@"selection.self"];
+            if ([a isKindOfClass:[Movie class]]) {
+                [floorLayer.layoutManager setSelectedMovie:(Movie*)a];
+            }
+        }
+    }
     if ([@"content.@count" isEqualToString:keyPath]) {
         NSMutableArray* allLayers = [listOfLayersInOrder objectAtIndex:0];
         int oldCount = [allLayers count];

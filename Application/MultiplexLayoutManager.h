@@ -9,7 +9,12 @@
 - (void) clearManagingLayerOfExtras;
 
 - (void) setHoveredMovieLayer:(MovieLayer*)layer;
+- (void) setSelectedMovie:(Movie*)movie;
+
 - (void) setListOfLayersInOrder:(NSArray*)listOfLayersInOrder;
 - (void) setListOfArrangedObjects:(NSArray*)arrangedObjects;
+
+// Make this concrete
+- (void) layoutSublayersOfLayer:(CALayer*)layer;
 
 @end

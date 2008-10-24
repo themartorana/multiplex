@@ -20,12 +20,14 @@
 - (id<MultiplexLayoutManager>) initWithManagingLayer:(CALayer*)_floorLayer
 {
     if (self == [super init]) {
+        _floorLayer.masksToBounds = NO;
+        
         radialGradientLayer = [CALayer layer];
         radialGradientLayer.hidden = YES;
-        radialGradientLayer.delegate = self;
+        //radialGradientLayer.delegate = self;
         radialGradientLayer.position = CGPointZero;
         radialGradientLayer.frame = CGRectMake(0, 0, 100, 100);
-        [radialGradientLayer setNeedsDisplay];
+        //[radialGradientLayer setNeedsDisplay];
         [_floorLayer addSublayer:radialGradientLayer];
         
         hoverHighlightLayer = [[CALayer layer] retain];
@@ -89,7 +91,10 @@
 
 - (void) clearManagingLayerOfExtras
 {
-    
+    [radialGradientLayer removeFromSuperlayer];
+    [titleContainerLayer removeFromSuperlayer];
+    [hoverHighlightLayer removeFromSuperlayer];
+    [hoverHighlightLayer release];
 }
 
 - (void) setListOfLayersInOrder:(NSArray*)_listOfLayersInOrder
@@ -112,6 +117,11 @@
     [self setHoveredMovieLayer:nil];
     
     radialGradientLayer.hidden = (!arrangedListOfObjects || [arrangedListOfObjects count] == 0);
+}
+
+- (void) setSelectedMovie:(Movie*)movie
+{
+    return;
 }
 
 - (void) setHoveredMovieLayer:(MovieLayer*)movieLayer;
@@ -218,7 +228,6 @@ static const CGFloat HS = 75.0;
     
     CGFloat opacity = 1.0;
     NSMutableSet* tagged = [NSMutableSet set];
-    int ZZ = 0;
     for (NSArray* layersInOrder in [listOfLayersInOrder reverseObjectEnumerator]) {
         for (MovieLayer* layer in layersInOrder) {
             if (![tagged containsObject:layer.movie.objectID]) {
@@ -226,13 +235,11 @@ static const CGFloat HS = 75.0;
                     layer.opaque = (opacity == 1.0);
                     layer.opacity = opacity;
                 }
-                ZZ++;
                 [tagged addObject:layer.movie.objectID];
             }
         }
         opacity *= 0.2;
     }
-    //NSLog(@"%d == %d", ZZ, [[floorLayer sublayers] count]);
     
     /*  This base transform sets up the origin (0, 0) to the center of the 
      *  layer along the X and Y axes.
@@ -260,7 +267,7 @@ static const CGFloat HS = 75.0;
         
         columns = [[parameters objectForKey:@"columns"] floatValue];
         rows = [[parameters objectForKey:@"rows"] floatValue];
-        height = (HS + ((H + WS) * rows));
+        height = (HS + ((H + HS) * rows));
         length = (WS + ((W + WS) * columns));
         radius = length / M_PI;
         if (0 == base) {

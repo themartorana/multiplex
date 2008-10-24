@@ -8,7 +8,7 @@
     BOOL isOpen;
 }
 
-@property (readonly) BOOL isOpen;
+@property BOOL isOpen;
 @property (retain) NSView* contentView;
 
 - (IBAction) toggle:(id)sender;

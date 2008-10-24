@@ -58,6 +58,7 @@
 		55D390770E82DE72007413C5 /* Progress.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55D390760E82DE72007413C5 /* Progress.pdf */; };
 		55D9581B0E942EB300E35FF4 /* button-play-down.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55D9581A0E942EB300E35FF4 /* button-play-down.pdf */; };
 		55F815360E94082A005EF5DE /* button-play.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55F815350E94082A005EF5DE /* button-play.pdf */; };
+		55FB44670EB11CF800CAF01F /* CoverFlowLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 55FB44660EB11CF800CAF01F /* CoverFlowLayoutManager.m */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		F914C9C80EAD653300877991 /* plus-36x36.png in Resources */ = {isa = PBXBuildFile; fileRef = F914C9C70EAD653300877991 /* plus-36x36.png */; };
@@ -361,6 +362,8 @@
 		55D390760E82DE72007413C5 /* Progress.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Progress.pdf; sourceTree = "<group>"; };
 		55D9581A0E942EB300E35FF4 /* button-play-down.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "button-play-down.pdf"; sourceTree = "<group>"; };
 		55F815350E94082A005EF5DE /* button-play.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "button-play.pdf"; sourceTree = "<group>"; };
+		55FB44650EB11CF800CAF01F /* CoverFlowLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverFlowLayoutManager.h; sourceTree = "<group>"; };
+		55FB44660EB11CF800CAF01F /* CoverFlowLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoverFlowLayoutManager.m; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* Multiplex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Multiplex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F914C9C70EAD653300877991 /* plus-36x36.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus-36x36.png"; sourceTree = "<group>"; };
@@ -650,6 +653,8 @@
 				55654E790EAD97D400265A45 /* StadiumLayoutManager.h */,
 				55654E7A0EAD97D400265A45 /* StadiumLayoutManager.m */,
 				55654E7C0EAD981000265A45 /* MultiplexLayoutManager.h */,
+				55FB44650EB11CF800CAF01F /* CoverFlowLayoutManager.h */,
+				55FB44660EB11CF800CAF01F /* CoverFlowLayoutManager.m */,
 			);
 			name = "Layout Managers";
 			sourceTree = "<group>";
@@ -1221,6 +1226,7 @@
 				F966E49C0EAF9215001D0B3B /* DragDropTargetView.m in Sources */,
 				F966E5270EAF9A53001D0B3B /* CoverArtImageView.m in Sources */,
 				F9B8D6900EB0BFCD008589F3 /* BoxArt.m in Sources */,
+				55FB44670EB11CF800CAF01F /* CoverFlowLayoutManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

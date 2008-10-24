@@ -17,8 +17,6 @@
 NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
 
 @interface EngineController (Private)
-- (void) _deleteAllMediaForEngine:(Engine*)engine;
-- (void) _deleteAllMoviesWithNoMedia;
 - (Disc*) _findDiscByFingerprint:(NSString*)fingerprint;
 - (BoxArt*) _findBoxArtByURL:(NSString*)url;
 - (Movie*) _findMovieByGTIN:(NSString*)gtin;
@@ -203,7 +201,8 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
     NSAssert(engine, @"no engine?");
     @synchronized (managedObjectContext) {
         engine.status = @"Disconnecting";
-        [managedObjectContext save:nil];
+        NSError* error = nil;
+        [managedObjectContext save:&error];
         
         MessageProtocol* protocol = [protocolsByUUID objectForKey:engine.uuid];
         if (protocol) {
@@ -216,16 +215,9 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
             }
             [uuid release];
         }
-
-        @try {
-            [self _deleteAllMediaForEngine:engine];
-            [self _deleteAllMoviesWithNoMedia];
-        } @catch (NSException* ex) {
-            NSLog(@"%s -- %@", __PRETTY_FUNCTION__, ex);
-        } @finally {
-            engine.status = @"Not Connected";
-            [managedObjectContext save:nil];
-        }
+        
+        engine.status = @"Not Connected";
+        [managedObjectContext save:&error];
     }
 }
 
@@ -234,42 +226,6 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
 
 #pragma mark -
 @implementation EngineController (Private)
-
-- (void) _deleteAllMediaForEngine:(Engine*)engine
-{
-    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:mediaEntity];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"engine == %@", engine]];
-    NSError* error = nil;
-    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    [fetchRequest release];
-    if (!error && [results count]) {
-        for (Media* media in results) {
-            [managedObjectContext deleteObject:media];
-        }
-    }
-}
-
-- (void) _deleteAllMoviesWithNoMedia
-{
-    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:discEntity];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"allMedia.@count == 0"]];
-    NSError* error = nil;
-    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    [fetchRequest release];
-    NSCountedSet* set = [NSCountedSet set];
-    if (!error && [results count]) {
-        for (Disc* disc in results) {
-            [set addObject:disc.movie];
-        }
-        for (Movie* movie in set) {
-            if ([movie.allDiscs count] == [set countForObject:movie]) {
-                [managedObjectContext deleteObject:movie];
-            }
-        }
-    }
-}
 
 - (BoxArt*) _findBoxArtByURL:(NSString*)url
 {
@@ -468,14 +424,11 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
 
 - (void) protocolDidClose:(MessageProtocol*)protocol
 {
-    @try {
-        NSString* uuid = protocol.userInfo;
-        Engine* engine = [self _findEngineByUUID:uuid];
-        [self disconnectEngine:engine];
-    } @catch (id exception) {
-        /* ignored */
-    } @finally {
-        [managedObjectContext save:nil];
+    NSString* uuid = protocol.userInfo;
+    Engine* engine = [self _findEngineByUUID:uuid];
+    if (engine) {
+        [protocolsByUUID removeObjectForKey:engine.uuid];
+        [self performSelectorOnMainThread:@selector(disconnectEngine:) withObject:engine waitUntilDone:NO];
     }
 }
 
@@ -752,14 +705,11 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
     [netService removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     [netServiceByName removeObjectForKey:[netService name]];
 
-    Engine* engine = nil;
     @synchronized (managedObjectContext) {
-        engine = [self _findEngineByNetServiceName:[netService name]];
+        Engine* engine = [self _findEngineByNetServiceName:[netService name]];
         if (engine) {
             [managedObjectContext deleteObject:engine];
-            NSError* error = nil;
-            [managedObjectContext save:&error];
-            NSLog(@"%@ - %@", error, error.userInfo);
+            [managedObjectContext save:nil];
         }
     }
 }

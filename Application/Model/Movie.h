@@ -1,5 +1,7 @@
 #import <Cocoa/Cocoa.h>
 
+@class BoxArt;
+
 @interface Movie : NSManagedObject {
 }
 
@@ -16,7 +18,7 @@
 @property (retain) NSDate* releaseDate;
 @property (retain) NSDate* theatricalReleaseDate;
 @property (retain) NSString* rating;
-@property (retain) id frontCover;
+@property (retain) BoxArt* boxArt;
 
 @property (readonly) NSSet* allDiscs;
 

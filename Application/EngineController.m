@@ -385,10 +385,18 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
                 CFSTR("public.image")
             ) autorelease];
             boxArt.type = type;
-            boxArt.image = data;
             boxArt.state = @"Loaded";
+            boxArt.imageData = data;
+            
+            for (Disc* disc in [boxArt allDiscs]) {
+                if (!disc.movie.boxArt) {
+                    disc.movie.boxArt = boxArt;
+                }
+            }
+            
             [managedObjectContext save:nil];
         } @catch (id exception) {
+            NSLog(@"%@", exception);
             [managedObjectContext rollback];
         } @finally {
             [activity terminate];

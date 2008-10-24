@@ -5,6 +5,7 @@
 #import "MultiplexColorFactory.h"
 #import "DragDropTargetView.h"
 #import "ApplicationResources.h"
+#import "BoxArt.h"
 
 #import <WebKit/WebKit.h>
 
@@ -39,7 +40,7 @@
     [prefs setUserStyleSheetEnabled:YES];
     [prefs setUserStyleSheetLocation:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"default" ofType:@"css"]]];
 
-    [coverArtImageView bind:@"image" toObject:self withKeyPath:@"movie.frontCover" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
+    [coverArtImageView bind:@"image" toObject:self withKeyPath:@"movie.boxArt.image" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
 }
 
 - (void) setMovie:(Movie*)_movie
@@ -108,7 +109,11 @@
         CFRelease(imageSource);
     }
     if (image) {
-        [movie setFrontCover:(id)image];
+        NSManagedObjectContext* managedObjectContext = [movie managedObjectContext];
+        NSEntityDescription* boxArtEntity = [NSEntityDescription entityForName:@"BoxArt" inManagedObjectContext:managedObjectContext];
+        BoxArt* boxArt = [[BoxArt alloc] initWithEntity:boxArtEntity insertIntoManagedObjectContext:managedObjectContext];
+        boxArt.image = image;
+        movie.boxArt = boxArt;
         CGImageRelease(image);
         return YES;
     } else {

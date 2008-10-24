@@ -5,5 +5,6 @@
 #import <Toolkit/NSDictionary+IndyHallLabs.h>
 #import <Toolkit/NSImage+IndyHallLabs.h>
 #import <Toolkit/NSString+IndyHallLabs.h>
+#import <Toolkit/NSValueTransformer+IndyHallLabs.h>
 
 #import <Toolkit/MessageProtocol.h>

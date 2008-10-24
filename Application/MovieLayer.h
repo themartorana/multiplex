@@ -10,13 +10,13 @@
     CATiledLayer* boxImageLayer; 
     /**/
     Movie* movie;
-    id boxImage;
+    id boxArtImage;
     
     NSString* movieTitle;
 }
 
 @property (readonly) Movie* movie;
-@property (retain) id boxImage;
+@property (retain) id boxArtImage;
 
 + (id) layerWithMovie:(Movie*)movie;
 

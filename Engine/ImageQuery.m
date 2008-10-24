@@ -93,11 +93,11 @@
     }
     
     if ([delegate respondsToSelector:@selector(imageQuery:didReceiveData:ofType:userInfo:)]) {
-        @try {
+//        @try {
             [delegate imageQuery:self didReceiveData:receivedData ofType:[[response allHeaderFields] objectForKey:@"Content-Type"] userInfo:userInfo];
-        } @catch (id _exception) {
-            NSLog(@"%@: Exception during %s -- %@", NSStringFromClass([self class]), __PRETTY_FUNCTION__, _exception);
-        }
+//        } @catch (id _exception) {
+//            NSLog(@"%@: Exception during %s -- %@", NSStringFromClass([self class]), __PRETTY_FUNCTION__, _exception);
+//        }
     }
 
     if ([delegate respondsToSelector:@selector(imageQuery:didReceiveImage:userInfo:)]) {

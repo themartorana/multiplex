@@ -95,6 +95,8 @@
 		F9A1D8D10E83699200AB691D /* Engine in Copy Files to Resources */ = {isa = PBXBuildFile; fileRef = F9A1D6220E8350C100AB691D /* Engine */; };
 		F9B380DC0EAD029700FCAB1E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B380DB0EAD029700FCAB1E /* SystemConfiguration.framework */; };
 		F9B8D6900EB0BFCD008589F3 /* BoxArt.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B8D68F0EB0BFCD008589F3 /* BoxArt.m */; };
+		F9B8DB370EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B8DB350EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9B8DB380EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B8DB360EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.m */; };
 		F9C2B0300E7B919B00474D97 /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
 		F9CA172A0E7C727C0049CD3E /* Movie.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CA17290E7C727C0049CD3E /* Movie.m */; };
 		F9CA172E0E7C72930049CD3E /* Disc.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CA172D0E7C72930049CD3E /* Disc.m */; };
@@ -407,6 +409,8 @@
 		F9B380DB0EAD029700FCAB1E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
 		F9B8D68E0EB0BFCD008589F3 /* BoxArt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoxArt.h; sourceTree = "<group>"; };
 		F9B8D68F0EB0BFCD008589F3 /* BoxArt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoxArt.m; sourceTree = "<group>"; };
+		F9B8DB350EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSValueTransformer+IndyHallLabs.h"; sourceTree = "<group>"; };
+		F9B8DB360EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSValueTransformer+IndyHallLabs.m"; sourceTree = "<group>"; };
 		F9C2AE540E7B747B00474D97 /* JSONKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JSONKit.xcodeproj; path = Frameworks/JSONKit/JSONKit.xcodeproj; sourceTree = "<group>"; };
 		F9CA17280E7C727C0049CD3E /* Movie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Movie.h; sourceTree = "<group>"; };
 		F9CA17290E7C727C0049CD3E /* Movie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Movie.m; sourceTree = "<group>"; };
@@ -848,6 +852,8 @@
 				F9CE81AD0EA68BED00602750 /* NSImage+IndyHallLabs.m */,
 				F9CE81B00EA68BED00602750 /* NSString+IndyHallLabs.h */,
 				F9CE81B10EA68BED00602750 /* NSString+IndyHallLabs.m */,
+				F9B8DB350EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.h */,
+				F9B8DB360EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.m */,
 			);
 			name = Source;
 			path = Frameworks/Toolkit/Source;
@@ -920,6 +926,7 @@
 				F9CE81BB0EA68BED00602750 /* NSDictionary+IndyHallLabs.h in Headers */,
 				F9CE81BD0EA68BED00602750 /* NSImage+IndyHallLabs.h in Headers */,
 				F9CE81C10EA68BED00602750 /* NSString+IndyHallLabs.h in Headers */,
+				F9B8DB370EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1265,6 +1272,7 @@
 				F9CE81BC0EA68BED00602750 /* NSDictionary+IndyHallLabs.m in Sources */,
 				F9CE81BE0EA68BED00602750 /* NSImage+IndyHallLabs.m in Sources */,
 				F9CE81C20EA68BED00602750 /* NSString+IndyHallLabs.m in Sources */,
+				F9B8DB380EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1614,6 +1622,7 @@
 				INFOPLIST_FILE = Frameworks/Toolkit/Resources/Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH_ACTUAL)";
+				OTHER_CFLAGS = "-DDEBUG";
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,

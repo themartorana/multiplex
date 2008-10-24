@@ -1,5 +1,6 @@
 #import "MovieLayer.h"
 #import "Movie.h"
+#import "BoxArt.h"
 #import "Disc.h"
 #import "Media.h"
 #import "IndeterminateProgressIndicatorLayer.h"
@@ -14,7 +15,7 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
 
 @implementation MovieLayer
 @synthesize movie;
-@synthesize boxImage;
+@synthesize boxArtImage;
 
 
 + (id) layerWithMovie:(Movie*)movie
@@ -60,7 +61,7 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
         [self addSublayer:boxImageLayer];
 
         [movie addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
-        [movie addObserver:self forKeyPath:@"frontCover" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
+        [movie addObserver:self forKeyPath:@"boxArt.imageData" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
     }
     return self;
 }
@@ -68,16 +69,16 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
 - (void) dealloc
 {
     [movie removeObserver:self forKeyPath:@"title"];
-    [movie removeObserver:self forKeyPath:@"frontCover"];
+    [movie removeObserver:self forKeyPath:@"boxArt.imageData"];
     [movie release];
-    [boxImage release];
+    [boxArtImage release];
     [super dealloc];
 }
 
 - (void) drawLayer:(CALayer*)layer inContext:(CGContextRef)c
 {
     if (layer == boxImageLayer) {
-        CGContextDrawImage(c, layer.bounds, (CGImageRef)boxImage);
+        CGContextDrawImage(c, layer.bounds, (CGImageRef)boxArtImage);
     } else if (layer == gradientLayer) {
         drawGlossGradient(c, [NSColor colorWithDeviceRed:0.05f green:0.05f blue:0.05f alpha:1.0], NSRectFromCGRect(self.bounds));
         drawTitleLayer(c, NSRectFromCGRect(self.bounds), movieTitle);
@@ -96,13 +97,10 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
             
             // TODO: Redraw the text layer if necessary
         }
-    } else if ([keyPath isEqualToString:@"frontCover"]) {
-        id frontCover = [change objectForKey:NSKeyValueChangeNewKey];
-        if ([frontCover isKindOfClass:[NSNull class]]) {
-            frontCover = nil;
-        }
-        [self setBoxImage:(id)frontCover];
-        if (boxImage != nil) {
+    } else if ([keyPath isEqualToString:@"boxArt.imageData"]) {
+        CGImageRef newBoxArtImage = [(Movie*)object boxArt].image;
+        [self setBoxArtImage:(id)newBoxArtImage];
+        if (newBoxArtImage != nil) {
             [boxImageLayer setNeedsDisplay];
         }
     }

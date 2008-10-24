@@ -8,11 +8,13 @@
 #import "MultiplexColorFactory.h"
 #import "InfoPaneFormController.h"
 #import "UserVoiceFeedbackPanel.h"
+#import "NSDescriptionValueTransformer.h"
 
 #import "StadiumLayoutManager.h"
 #import "CoverFlowLayoutManager.h"
 
 #import <QuartzCore/QuartzCore.h>
+#import <Toolkit/Toolkit.h>
 
 @interface WindowController (Private)
 - (void) openInfoView:(NSNotification*)notification;
@@ -24,6 +26,8 @@
 - (id) init 
 {
     if (self == [super init]) {
+        [NSDescriptionValueTransformer registerYourself];
+        
         managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
         
         persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];

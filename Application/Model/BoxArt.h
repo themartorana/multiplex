@@ -4,8 +4,11 @@
 }
 
 @property (retain) NSString* url;
-@property (retain) NSData* image;
+@property (assign) CGImageRef image;
 @property (retain) NSString* type;
 @property (retain) NSString* state;
+@property (retain) NSData *imageData;
+
+@property (retain) NSSet *allDiscs;
 
 @end

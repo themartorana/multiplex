@@ -31,5 +31,6 @@
 + (CGColorRef) multiplexOrange;
 + (CGColorRef) multiplexOrangeSlightlyTransparent;
 + (NSColor*) multiplexYellowOrange;
++ (CGColorRef) multiplexYellowOrangeAsCGColor;
 
 @end

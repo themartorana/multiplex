@@ -3,6 +3,7 @@
 #import "MovieLayer.h"
 #import "Movie.h"
 #import "MultiplexColorFactory.h"
+#import <Toolkit/Toolkit.h>
 
 @implementation CoverFlowLayoutManager
 
@@ -11,6 +12,20 @@
     if (self = [super init]) {
         floorLayer = [layer retain];
         //[layer setMasksToBounds:YES];
+
+        selectedHighlightLayer = [[CALayer layer] retain];
+        selectedHighlightLayer.borderColor = [MultiplexColorFactory multiplexYellowOrangeAsCGColor];
+        selectedHighlightLayer.borderWidth = 10.0;
+        selectedHighlightLayer.cornerRadius = 10.0;
+        selectedHighlightLayer.hidden = YES;
+        [floorLayer addSublayer:selectedHighlightLayer];
+        
+        hoverHighlightLayer = [[CALayer layer] retain];
+        hoverHighlightLayer.borderColor = [MultiplexColorFactory multiplexOrange];
+        hoverHighlightLayer.borderWidth = 10.0;
+        hoverHighlightLayer.cornerRadius = 10.0;
+        hoverHighlightLayer.hidden = YES;
+        [floorLayer addSublayer:hoverHighlightLayer];
     }
     
     return self;
@@ -32,7 +47,8 @@
 
 - (void) clearManagingLayerOfExtras
 {
-    return;
+    [hoverHighlightLayer removeFromSuperlayer];
+    [selectedHighlightLayer removeFromSuperlayer];
 }
 
 - (void) setSelectedMovie:(Movie*)movie
@@ -45,6 +61,7 @@
     selectedMovie = [movie retain];
     
     if (selectedMovie) {
+        hoverHighlightLayer.hidden = YES;
         scrollToSelectedMovie = YES;        
         [floorLayer setNeedsLayout];
     } else {
@@ -64,8 +81,21 @@
         hoveredMovieLayer = [layer retain];
         
         if (hoveredMovieLayer) {
-            [floorLayer setNeedsLayout];
-        }
+            [CATransaction begin];
+            [CATransaction setValue:[NSNumber numberWithDouble:0.0] forKey:kCATransactionAnimationDuration];
+            
+            //dontLayoutBecauseOfHighlight = YES;
+            hoverHighlightLayer.hidden = NO;
+            hoverHighlightLayer.anchorPoint = hoveredMovieLayer.anchorPoint;
+            hoverHighlightLayer.bounds = CGRectInset(hoveredMovieLayer.bounds, -20, -20);
+            hoverHighlightLayer.position = hoveredMovieLayer.position;
+            hoverHighlightLayer.zPosition = hoveredMovieLayer.zPosition - 1;
+            hoverHighlightLayer.transform = hoveredMovieLayer.transform;
+            
+            [CATransaction commit];
+        } else {
+            hoverHighlightLayer.hidden = YES;
+        }            
     }
 }
 
@@ -123,7 +153,7 @@ static const CGFloat HS = 75.0;
     // TODO: WTF is this equation, and why does it work??
     float xFactor = -(width / 2.0) + (W*2.5) - (WS* .5);
     
-    CALayer* selectedLayer;
+    CALayer* selectedLayer = nil;
     
     for (CALayer* sublayer in frontMostLayers) {
         // Translate
@@ -142,6 +172,17 @@ static const CGFloat HS = 75.0;
     CGFloat scale = size.height / height;
     CATransform3D p =  CATransform3DIdentity;
     p = CATransform3DScale(p, scale, scale, 1.0);
+    
+    if (selectedLayer) {
+        selectedHighlightLayer.hidden = NO;
+        selectedHighlightLayer.anchorPoint = selectedLayer.anchorPoint;
+        selectedHighlightLayer.bounds = CGRectInset(selectedLayer.bounds, -20, -20);
+        selectedHighlightLayer.position = selectedLayer.position;
+        selectedHighlightLayer.zPosition = selectedLayer.zPosition - 1;
+        selectedHighlightLayer.transform = selectedLayer.transform;
+    } else {
+        selectedHighlightLayer.hidden = YES;
+    }
     
     if (scrollToSelectedMovie && selectedLayer && [selectedLayer isKindOfClass:[CALayer class]]) {
         float pointOnX = selectedLayer.frame.origin.x - W;

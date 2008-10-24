@@ -8,8 +8,10 @@
     NSArray* arrangedListOfObjects;
     
     CALayer* hoveredMovieLayer;
-    
     CALayer* floorLayer;
+
+    CALayer* hoverHighlightLayer;
+    CALayer* selectedHighlightLayer;
     
     Movie* selectedMovie;
     BOOL scrollToSelectedMovie;

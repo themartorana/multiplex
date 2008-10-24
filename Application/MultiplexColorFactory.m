@@ -151,6 +151,15 @@ static CGImageRef _createCGImageFromFile(NSString* path);
     return color;
 }
 
++ (CGColorRef) multiplexYellowOrangeAsCGColor
+{
+    static CGColorRef color = NULL;
+    if (!color) {
+        color = CGColorCreateGenericRGB(239.0/255.0, 168.0/255.0, 52.0/255.0, 255.0/255.0);
+    }
+    return color;
+}
+
 + (NSColor*) multiplexYellowOrange
 {
     static NSColor* color = nil;

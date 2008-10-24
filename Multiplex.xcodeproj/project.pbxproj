@@ -572,14 +572,14 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				5535D98D0E4E3F5400A45761 /* EngineController.h */,
-				5535D98E0E4E3F5400A45761 /* EngineController.m */,
 				556BD78E0E94470600EC698A /* Activity.h */,
 				556BD78F0E94470600EC698A /* Activity.m */,
-				551558420EA53C1D006F2674 /* MultiplexColorFactory.h */,
-				551558430EA53C1D006F2674 /* MultiplexColorFactory.m */,
 				F9CE85D20EA7E2D400602750 /* ApplicationResources.h */,
 				F9CE85D30EA7E2D400602750 /* ApplicationResources.m */,
+				5535D98D0E4E3F5400A45761 /* EngineController.h */,
+				5535D98E0E4E3F5400A45761 /* EngineController.m */,
+				551558420EA53C1D006F2674 /* MultiplexColorFactory.h */,
+				551558430EA53C1D006F2674 /* MultiplexColorFactory.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -704,17 +704,6 @@
 			name = "UI Controllers";
 			sourceTree = "<group>";
 		};
-		558D1AEC0E9D17CF000F67FA /* DiscsLayers */ = {
-			isa = PBXGroup;
-			children = (
-				558D1B010E9D3F37000F67FA /* PageNumberLayer.h */,
-				558D1B020E9D3F37000F67FA /* PageNumberLayer.m */,
-				558D1C3C0E9D5562000F67FA /* DiscPlayLayer.h */,
-				558D1C3D0E9D5562000F67FA /* DiscPlayLayer.m */,
-			);
-			name = DiscsLayers;
-			sourceTree = "<group>";
-		};
 		55D957DA0E94246800E35FF4 /* ValueTransformers */ = {
 			isa = PBXGroup;
 			children = (
@@ -762,15 +751,18 @@
 		F967B0D50E7E22B300C12B92 /* Layers */ = {
 			isa = PBXGroup;
 			children = (
-				558D1AEC0E9D17CF000F67FA /* DiscsLayers */,
+				5598E60A0E91D294005FCC91 /* ButtonLayer.h */,
+				5598E60B0E91D294005FCC91 /* ButtonLayer.m */,
+				558D1C3C0E9D5562000F67FA /* DiscPlayLayer.h */,
+				558D1C3D0E9D5562000F67FA /* DiscPlayLayer.m */,
+				5515555F0EA46220006F2674 /* HoverPlayLayer.h */,
+				551555600EA46220006F2674 /* HoverPlayLayer.m */,
 				55D390730E82D692007413C5 /* IndeterminateProgressIndicatorLayer.h */,
 				55D390740E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m */,
 				F967B0D60E7E22BF00C12B92 /* MovieLayer.h */,
 				F967B0D70E7E22BF00C12B92 /* MovieLayer.m */,
-				5598E60A0E91D294005FCC91 /* ButtonLayer.h */,
-				5598E60B0E91D294005FCC91 /* ButtonLayer.m */,
-				5515555F0EA46220006F2674 /* HoverPlayLayer.h */,
-				551555600EA46220006F2674 /* HoverPlayLayer.m */,
+				558D1B010E9D3F37000F67FA /* PageNumberLayer.h */,
+				558D1B020E9D3F37000F67FA /* PageNumberLayer.m */,
 			);
 			name = Layers;
 			sourceTree = "<group>";
@@ -797,12 +789,12 @@
 		F98DCA920B6307B400371A83 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				2A37F4B0FDCFA73011CA2CEA /* main.m */,
 				55654E750EAD955A00265A45 /* Layout Managers */,
 				551554980EA456B3006F2674 /* Controls */,
 				55D957DA0E94246800E35FF4 /* ValueTransformers */,
 				F967B0D50E7E22B300C12B92 /* Layers */,
 				F967AFF30E7E13D400C12B92 /* Views */,
-				2A37F4B0FDCFA73011CA2CEA /* main.m */,
 				5535DE020E508D3D00A45761 /* Model */,
 				557B69710E4CD0660009919E /* UI Controllers */,
 				2A37F4ABFDCFA73011CA2CEA /* Classes */,

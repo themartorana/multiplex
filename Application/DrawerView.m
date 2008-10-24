@@ -58,7 +58,9 @@
         
         [self setFrame:newFrame];
         [contentView setFrame:newViewFrame];
+        [noDiscView setFrame:newViewFrame];
         [self addSubview:contentView];
+        [self addSubview:noDiscView];
 
         [NSAnimationContext beginGrouping];
         if ([[NSApp currentEvent] modifierFlags] & NSShiftKeyMask) {
@@ -90,6 +92,7 @@
         [[self animator] setFrame:NSOffsetRect(frame, 0, -viewFrame.size.height)];
         [NSAnimationContext endGrouping];
         [contentView removeFromSuperview];
+        [noDiscView removeFromSuperview];
         [self setIsOpen:NO];
     }
 }

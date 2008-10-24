@@ -13,4 +13,6 @@
 + (CGImageRef) closeButton;
 + (CGImageRef) closeButtonDown; 
 
++ (CGImageRef) stadiumLayoutRadialFloorGradient;
+
 @end

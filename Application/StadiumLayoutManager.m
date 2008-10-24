@@ -10,6 +10,7 @@
 #import "MultiplexColorFactory.h"
 #import "Movie.h"
 #import "MovieLayer.h"
+#import "ApplicationResources.h"
 
 #import <QuartzCore/QuartzCore.h>
 #import <Toolkit/CALayer+IndyHallLabs.h>
@@ -24,10 +25,8 @@
         
         radialGradientLayer = [CALayer layer];
         radialGradientLayer.hidden = YES;
-        //radialGradientLayer.delegate = self;
-        radialGradientLayer.position = CGPointZero;
+        radialGradientLayer.contents = (id)[ApplicationResources stadiumLayoutRadialFloorGradient];
         radialGradientLayer.frame = CGRectMake(0, 0, 100, 100);
-        //[radialGradientLayer setNeedsDisplay];
         [_floorLayer addSublayer:radialGradientLayer];
         
         hoverHighlightLayer = [[CALayer layer] retain];
@@ -319,51 +318,32 @@ static const CGFloat HS = 75.0;
     }
     
     if (!lastWasEmpty) {
-        /*  Determine the scale that will "best" fit the screen.
+        /*  Position, scale and rotate our gradient.
          */
-        CGFloat scale = size.width / width;
-        if (scale * height > size.height) {
-            scale = size.height / height;
-        }
-        
-        radialGradientLayer.position = CGPointZero;
-        radialGradientLayer.bounds = CGRectMake(length / 2.0, length / 2.0, width, width);
-        radialGradientLayer.transform = CATransform3DRotate(b, -M_PI / 2.0, 1.0, 0.0, 0.0);
-        
+        CGFloat tWidth = radialGradientLayer.bounds.size.width;
+        CGFloat tScale = width / tWidth;
+        CATransform3D t = b;
+        t = CATransform3DTranslate(t, -tWidth / 2.0, 0.0, 0.0);
+        t = CATransform3DRotate(t, -M_PI / 2.0, 1.0, 0.0, 0.0);
+        t = CATransform3DScale(t, tScale, tScale, 1.0);
+        radialGradientLayer.transform = t;
+
         /*  Add in our scale and perspective...  then throw a little rotational 
          *  "stank" on it.  ;)
          */
+        CGFloat pScale = size.width / width;
+        if (pScale * height > size.height) {
+            pScale = size.height / height;
+        }
         CATransform3D p = CATransform3DIdentity;
-        p = CATransform3DScale(p, scale, scale, 1.0);
+        p = CATransform3DScale(p, pScale, pScale, 1.0);
         p = CATransform3DTranslate(p, 0.0, -height / 2.0, 0.0);
         p.m34 = 1.0 / -MAX(width, 2000);
         p = CATransform3DRotate(p, 0.075, 1.0, 0.0, 0.0);
         floorLayer.sublayerTransform = p;
     }
     
-//    [self setHoveredMovieLayer:nil];
-    
     [CATransaction commit];
-}
-
-- (void) drawLayer:(CALayer*)layer inContext:(CGContextRef)c
-{
-    NSLog(@"Drawing radialGradientLayer");
-    if (layer == radialGradientLayer) {
-        [NSGraphicsContext saveGraphicsState];
-        [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:c flipped:YES]];
-        {
-            CGRect bounds = layer.bounds;
-            NSPoint center = NSMakePoint(bounds.origin.x + bounds.size.width / 2.0, bounds.origin.y + bounds.size.height / 2.0);
-            
-            NSColor* lightGrey = [NSColor colorWithDeviceRed:154.0/255.0 green:154.0/255.0 blue:154.0/255.0 alpha:1.0];
-            NSColor* darkGrey = [NSColor colorWithDeviceRed:154.0/255.0 green:154.0/255.0 blue:154.0/255.0 alpha:0.0];
-            NSGradient* gradient = [[NSGradient alloc] initWithColorsAndLocations:lightGrey, (CGFloat)0.0, darkGrey, (CGFloat)1.0, nil];
-            [gradient drawFromCenter:center radius:0 toCenter:center radius:MIN(bounds.size.width, bounds.size.height)/2.0 options:0];
-            [gradient release];
-        }
-        [NSGraphicsContext restoreGraphicsState];
-    }
 }
 
 @end

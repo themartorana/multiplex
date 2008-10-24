@@ -8,8 +8,9 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1464"/>
 			<integer value="1151"/>
+			<integer value="1627"/>
+			<integer value="1464"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2332,8 +2333,8 @@
 				<bool key="NSClearsFilterPredicateOnInsertion">YES</bool>
 			</object>
 			<object class="NSCustomView" id="843854123">
-				<nil key="NSNextResponder"/>
-				<int key="NSvFlags">268</int>
+				<reference key="NSNextResponder"/>
+				<int key="NSvFlags">261</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<object class="NSBox" id="630568704">
@@ -2418,6 +2419,7 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{661, 403}</string>
+				<reference key="NSSuperview"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSView" id="162150624">
@@ -3939,6 +3941,7 @@
 							</object>
 							<string key="NSFrameSize">{732, 513}</string>
 							<reference key="NSSuperview" ref="453702912"/>
+							<reference key="NSNextKeyView"/>
 							<string key="FrameName"/>
 							<string key="GroupName"/>
 							<reference key="Preferences" ref="896147280"/>

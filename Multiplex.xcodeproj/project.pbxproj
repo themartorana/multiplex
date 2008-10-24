@@ -97,6 +97,7 @@
 		F9B8D6900EB0BFCD008589F3 /* BoxArt.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B8D68F0EB0BFCD008589F3 /* BoxArt.m */; };
 		F9B8DB370EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B8DB350EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F9B8DB380EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B8DB360EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.m */; };
+		F9B8E1970EB25628008589F3 /* CoverFlowLayoutManager2.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B8E1960EB25628008589F3 /* CoverFlowLayoutManager2.m */; };
 		F9C2B0300E7B919B00474D97 /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
 		F9CA172A0E7C727C0049CD3E /* Movie.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CA17290E7C727C0049CD3E /* Movie.m */; };
 		F9CA172E0E7C72930049CD3E /* Disc.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CA172D0E7C72930049CD3E /* Disc.m */; };
@@ -411,6 +412,8 @@
 		F9B8D68F0EB0BFCD008589F3 /* BoxArt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoxArt.m; sourceTree = "<group>"; };
 		F9B8DB350EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSValueTransformer+IndyHallLabs.h"; sourceTree = "<group>"; };
 		F9B8DB360EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSValueTransformer+IndyHallLabs.m"; sourceTree = "<group>"; };
+		F9B8E1950EB25628008589F3 /* CoverFlowLayoutManager2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverFlowLayoutManager2.h; sourceTree = "<group>"; };
+		F9B8E1960EB25628008589F3 /* CoverFlowLayoutManager2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoverFlowLayoutManager2.m; sourceTree = "<group>"; };
 		F9C2AE540E7B747B00474D97 /* JSONKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JSONKit.xcodeproj; path = Frameworks/JSONKit/JSONKit.xcodeproj; sourceTree = "<group>"; };
 		F9CA17280E7C727C0049CD3E /* Movie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Movie.h; sourceTree = "<group>"; };
 		F9CA17290E7C727C0049CD3E /* Movie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Movie.m; sourceTree = "<group>"; };
@@ -659,6 +662,8 @@
 				55654E7C0EAD981000265A45 /* MultiplexLayoutManager.h */,
 				55FB44650EB11CF800CAF01F /* CoverFlowLayoutManager.h */,
 				55FB44660EB11CF800CAF01F /* CoverFlowLayoutManager.m */,
+				F9B8E1950EB25628008589F3 /* CoverFlowLayoutManager2.h */,
+				F9B8E1960EB25628008589F3 /* CoverFlowLayoutManager2.m */,
 			);
 			name = "Layout Managers";
 			sourceTree = "<group>";
@@ -1234,6 +1239,7 @@
 				F966E5270EAF9A53001D0B3B /* CoverArtImageView.m in Sources */,
 				F9B8D6900EB0BFCD008589F3 /* BoxArt.m in Sources */,
 				55FB44670EB11CF800CAF01F /* CoverFlowLayoutManager.m in Sources */,
+				F9B8E1970EB25628008589F3 /* CoverFlowLayoutManager2.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

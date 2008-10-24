@@ -1,11 +1,3 @@
-//
-//  StadiumLayoutManager.m
-//  Multiplex
-//
-//  Created by David Martorana on 10/21/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
-//
-
 #import "StadiumLayoutManager.h"
 #import "MultiplexColorFactory.h"
 #import "Movie.h"
@@ -120,7 +112,7 @@
 
 - (void) setSelectedMovie:(Movie*)movie
 {
-    return;
+    /* IGNORED */
 }
 
 - (void) setHoveredMovieLayer:(MovieLayer*)movieLayer;
@@ -153,7 +145,6 @@
         hoverHighlightLayer.hidden = YES;
     }
     
-    
     [CATransaction commit];
 }
 
@@ -162,14 +153,6 @@ static const CGFloat WS = 75.0;
 static const CGFloat W = 280.0;
 static const CGFloat H = 400.0;
 static const CGFloat HS = 75.0;
-
-- (id<CAAction>) actionForLayer:(CALayer*)layer forKey:(NSString*)key
-{
-    if ([key isEqualToString:@"position"]) {
-        return [CAAnimation animation];
-    }
-    return nil;
-}
 
 - (NSDictionary*) computeParametersForSize:(CGSize)size andCount:(int)count
 {

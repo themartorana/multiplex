@@ -82,14 +82,6 @@ static const CGFloat W = 280.0;
 static const CGFloat H = 400.0;
 static const CGFloat HS = 75.0;
 
-- (id<CAAction>) actionForLayer:(CALayer*)layer forKey:(NSString*)key
-{
-    if ([key isEqualToString:@"position"]) {
-        return [CAAnimation animation];
-    }
-    return nil;
-}
-
 - (void) layoutSublayersOfLayer:(CALayer*)floorLayer
 {
     // TODO: THERE MUST A BETTER WAY!

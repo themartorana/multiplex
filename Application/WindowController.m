@@ -201,6 +201,20 @@
     }
 }
 
+- (IBAction) swapFullScreen:(id)sender
+{
+    NSWindow* mainWindow = [sender window];
+    
+    if ([[mainWindow contentView] isInFullScreenMode]) {
+        [[mainWindow contentView] exitFullScreenModeWithOptions:nil];
+    }
+    else {
+        [[mainWindow contentView] enterFullScreenMode:[NSScreen mainScreen] 
+                                          withOptions:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:NSFullScreenModeAllScreens]
+        ];
+    }
+}
+
 #if 0
 - (void) _coreDataDidSaveNotification:(NSNotification*)notification
 {

@@ -32,6 +32,7 @@
 		553477520EA3A9E400436A8C /* ImageQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 5534774C0EA3A9CA00436A8C /* ImageQuery.m */; };
 		553477810EA3AD5100436A8C /* multiplex-mark01a.icns in Resources */ = {isa = PBXBuildFile; fileRef = 553477800EA3AD5100436A8C /* multiplex-mark01a.icns */; };
 		5535D98F0E4E3F5400A45761 /* EngineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5535D98E0E4E3F5400A45761 /* EngineController.m */; };
+		554282C70EB3D69B00FF7E44 /* full-screen-icon.gif in Resources */ = {isa = PBXBuildFile; fileRef = 554282C60EB3D69B00FF7E44 /* full-screen-icon.gif */; };
 		556550D90EAE7FD600265A45 /* StadiumLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 55654E7A0EAD97D400265A45 /* StadiumLayoutManager.m */; };
 		556BD78C0E9444ED00EC698A /* WorkingStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 556BD78B0E9444ED00EC698A /* WorkingStatusView.m */; };
 		556BD7900E94470600EC698A /* Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 556BD78F0E94470600EC698A /* Activity.m */; };
@@ -330,6 +331,7 @@
 		553477800EA3AD5100436A8C /* multiplex-mark01a.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "multiplex-mark01a.icns"; sourceTree = "<group>"; };
 		5535D98D0E4E3F5400A45761 /* EngineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngineController.h; sourceTree = "<group>"; };
 		5535D98E0E4E3F5400A45761 /* EngineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngineController.m; sourceTree = "<group>"; };
+		554282C60EB3D69B00FF7E44 /* full-screen-icon.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "full-screen-icon.gif"; sourceTree = "<group>"; };
 		55654E790EAD97D400265A45 /* StadiumLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StadiumLayoutManager.h; sourceTree = "<group>"; };
 		55654E7A0EAD97D400265A45 /* StadiumLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StadiumLayoutManager.m; sourceTree = "<group>"; };
 		55654E7C0EAD981000265A45 /* MultiplexLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiplexLayoutManager.h; sourceTree = "<group>"; };
@@ -593,6 +595,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				554282C60EB3D69B00FF7E44 /* full-screen-icon.gif */,
 				F966E6880EAFB38B001D0B3B /* drag-drop-no-image.pdf */,
 				F914CB0F0EAD7C8700877991 /* drawer-background-pattern-96x96.gif */,
 				5574409C0EABDD54002E0B80 /* uservoice-feedback.css */,
@@ -1140,6 +1143,7 @@
 				F914C9C80EAD653300877991 /* plus-36x36.png in Resources */,
 				F914CB100EAD7C8700877991 /* drawer-background-pattern-96x96.gif in Resources */,
 				F966E6890EAFB38B001D0B3B /* drag-drop-no-image.pdf in Resources */,
+				554282C70EB3D69B00FF7E44 /* full-screen-icon.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -30,16 +30,14 @@
         
         // To hold the title and its reflection
         titleContainerLayer = [CALayer layer];
-        titleContainerLayer.anchorPoint = CGPointZero;
         titleContainerLayer.frame = CGRectMake(0.0, 100.0, _floorLayer.superlayer.frame.size.width, 100.0);
         titleContainerLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
-        //titleContainerLayer.borderColor = [MultiplexColorFactory multiplexOrange];
-        //titleContainerLayer.borderWidth = 2.0;
+        titleContainerLayer.borderColor = [MultiplexColorFactory multiplexOrange];
+        titleContainerLayer.borderWidth = 2.0;
         titleContainerLayer.autoresizingMask = kCALayerWidthSizable;
         [_floorLayer addSublayer:titleContainerLayer];
         
         titleLayer = [CATextLayer layer];
-        titleLayer.anchorPoint = CGPointZero;
         titleLayer.wrapped = NO;
         titleLayer.alignmentMode = kCAAlignmentCenter;
         titleLayer.font = [NSFont systemFontOfSize:40.0];
@@ -55,7 +53,6 @@
         [titleContainerLayer addSublayer:titleLayer];
         
         titleReflectionLayer = [[CATextLayer layer] retain];
-        titleReflectionLayer.anchorPoint = CGPointZero;
         titleReflectionLayer.wrapped = NO;
         titleReflectionLayer.alignmentMode = kCAAlignmentCenter;
         titleReflectionLayer.font = [NSFont systemFontOfSize:40.0];

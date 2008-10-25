@@ -385,7 +385,7 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
         Activity* activity = userInfo;
         @try {
             BoxArt* boxArt = activity.userInfo;
-            if (!boxArt.isDeleted) {
+            if ([boxArt validateForUpdate:nil]) {
                 NSString* type = [(id)UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (CFStringRef)mimeType, CFSTR("public.image")) autorelease];
                 boxArt.type = type;
                 boxArt.state = @"Loaded";

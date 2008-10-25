@@ -368,9 +368,11 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
         Activity* activity = userInfo;
         @try {
             BoxArt* boxArt = activity.userInfo;
-            NSString* state = error ? [error description] : @"Error";
-            boxArt.state = state;
-            [managedObjectContext save:nil];
+            if ([boxArt validateForUpdate:nil]) {
+                NSString* state = error ? [error description] : @"Error";
+                boxArt.state = state;
+                [managedObjectContext save:nil];
+            }
         } @catch (id exception) {
             [managedObjectContext rollback];
         } @finally {

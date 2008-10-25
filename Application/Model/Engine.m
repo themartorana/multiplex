@@ -7,4 +7,6 @@
 @dynamic netServiceName;
 @dynamic status;
 
+@dynamic allMedia;
+
 @end

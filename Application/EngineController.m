@@ -201,8 +201,7 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
     NSAssert(engine, @"no engine?");
     @synchronized (managedObjectContext) {
         engine.status = @"Disconnecting";
-        NSError* error = nil;
-        [managedObjectContext save:&error];
+        [managedObjectContext save:nil];
         
         MessageProtocol* protocol = [protocolsByUUID objectForKey:engine.uuid];
         if (protocol) {
@@ -217,7 +216,14 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
         }
         
         engine.status = @"Not Connected";
+        [managedObjectContext save:nil];
+
+        for (Media* media in [engine allMedia]) {
+            [managedObjectContext deleteObject:media];
+        }
+        NSError* error = nil;
         [managedObjectContext save:&error];
+        NSLog(@"%@ -- %@", error, error.userInfo);
     }
 }
 
@@ -379,22 +385,20 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
         Activity* activity = userInfo;
         @try {
             BoxArt* boxArt = activity.userInfo;
-            NSString* type = [(id)UTTypeCreatePreferredIdentifierForTag(
-                kUTTagClassMIMEType,
-                (CFStringRef)mimeType,
-                CFSTR("public.image")
-            ) autorelease];
-            boxArt.type = type;
-            boxArt.state = @"Loaded";
-            boxArt.imageData = data;
-            
-            for (Disc* disc in [boxArt allDiscs]) {
-                if (!disc.movie.boxArt) {
-                    disc.movie.boxArt = boxArt;
+            if (!boxArt.isDeleted) {
+                NSString* type = [(id)UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (CFStringRef)mimeType, CFSTR("public.image")) autorelease];
+                boxArt.type = type;
+                boxArt.state = @"Loaded";
+                boxArt.imageData = data;
+                
+                for (Disc* disc in [boxArt allDiscs]) {
+                    if (!disc.movie.boxArt) {
+                        disc.movie.boxArt = boxArt;
+                    }
                 }
+                
+                [managedObjectContext save:nil];
             }
-            
-            [managedObjectContext save:nil];
         } @catch (id exception) {
             NSLog(@"%@", exception);
             [managedObjectContext rollback];
@@ -717,7 +721,9 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
         Engine* engine = [self _findEngineByNetServiceName:[netService name]];
         if (engine) {
             [managedObjectContext deleteObject:engine];
-            [managedObjectContext save:nil];
+            NSError* error = nil;
+            [managedObjectContext save:&error];
+            NSLog(@"%@ -- %@", error, error.userInfo);
         }
     }
 }

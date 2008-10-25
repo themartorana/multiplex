@@ -28,50 +28,16 @@
         hoverHighlightLayer.hidden = YES;
         [_floorLayer addSublayer:hoverHighlightLayer];
         
-        // To hold the title and its reflection
-        titleContainerLayer = [CALayer layer];
-        titleContainerLayer.frame = CGRectMake(0.0, 100.0, _floorLayer.superlayer.frame.size.width, 100.0);
-        titleContainerLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
-        titleContainerLayer.borderColor = [MultiplexColorFactory multiplexOrange];
-        titleContainerLayer.borderWidth = 2.0;
-        titleContainerLayer.autoresizingMask = kCALayerWidthSizable;
-        [_floorLayer addSublayer:titleContainerLayer];
-        
         titleLayer = [CATextLayer layer];
+        titleLayer.position = CGPointZero;
         titleLayer.wrapped = NO;
         titleLayer.alignmentMode = kCAAlignmentCenter;
-        titleLayer.font = [NSFont systemFontOfSize:40.0];
-        titleLayer.fontSize = 40.0;
+        titleLayer.font = [NSFont systemFontOfSize:45.0];
+        titleLayer.fontSize = 90.0;
         titleLayer.name = @"titleLayer";
-        titleLayer.constraints = [NSArray arrayWithObjects:
-                                  [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
-                                  [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY scale:1.0 offset:-9.0],
-                                  [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.0 offset:900.0],
-                                  nil];
-        titleLayer.name = @"titleLayer";
+        titleLayer.frame = CGRectMake(0, 0, 2000, 110);
         titleLayer.truncationMode = kCATruncationEnd;
-        [titleContainerLayer addSublayer:titleLayer];
-        
-        titleReflectionLayer = [[CATextLayer layer] retain];
-        titleReflectionLayer.wrapped = NO;
-        titleReflectionLayer.alignmentMode = kCAAlignmentCenter;
-        titleReflectionLayer.font = [NSFont systemFontOfSize:40.0];
-        titleReflectionLayer.fontSize = 40.0;
-        titleReflectionLayer.foregroundColor = [MultiplexColorFactory white];
-        titleReflectionLayer.name = @"titleReflectionLayer";
-        titleReflectionLayer.transform = CATransform3DMakeScale(1.0, -1.0, 1.0);
-        titleReflectionLayer.constraints = [NSArray arrayWithObjects:
-                                            [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
-                                            [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"titleLayer" attribute:kCAConstraintMinY scale:1.0 offset:14.0],
-                                            [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.0 offset:900.0],
-                                            nil];
-        titleReflectionLayer.name = @"titleReflectionLayer";
-        titleReflectionLayer.truncationMode = kCATruncationEnd;
-        
-        [titleReflectionLayer setMask:[CALayer maskLayer]];
-        [titleContainerLayer addSublayer:titleReflectionLayer];
-        
-        [titleReflectionLayer bind:@"string" toObject:titleLayer withKeyPath:@"string" options:nil];    
+        [_floorLayer addSublayer:titleLayer];
     }
     
     return self;
@@ -80,7 +46,7 @@
 - (void) clearManagingLayerOfExtras
 {
     [radialGradientLayer removeFromSuperlayer];
-    [titleContainerLayer removeFromSuperlayer];
+    [titleLayer removeFromSuperlayer];
     [hoverHighlightLayer removeFromSuperlayer];
     [hoverHighlightLayer release];
 }
@@ -167,39 +133,38 @@ static const CGFloat HS = 75.0;
     if (count > 0) {
         int rows = 0;
         resultSet--;
-        do {
+        CGFloat lowScore = CGFLOAT_MAX;
+        for (;;) {
             resultSet++;
             resultSet->rows = ++rows;
             resultSet->columns = (count / resultSet->rows) + ((count % resultSet->rows) > 0);
             resultSet->aspect = (((W+WS)/(H+HS)) * resultSet->columns / 2.0) / resultSet->rows;
-            resultSet->score = resultSet->aspect - aspectToFit;
-        } while (resultSet->score > -0.005);
-        
-        CGFloat lowScore = CGFLOAT_MAX;
-        for (struct result* rp = resultSet, *rb = resultSet - rows; rp > rb; rp--) {
-            if (fabsf(rp->score) < lowScore) {
-                resultSet = rp;
-                lowScore = fabsf(rp->score);
+            resultSet->score = fabsf(resultSet->aspect - aspectToFit);
+            if (resultSet->score > lowScore) {
+                resultSet--;
+                break;
             }
+            lowScore = resultSet->score;
         }
     }
     
     return [NSDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithInt:resultSet->columns], @"columns",
-            [NSNumber numberWithInt:resultSet->rows], @"rows",
-            nil
-            ];
+        [NSNumber numberWithInt:resultSet->columns], @"columns",
+        [NSNumber numberWithInt:resultSet->rows], @"rows",
+        nil
+    ];
 }
 
-- (void) layoutSublayersOfLayer:(CALayer*)floorLayer
+#define DEBUG_TRACE()   NSLog(@"% 4d%s", __LINE__, __PRETTY_FUNCTION__)
+
+- (void) layoutSublayersOfLayer:(CALayer*)layer
 {
     // TODO: THERE MUST A BETTER WAY!
     if (dontLayoutBecauseOfHighlight) {
         dontLayoutBecauseOfHighlight = NO;
         return;
     }
-    
-    NSLog(@"laying out");
+    DEBUG_TRACE();
     
     [CATransaction begin];
     [CATransaction setValue:[NSNumber numberWithDouble:([[NSApp currentEvent] modifierFlags] & NSShiftKeyMask) ? 3.0 : 0.3] forKey:kCATransactionAnimationDuration];
@@ -219,13 +184,14 @@ static const CGFloat HS = 75.0;
         opacity *= 0.2;
     }
     
+    CGSize const size = ((CALayer*)layer.presentationLayer).bounds.size;
+
     /*  This base transform sets up the origin (0, 0) to the center of the 
      *  layer along the X and Y axes.
      */
     CATransform3D b = CATransform3DIdentity;
-    b = CATransform3DTranslate(b, floorLayer.bounds.size.width / 2.0, floorLayer.bounds.size.height / 2.0, 0.0);
+    b = CATransform3DTranslate(b, size.width / 2.0, size.height / 2.0, 0.0);
     
-    CGSize const size = floorLayer.bounds.size;
     BOOL lastWasEmpty = YES;
     CGFloat columns = 0;
     CGFloat rows = 0;
@@ -241,7 +207,7 @@ static const CGFloat HS = 75.0;
     for (NSArray* layersInOrder in listOfLayersInOrder) {
         int count = [layersInOrder count];
         lastWasEmpty = !count;
-        NSDictionary* parameters = [self computeParametersForSize:floorLayer.bounds.size andCount:count];
+        NSDictionary* parameters = [self computeParametersForSize:layer.bounds.size andCount:count];
         
         columns = [[parameters objectForKey:@"columns"] floatValue];
         rows = [[parameters objectForKey:@"rows"] floatValue];
@@ -254,7 +220,7 @@ static const CGFloat HS = 75.0;
         
         int x = 0;
         int y = rows;
-        for (MovieLayer* layer in layersInOrder) {
+        for (MovieLayer* sublayer in layersInOrder) {
             CGFloat chord = WS + (W / 2.0) + ((W + WS) * x);
             
             /*  Starting with the base transform, translate the layer along the
@@ -283,7 +249,7 @@ static const CGFloat HS = 75.0;
                     t = CATransform3DRotate(t, theta + M_PI/2.0, 0.0, 1.0, 0.0);
                 }
             }
-            layer.transform = t;
+            sublayer.transform = t;
             
             /*  Setup for the next iteration.
              */
@@ -298,29 +264,47 @@ static const CGFloat HS = 75.0;
     }
     
     if (!lastWasEmpty) {
+        CGFloat const rotationalStank = 0.05;
+        
         /*  Position, scale and rotate our gradient.
          */
-        CGFloat tWidth = radialGradientLayer.bounds.size.width;
-        CGFloat tScale = width / tWidth;
-        CATransform3D t = b;
-        t = CATransform3DTranslate(t, -tWidth / 2.0, 0.0, 0.0);
-        t = CATransform3DRotate(t, -M_PI / 2.0, 1.0, 0.0, 0.0);
-        t = CATransform3DScale(t, tScale, tScale, 1.0);
-        radialGradientLayer.transform = t;
+        {
+            CGFloat tWidth = radialGradientLayer.bounds.size.width;
+            CGFloat tScale = width / tWidth;
+            CATransform3D t = b;
+            t = CATransform3DTranslate(t, -tWidth / 2.0, -WS, 0.0);
+            t = CATransform3DRotate(t, -M_PI / 2.0, 1.0, 0.0, 0.0);
+            t = CATransform3DScale(t, tScale, tScale, 1.0);
+            radialGradientLayer.transform = t;
+        }
 
+        /*  Position, scale and rotate our title.
+         */
+        {
+            CGSize size = titleLayer.bounds.size;
+            CGFloat scale = MIN(width / size.width, 2.0);
+            CATransform3D t = b;
+            t = CATransform3DTranslate(t, -size.width / 2.0, (WS + size.height), WS * 4);
+            t = CATransform3DRotate(t, -rotationalStank, 1.0, 0.0, 0.0);
+            t = CATransform3DScale(t, scale, scale, 1.0);
+            titleLayer.transform = t;
+        }
+        
         /*  Add in our scale and perspective...  then throw a little rotational 
          *  "stank" on it.  ;)
          */
-        CGFloat pScale = size.width / width;
-        if (pScale * height > size.height) {
-            pScale = size.height / height;
+        {
+            CGFloat scale = size.width / width;
+            if (scale * height > size.height) {
+                scale = size.height / height;
+            }
+            CATransform3D p = CATransform3DIdentity;
+            p = CATransform3DScale(p, scale, scale, 1.0);
+            p = CATransform3DTranslate(p, 0.0, -height / 2.25, 0.0);
+            p.m34 = 1.0 / -MAX(width, 2000);
+            p = CATransform3DRotate(p, rotationalStank, 1.0, 0.0, 0.0);
+            layer.sublayerTransform = p;
         }
-        CATransform3D p = CATransform3DIdentity;
-        p = CATransform3DScale(p, pScale, pScale, 1.0);
-        p = CATransform3DTranslate(p, 0.0, -height / 2.0, 0.0);
-        p.m34 = 1.0 / -MAX(width, 2000);
-        p = CATransform3DRotate(p, 0.075, 1.0, 0.0, 0.0);
-        floorLayer.sublayerTransform = p;
     }
     
     [CATransaction commit];

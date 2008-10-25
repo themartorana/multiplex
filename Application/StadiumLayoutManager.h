@@ -9,9 +9,7 @@
     CALayer* hoveredMovieLayer;
     CALayer* hoverHighlightLayer;
     
-    CALayer* titleContainerLayer;
     CATextLayer* titleLayer;
-    CATextLayer* titleReflectionLayer;
     
     NSArray* listOfLayersInOrder;
     NSArray* arrangedListOfObjects;

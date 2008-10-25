@@ -37,14 +37,12 @@
     [self setWantsLayer:YES];
     
     floorLayer = [CALayer layer];
-    //[floorLayer setScrollMode:kCAScrollVertically];
     floorLayer.delegate = self;
-    floorLayer.position = CGPointZero;
     floorLayer.constraints = [NSArray arrayWithObjects:
         [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY],
         [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
-        [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.90 offset:0.0],
-        [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0.90 offset:0.0],
+        [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.95 offset:0.0],
+        [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight],
         nil
     ];
     [rootLayer insertSublayer:floorLayer atIndex:0];
@@ -135,16 +133,6 @@
     [self cancelHoverTimer];
 
     if (movie) {
-        /*
-        MovieLayer* movieLayer = [layersByID objectForKey:hoveredMovie.objectID];
-
-        hoverHighlightLayer.hidden = NO;
-        hoverHighlightLayer.anchorPoint = movieLayer.anchorPoint;
-        hoverHighlightLayer.bounds = CGRectInset(movieLayer.bounds, 20, 20);
-        hoverHighlightLayer.position = movieLayer.position;
-        hoverHighlightLayer.zPosition = movieLayer.zPosition  1;
-        hoverHighlightLayer.transform = movieLayer.transform;
-        */
         hoverTimer = [[NSTimer scheduledTimerWithTimeInterval:0.75 target:self selector:@selector(hoverTimerTicked:) userInfo:nil repeats:NO] retain];
     }
 }
@@ -154,7 +142,6 @@
 {
     [super setFrameSize:frameSize];
     [self _restartMouseTracking];
-    //[floorLayer setNeedsLayout];
 }
 
 - (void) mouseDown:(NSEvent*)theEvent

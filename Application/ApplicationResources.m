@@ -90,7 +90,6 @@
     static CGImageRef image = NULL;
     if (!image) {
         const int W = 100, H = 100;
-        NSLog(@"Drawing radialGradientLayer");
         CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
         void* bits = calloc(W * H, 4);
         NSAssert(bits, @"no bits!");
@@ -120,7 +119,6 @@
     static CGImageRef image = NULL;
     if (!image) {
         const int W = 100, H = 100;
-        NSLog(@"Drawing radialGradientLayer");
         CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
         void* bits = calloc(W * H, 4);
         NSAssert(bits, @"no bits!");
@@ -150,7 +148,6 @@
     static CGImageRef image = NULL;
     if (!image) {
         const int W = 100, H = 15;
-        NSLog(@"Drawing radialGradientLayer");
         CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
         void* bits = calloc(W * H, 4);
         NSAssert(bits, @"no bits!");

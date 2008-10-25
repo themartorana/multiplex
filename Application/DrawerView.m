@@ -94,7 +94,7 @@
                 [self setFrame:newFrame];
 
                 [button setFrameCenterRotation:45.0];
-                [[upperView animator] setFrame:newUpperViewFrame];
+                [upperView setFrame:newUpperViewFrame];
                 [[self animator] setFrame:NSOffsetRect(newFrame, 0, viewFrame.size.height)];
             }
             else {
@@ -109,7 +109,7 @@
                 }
                 
                 [button setFrameCenterRotation:45.0];
-                [[upperView animator] setFrame:newUpperViewFrame];
+                [upperView setFrame:newUpperViewFrame];
                 [[self animator] setFrame:NSOffsetRect(newFrame, 0, -offset)];
             }
         }
@@ -118,7 +118,7 @@
             NSRect newUpperViewFrame = NSMakeRect(0, minHeight, superViewFrame.size.width, superViewFrame.size.height - minHeight);
             
             [button setFrameCenterRotation:0.0];
-            [[upperView animator] setFrame:newUpperViewFrame];
+            [upperView setFrame:newUpperViewFrame];
             [[self animator] setFrame:NSOffsetRect(newFrame, 0, 0)];
         }
         

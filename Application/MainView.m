@@ -76,6 +76,8 @@
 
 - (void) setFloorLayerLayoutManagerClass:(Class)class
 {
+    NSLog(@"Swapping floor layout manager");
+    
     floorLayerLayoutManagerClass = class;
     
     if (floorLayer) {

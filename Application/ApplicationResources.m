@@ -1,5 +1,6 @@
 #import "ApplicationResources.h"
 #import <Quartz/Quartz.h>
+#import <WebKit/WebKit.h>
 
 @implementation ApplicationResources
 
@@ -186,6 +187,27 @@
         free(bits);
     }
     return image;
+}
+
++ (WebPreferences*) userVoiceWebPreferences
+{
+    WebPreferences* prefs = [[WebPreferences alloc] init];
+    [prefs setUserStyleSheetEnabled:YES];
+    [prefs setJavaEnabled:NO];
+    [prefs setPlugInsEnabled:NO];
+    [prefs setUserStyleSheetLocation:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"uservoice-feedback" ofType:@"css"]]];   
+    return prefs;
+}
+
++ (WebPreferences*) movieDescriptionWebPreferences
+{
+    WebPreferences* prefs = [[WebPreferences alloc] init];
+    [prefs setJavaEnabled:NO];
+    [prefs setJavaScriptEnabled:NO];
+    [prefs setPlugInsEnabled:NO];
+    [prefs setUserStyleSheetEnabled:YES];
+    [prefs setUserStyleSheetLocation:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"movie-description" ofType:@"css"]]];   
+    return prefs;
 }
 
 @end

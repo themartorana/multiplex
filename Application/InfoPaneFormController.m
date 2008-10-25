@@ -1,4 +1,3 @@
-
 #import "InfoPaneFormController.h"
 #import "Movie.h"
 #import "InfoPaneDiscsView.h"
@@ -36,14 +35,12 @@
     [descriptionWebView setFrameLoadDelegate:self];
     [descriptionWebView setEditable:YES];
     [descriptionWebView setDrawsBackground:NO];
+
+    [descriptionWebView setPreferences:[ApplicationResources movieDescriptionWebPreferences]];
     
     [playButtonView setButtonLayerButtonWithUpState:[ApplicationResources playButton] andDownState:[ApplicationResources playButtonDown]];
     [playButtonView setNotificationNameToPost:@"MultiplexPlayButtonClicked"];
     
-    WebPreferences* prefs = [descriptionWebView preferences];
-    [prefs setUserStyleSheetEnabled:YES];
-    [prefs setUserStyleSheetLocation:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"default" ofType:@"css"]]];
-
     [coverArtImageView bind:@"image" toObject:self withKeyPath:@"movie.boxArt.image" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
 }
 

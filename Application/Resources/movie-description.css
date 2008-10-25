@@ -1,0 +1,13 @@
+body
+{
+    margin: 0;
+    padding: 0;
+    color: white;
+ 
+    background-image: url(desc_bg.png);
+    
+    overflow-x: hidden;
+    font-family: "Lucida Grande";
+    font-size: 13px;
+    line-height: 22px;
+}

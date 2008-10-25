@@ -240,10 +240,18 @@
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
     if ([@"selection.self" isEqualToString:keyPath]) {
-        if (object && [[object arrangedObjects] count] > 0) {
-            id a = [object valueForKeyPath:@"selection.self"];
-            if ([a isKindOfClass:[Movie class]]) {
-                [floorLayer.layoutManager setSelectedMovie:(Movie*)a];
+        if (object) {
+            if ([[object arrangedObjects] count] > 0) {
+                id a = [object valueForKeyPath:@"selection.self"];
+                if ([a isKindOfClass:[Movie class]]) {
+                    [floorLayer.layoutManager setSelectedMovie:(Movie*)a];
+                }
+                else {
+                    [floorLayer.layoutManager setSelectedMovie:nil];
+                }
+            }
+            else {
+                [floorLayer.layoutManager setSelectedMovie:nil];
             }
         }
     }

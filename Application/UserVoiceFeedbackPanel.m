@@ -1,4 +1,5 @@
 #import "UserVoiceFeedbackPanel.h"
+#import "ApplicationResources.h"
 #import <WebKit/WebKit.h>
 
 @implementation UserVoiceFeedbackPanel
@@ -12,16 +13,12 @@
                                                        alpha:0.5]];
     [userVoiceFeedbackWebView setDrawsBackground:NO];
     [userVoiceFeedbackWebView setFrameLoadDelegate:self];
-    [userVoiceFeedbackWebView setPolicyDelegate:self];    
+    [userVoiceFeedbackWebView setPolicyDelegate:self];
 
     id style = [userVoiceFeedbackWebView styleDeclarationWithText:[NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"uservoice-feedback" ofType:@"css"]]];
     [userVoiceFeedbackWebView applyStyle:style];
 
-    WebPreferences* prefs = [[WebPreferences alloc] init];
-    [prefs setUserStyleSheetEnabled:YES];
-    [prefs setUserStyleSheetLocation:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"uservoice-feedback" ofType:@"css"]]];   
-    [userVoiceFeedbackWebView setPreferences:prefs];
-    [prefs release];
+    [userVoiceFeedbackWebView setPreferences:[ApplicationResources userVoiceWebPreferences]];
     
     [self resetFeedbackPage];
 }

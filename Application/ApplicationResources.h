@@ -1,5 +1,7 @@
 #import <Cocoa/Cocoa.h>
 
+@class WebPreferences;
+
 @interface ApplicationResources : NSObject {
 }
 
@@ -16,5 +18,8 @@
 + (CGImageRef) textureForStadiumLayoutFloor;
 + (CGImageRef) textureForDrawerBackground;
 + (CGImageRef) textureForDrawerTopEdge;
+
++ (WebPreferences*) movieDescriptionWebPreferences;
++ (WebPreferences*) userVoiceWebPreferences;
 
 @end

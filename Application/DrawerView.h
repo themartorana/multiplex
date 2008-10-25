@@ -4,7 +4,6 @@
     IBOutlet NSView* upperView;
     IBOutlet NSView* contentView;
     IBOutlet NSView* button;
-    IBOutlet NSView* noDiscView;
     CGFloat minHeight;
     BOOL isOpen;
 }

@@ -79,15 +79,14 @@
     selectedMovie = [movie retain];
     
     if (selectedMovie) {
-        hoverHighlightLayer.hidden = YES;
         dontLayoutBecauseOfHighlight = NO;
         scrollToSelectedMovie = YES;        
         [floorLayer setNeedsLayout];
     } else {
         scrollToSelectedMovie = NO;
         selectedHighlightLayer.hidden = YES;
+
     }
-    
 }
 
 - (void) setHoveredMovieLayer:(MovieLayer*)movieLayer;

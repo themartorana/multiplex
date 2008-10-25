@@ -10,6 +10,7 @@
     IBOutlet NSArrayController* movies;
     /**/
     IBOutlet MainView* mainView;
+    /**/
     IBOutlet DrawerView* drawerView;
     /**/
     IBOutlet NSView* infoPaneView;

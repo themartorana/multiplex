@@ -39,6 +39,7 @@
 		557440660EABD786002E0B80 /* uservoice-hover.png in Resources */ = {isa = PBXBuildFile; fileRef = 557440640EABD786002E0B80 /* uservoice-hover.png */; };
 		557440670EABD786002E0B80 /* uservoice-normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 557440650EABD786002E0B80 /* uservoice-normal.png */; };
 		5574409D0EABDD54002E0B80 /* uservoice-feedback.css in Resources */ = {isa = PBXBuildFile; fileRef = 5574409C0EABDD54002E0B80 /* uservoice-feedback.css */; };
+		557B63BF0EB37CC400DFD76F /* DrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B63BE0EB37CC400DFD76F /* DrawerController.m */; };
 		557B69460E4CCD3F0009919E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 557B69450E4CCD3F0009919E /* MainMenu.xib */; };
 		5583D1640E51D82700EB7AE6 /* Multiplex.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */; };
 		558D1AF00E9D186B000F67FA /* InfoPaneDiscsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */; };
@@ -53,7 +54,7 @@
 		55912E250EA0083C00446666 /* play-button-inactive.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55912E240EA0083C00446666 /* play-button-inactive.pdf */; };
 		5598E60C0E91D294005FCC91 /* ButtonLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5598E60B0E91D294005FCC91 /* ButtonLayer.m */; };
 		55A8E81D0E9BE18200DC9F35 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55A8E81C0E9BE18200DC9F35 /* WebKit.framework */; };
-		55B81A490EA049D500775EAE /* default.css in Resources */ = {isa = PBXBuildFile; fileRef = 55B81A480EA049D500775EAE /* default.css */; };
+		55B81A490EA049D500775EAE /* movie-description.css in Resources */ = {isa = PBXBuildFile; fileRef = 55B81A480EA049D500775EAE /* movie-description.css */; };
 		55C9F6260EB26A15001B9BCD /* HalfTransparentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C9F6250EB26A15001B9BCD /* HalfTransparentView.m */; };
 		55C9F6430EB26C5A001B9BCD /* LayerBackedButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C9F6420EB26C5A001B9BCD /* LayerBackedButtonView.m */; };
 		55D390750E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D390740E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m */; };
@@ -341,6 +342,8 @@
 		557440640EABD786002E0B80 /* uservoice-hover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "uservoice-hover.png"; sourceTree = "<group>"; };
 		557440650EABD786002E0B80 /* uservoice-normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "uservoice-normal.png"; sourceTree = "<group>"; };
 		5574409C0EABDD54002E0B80 /* uservoice-feedback.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = "uservoice-feedback.css"; sourceTree = "<group>"; };
+		557B63BD0EB37CC400DFD76F /* DrawerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawerController.h; sourceTree = "<group>"; };
+		557B63BE0EB37CC400DFD76F /* DrawerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawerController.m; sourceTree = "<group>"; };
 		557B66A20E4A2F4D0009919E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		557B69450E4CCD3F0009919E /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Multiplex.xcdatamodel; sourceTree = "<group>"; };
@@ -360,7 +363,7 @@
 		5598E60A0E91D294005FCC91 /* ButtonLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonLayer.h; sourceTree = "<group>"; };
 		5598E60B0E91D294005FCC91 /* ButtonLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtonLayer.m; sourceTree = "<group>"; };
 		55A8E81C0E9BE18200DC9F35 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
-		55B81A480EA049D500775EAE /* default.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = default.css; sourceTree = "<group>"; };
+		55B81A480EA049D500775EAE /* movie-description.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = "movie-description.css"; sourceTree = "<group>"; };
 		55C9F6240EB26A15001B9BCD /* HalfTransparentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HalfTransparentView.h; sourceTree = "<group>"; };
 		55C9F6250EB26A15001B9BCD /* HalfTransparentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HalfTransparentView.m; sourceTree = "<group>"; };
 		55C9F6410EB26C5A001B9BCD /* LayerBackedButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerBackedButtonView.h; sourceTree = "<group>"; };
@@ -610,7 +613,7 @@
 				8D15AC360486D014006FF6A4 /* Info.plist */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				557B69450E4CCD3F0009919E /* MainMenu.xib */,
-				55B81A480EA049D500775EAE /* default.css */,
+				55B81A480EA049D500775EAE /* movie-description.css */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -701,6 +704,8 @@
 				F967B02C0E7E16DE00C12B92 /* WindowController.m */,
 				550D082A0E9AE14E008F0275 /* InfoPaneFormController.h */,
 				550D082B0E9AE14E008F0275 /* InfoPaneFormController.m */,
+				557B63BD0EB37CC400DFD76F /* DrawerController.h */,
+				557B63BE0EB37CC400DFD76F /* DrawerController.m */,
 			);
 			name = "UI Controllers";
 			sourceTree = "<group>";
@@ -1127,7 +1132,7 @@
 				558D1EB50E9E65A8000F67FA /* search-click128x128.pdf in Resources */,
 				558D1EB60E9E65A8000F67FA /* search128x128.pdf in Resources */,
 				55912E250EA0083C00446666 /* play-button-inactive.pdf in Resources */,
-				55B81A490EA049D500775EAE /* default.css in Resources */,
+				55B81A490EA049D500775EAE /* movie-description.css in Resources */,
 				553477810EA3AD5100436A8C /* multiplex-mark01a.icns in Resources */,
 				557440660EABD786002E0B80 /* uservoice-hover.png in Resources */,
 				557440670EABD786002E0B80 /* uservoice-normal.png in Resources */,
@@ -1238,6 +1243,7 @@
 				F9B8E1970EB25628008589F3 /* CoverFlowLayoutManager2.m in Sources */,
 				55C9F6260EB26A15001B9BCD /* HalfTransparentView.m in Sources */,
 				55C9F6430EB26C5A001B9BCD /* LayerBackedButtonView.m in Sources */,
+				557B63BF0EB37CC400DFD76F /* DrawerController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

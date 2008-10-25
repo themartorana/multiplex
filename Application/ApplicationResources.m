@@ -149,7 +149,7 @@
 {
     static CGImageRef image = NULL;
     if (!image) {
-        const int W = 100, H = 50;
+        const int W = 100, H = 15;
         NSLog(@"Drawing radialGradientLayer");
         CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
         void* bits = calloc(W * H, 4);
@@ -162,7 +162,7 @@
         {
             NSColor* color1 = [NSColor colorWithDeviceRed:171.0/255.0 green:171.0/255.0 blue:171.0/255.0 alpha:1.0];
             NSColor* color2 = [NSColor colorWithDeviceRed:15.0/255.0 green:15.0/255.0 blue:15.0/255.0 alpha:1.0];
-            NSColor* color3 = [NSColor colorWithCalibratedWhite:0.0 alpha:0.15];
+            NSColor* color3 = [NSColor colorWithCalibratedWhite:0.0 alpha:0.25];
             NSColor* color4 = [NSColor colorWithCalibratedWhite:0.0 alpha:0];
             
             [color1 set];

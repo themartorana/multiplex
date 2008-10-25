@@ -85,14 +85,14 @@
     return image;
 }
 
-+ (CGImageRef) stadiumLayoutRadialFloorGradient
++ (CGImageRef) textureForStadiumLayoutFloor
 {
     static CGImageRef image = NULL;
     if (!image) {
         const int W = 100, H = 100;
         NSLog(@"Drawing radialGradientLayer");
         CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-        void* bits = malloc(W * H * 4);
+        void* bits = calloc(W * H, 4);
         NSAssert(bits, @"no bits!");
         CGContextRef c = CGBitmapContextCreate(bits, W, H, 8, W * 4, colorSpace, kCGImageAlphaPremultipliedFirst);
         CGColorSpaceRelease(colorSpace);
@@ -101,12 +101,86 @@
         [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:c flipped:YES]];
         {
             NSPoint center = NSMakePoint(W / 2.0, H / 2.0);
-            [[NSColor clearColor] set];
-            NSRectFill(NSMakeRect(0, 0, W, H));
             NSColor* lightGrey = [NSColor colorWithDeviceRed:154.0/255.0 green:154.0/255.0 blue:154.0/255.0 alpha:1.0];
             NSColor* darkGrey = [NSColor colorWithDeviceRed:154.0/255.0 green:154.0/255.0 blue:154.0/255.0 alpha:0.0];
             NSGradient* gradient = [[NSGradient alloc] initWithColorsAndLocations:lightGrey, (CGFloat)0.0, darkGrey, (CGFloat)1.0, nil];
             [gradient drawFromCenter:center radius:0 toCenter:center radius:MIN(W, H)/2.0 options:0];
+            [gradient release];
+        }
+        [NSGraphicsContext restoreGraphicsState];
+        image = CGBitmapContextCreateImage(c);
+        CGContextRelease(c);
+        free(bits);
+    }
+    return image;
+}
+
++ (CGImageRef) textureForDrawerBackground
+{
+    static CGImageRef image = NULL;
+    if (!image) {
+        const int W = 100, H = 100;
+        NSLog(@"Drawing radialGradientLayer");
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+        void* bits = calloc(W * H, 4);
+        NSAssert(bits, @"no bits!");
+        CGContextRef c = CGBitmapContextCreate(bits, W, H, 8, W * 4, colorSpace, kCGImageAlphaPremultipliedFirst);
+        CGColorSpaceRelease(colorSpace);
+        
+        [NSGraphicsContext saveGraphicsState];
+        [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:c flipped:YES]];
+        {
+            NSColor* color1 = [NSColor colorWithDeviceRed:31.0/255.0 green:31.0/255.0 blue:31.0/255.0 alpha:1.0];
+            NSColor* color2 = [NSColor colorWithDeviceRed:71.0/255.0 green:71.0/255.0 blue:71.0/255.0 alpha:1.0];
+            
+            NSGradient* gradient = [[NSGradient alloc] initWithColorsAndLocations:color1, (CGFloat)0.0, color2, (CGFloat)0.5, color1, (CGFloat)1.0, nil];
+            [gradient drawInRect:NSMakeRect(0, 0, W, H) angle:145.0];
+            [gradient release];
+        }
+        [NSGraphicsContext restoreGraphicsState];
+        image = CGBitmapContextCreateImage(c);
+        CGContextRelease(c);
+        free(bits);
+    }
+    return image;
+}
+
++ (CGImageRef) textureForDrawerTopEdge
+{
+    static CGImageRef image = NULL;
+    if (!image) {
+        const int W = 100, H = 50;
+        NSLog(@"Drawing radialGradientLayer");
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+        void* bits = calloc(W * H, 4);
+        NSAssert(bits, @"no bits!");
+        CGContextRef c = CGBitmapContextCreate(bits, W, H, 8, W * 4, colorSpace, kCGImageAlphaPremultipliedFirst);
+        CGColorSpaceRelease(colorSpace);
+        
+        [NSGraphicsContext saveGraphicsState];
+        [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:c flipped:YES]];
+        {
+            NSColor* color1 = [NSColor colorWithDeviceRed:171.0/255.0 green:171.0/255.0 blue:171.0/255.0 alpha:1.0];
+            NSColor* color2 = [NSColor colorWithDeviceRed:15.0/255.0 green:15.0/255.0 blue:15.0/255.0 alpha:1.0];
+            NSColor* color3 = [NSColor colorWithCalibratedWhite:0.0 alpha:0.15];
+            NSColor* color4 = [NSColor colorWithCalibratedWhite:0.0 alpha:0];
+            
+            [color1 set];
+            NSBezierPath* line1 = [NSBezierPath bezierPath];
+            [line1 setLineWidth:1.0];
+            [line1 moveToPoint:NSMakePoint(0, H)];
+            [line1 lineToPoint:NSMakePoint(W, H)];
+            [line1 stroke];
+
+            [color2 set];
+            NSBezierPath* line2 = [NSBezierPath bezierPath];
+            [line2 setLineWidth:1.0];
+            [line2 moveToPoint:NSMakePoint(0, H - 1)];
+            [line2 lineToPoint:NSMakePoint(W, H - 1)];
+            [line2 stroke];
+
+            NSGradient* gradient = [[NSGradient alloc] initWithColorsAndLocations:color4, (CGFloat)0.0, color3, (CGFloat)1.0, nil];
+            [gradient drawInRect:NSMakeRect(0, 0, W, H - 2) angle:90.0];
             [gradient release];
         }
         [NSGraphicsContext restoreGraphicsState];

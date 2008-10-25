@@ -1,5 +1,6 @@
 #import "DrawerView.h"
 #import "MultiplexColorFactory.h"
+#import "ApplicationResources.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation DrawerView
@@ -13,16 +14,16 @@
     CALayer* root = [self layer];
     [root setLayoutManager:[CAConstraintLayoutManager layoutManager]];
 
-    CALayer* solidLayer = [CALayer layer];
-    solidLayer.backgroundColor = [MultiplexColorFactory drawerBackgroundBaseColor];
-    solidLayer.constraints = [NSArray arrayWithObjects:
+    CALayer* backgroundLayer = [CALayer layer];
+    backgroundLayer.contents = (id)[ApplicationResources textureForDrawerBackground];
+    backgroundLayer.constraints = [NSArray arrayWithObjects:
         [CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX],
         [CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY],
         [CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX],
         [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY scale:1.0 offset:-50],
         nil
     ];
-    [root addSublayer:solidLayer];
+    [root addSublayer:backgroundLayer];
     
     CALayer* patternLayer = [CALayer layer];
     patternLayer.backgroundColor = [MultiplexColorFactory drawerBackgroundPattern];
@@ -30,10 +31,23 @@
         [CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX],
         [CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY],
         [CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX],
-        [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY scale:1.0 offset:-50],
+        [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY scale:1.0 offset:-52],
         nil
     ];
     [root addSublayer:patternLayer];
+
+    CALayer* topEdgeLayer = [CALayer layer];
+    CGImageRef textureForDrawerTopEdge = [ApplicationResources textureForDrawerTopEdge];
+    topEdgeLayer.contents = (id)textureForDrawerTopEdge;
+    topEdgeLayer.frame = CGRectMake(0, 0, CGImageGetWidth(textureForDrawerTopEdge), CGImageGetHeight(textureForDrawerTopEdge));
+    topEdgeLayer.constraints = [NSArray arrayWithObjects:
+        [CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX],
+        [CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX],
+        [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY scale:1.0 offset:-50],
+        nil
+    ];
+    [root addSublayer:topEdgeLayer];
+    
 }
 
 - (void) setContentView:(NSView*)_contentView

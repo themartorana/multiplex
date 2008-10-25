@@ -17,7 +17,7 @@
         
         radialGradientLayer = [CALayer layer];
         radialGradientLayer.hidden = YES;
-        radialGradientLayer.contents = (id)[ApplicationResources stadiumLayoutRadialFloorGradient];
+        radialGradientLayer.contents = (id)[ApplicationResources textureForStadiumLayoutFloor];
         radialGradientLayer.frame = CGRectMake(0, 0, 100, 100);
         [_floorLayer addSublayer:radialGradientLayer];
         

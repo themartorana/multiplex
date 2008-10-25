@@ -13,6 +13,8 @@
 + (CGImageRef) closeButton;
 + (CGImageRef) closeButtonDown; 
 
-+ (CGImageRef) stadiumLayoutRadialFloorGradient;
++ (CGImageRef) textureForStadiumLayoutFloor;
++ (CGImageRef) textureForDrawerBackground;
++ (CGImageRef) textureForDrawerTopEdge;
 
 @end

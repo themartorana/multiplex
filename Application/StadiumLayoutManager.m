@@ -87,7 +87,7 @@
         hoveredMovieLayer = [_hoveredMovieLayer retain];
 
         [CATransaction begin];
-        [CATransaction setValue:[NSNumber numberWithDouble:0.0] forKey:kCATransactionAnimationDuration];
+        [CATransaction setValue:[NSNumber numberWithBool:YES] forKey:kCATransactionDisableActions];
         
         Movie* movie = _hoveredMovieLayer.movie;
         if (movie){

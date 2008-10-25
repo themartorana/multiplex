@@ -78,37 +78,37 @@
     /* IGNORED */
 }
 
-- (void) setHoveredMovieLayer:(MovieLayer*)movieLayer;
+- (void) setHoveredMovieLayer:(MovieLayer*)_hoveredMovieLayer;
 {
-    [CATransaction begin];
-    [CATransaction setValue:[NSNumber numberWithDouble:0.0] forKey:kCATransactionAnimationDuration];
-    
-    Movie* movie = movieLayer.movie;
-    
-    if (movie){
-        titleLayer.string = movie.title;
-    } else {
-        titleLayer.string = @" ";
-    }
-    
-    if (movieLayer != hoveredMovieLayer) {
-        [hoveredMovieLayer release];
-        hoveredMovieLayer = [movieLayer retain];
-    }
-    
-    if (movieLayer) {
+    if (hoveredMovieLayer != _hoveredMovieLayer) {
         dontLayoutBecauseOfHighlight = YES;
-        hoverHighlightLayer.hidden = NO;
-        hoverHighlightLayer.anchorPoint = movieLayer.anchorPoint;
-        hoverHighlightLayer.bounds = CGRectInset(movieLayer.bounds, -20, -20);
-        hoverHighlightLayer.position = movieLayer.position;
-        hoverHighlightLayer.zPosition = movieLayer.zPosition - 1;
-        hoverHighlightLayer.transform = movieLayer.transform;
-    } else {
-        hoverHighlightLayer.hidden = YES;
+
+        [hoveredMovieLayer release];
+        hoveredMovieLayer = [_hoveredMovieLayer retain];
+
+        [CATransaction begin];
+        [CATransaction setValue:[NSNumber numberWithDouble:0.0] forKey:kCATransactionAnimationDuration];
+        
+        Movie* movie = _hoveredMovieLayer.movie;
+        if (movie){
+            titleLayer.string = movie.title;
+        } else {
+            titleLayer.string = @" ";
+        }
+        
+        if (_hoveredMovieLayer) {
+            hoverHighlightLayer.hidden = NO;
+            hoverHighlightLayer.anchorPoint = _hoveredMovieLayer.anchorPoint;
+            hoverHighlightLayer.bounds = CGRectInset(_hoveredMovieLayer.bounds, -20, -20);
+            hoverHighlightLayer.position = _hoveredMovieLayer.position;
+            hoverHighlightLayer.zPosition = _hoveredMovieLayer.zPosition - 1;
+            hoverHighlightLayer.transform = _hoveredMovieLayer.transform;
+        } else {
+            hoverHighlightLayer.hidden = YES;
+        }
+        
+        [CATransaction commit];
     }
-    
-    [CATransaction commit];
 }
 
 
@@ -155,7 +155,7 @@ static const CGFloat HS = 75.0;
     ];
 }
 
-#define DEBUG_TRACE()   NSLog(@"% 4d%s", __LINE__, __PRETTY_FUNCTION__)
+#define DEBUG_TRACE()   NSLog(@"% 4d %s", __LINE__, __PRETTY_FUNCTION__)
 
 - (void) layoutSublayersOfLayer:(CALayer*)layer
 {
@@ -184,7 +184,7 @@ static const CGFloat HS = 75.0;
         opacity *= 0.2;
     }
     
-    CGSize const size = ((CALayer*)layer.presentationLayer).bounds.size;
+    CGSize const size = layer.bounds.size;
 
     /*  This base transform sets up the origin (0, 0) to the center of the 
      *  layer along the X and Y axes.

@@ -14,19 +14,13 @@
 {
     if (self == [super init]) {
         _floorLayer.masksToBounds = NO;
+        floorLayer = _floorLayer;
         
         radialGradientLayer = [CALayer layer];
         radialGradientLayer.hidden = YES;
         radialGradientLayer.contents = (id)[ApplicationResources textureForStadiumLayoutFloor];
         radialGradientLayer.frame = CGRectMake(0, 0, 100, 100);
         [_floorLayer addSublayer:radialGradientLayer];
-        
-        hoverHighlightLayer = [[CALayer layer] retain];
-        hoverHighlightLayer.borderColor = [MultiplexColorFactory multiplexOrange];
-        hoverHighlightLayer.borderWidth = 10.0;
-        hoverHighlightLayer.cornerRadius = 10.0;
-        hoverHighlightLayer.hidden = YES;
-        [_floorLayer addSublayer:hoverHighlightLayer];
         
         titleLayer = [CATextLayer layer];
         titleLayer.position = CGPointZero;
@@ -46,9 +40,8 @@
 - (void) clearManagingLayerOfExtras
 {
     [radialGradientLayer removeFromSuperlayer];
-    [titleLayer removeFromSuperlayer];
     [hoverHighlightLayer removeFromSuperlayer];
-    [hoverHighlightLayer release];
+    [titleLayer removeFromSuperlayer];
 }
 
 - (void) setListOfLayersInOrder:(NSArray*)_listOfLayersInOrder
@@ -81,7 +74,7 @@
 - (void) setHoveredMovieLayer:(MovieLayer*)_hoveredMovieLayer;
 {
     if (hoveredMovieLayer != _hoveredMovieLayer) {
-        dontLayoutBecauseOfHighlight = YES;
+//        dontLayoutBecauseOfHighlight = YES;
 
         [hoveredMovieLayer release];
         hoveredMovieLayer = [_hoveredMovieLayer retain];
@@ -97,12 +90,19 @@
         }
         
         if (_hoveredMovieLayer) {
-            hoverHighlightLayer.hidden = NO;
-            hoverHighlightLayer.anchorPoint = _hoveredMovieLayer.anchorPoint;
-            hoverHighlightLayer.bounds = CGRectInset(_hoveredMovieLayer.bounds, -20, -20);
-            hoverHighlightLayer.position = _hoveredMovieLayer.position;
-            hoverHighlightLayer.zPosition = _hoveredMovieLayer.zPosition - 1;
+            if (!hoverHighlightLayer) {
+                hoverHighlightLayer = [CALayer layer];
+                hoverHighlightLayer.borderColor = [MultiplexColorFactory multiplexOrange];
+                hoverHighlightLayer.borderWidth = 10.0;
+                hoverHighlightLayer.cornerRadius = 10.0;
+                hoverHighlightLayer.anchorPoint = _hoveredMovieLayer.anchorPoint;
+                hoverHighlightLayer.bounds = CGRectInset(_hoveredMovieLayer.bounds, -20, -20);
+                hoverHighlightLayer.position = _hoveredMovieLayer.position;
+                hoverHighlightLayer.zPosition = -1.0;
+                [floorLayer addSublayer:hoverHighlightLayer];
+            }
             hoverHighlightLayer.transform = _hoveredMovieLayer.transform;
+            hoverHighlightLayer.hidden = NO;
         } else {
             hoverHighlightLayer.hidden = YES;
         }
@@ -270,21 +270,21 @@ static const CGFloat HS = 75.0;
          */
         {
             CGFloat tWidth = radialGradientLayer.bounds.size.width;
-            CGFloat tScale = width / tWidth;
+            CGFloat scale = width / tWidth;
             CATransform3D t = b;
             t = CATransform3DTranslate(t, -tWidth / 2.0, -WS, 0.0);
             t = CATransform3DRotate(t, -M_PI / 2.0, 1.0, 0.0, 0.0);
-            t = CATransform3DScale(t, tScale, tScale, 1.0);
+            t = CATransform3DScale(t, scale, scale, 1.0);
             radialGradientLayer.transform = t;
         }
 
         /*  Position, scale and rotate our title.
          */
         {
-            CGSize size = titleLayer.bounds.size;
-            CGFloat scale = MIN(width / size.width, 2.0);
+            CGSize tSize = titleLayer.bounds.size;
+            CGFloat scale = MAX(MIN(width / tSize.width, 2.0), 0.5);
             CATransform3D t = b;
-            t = CATransform3DTranslate(t, -size.width / 2.0, (WS + size.height), WS * 4);
+            t = CATransform3DTranslate(t, -tSize.width / 2.0, -WS / 2.0, WS);
             t = CATransform3DRotate(t, -rotationalStank, 1.0, 0.0, 0.0);
             t = CATransform3DScale(t, scale, scale, 1.0);
             titleLayer.transform = t;

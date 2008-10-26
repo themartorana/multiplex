@@ -1,11 +1,10 @@
 #import "Engine.h"
-#import "Disc.h"
-#import "DVDMediaSource.h"
-#import "PhysicalMediaSource.h"
-#import "DiscIdentQuery.h"
-#import "AmazonQuery.h"
-#import "ImageQuery.h"
+#import "Model/Disc.h"
+#import "Queries/AmazonQuery.h"
+#import "Queries/ImageQuery.h"
 
+#import <DiscIdentKit/DiscIdentKit.h>
+#import <CoreData/CoreData.h>
 #import <Toolkit/Toolkit.h>
 #import <JSONKit/JSONKit.h>
 #import <SystemConfiguration/SCDynamicStore.h>
@@ -42,7 +41,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 - (id) init
 {
     if (self = [super init]) {
-        discsByFingerprint = [[NSMutableDictionary alloc] init];
+        mediaByURL = [[NSMutableDictionary alloc] init];
         infoDictionariesByFingerprint = [[NSMutableDictionary alloc] init];
         protocols = [[NSMutableArray alloc] init];
         mediaSources = [[NSMutableArray alloc] init];
@@ -73,13 +72,13 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (void) dealloc
 {
+    [mediaByURL release];
+    [infoDictionariesByFingerprint release];
     [mediaSources release];
     [machineId release];
     [machineName release];
     [txtData release];
     [protocols release];
-    [discsByFingerprint release];
-    [infoDictionariesByFingerprint release];
     [super dealloc];
 }
 
@@ -93,6 +92,16 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
          */
         NSUserDefaultsController* defaultsController = [NSUserDefaultsController sharedUserDefaultsController];
         [defaultsController addObserver:self forKeyPath:@"values.machine-name" options:NSKeyValueObservingOptionNew context:nil];
+
+        {
+            managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Engine" ofType:@"mom"]]];
+            persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
+            [persistentStoreCoordinator addPersistentStoreWithType:NSInMemoryStoreType configuration:nil URL:nil options:nil error:nil];
+            managedObjectContext = [[NSManagedObjectContext alloc] init];
+            [managedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
+            
+            discEntity = [[NSEntityDescription entityForName:@"Disc" inManagedObjectContext:managedObjectContext] retain];
+        }
         
         {
             struct sockaddr_in6 sin6;
@@ -175,9 +184,9 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             if (![plugin loadAndReturnError:&error]) {
                 NSLog(@"    - Error loading plugin (%@) -- %@", pluginFile, error);
             } else {
-                id<MediaSource> mediaSource = nil;
+                id<MediaFileSource> mediaSource = nil;
                 Class principalClass = [plugin principalClass];
-                if ([principalClass conformsToProtocol:@protocol(MediaSource)]) {
+                if ([principalClass conformsToProtocol:@protocol(MediaFileSource)]) {
                     @try {
                         /*  Set ourselves as the media source's delegate, and 
                          *  then start it up.
@@ -202,7 +211,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (void) _stopMediaSourcePlugins
 {
-    for (id<MediaSource> mediaSource in mediaSources) {
+    for (id<MediaFileSource> mediaSource in mediaSources) {
         @try {
             [mediaSource stop];
         } @catch (id exception) {
@@ -241,6 +250,20 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     [netService publish];
 }
 
+- (Disc*) _findDiscByFingerprint:(NSString*)fingerprint
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:discEntity];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"fingerprint == %@", fingerprint]];
+    NSError* error = nil;
+    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    [fetchRequest release];
+    if (!error && [results count]) {
+        return [results objectAtIndex:0];
+    }
+    return nil;
+}
+
 - (NSString*) _frontCoverURLForFingerprint:(NSString*)fingerprint
 {
     return [[NSURL URLWithString:[NSString stringWithFormat:@"/%@/FrontCover", fingerprint] relativeToURL:baseImageURL] absoluteString];
@@ -260,17 +283,18 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         setsockopt(fd, SOL_SOCKET, SO_RCVBUF, (void*)&receiveBufferSize, sizeof(receiveBufferSize));
         
         protocol = [MessageProtocol protocolWithDelegate:self fileHandleForReading:connection fileHandleForWriting:connection];
-        if ([infoDictionariesByFingerprint count]) {
+        
+        NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+        [fetchRequest setEntity:discEntity];
+        NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:nil];
+        if ([results count]) {
             NSMutableDictionary* adds = [NSMutableDictionary dictionary];
-            for (NSString* fingerprint in infoDictionariesByFingerprint) {
-                Disc* disc = [discsByFingerprint objectForKey:fingerprint];
-                NSMutableArray* urls = [NSMutableArray array];
-                for (MediaFile* media in disc.allMedia) {
-                    [urls addObject:[media.url absoluteString]];
-                }
-                [adds setObject:[NSDictionary dictionaryWithObjectsAndKeys:urls, @"urls", [self _frontCoverURLForFingerprint:fingerprint], @"frontCoverURL", nil] forKey:fingerprint];
+            NSMutableDictionary* updates = [NSMutableDictionary dictionary];
+            for (Disc* disc in results) {
+                [adds setObject:[NSDictionary dictionaryWithObjectsAndKeys:[disc.mediaURLs allObjects], @"urls", [self _frontCoverURLForFingerprint:disc.fingerprint], @"frontCoverURL", nil] forKey:disc.fingerprint];
+                [updates setObject:disc.infoDictionary forKey:disc.fingerprint];
             }
-            [protocol sendMessage:[NSDictionary dictionaryWithObjectsAndKeys:adds, @"add", infoDictionariesByFingerprint, @"update", nil]];
+            [protocol sendMessage:[NSDictionary dictionaryWithObjectsAndKeys:adds, @"add", updates, @"update", nil]];
         }
         [protocols addObject:protocol];
     } @catch (id exception) {
@@ -420,10 +444,11 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     NSArray* parts = [[url path] componentsSeparatedByString:@"/"];
     NSString* fingerprint = nil;
     if ([parts count] == 3 && [@"FrontCover" isEqualToString:[parts objectAtIndex:2]] && [fingerprint = [parts objectAtIndex:1] length] == 36) {
-        Disc* disc = [discsByFingerprint objectForKey:fingerprint];
+        Disc* disc = [self _findDiscByFingerprint:fingerprint];
         if (disc) {
             NSData* frontCover = nil;
-            for (MediaFile* media in disc.allMedia) {
+            for (NSString* mediaURL in disc.mediaURLs) {
+                MediaFile* media = [mediaByURL objectForKey:mediaURL];
                 frontCover = media.frontCover;
                 if (frontCover) {
                     break;
@@ -441,7 +466,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 #pragma mark MediaSourceDelegate
 
-- (void) mediaSource:(id<MediaSource>)mediaSource didAddMedia:(NSArray*)arrayOfMedia
+- (void) mediaFileSource:(id<MediaFileSource>)mediaSource didAddMedia:(NSArray*)arrayOfMedia
 {
     NSMutableDictionary* addsByFingerprint = [NSMutableDictionary dictionary];
     NSMutableDictionary* updatesByFingerprint = [NSMutableDictionary dictionary];
@@ -454,18 +479,16 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
              *  otherwise, we can consider this a normal update to an existing
              *  movie.
              */
-            Disc* disc = [discsByFingerprint objectForKey:mediaFingerprint];
+            Disc* disc = [self _findDiscByFingerprint:mediaFingerprint];
             if (!disc) {
-                [discsByFingerprint setObject:
-                    disc = [[Disc alloc] initWithFingerprint:mediaFingerprint media:media]
-                    forKey:mediaFingerprint
-                ];
+                disc = [[Disc alloc] initWithEntity:discEntity insertIntoManagedObjectContext:managedObjectContext];
+                disc.fingerprint = mediaFingerprint;
+                
                 if (![infoDictionariesByFingerprint valueForKeyPath:@"meta.discident"]) {
                     [DiscIdentQuery queryWithFingerprint:mediaFingerprint delegate:self userInfo:[disc retain] startImmediately:YES];
                 }
-            } else {
-                [disc addMedia:media];
             }
+            [disc.mediaURLs addObject:media.url];
             
             /*
              */
@@ -524,7 +547,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     }
 }
 
-- (void) mediaSource:(id<MediaSource>)mediaSource didUpdateMedia:(NSArray*)arrayOfMedia
+- (void) mediaFileSource:(id<MediaFileSource>)mediaSource didUpdateMedia:(NSArray*)arrayOfMedia
 {
     NSMutableDictionary* addsByFingerprint = [NSMutableDictionary dictionary];
     NSMutableDictionary* updatesByFingerprint = [NSMutableDictionary dictionary];
@@ -541,10 +564,11 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                  *  we'll need to delete it.
                  */
                 if (discFingerprint) {
-                    Disc* disc = [discsByFingerprint objectForKey:discFingerprint];
-                    [disc removeMedia:media];
-                    if (![disc hasDisc]) {
-                        [discsByFingerprint removeObjectForKey:discFingerprint];
+                    
+                    Disc* disc = [self _findDiscByFingerprint:discFingerprint];
+                    [disc.mediaURLs removeObject:media.url];
+                    if (![disc.mediaURLs count]) {
+                        [self _findDiscByFingerprint:discFingerprint];
                         [infoDictionariesByFingerprint removeObjectForKey:discFingerprint];
                     }
 
@@ -573,15 +597,12 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                  */
                 media.url = [NSURL fileURLWithPath:media.pathToFile isDirectory:YES];
                 if (mediaFingerprint) {
-                    Disc* disc = [discsByFingerprint objectForKey:mediaFingerprint];
+                    Disc* disc = [self _findDiscByFingerprint:mediaFingerprint];
                     if (!disc) {
-                        [discsByFingerprint setObject:
-                            disc = [[Disc alloc] initWithFingerprint:mediaFingerprint media:media]
-                            forKey:mediaFingerprint
-                        ];
-                    } else {
-                        [disc addMedia:media];
+                        disc = [[Disc alloc] initWithEntity:discEntity insertIntoManagedObjectContext:managedObjectContext];
+                        disc.fingerprint = mediaFingerprint;
                     }
+                    [disc.mediaURLs addObject:media.url];
                 
                     NSMutableDictionary* entry = [addsByFingerprint objectForKey:mediaFingerprint];
                     if (!entry) {
@@ -640,16 +661,16 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     }
 }
 
-- (void) mediaSource:(id<MediaSource>)mediaSource didRemoveMedia:(NSArray*)arrayOfMedia
+- (void) mediaFileSource:(id<MediaFileSource>)mediaSource didRemoveMedia:(NSArray*)arrayOfMedia
 {
     NSMutableDictionary* deletesByFingerprint = [NSMutableDictionary dictionary];
     for (MediaFile* media in arrayOfMedia) {
         Disc* disc = [media disc];
         if (disc) {
             NSString* discFingerprint = [disc fingerprint];
-            [disc removeMedia:media];
-            if (![disc hasDisc]) {
-                [discsByFingerprint removeObjectForKey:discFingerprint];
+            [disc.mediaURLs removeObject:media.url];
+            if (![disc.mediaURLs count]) {
+                [self _findDiscByFingerprint:discFingerprint];
                 [infoDictionariesByFingerprint removeObjectForKey:discFingerprint];
             }
             
@@ -771,8 +792,8 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
     /*  TODO: Process/Crop image to appropriate dimensions.  */
     
-    for (MediaFile* media in disc.allMedia) {
-        [media setFrontCover:[response PNGRepresentation]];
+    for (NSString* url in disc.mediaURLs) {
+        [[mediaByURL objectForKey:url] setFrontCover:[response PNGRepresentation]];
     }
 }
 

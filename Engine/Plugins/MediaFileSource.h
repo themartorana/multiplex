@@ -1,10 +1,11 @@
+#import <Foundation/Foundation.h>
 #import "MediaFile.h"
 
-@protocol MediaSourceDelegate;
+@protocol MediaFileSourceDelegate;
 
-@protocol MediaSource
+@protocol MediaFileSource
 
-@property (assign) id<MediaSourceDelegate> delegate;
+@property (assign) id<MediaFileSourceDelegate> delegate;
 - (void) start;
 - (void) stop;
 - (NSMutableDictionary*) infoDictionaryForMedia:(MediaFile*)media;
@@ -16,10 +17,11 @@
 - (void) reloadMedia:(MediaFile*)media;
 @end
 
-@protocol MediaSourceDelegate
+@protocol MediaFileSourceDelegate
 
-- (void) mediaSource:(id<MediaSource>)mediaSource didAddMedia:(NSArray*)media;
-- (void) mediaSource:(id<MediaSource>)mediaSource didUpdateMedia:(NSArray*)media;
-- (void) mediaSource:(id<MediaSource>)mediaSource didRemoveMedia:(NSArray*)media;
+- (void) mediaFileSource:(id<MediaFileSource>)mediaSource didAddMedia:(NSArray*)media;
+- (void) mediaFileSource:(id<MediaFileSource>)mediaSource didUpdateMedia:(NSArray*)media;
+- (void) mediaFileSource:(id<MediaFileSource>)mediaSource didRemoveMedia:(NSArray*)media;
 
 @end
+

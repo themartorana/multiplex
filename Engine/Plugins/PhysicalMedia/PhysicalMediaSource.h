@@ -1,13 +1,13 @@
 #import <Cocoa/Cocoa.h>
-#import "MediaSource.h"
+#import "MediaFileSource.h"
 
-@interface PhysicalMediaSource : NSObject <MediaSource> {
+@interface PhysicalMediaSource : NSObject <MediaFileSource> {
     BOOL started;
     NSMutableDictionary* mediaByDeviceName;
-    id<MediaSourceDelegate> delegate;
+    id<MediaFileSourceDelegate> delegate;
 }
 
-@property (assign) id<MediaSourceDelegate> delegate;
+@property (assign) id<MediaFileSourceDelegate> delegate;
 - (void) start;
 - (void) stop;
 

@@ -1,6 +1,6 @@
 #import "MediaFile.h"
 #import "JSONKit/JSONKit.h"
-#import "MediaSource.h"
+#import "MediaFileSource.h"
 #import <libkern/OSAtomic.h>
 
 const CFStringRef kMDDiscDiscIdentFingerprint = CFSTR("com_discident_fingerprint");
@@ -14,13 +14,13 @@ extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
 @synthesize mediaInfo;
 @synthesize disc;
 @synthesize url;
-@synthesize mediaSource;
+@synthesize mediaFileSource;
 @synthesize frontCover;
 
-- (id) initWithMediaSource:(id<MediaSource>)_mediaSource mediaInfo:(void*)_mediaInfo;
+- (id) initWithMediaSource:(id<MediaFileSource>)_mediaFileSource mediaInfo:(void*)_mediaInfo;
 {
     if (self = [super init]) {
-        mediaSource = _mediaSource; // NOT RETAINED.
+        mediaFileSource = _mediaFileSource; // NOT RETAINED.
         mediaInfo = _mediaInfo; // NOT RETAINED.
     }
     return self;
@@ -36,42 +36,42 @@ extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
 
 - (void) reload
 {
-    NSAssert(mediaSource, @"No mediaSource?");
-    [mediaSource reloadMedia:self];
+    NSAssert(mediaFileSource, @"No mediaSource?");
+    [mediaFileSource reloadMedia:self];
 }
 
 - (NSString*) fingerprint
 {
-    NSAssert(mediaSource, @"No mediaSource?");
-    return [mediaSource fingerprintForMedia:self];
+    NSAssert(mediaFileSource, @"No mediaSource?");
+    return [mediaFileSource fingerprintForMedia:self];
 }
 
 - (NSString*) pathToFile
 {
-    NSAssert(mediaSource, @"No mediaSource?");
-    return [mediaSource pathToFileForMedia:self];
+    NSAssert(mediaFileSource, @"No mediaSource?");
+    return [mediaFileSource pathToFileForMedia:self];
 }
 
 - (NSMutableDictionary*) infoDictionary
 {
-    NSAssert(mediaSource, @"No mediaSource?");
-    return [mediaSource infoDictionaryForMedia:self];
+    NSAssert(mediaFileSource, @"No mediaSource?");
+    return [mediaFileSource infoDictionaryForMedia:self];
 }
 
 - (void) setInfoDictionary:(NSMutableDictionary*)infoDictionary
 {
-    NSAssert(mediaSource, @"No mediaSource?");
-    [mediaSource setInfoDictionary:infoDictionary forMedia:self];
+    NSAssert(mediaFileSource, @"No mediaSource?");
+    [mediaFileSource setInfoDictionary:infoDictionary forMedia:self];
 }
 
 - (NSData*) frontCover
 {
-    return [mediaSource frontCoverForMedia:self];
+    return [mediaFileSource frontCoverForMedia:self];
 }
 
 - (void) setFrontCover:(NSData*)frontCover
 {
-    [mediaSource setFrontCover:frontCover forMedia:self];
+    [mediaFileSource setFrontCover:frontCover forMedia:self];
 }
 
 @end

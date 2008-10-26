@@ -104,7 +104,7 @@
      *  will no longer be available.
      */
     if ([mediaByDeviceName count]) {
-        [delegate mediaSource:self didRemoveMedia:[mediaByDeviceName allValues]];
+        [delegate mediaFileSource:self didRemoveMedia:[mediaByDeviceName allValues]];
         [mediaByDeviceName removeAllObjects];
     }
 
@@ -113,7 +113,7 @@
 
 - (NSMutableDictionary*) infoDictionaryForMedia:(MediaFile*)media
 {
-    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSAssert(media.mediaFileSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
     
     NSString *pathToInfoFile = [self _pathToInfoFileForMedia: media];
@@ -145,7 +145,7 @@
 
 - (void) setInfoDictionary:(NSMutableDictionary*)infoDictionary forMedia:(MediaFile*)media
 {
-    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSAssert(media.mediaFileSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
     [mediaInfo setObject:infoDictionary forKey:@"info"];
 
@@ -159,32 +159,32 @@
 
 - (NSData*) frontCoverForMedia:(MediaFile*)media
 {
-    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSAssert(media.mediaFileSource == self, @"This media doesn't belong to me.");
     return [NSData dataWithContentsOfFile:[self _pathToFrontCoverForMedia: media]];
 }
 
 - (void) setFrontCover:(NSData*)frontCover forMedia:(MediaFile*)media
 {
-    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSAssert(media.mediaFileSource == self, @"This media doesn't belong to me.");
     [frontCover writeToFile:[self _pathToFrontCoverForMedia: media] atomically:YES];
 }
 
 - (void) reloadMedia:(MediaFile*)media
 {
-    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSAssert(media.mediaFileSource == self, @"This media doesn't belong to me.");
     /* Ignored */
 }
 
 - (NSString*) pathToFileForMedia:(MediaFile*)media
 {
-    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSAssert(media.mediaFileSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
     return [mediaInfo objectForKey:@"mountPoint"];
 }
 
 - (NSString*) fingerprintForMedia:(MediaFile*)media
 {
-    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSAssert(media.mediaFileSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
     return [mediaInfo objectForKey:@"fingerprint"];
 }
@@ -193,7 +193,7 @@
 {
     if ([NSThread currentThread] == [NSThread mainThread]) {
         @try {
-            [delegate mediaSource:self didAddMedia:media];
+            [delegate mediaFileSource:self didAddMedia:media];
         } @catch (id exception) {
             /* IGNORED */
         }
@@ -206,7 +206,7 @@
 {
     if ([NSThread currentThread] == [NSThread mainThread]) {
         @try {
-            [delegate mediaSource:self didUpdateMedia:media];
+            [delegate mediaFileSource:self didUpdateMedia:media];
         } @catch (id exception) {
             /* IGNORED */
         }
@@ -219,7 +219,7 @@
 {
     if ([NSThread currentThread] == [NSThread mainThread]) {
         @try {
-            [delegate mediaSource:self didRemoveMedia:media];
+            [delegate mediaFileSource:self didRemoveMedia:media];
         } @catch (id exception) {
             /* IGNORED */
         }

@@ -90,7 +90,6 @@
 		F9A1D6360E83511E00AB691D /* Engine.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA2D00E4C9ECA00438E14 /* Engine.m */; };
 		F9A1D6380E83511E00AB691D /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A1D5170E8342C700AB691D /* HTTPServer.m */; };
 		F9A1D63A0E83512400AB691D /* Disc.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA6FB0E4E290B00438E14 /* Disc.m */; };
-		F9A1D63C0E83512400AB691D /* MediaFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA3770E4CA58D00438E14 /* MediaFile.m */; };
 		F9A1D6490E83517000AB691D /* AmazonQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F93B04A60E6F57CF006CB915 /* AmazonQuery.m */; };
 		F9A1D64C0E83518300AB691D /* DiscIdentKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F94A06060E7B9B5800C8A8B7 /* DiscIdentKit.framework */; };
 		F9A1D64D0E83518600AB691D /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
@@ -128,6 +127,9 @@
 		F9CE81CB0EA68C2400602750 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F967B07F0E7E1F3100C12B92 /* QuartzCore.framework */; };
 		F9CE84CB0EA7D3D900602750 /* Toolkit.h in Headers */ = {isa = PBXBuildFile; fileRef = F9CE84CA0EA7D3D900602750 /* Toolkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F9CE85D40EA7E2D400602750 /* ApplicationResources.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CE85D30EA7E2D400602750 /* ApplicationResources.m */; };
+		F9D10CBE0EB509A8007B8B73 /* Engine.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = F9D10CBD0EB509A8007B8B73 /* Engine.xcdatamodel */; };
+		F9D10CCB0EB50A68007B8B73 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9D315230E7DDB9900D99DCA /* CoreData.framework */; };
+		F9D10DC20EB51E70007B8B73 /* MediaFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D10DC00EB51E70007B8B73 /* MediaFile.m */; };
 		F9D30D6D0E7DD63600D99DCA /* PhysicalMediaSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F9DA5B4C0E61C1C900E96C0D /* PhysicalMediaSource.m */; };
 		F9D314BA0E7DD95000D99DCA /* PhysicalMedia.mediasource in Copy Files to Plugins */ = {isa = PBXBuildFile; fileRef = F9D30D610E7DD5B500D99DCA /* PhysicalMedia.mediasource */; };
 		F9D314D80E7DD9C700D99DCA /* DVDMedia.mediasource in Copy Files to Plugins */ = {isa = PBXBuildFile; fileRef = F9D314CE0E7DD99500D99DCA /* DVDMedia.mediasource */; };
@@ -390,8 +392,6 @@
 		F94EA2BF0E4C9DBF00438E14 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F94EA2CF0E4C9ECA00438E14 /* Engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Engine.h; sourceTree = "<group>"; };
 		F94EA2D00E4C9ECA00438E14 /* Engine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Engine.m; sourceTree = "<group>"; };
-		F94EA3760E4CA58D00438E14 /* MediaFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaFile.h; sourceTree = "<group>"; };
-		F94EA3770E4CA58D00438E14 /* MediaFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaFile.m; sourceTree = "<group>"; };
 		F94EA6FA0E4E290B00438E14 /* Disc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Disc.h; sourceTree = "<group>"; };
 		F94EA6FB0E4E290B00438E14 /* Disc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Disc.m; sourceTree = "<group>"; };
 		F966E49A0EAF9215001D0B3B /* DragDropTargetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragDropTargetView.h; sourceTree = "<group>"; };
@@ -453,6 +453,10 @@
 		F9CE84CA0EA7D3D900602750 /* Toolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Toolkit.h; sourceTree = "<group>"; };
 		F9CE85D20EA7E2D400602750 /* ApplicationResources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationResources.h; sourceTree = "<group>"; };
 		F9CE85D30EA7E2D400602750 /* ApplicationResources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationResources.m; sourceTree = "<group>"; };
+		F9D10CBD0EB509A8007B8B73 /* Engine.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Engine.xcdatamodel; sourceTree = "<group>"; };
+		F9D10DBF0EB51E70007B8B73 /* MediaFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaFile.h; sourceTree = "<group>"; };
+		F9D10DC00EB51E70007B8B73 /* MediaFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaFile.m; sourceTree = "<group>"; };
+		F9D10DC10EB51E70007B8B73 /* MediaFileSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaFileSource.h; sourceTree = "<group>"; };
 		F9D30D610E7DD5B500D99DCA /* PhysicalMedia.mediasource */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhysicalMedia.mediasource; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9D30D620E7DD5B500D99DCA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F9D30D6F0E7DD69A00D99DCA /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -467,7 +471,6 @@
 		F9DA5B490E61C1BC00E96C0D /* DVDMediaSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVDMediaSource.m; sourceTree = "<group>"; };
 		F9DA5B4B0E61C1C900E96C0D /* PhysicalMediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicalMediaSource.h; sourceTree = "<group>"; };
 		F9DA5B4C0E61C1C900E96C0D /* PhysicalMediaSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhysicalMediaSource.m; sourceTree = "<group>"; };
-		F9DA5B6F0E61C67400E96C0D /* MediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaSource.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -500,6 +503,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9D10CCB0EB50A68007B8B73 /* CoreData.framework in Frameworks */,
 				F9B380DC0EAD029700FCAB1E /* SystemConfiguration.framework in Frameworks */,
 				F9CE81700EA6898600602750 /* Toolkit.framework in Frameworks */,
 				F9A1D64D0E83518600AB691D /* JSONKit.framework in Frameworks */,
@@ -685,6 +689,7 @@
 				557B66A20E4A2F4D0009919E /* main.m */,
 				F9E3F82D0E7579B300DCA2A8 /* Model */,
 				F9D30D680E7DD60000D99DCA /* Plugins */,
+				F9E3F82C0E7579A300DCA2A8 /* Queries */,
 				557B668B0E4A2DD70009919E /* Classes */,
 				F94EA2BD0E4C9D7100438E14 /* Resources */,
 			);
@@ -694,8 +699,6 @@
 		557B668B0E4A2DD70009919E /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				F9E3F82C0E7579A300DCA2A8 /* Queries */,
-				F9DA5B6F0E61C67400E96C0D /* MediaSource.h */,
 				F94EA2CF0E4C9ECA00438E14 /* Engine.h */,
 				F94EA2D00E4C9ECA00438E14 /* Engine.m */,
 				F9A1D5160E8342C700AB691D /* HTTPServer.h */,
@@ -876,6 +879,9 @@
 		F9D30D680E7DD60000D99DCA /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				F9D10DBF0EB51E70007B8B73 /* MediaFile.h */,
+				F9D10DC00EB51E70007B8B73 /* MediaFile.m */,
+				F9D10DC10EB51E70007B8B73 /* MediaFileSource.h */,
 				F9D314E40E7DDA0100D99DCA /* DVDMedia */,
 				F9D30D690E7DD60F00D99DCA /* PhysicalMedia */,
 			);
@@ -910,18 +916,17 @@
 				F93B04A50E6F57CF006CB915 /* AmazonQuery.h */,
 				F93B04A60E6F57CF006CB915 /* AmazonQuery.m */,
 			);
-			name = Queries;
+			path = Queries;
 			sourceTree = "<group>";
 		};
 		F9E3F82D0E7579B300DCA2A8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				F9D10CBD0EB509A8007B8B73 /* Engine.xcdatamodel */,
 				F94EA6FA0E4E290B00438E14 /* Disc.h */,
 				F94EA6FB0E4E290B00438E14 /* Disc.m */,
-				F94EA3760E4CA58D00438E14 /* MediaFile.h */,
-				F94EA3770E4CA58D00438E14 /* MediaFile.m */,
 			);
-			name = Model;
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1268,13 +1273,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9D10CBE0EB509A8007B8B73 /* Engine.xcdatamodel in Sources */,
+				F9A1D63A0E83512400AB691D /* Disc.m in Sources */,
 				553477520EA3A9E400436A8C /* ImageQuery.m in Sources */,
 				F9A1D64F0E83519300AB691D /* main.m in Sources */,
 				F9A1D6490E83517000AB691D /* AmazonQuery.m in Sources */,
-				F9A1D63A0E83512400AB691D /* Disc.m in Sources */,
-				F9A1D63C0E83512400AB691D /* MediaFile.m in Sources */,
 				F9A1D6360E83511E00AB691D /* Engine.m in Sources */,
 				F9A1D6380E83511E00AB691D /* HTTPServer.m in Sources */,
+				F9D10DC20EB51E70007B8B73 /* MediaFile.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1579,7 +1585,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				GCC_PREFIX_HEADER = "";
 				GCC_VERSION = 4.2;
 				INSTALL_PATH = /usr/local/bin;
 				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
@@ -1606,7 +1612,7 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				GCC_PREFIX_HEADER = "";
 				GCC_VERSION = 4.2;
 				INSTALL_PATH = /usr/local/bin;
 				OTHER_CFLAGS = "-fvisibility=default";

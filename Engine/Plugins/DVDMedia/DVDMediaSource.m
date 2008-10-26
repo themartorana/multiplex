@@ -27,10 +27,10 @@
         
 @end
 
-static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSource)
+static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, DVDMediaSource* mediaSource)
 {
     MediaFile* media = [[MediaFile alloc] initWithMediaSource:mediaSource mediaInfo:[[NSMutableDictionary alloc] initWithObjectsAndKeys:(id)item, @"item", nil]];
-    [(DVDMediaSource*)mediaSource reloadMedia:media];
+    [mediaSource reloadMedia:media];
     return media;
 }
 
@@ -105,7 +105,7 @@ static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, void* media
         while (count-- > 0) {
             [removedDiscs addObject:(MediaFile*)MDQueryGetResultAtIndex(query, count)];
         }
-        [delegate mediaSource:self didRemoveMedia:removedDiscs];
+        [delegate mediaFileSource:self didRemoveMedia:removedDiscs];
     }
     
     /*  Shutdown the query.
@@ -118,7 +118,7 @@ static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, void* media
 
 - (NSMutableDictionary*) infoDictionaryForMedia:(MediaFile*)media
 {
-    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSAssert(media.mediaFileSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
     
     NSMutableDictionary* info = [mediaInfo objectForKey:@"info"];
@@ -164,7 +164,7 @@ static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, void* media
 
 - (void) setInfoDictionary:(NSMutableDictionary*)infoDictionary forMedia:(MediaFile*)media
 {
-    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSAssert(media.mediaFileSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
     [mediaInfo setObject:infoDictionary forKey:@"info"];
     
@@ -178,13 +178,13 @@ static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, void* media
 
 - (NSData*) frontCoverForMedia:(MediaFile*)media
 {
-    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSAssert(media.mediaFileSource == self, @"This media doesn't belong to me.");
     return [NSData dataWithContentsOfFile:[[media.pathToFile stringByAppendingPathComponent:@"QuickLook"] stringByAppendingPathComponent:@"FrontCover.png"]];
 }
 
 - (void) setFrontCover:(NSData*)frontCover forMedia:(MediaFile*)media
 {
-    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");    
+    NSAssert(media.mediaFileSource == self, @"This media doesn't belong to me.");    
     NSString* pathToQuickLookFolder = [media.pathToFile stringByAppendingPathComponent:@"QuickLook"];
     NSFileManager* fileManager = [NSFileManager defaultManager];
     [fileManager createDirectoryAtPath:pathToQuickLookFolder attributes:nil];
@@ -195,7 +195,7 @@ static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, void* media
 
 - (void) reloadMedia:(MediaFile*)media
 {
-    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSAssert(media.mediaFileSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
 #if 0
     MDItemRef item = (MDItemRef)[mediaInfo objectForKey:@"item"];
@@ -212,7 +212,7 @@ static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, void* media
 
 - (NSString*) fingerprintForMedia:(MediaFile*)media
 {
-    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSAssert(media.mediaFileSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
     NSString* fingerprint = (NSString*)MDItemCopyAttribute((MDItemRef)[mediaInfo objectForKey:@"item"], CFSTR("com_discident_fingerprint"));
     return [fingerprint autorelease];
@@ -220,7 +220,7 @@ static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, void* media
 
 - (NSString*) pathToFileForMedia:(MediaFile*)media
 {
-    NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
+    NSAssert(media.mediaFileSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
     NSString* pathToFile = (NSString*)MDItemCopyAttribute((MDItemRef)[mediaInfo objectForKey:@"item"], kMDItemPath);
     return [pathToFile autorelease];
@@ -230,9 +230,9 @@ static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, void* media
 {
     if ([NSThread currentThread] == [NSThread mainThread]) {
         @try {
-            [delegate mediaSource:self didAddMedia:media];
+            [delegate mediaFileSource:self didAddMedia:media];
         } @catch (id exception) {
-            /* IGNORED */
+            NSLog(@"%s: %@", __PRETTY_FUNCTION__, exception);
         }
     } else {
         [self performSelectorOnMainThread:@selector(_fireDidAddMedia:) withObject:media waitUntilDone:NO];
@@ -243,9 +243,9 @@ static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, void* media
 {
     if ([NSThread currentThread] == [NSThread mainThread]) {
         @try {
-            [delegate mediaSource:self didUpdateMedia:media];
+            [delegate mediaFileSource:self didUpdateMedia:media];
         } @catch (id exception) {
-            /* IGNORED */
+            NSLog(@"%s: %@", __PRETTY_FUNCTION__, exception);
         }
     } else {
         [self performSelectorOnMainThread:@selector(_fireDidUpdateMedia:) withObject:media waitUntilDone:NO];
@@ -256,9 +256,9 @@ static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, void* media
 {
     if ([NSThread currentThread] == [NSThread mainThread]) {
         @try {
-            [delegate mediaSource:self didRemoveMedia:media];
+            [delegate mediaFileSource:self didRemoveMedia:media];
         } @catch (id exception) {
-            /* IGNORED */
+            NSLog(@"%s: %@", __PRETTY_FUNCTION__, exception);
         }
     } else {
         [self performSelectorOnMainThread:@selector(_fireDidRemoveMedia:) withObject:media waitUntilDone:NO];

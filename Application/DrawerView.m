@@ -12,6 +12,7 @@
     minHeight = [self frame].size.height;
     
     CALayer* root = [self layer];
+    [root setZPosition:1000];
     [root setLayoutManager:[CAConstraintLayoutManager layoutManager]];
 
     CALayer* backgroundLayer = [CALayer layer];

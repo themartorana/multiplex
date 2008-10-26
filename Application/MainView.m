@@ -126,18 +126,22 @@
     }
 }
 
+- (void) restartHoverTimer
+{
+    [self cancelHoverTimer];
+    if (hoveredMovie) {
+        hoverTimer = [[NSTimer scheduledTimerWithTimeInterval:0.75 target:self selector:@selector(hoverTimerTicked:) userInfo:nil repeats:NO] retain];
+    }
+}
+
 - (void) setHoveredMovie:(Movie*)_hoveredMovie
 {
     if (_hoveredMovie != hoveredMovie) {
         [hoveredMovie release];
         hoveredMovie = [_hoveredMovie retain];
-
         hoverPlayLayer.hidden = YES;
-        [self cancelHoverTimer];
-        if (_hoveredMovie) {
-            hoverTimer = [[NSTimer scheduledTimerWithTimeInterval:0.75 target:self selector:@selector(hoverTimerTicked:) userInfo:nil repeats:NO] retain];
-        }
     }
+    [self restartHoverTimer];
 }
 
 
@@ -193,6 +197,8 @@
     if (movie != hoveredMovie && ![hoverPlayLayer hitTest:position]) {
         [floorLayer.layoutManager setHoveredMovieLayer:movieLayer];
         [self setHoveredMovie:movie];
+    } else {
+        [self restartHoverTimer];
     }
     
     if (hoverPlayLayer.hidden) {

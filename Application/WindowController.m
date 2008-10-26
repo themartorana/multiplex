@@ -98,9 +98,6 @@
     [notificationCenter addObserver:self selector:@selector(closeInfoView:) name:@"MultiplexCloseMovieDialog" object:nil];
     [notificationCenter addObserver:self selector:@selector(playSelectedMovie:) name:@"MultiplexPlayButtonClicked" object:nil];
     [notificationCenter addObserver:self selector:@selector(toggleFullScreen:) name:@"MultiplexToggleFullScreen" object:nil];
-#if 0
-    [notificationCenter addObserver:self selector:@selector(_coreDataDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:nil];
-#endif
     
     engineController = [[EngineController alloc] initWithManagedObjectContext:engineManagedObjectContext];
     
@@ -215,44 +212,6 @@
         ];
     }
 }
-
-#if 0
-- (void) _coreDataDidSaveNotification:(NSNotification*)notification
-{
-    NSDictionary* userInfo = [notification userInfo];
-    
-    NSMutableArray* insertedMovies = nil;
-    for (NSManagedObject* object in [userInfo objectForKey:NSInsertedObjectsKey]) {
-        if ([object entity] == movieDesc) {
-            if (!insertedMovies) {
-                insertedMovies = [NSMutableArray array];
-            }
-            [insertedMovies addObject:object];
-        }
-    }
-    if (insertedMovies) {
-        [movies addObjects:insertedMovies];
-    }
-    
-    NSMutableArray* deletedMovies = nil;
-    for (NSManagedObject* object in [userInfo objectForKey:NSDeletedObjectsKey]) {
-        if ([object entity] == movieDesc) {
-            if (!deletedMovies) {
-                deletedMovies = [NSMutableArray array];
-            }
-            [deletedMovies addObject:object];
-        }
-    }
-    if (deletedMovies) {
-        @try {
-            [movies removeObjects:deletedMovies];
-        }
-        @catch (NSException* exception) {
-            NSLog(@"%@", exception);
-        }
-    }    
-}
-#endif
 
 @end
 

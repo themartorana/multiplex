@@ -19,6 +19,7 @@
         radialGradientLayer = [CALayer layer];
         radialGradientLayer.hidden = YES;
         radialGradientLayer.contents = (id)[ApplicationResources textureForStadiumLayoutFloor];
+//        radialGradientLayer.backgroundColor = [MultiplexColorFactory multiplexOrange];
         radialGradientLayer.frame = CGRectMake(0, 0, 100, 100);
         [_floorLayer addSublayer:radialGradientLayer];
         
@@ -74,8 +75,6 @@
 - (void) setHoveredMovieLayer:(MovieLayer*)_hoveredMovieLayer;
 {
     if (hoveredMovieLayer != _hoveredMovieLayer) {
-//        dontLayoutBecauseOfHighlight = YES;
-
         [hoveredMovieLayer release];
         hoveredMovieLayer = [_hoveredMovieLayer retain];
 
@@ -159,11 +158,6 @@ static const CGFloat HS = 75.0;
 
 - (void) layoutSublayersOfLayer:(CALayer*)layer
 {
-    // TODO: THERE MUST A BETTER WAY!
-    if (dontLayoutBecauseOfHighlight) {
-        dontLayoutBecauseOfHighlight = NO;
-        return;
-    }
     DEBUG_TRACE();
     
     [CATransaction begin];
@@ -272,7 +266,7 @@ static const CGFloat HS = 75.0;
             CGFloat tWidth = radialGradientLayer.bounds.size.width;
             CGFloat scale = width / tWidth;
             CATransform3D t = b;
-            t = CATransform3DTranslate(t, -tWidth / 2.0, -WS, 0.0);
+            t = CATransform3DTranslate(t, -tWidth / 2.0, -WS * 2.0, 0.0);
             t = CATransform3DRotate(t, -M_PI / 2.0, 1.0, 0.0, 0.0);
             t = CATransform3DScale(t, scale, scale, 1.0);
             radialGradientLayer.transform = t;

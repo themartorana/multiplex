@@ -7,16 +7,17 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		F9A1D17C0E82E4F400AB691D /* All Engine Plugins */ = {
+		F9A1D17C0E82E4F400AB691D /* Engine and Plugins */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = F9A1D18E0E82E52100AB691D /* Build configuration list for PBXAggregateTarget "All Engine Plugins" */;
+			buildConfigurationList = F9A1D18E0E82E52100AB691D /* Build configuration list for PBXAggregateTarget "Engine and Plugins" */;
 			buildPhases = (
 			);
 			dependencies = (
+				F9D10B940EB4FB7E007B8B73 /* PBXTargetDependency */,
 				F9A1D1820E82E4FC00AB691D /* PBXTargetDependency */,
 				F9A1D1840E82E4FC00AB691D /* PBXTargetDependency */,
 			);
-			name = "All Engine Plugins";
+			name = "Engine and Plugins";
 			productName = "Engine and All Plugins";
 		};
 /* End PBXAggregateTarget section */
@@ -93,7 +94,6 @@
 		F9A1D6360E83511E00AB691D /* Engine.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA2D00E4C9ECA00438E14 /* Engine.m */; };
 		F9A1D6380E83511E00AB691D /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A1D5170E8342C700AB691D /* HTTPServer.m */; };
 		F9A1D63A0E83512400AB691D /* Disc.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA6FB0E4E290B00438E14 /* Disc.m */; };
-		F9A1D63C0E83512400AB691D /* Media.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA3770E4CA58D00438E14 /* Media.m */; };
 		F9A1D6490E83517000AB691D /* AmazonQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F93B04A60E6F57CF006CB915 /* AmazonQuery.m */; };
 		F9A1D64C0E83518300AB691D /* DiscIdentKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F94A06060E7B9B5800C8A8B7 /* DiscIdentKit.framework */; };
 		F9A1D64D0E83518600AB691D /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
@@ -131,6 +131,10 @@
 		F9CE81CB0EA68C2400602750 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F967B07F0E7E1F3100C12B92 /* QuartzCore.framework */; };
 		F9CE84CB0EA7D3D900602750 /* Toolkit.h in Headers */ = {isa = PBXBuildFile; fileRef = F9CE84CA0EA7D3D900602750 /* Toolkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F9CE85D40EA7E2D400602750 /* ApplicationResources.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CE85D30EA7E2D400602750 /* ApplicationResources.m */; };
+		F9D10CBE0EB509A8007B8B73 /* Engine.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = F9D10CBD0EB509A8007B8B73 /* Engine.xcdatamodel */; };
+		F9D10CCB0EB50A68007B8B73 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9D315230E7DDB9900D99DCA /* CoreData.framework */; };
+		F9D10DC20EB51E70007B8B73 /* MediaFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D10DC00EB51E70007B8B73 /* MediaFile.m */; };
+		F9D10E330EB522A0007B8B73 /* Engine.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = F9D10CBD0EB509A8007B8B73 /* Engine.xcdatamodel */; };
 		F9D30D6D0E7DD63600D99DCA /* PhysicalMediaSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F9DA5B4C0E61C1C900E96C0D /* PhysicalMediaSource.m */; };
 		F9D314BA0E7DD95000D99DCA /* PhysicalMedia.mediasource in Copy Files to Plugins */ = {isa = PBXBuildFile; fileRef = F9D30D610E7DD5B500D99DCA /* PhysicalMedia.mediasource */; };
 		F9D314D80E7DD9C700D99DCA /* DVDMedia.mediasource in Copy Files to Plugins */ = {isa = PBXBuildFile; fileRef = F9D314CE0E7DD99500D99DCA /* DVDMedia.mediasource */; };
@@ -201,13 +205,6 @@
 			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
 			remoteInfo = JSONKit;
 		};
-		F9A1D63F0E83515500AB691D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F9A1D6210E8350C100AB691D;
-			remoteInfo = Engine;
-		};
 		F9A1D89E0E8368B900AB691D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
@@ -256,6 +253,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = F9CE81550EA6894500602750;
 			remoteInfo = Toolkit;
+		};
+		F9D10B930EB4FB7E007B8B73 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F9A1D6210E8350C100AB691D /* Engine */;
+			remoteInfo = Engine;
 		};
 		F9D314D30E7DD99A00D99DCA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -399,8 +403,6 @@
 		F94EA2BF0E4C9DBF00438E14 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F94EA2CF0E4C9ECA00438E14 /* Engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Engine.h; sourceTree = "<group>"; };
 		F94EA2D00E4C9ECA00438E14 /* Engine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Engine.m; sourceTree = "<group>"; };
-		F94EA3760E4CA58D00438E14 /* Media.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Media.h; sourceTree = "<group>"; };
-		F94EA3770E4CA58D00438E14 /* Media.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Media.m; sourceTree = "<group>"; };
 		F94EA6FA0E4E290B00438E14 /* Disc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Disc.h; sourceTree = "<group>"; };
 		F94EA6FB0E4E290B00438E14 /* Disc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Disc.m; sourceTree = "<group>"; };
 		F966E49A0EAF9215001D0B3B /* DragDropTargetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragDropTargetView.h; sourceTree = "<group>"; };
@@ -462,6 +464,10 @@
 		F9CE84CA0EA7D3D900602750 /* Toolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Toolkit.h; sourceTree = "<group>"; };
 		F9CE85D20EA7E2D400602750 /* ApplicationResources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationResources.h; sourceTree = "<group>"; };
 		F9CE85D30EA7E2D400602750 /* ApplicationResources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationResources.m; sourceTree = "<group>"; };
+		F9D10CBD0EB509A8007B8B73 /* Engine.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Engine.xcdatamodel; sourceTree = "<group>"; };
+		F9D10DBF0EB51E70007B8B73 /* MediaFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaFile.h; sourceTree = "<group>"; };
+		F9D10DC00EB51E70007B8B73 /* MediaFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaFile.m; sourceTree = "<group>"; };
+		F9D10DC10EB51E70007B8B73 /* MediaFileSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaFileSource.h; sourceTree = "<group>"; };
 		F9D30D610E7DD5B500D99DCA /* PhysicalMedia.mediasource */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhysicalMedia.mediasource; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9D30D620E7DD5B500D99DCA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F9D30D6F0E7DD69A00D99DCA /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -476,7 +482,6 @@
 		F9DA5B490E61C1BC00E96C0D /* DVDMediaSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVDMediaSource.m; sourceTree = "<group>"; };
 		F9DA5B4B0E61C1C900E96C0D /* PhysicalMediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicalMediaSource.h; sourceTree = "<group>"; };
 		F9DA5B4C0E61C1C900E96C0D /* PhysicalMediaSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhysicalMediaSource.m; sourceTree = "<group>"; };
-		F9DA5B6F0E61C67400E96C0D /* MediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaSource.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -509,6 +514,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9D10CCB0EB50A68007B8B73 /* CoreData.framework in Frameworks */,
 				F9B380DC0EAD029700FCAB1E /* SystemConfiguration.framework in Frameworks */,
 				F9CE81700EA6898600602750 /* Toolkit.framework in Frameworks */,
 				F9A1D64D0E83518600AB691D /* JSONKit.framework in Frameworks */,
@@ -695,8 +701,10 @@
 		557B66890E4A2DD00009919E /* Engine */ = {
 			isa = PBXGroup;
 			children = (
-				F9D30D680E7DD60000D99DCA /* Plugins */,
 				557B66A20E4A2F4D0009919E /* main.m */,
+				F9E3F82D0E7579B300DCA2A8 /* Model */,
+				F9D30D680E7DD60000D99DCA /* Plugins */,
+				F9E3F82C0E7579A300DCA2A8 /* Queries */,
 				557B668B0E4A2DD70009919E /* Classes */,
 				F94EA2BD0E4C9D7100438E14 /* Resources */,
 			);
@@ -706,9 +714,6 @@
 		557B668B0E4A2DD70009919E /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				F9E3F82D0E7579B300DCA2A8 /* Models */,
-				F9E3F82C0E7579A300DCA2A8 /* Queries */,
-				F9DA5B6F0E61C67400E96C0D /* MediaSource.h */,
 				F94EA2CF0E4C9ECA00438E14 /* Engine.h */,
 				F94EA2D00E4C9ECA00438E14 /* Engine.m */,
 				F9A1D5160E8342C700AB691D /* HTTPServer.h */,
@@ -891,6 +896,9 @@
 		F9D30D680E7DD60000D99DCA /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				F9D10DBF0EB51E70007B8B73 /* MediaFile.h */,
+				F9D10DC00EB51E70007B8B73 /* MediaFile.m */,
+				F9D10DC10EB51E70007B8B73 /* MediaFileSource.h */,
 				F9D314E40E7DDA0100D99DCA /* DVDMedia */,
 				F9D30D690E7DD60F00D99DCA /* PhysicalMedia */,
 			);
@@ -925,18 +933,17 @@
 				F93B04A50E6F57CF006CB915 /* AmazonQuery.h */,
 				F93B04A60E6F57CF006CB915 /* AmazonQuery.m */,
 			);
-			name = Queries;
+			path = Queries;
 			sourceTree = "<group>";
 		};
-		F9E3F82D0E7579B300DCA2A8 /* Models */ = {
+		F9E3F82D0E7579B300DCA2A8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				F9D10CBD0EB509A8007B8B73 /* Engine.xcdatamodel */,
 				F94EA6FA0E4E290B00438E14 /* Disc.h */,
 				F94EA6FB0E4E290B00438E14 /* Disc.m */,
-				F94EA3760E4CA58D00438E14 /* Media.h */,
-				F94EA3770E4CA58D00438E14 /* Media.m */,
 			);
-			name = Models;
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -978,7 +985,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				F9A1D6400E83515500AB691D /* PBXTargetDependency */,
 				F9A1D89F0E8368B900AB691D /* PBXTargetDependency */,
 				5535DBE10E4FC99200A45761 /* PBXTargetDependency */,
 				F9970F420E7B9D8C009A1B6A /* PBXTargetDependency */,
@@ -1110,8 +1116,8 @@
 			projectRoot = "";
 			targets = (
 				8D15AC270486D014006FF6A4 /* Multiplex */,
+				F9A1D17C0E82E4F400AB691D /* Engine and Plugins */,
 				F9A1D6210E8350C100AB691D /* Engine */,
-				F9A1D17C0E82E4F400AB691D /* All Engine Plugins */,
 				F9D30D600E7DD5B500D99DCA /* PhysicalMedia.mediasource */,
 				F9D314CD0E7DD99500D99DCA /* DVDMedia.mediasource */,
 				F98DC6B50B63008700371A83 /* DVD.mdimporter */,
@@ -1212,7 +1218,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\n#  Strip Everything\n\nif [ \"$ACTION\" = \"build\" ]; then\n  if [ \"$BUILD_STYLE\" = \"Release\" ]; then\n    echo -n \"Stripping all executables and libraries...\"\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type f -perm 755 -exec strip -x \\{} +\n    echo \"ok\"\n\n    echo -n \"Removing all framework header files...\"\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type f -name '*.h' -exec rm -rf \\{} +\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type l -name 'Headers' -exec rm -rf \\{} +\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type d -name 'Headers' -exec rm -rf \\{} +\n    echo \"ok\"\n  fi\nfi\n\n\n#  Fixup the Spotlight Importer\n\ninstall_name_tool \\\n  -change \\\n    @executable_path/../Frameworks/JSONKit.framework/Versions/A/JSONKit \\\n    @loader_path/../../../../../Frameworks/JSONKit.framework/Versions/A/JSONKit \\\n  ${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/Spotlight/DVD.mdimporter/Contents/MacOS/DVD\n\ninstall_name_tool \\\n  -change \\\n    @executable_path/../Frameworks/Toolkit.framework/Versions/A/Toolkit \\\n    @loader_path/../../../../../Frameworks/Toolkit.framework/Versions/A/Toolkit \\\n  ${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/Spotlight/DVD.mdimporter/Contents/MacOS/DVD\n";
+			shellScript = "\n#  Strip Everything\n\nif [ \"$ACTION\" = \"build\" ]; then\n  if [ \"$BUILD_STYLE\" = \"Release\" ]; then\n    echo -n \"Stripping all executables and libraries...\"\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type f -perm 755 -exec strip -x \\{} +\n    echo \"ok\"\n\n    echo -n \"Removing all framework header files...\"\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type f -name '*.h' -exec rm -rf \\{} +\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type l -name 'Headers' -exec rm -rf \\{} +\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type d -name 'Headers' -exec rm -rf \\{} +\n    echo \"ok\"\n  fi\nfi\n\n#  Fixup the Spotlight Importer\n\ninstall_name_tool \\\n  -change \\\n    @executable_path/../Frameworks/JSONKit.framework/Versions/A/JSONKit \\\n    @loader_path/../../../../../Frameworks/JSONKit.framework/Versions/A/JSONKit \\\n  ${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/Spotlight/DVD.mdimporter/Contents/MacOS/DVD\n\ninstall_name_tool \\\n  -change \\\n    @executable_path/../Frameworks/Toolkit.framework/Versions/A/Toolkit \\\n    @loader_path/../../../../../Frameworks/Toolkit.framework/Versions/A/Toolkit \\\n  ${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/Spotlight/DVD.mdimporter/Contents/MacOS/DVD\n";
 			showEnvVarsInLog = 0;
 		};
 		F9A1D62E0E83510100AB691D /* ShellScript */ = {
@@ -1235,10 +1241,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9D10E330EB522A0007B8B73 /* Engine.xcdatamodel in Sources */,
+				5583D1640E51D82700EB7AE6 /* Multiplex.xcdatamodel in Sources */,
 				556550D90EAE7FD600265A45 /* StadiumLayoutManager.m in Sources */,
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
 				5535D98F0E4E3F5400A45761 /* EngineController.m in Sources */,
-				5583D1640E51D82700EB7AE6 /* Multiplex.xcdatamodel in Sources */,
 				F9CA172A0E7C727C0049CD3E /* Movie.m in Sources */,
 				F9CA172E0E7C72930049CD3E /* Disc.m in Sources */,
 				F9CA17A90E7C79CE0049CD3E /* Media.m in Sources */,
@@ -1288,13 +1295,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9D10CBE0EB509A8007B8B73 /* Engine.xcdatamodel in Sources */,
+				F9A1D63A0E83512400AB691D /* Disc.m in Sources */,
 				553477520EA3A9E400436A8C /* ImageQuery.m in Sources */,
 				F9A1D64F0E83519300AB691D /* main.m in Sources */,
 				F9A1D6490E83517000AB691D /* AmazonQuery.m in Sources */,
-				F9A1D63A0E83512400AB691D /* Disc.m in Sources */,
-				F9A1D63C0E83512400AB691D /* Media.m in Sources */,
 				F9A1D6360E83511E00AB691D /* Engine.m in Sources */,
 				F9A1D6380E83511E00AB691D /* HTTPServer.m in Sources */,
+				F9D10DC20EB51E70007B8B73 /* MediaFile.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1368,14 +1376,9 @@
 			name = JSONKit;
 			targetProxy = F9A1D62A0E8350C800AB691D /* PBXContainerItemProxy */;
 		};
-		F9A1D6400E83515500AB691D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F9A1D6210E8350C100AB691D /* Engine */;
-			targetProxy = F9A1D63F0E83515500AB691D /* PBXContainerItemProxy */;
-		};
 		F9A1D89F0E8368B900AB691D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F9A1D17C0E82E4F400AB691D /* All Engine Plugins */;
+			target = F9A1D17C0E82E4F400AB691D /* Engine and Plugins */;
 			targetProxy = F9A1D89E0E8368B900AB691D /* PBXContainerItemProxy */;
 		};
 		F9A1D8AE0E8368EC00AB691D /* PBXTargetDependency */ = {
@@ -1402,6 +1405,11 @@
 			isa = PBXTargetDependency;
 			target = F9CE81550EA6894500602750 /* Toolkit */;
 			targetProxy = F9CE815D0EA6896F00602750 /* PBXContainerItemProxy */;
+		};
+		F9D10B940EB4FB7E007B8B73 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F9A1D6210E8350C100AB691D /* Engine */;
+			targetProxy = F9D10B930EB4FB7E007B8B73 /* PBXContainerItemProxy */;
 		};
 		F9D314D40E7DD99A00D99DCA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1599,7 +1607,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				GCC_PREFIX_HEADER = "";
 				GCC_VERSION = 4.2;
 				INSTALL_PATH = /usr/local/bin;
 				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
@@ -1626,7 +1634,7 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				GCC_PREFIX_HEADER = "";
 				GCC_VERSION = 4.2;
 				INSTALL_PATH = /usr/local/bin;
 				OTHER_CFLAGS = "-fvisibility=default";
@@ -1845,7 +1853,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F9A1D18E0E82E52100AB691D /* Build configuration list for PBXAggregateTarget "All Engine Plugins" */ = {
+		F9A1D18E0E82E52100AB691D /* Build configuration list for PBXAggregateTarget "Engine and Plugins" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F9A1D17D0E82E4F500AB691D /* Debug */,

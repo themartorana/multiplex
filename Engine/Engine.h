@@ -1,11 +1,17 @@
 #import <Cocoa/Cocoa.h>
-#import "Media.h"
-#import "MediaSource.h"
+#import <CoreData/CoreData.h>
+#import "MediaFile.h"
+#import "MediaFileSource.h"
 #import "HTTPServer.h"
 
-@interface Engine : NSApplication <MediaSourceDelegate> {
+@interface Engine : NSApplication <MediaFileSourceDelegate> {
+    NSManagedObjectModel* managedObjectModel;
+    NSPersistentStoreCoordinator* persistentStoreCoordinator;
+    NSManagedObjectContext* managedObjectContext;
+    NSEntityDescription* discEntity;
+    /**/
+    NSMutableDictionary* mediaByURL;
     NSMutableDictionary* infoDictionariesByFingerprint;
-    NSMutableDictionary* discsByFingerprint;
     NSMutableArray* protocols;
     NSString* machineId;
     NSString* machineName;

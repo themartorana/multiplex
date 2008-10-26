@@ -176,7 +176,7 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
                     
                     NSFileHandle* fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:fd closeOnDealloc:YES];
                     protocol = [MessageProtocol protocolWithDelegate:self fileHandleForReading:fileHandle fileHandleForWriting:fileHandle];
-                    protocol.userInfo = [engine.uuid retain];
+                    protocol.userInfo = [[engine objectID] retain];
                     [protocolsByUUID setObject:protocol forKey:engine.uuid];
                     [fileHandle release];
                     break;
@@ -205,14 +205,14 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
         
         MessageProtocol* protocol = [protocolsByUUID objectForKey:engine.uuid];
         if (protocol) {
-            NSString* uuid = protocol.userInfo;
-            NSAssert([uuid isEqualToString:engine.uuid], @"Why don't these match?");
+            NSManagedObjectID* objectID = protocol.userInfo;
+            NSAssert([objectID isEqual:engine.objectID], @"Why don't these match?");
             @try {
                 [protocol close];
             } @finally {
                 [protocolsByUUID removeObjectForKey:engine.uuid];
             }
-            [uuid release];
+            [objectID release];
         }
         
         engine.status = @"Not Connected";
@@ -367,11 +367,14 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
     @synchronized (managedObjectContext) {
         Activity* activity = userInfo;
         @try {
-            BoxArt* boxArt = activity.userInfo;
-            if ([boxArt validateForUpdate:nil]) {
+            BoxArt* boxArt = (BoxArt*)[managedObjectContext objectRegisteredForID:activity.userInfo];
+            if (boxArt) {
                 NSString* state = error ? [error description] : @"Error";
                 boxArt.state = state;
-                [managedObjectContext save:nil];
+
+                if ([boxArt validateForUpdate:nil]) {
+                    [managedObjectContext save:nil];
+                }
             }
         } @catch (id exception) {
             [managedObjectContext rollback];
@@ -386,8 +389,8 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
     @synchronized (managedObjectContext) {
         Activity* activity = userInfo;
         @try {
-            BoxArt* boxArt = activity.userInfo;
-            if ([boxArt validateForUpdate:nil]) {
+            BoxArt* boxArt = (BoxArt*)[managedObjectContext objectRegisteredForID:activity.userInfo];
+            if (boxArt) {
                 NSString* type = [(id)UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (CFStringRef)mimeType, CFSTR("public.image")) autorelease];
                 boxArt.type = type;
                 boxArt.state = @"Loaded";
@@ -399,7 +402,9 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
                     }
                 }
                 
-                [managedObjectContext save:nil];
+                if ([boxArt validateForUpdate:nil]) {
+                    [managedObjectContext save:nil];
+                }
             }
         } @catch (id exception) {
             NSLog(@"%@", exception);
@@ -438,18 +443,21 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
 
 - (void) protocolDidClose:(MessageProtocol*)protocol
 {
-    NSString* uuid = protocol.userInfo;
-    Engine* engine = [self _findEngineByUUID:uuid];
-    if (engine) {
-        [protocolsByUUID removeObjectForKey:engine.uuid];
-        [self performSelectorOnMainThread:@selector(disconnectEngine:) withObject:engine waitUntilDone:NO];
+    @synchronized (managedObjectContext) {
+        NSManagedObjectID* objectID = protocol.userInfo;
+        Engine* engine = (Engine*)[managedObjectContext objectWithID:objectID];
+        if (engine) {
+            [protocolsByUUID removeObjectForKey:engine.uuid];
+            [self disconnectEngine:engine];
+        }
     }
 }
 
 - (void) protocol:(MessageProtocol*)protocol didReceiveMessage:(NSDictionary*)message 
 {
     @synchronized (managedObjectContext) {
-        Engine* engine = [self _findEngineByUUID:[protocol userInfo]];
+        NSManagedObjectID* objectID = protocol.userInfo;
+        Engine* engine = (Engine*)[managedObjectContext objectWithID:objectID];
         if (!engine) {
             return;
         }
@@ -476,7 +484,9 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
                         boxArt = disc.boxArt = [[BoxArt alloc] initWithEntity:boxArtEntity insertIntoManagedObjectContext:managedObjectContext];
                         boxArt.url = frontCoverURL;
                         boxArt.state = @"Loading";
-                        [ImageQuery imageQueryWithURL:[NSURL URLWithString:frontCoverURL] delegate:self userInfo:[Activity activityWithName:kLoadingBoxArtActivityName userInfo:boxArt] startImmediately:YES];
+                        if ([managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject:boxArt] error:nil]) {
+                            [ImageQuery imageQueryWithURL:[NSURL URLWithString:frontCoverURL] delegate:self userInfo:[Activity activityWithName:kLoadingBoxArtActivityName userInfo:boxArt.objectID] startImmediately:YES];
+                        }
                     }
                 }
                 
@@ -709,6 +719,7 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
         engine.netServiceName = [netService name];
         engine.name = [netService name];
         engine.status = @"Resolving";
+        [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject:engine] error:nil];
         [managedObjectContext save:nil];
     }
     

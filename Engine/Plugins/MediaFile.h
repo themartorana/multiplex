@@ -1,17 +1,17 @@
 #import <Foundation/Foundation.h>
 
-@protocol MediaSource;
+@protocol MediaFileSource;
 @class Disc;
 
-@interface Media : NSObject {
+@interface MediaFile : NSObject {
     void* mediaInfo;
     NSString* fingerprint;
     Disc* disc;
     NSURL* url;
-    id<MediaSource> mediaSource;
+    id<MediaFileSource> mediaFileSource;
 }
 
-- (id) initWithMediaSource:(id<MediaSource>)mediaSource mediaInfo:(void*)mediaInfo;
+- (id) initWithMediaSource:(id<MediaFileSource>)mediaSource mediaInfo:(void*)mediaInfo;
 
 @property (readonly) void* mediaInfo;
 
@@ -19,7 +19,7 @@
 @property (retain) NSURL* url;
 @property (retain) NSString* fingerprint;
 @property (readonly) NSString* pathToFile;
-@property (readonly) id<MediaSource> mediaSource;
+@property (readonly) id<MediaFileSource> mediaFileSource;
 @property (assign) NSMutableDictionary* infoDictionary;
 @property (assign) NSData* frontCover;
 

@@ -103,6 +103,10 @@
     
     // Hook up to drawer view
     [drawerView addObserver:self forKeyPath:@"isOpen" options:NSKeyValueObservingOptionNew context:nil];
+    
+    // Put uservoice button forward
+    [userVoiceButton setWantsLayer:YES];
+    [[userVoiceButton layer] setZPosition:2000.0];
 }
 
 - (void) applicationDidFinishLaunching:(NSNotification*)notification

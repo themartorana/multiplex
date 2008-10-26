@@ -1,5 +1,5 @@
 #import "Disc.h"
-#import "Media.h"
+#import "MediaFile.h"
 
 #pragma mark -
 @implementation Disc
@@ -7,7 +7,7 @@
 @synthesize infoDictionary;
 @synthesize fingerprint;
 
-- (id) initWithFingerprint:(NSString*)_fingerprint media:(Media*)_media
+- (id) initWithFingerprint:(NSString*)_fingerprint media:(MediaFile*)_media
 {
     NSAssert(_fingerprint, @"fingerprint cannot be nil.");
     NSAssert(_media, @"media cannot be nil.");
@@ -47,14 +47,14 @@
     return [[allMedia objectAtIndex:0] isPhysicalMedia];
 }
 
-- (void) addMedia:(Media*)media
+- (void) addMedia:(MediaFile*)media
 {
     NSAssert([media disc] == nil, @"");
     [allMedia addObject:media];
     [media setDisc:self];
 }
 
-- (void) removeMedia:(Media*)media
+- (void) removeMedia:(MediaFile*)media
 {
     NSAssert([media disc] == self, @"");
     [media setDisc:nil];
@@ -71,7 +71,7 @@
     if (infoDictionary != _infoDictionary) {
         [infoDictionary release];
         infoDictionary = [_infoDictionary retain];
-        for (Media* media in allMedia) {
+        for (MediaFile* media in allMedia) {
             media.infoDictionary = _infoDictionary;
         }
     }

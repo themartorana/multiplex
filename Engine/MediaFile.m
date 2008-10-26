@@ -1,4 +1,4 @@
-#import "Media.h"
+#import "MediaFile.h"
 #import "JSONKit/JSONKit.h"
 #import "MediaSource.h"
 #import <libkern/OSAtomic.h>
@@ -8,7 +8,7 @@ const CFStringRef kMDDiscDiscIdentFingerprint = CFSTR("com_discident_fingerprint
 extern void MDItemSetAttribute(MDItemRef, CFStringRef, CFTypeRef);
 extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
 
-@implementation Media
+@implementation MediaFile
 
 @synthesize fingerprint;
 @synthesize mediaInfo;

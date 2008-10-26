@@ -127,7 +127,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             NSLog(@"Listening on ip6 port: %d", networkPort);
         }
 
-        /*  Load and start our Media Source plugins
+        /*  Load and start our MediaFile Source plugins
          */
         [self _loadMediaSourcePlugins];        
 
@@ -265,7 +265,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             for (NSString* fingerprint in infoDictionariesByFingerprint) {
                 Disc* disc = [discsByFingerprint objectForKey:fingerprint];
                 NSMutableArray* urls = [NSMutableArray array];
-                for (Media* media in disc.allMedia) {
+                for (MediaFile* media in disc.allMedia) {
                     [urls addObject:[media.url absoluteString]];
                 }
                 [adds setObject:[NSDictionary dictionaryWithObjectsAndKeys:urls, @"urls", [self _frontCoverURLForFingerprint:fingerprint], @"frontCoverURL", nil] forKey:fingerprint];
@@ -334,7 +334,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     NSMutableArray* userKeysA = [NSMutableArray arrayWithArray:[movieA allKeys]];
     [userKeysA removeObjectsInArray:synthesizedKeysA];
 
-    /*  Grab the relevant parts of the Media Info
+    /*  Grab the relevant parts of the MediaFile Info
      */
     NSMutableDictionary* infoB = [NSMutableDictionary dictionaryWithDictionary:mediaInfo];
     NSMutableDictionary* movieB = [infoB objectForKey:@"movie"];
@@ -423,7 +423,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         Disc* disc = [discsByFingerprint objectForKey:fingerprint];
         if (disc) {
             NSData* frontCover = nil;
-            for (Media* media in disc.allMedia) {
+            for (MediaFile* media in disc.allMedia) {
                 frontCover = media.frontCover;
                 if (frontCover) {
                     break;
@@ -445,7 +445,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 {
     NSMutableDictionary* addsByFingerprint = [NSMutableDictionary dictionary];
     NSMutableDictionary* updatesByFingerprint = [NSMutableDictionary dictionary];
-    for (Media* media in arrayOfMedia) {
+    for (MediaFile* media in arrayOfMedia) {
         NSString* mediaFingerprint = [media fingerprint];
         media.url = [NSURL fileURLWithPath:[media pathToFile] isDirectory:YES];
         if (mediaFingerprint) {
@@ -529,7 +529,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     NSMutableDictionary* addsByFingerprint = [NSMutableDictionary dictionary];
     NSMutableDictionary* updatesByFingerprint = [NSMutableDictionary dictionary];
     NSMutableDictionary* deletesByFingerprint = [NSMutableDictionary dictionary];
-    for (Media* media in arrayOfMedia) {
+    for (MediaFile* media in arrayOfMedia) {
         NSString* discFingerprint = [[media disc] fingerprint];
         NSString* mediaFingerprint = [media fingerprint];
         
@@ -643,7 +643,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 - (void) mediaSource:(id<MediaSource>)mediaSource didRemoveMedia:(NSArray*)arrayOfMedia
 {
     NSMutableDictionary* deletesByFingerprint = [NSMutableDictionary dictionary];
-    for (Media* media in arrayOfMedia) {
+    for (MediaFile* media in arrayOfMedia) {
         Disc* disc = [media disc];
         if (disc) {
             NSString* discFingerprint = [disc fingerprint];
@@ -771,7 +771,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
     /*  TODO: Process/Crop image to appropriate dimensions.  */
     
-    for (Media* media in disc.allMedia) {
+    for (MediaFile* media in disc.allMedia) {
         [media setFrontCover:[response PNGRepresentation]];
     }
 }

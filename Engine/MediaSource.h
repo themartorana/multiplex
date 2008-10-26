@@ -1,4 +1,4 @@
-#import "Media.h"
+#import "MediaFile.h"
 
 @protocol MediaSourceDelegate;
 
@@ -7,13 +7,13 @@
 @property (assign) id<MediaSourceDelegate> delegate;
 - (void) start;
 - (void) stop;
-- (NSMutableDictionary*) infoDictionaryForMedia:(Media*)media;
-- (void) setInfoDictionary:(NSMutableDictionary*)infoDictionary forMedia:(Media*)media;
-- (NSData*) frontCoverForMedia:(Media*)media;
-- (void) setFrontCover:(NSData*)frontCover forMedia:(Media*)media;
-- (NSString*) pathToFileForMedia:(Media*)media;
-- (NSString*) fingerprintForMedia:(Media*)media;
-- (void) reloadMedia:(Media*)media;
+- (NSMutableDictionary*) infoDictionaryForMedia:(MediaFile*)media;
+- (void) setInfoDictionary:(NSMutableDictionary*)infoDictionary forMedia:(MediaFile*)media;
+- (NSData*) frontCoverForMedia:(MediaFile*)media;
+- (void) setFrontCover:(NSData*)frontCover forMedia:(MediaFile*)media;
+- (NSString*) pathToFileForMedia:(MediaFile*)media;
+- (NSString*) fingerprintForMedia:(MediaFile*)media;
+- (void) reloadMedia:(MediaFile*)media;
 @end
 
 @protocol MediaSourceDelegate

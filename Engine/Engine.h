@@ -1,5 +1,5 @@
 #import <Cocoa/Cocoa.h>
-#import "Media.h"
+#import "MediaFile.h"
 #import "MediaSource.h"
 #import "HTTPServer.h"
 

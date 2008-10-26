@@ -27,9 +27,9 @@
         
 @end
 
-static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSource)
+static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSource)
 {
-    Media* media = [[Media alloc] initWithMediaSource:mediaSource mediaInfo:[[NSMutableDictionary alloc] initWithObjectsAndKeys:(id)item, @"item", nil]];
+    MediaFile* media = [[MediaFile alloc] initWithMediaSource:mediaSource mediaInfo:[[NSMutableDictionary alloc] initWithObjectsAndKeys:(id)item, @"item", nil]];
     [(DVDMediaSource*)mediaSource reloadMedia:media];
     return media;
 }
@@ -103,7 +103,7 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
     if (count) {
         NSMutableArray* removedDiscs = [NSMutableArray arrayWithCapacity:count];
         while (count-- > 0) {
-            [removedDiscs addObject:(Media*)MDQueryGetResultAtIndex(query, count)];
+            [removedDiscs addObject:(MediaFile*)MDQueryGetResultAtIndex(query, count)];
         }
         [delegate mediaSource:self didRemoveMedia:removedDiscs];
     }
@@ -116,7 +116,7 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
     mediaProcessed = 0;
 }
 
-- (NSMutableDictionary*) infoDictionaryForMedia:(Media*)media
+- (NSMutableDictionary*) infoDictionaryForMedia:(MediaFile*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
@@ -162,7 +162,7 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
     return info;
 }
 
-- (void) setInfoDictionary:(NSMutableDictionary*)infoDictionary forMedia:(Media*)media
+- (void) setInfoDictionary:(NSMutableDictionary*)infoDictionary forMedia:(MediaFile*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
@@ -176,13 +176,13 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
     }
 }
 
-- (NSData*) frontCoverForMedia:(Media*)media
+- (NSData*) frontCoverForMedia:(MediaFile*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
     return [NSData dataWithContentsOfFile:[[media.pathToFile stringByAppendingPathComponent:@"QuickLook"] stringByAppendingPathComponent:@"FrontCover.png"]];
 }
 
-- (void) setFrontCover:(NSData*)frontCover forMedia:(Media*)media
+- (void) setFrontCover:(NSData*)frontCover forMedia:(MediaFile*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");    
     NSString* pathToQuickLookFolder = [media.pathToFile stringByAppendingPathComponent:@"QuickLook"];
@@ -193,7 +193,7 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
     }
 }
 
-- (void) reloadMedia:(Media*)media
+- (void) reloadMedia:(MediaFile*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
@@ -210,7 +210,7 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
     [mediaInfo removeObjectForKey:@"info"];
 }
 
-- (NSString*) fingerprintForMedia:(Media*)media
+- (NSString*) fingerprintForMedia:(MediaFile*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
@@ -218,7 +218,7 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
     return [fingerprint autorelease];
 }
 
-- (NSString*) pathToFileForMedia:(Media*)media
+- (NSString*) pathToFileForMedia:(MediaFile*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
@@ -283,7 +283,7 @@ static Media* newSpotlightItem(MDQueryRef query, MDItemRef item, void* mediaSour
         int imax = MDQueryGetResultCount(query);
         NSMutableArray* addedDiscs = [NSMutableArray array];
         for (int i = mediaProcessed; i < imax; i++) {
-            [addedDiscs addObject:(Media*)MDQueryGetResultAtIndex(query, i)];
+            [addedDiscs addObject:(MediaFile*)MDQueryGetResultAtIndex(query, i)];
         }
         [self _fireDidAddMedia:addedDiscs];
         mediaProcessed = imax;

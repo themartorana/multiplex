@@ -3,7 +3,7 @@
 @protocol MediaSource;
 @class Disc;
 
-@interface Media : NSObject {
+@interface MediaFile : NSObject {
     void* mediaInfo;
     NSString* fingerprint;
     Disc* disc;

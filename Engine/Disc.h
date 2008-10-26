@@ -1,5 +1,5 @@
 #import <Cocoa/Cocoa.h>
-#import "Media.h"
+#import "MediaFile.h"
 
 @interface Disc : NSObject {
     NSString* fingerprint;
@@ -7,7 +7,7 @@
     NSMutableDictionary* infoDictionary;
 }
 
-- (id) initWithFingerprint:(NSString*)fingerprint media:(Media*)media;
+- (id) initWithFingerprint:(NSString*)fingerprint media:(MediaFile*)media;
 
 @property (readonly) NSString* contentType;
 @property (readonly) NSString* fingerprint;
@@ -17,7 +17,7 @@
 @property (readonly) NSMutableArray* allMedia;
 @property (retain) NSMutableDictionary* infoDictionary;
 
-- (void) addMedia:(Media*)media;
-- (void) removeMedia:(Media*)media;
+- (void) addMedia:(MediaFile*)media;
+- (void) removeMedia:(MediaFile*)media;
 
 @end

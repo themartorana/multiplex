@@ -45,12 +45,12 @@
     return [[[NSApp pathToUserApplicationSupportFolder] stringByAppendingPathComponent:@"Multiplex"] stringByAppendingPathComponent:@"Info"];
 }
 
-- (NSString*) _pathToInfoFileForMedia:(Media*)media 
+- (NSString*) _pathToInfoFileForMedia:(MediaFile*)media 
 {
     return [[self _pathToInfoFolder] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.json", [self fingerprintForMedia:media]]];
 }
 
-- (NSString*) _pathToFrontCoverForMedia:(Media*)media 
+- (NSString*) _pathToFrontCoverForMedia:(MediaFile*)media 
 {
     return [[self _pathToInfoFolder] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@-FrontCover.png", [self fingerprintForMedia:media]]];
 }
@@ -111,7 +111,7 @@
     started = NO;
 }
 
-- (NSMutableDictionary*) infoDictionaryForMedia:(Media*)media
+- (NSMutableDictionary*) infoDictionaryForMedia:(MediaFile*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
@@ -143,7 +143,7 @@
     return info;
 }
 
-- (void) setInfoDictionary:(NSMutableDictionary*)infoDictionary forMedia:(Media*)media
+- (void) setInfoDictionary:(NSMutableDictionary*)infoDictionary forMedia:(MediaFile*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
@@ -157,32 +157,32 @@
     }
 }
 
-- (NSData*) frontCoverForMedia:(Media*)media
+- (NSData*) frontCoverForMedia:(MediaFile*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
     return [NSData dataWithContentsOfFile:[self _pathToFrontCoverForMedia: media]];
 }
 
-- (void) setFrontCover:(NSData*)frontCover forMedia:(Media*)media
+- (void) setFrontCover:(NSData*)frontCover forMedia:(MediaFile*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
     [frontCover writeToFile:[self _pathToFrontCoverForMedia: media] atomically:YES];
 }
 
-- (void) reloadMedia:(Media*)media
+- (void) reloadMedia:(MediaFile*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
     /* Ignored */
 }
 
-- (NSString*) pathToFileForMedia:(Media*)media
+- (NSString*) pathToFileForMedia:(MediaFile*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
     return [mediaInfo objectForKey:@"mountPoint"];
 }
 
-- (NSString*) fingerprintForMedia:(Media*)media
+- (NSString*) fingerprintForMedia:(MediaFile*)media
 {
     NSAssert(media.mediaSource == self, @"This media doesn't belong to me.");
     NSMutableDictionary* mediaInfo = media.mediaInfo;
@@ -236,7 +236,7 @@
 - (void) _volumeDidUnmount:(NSNotification*)notification
 {
     NSString* deviceName = [self _deviceNameForMountPoint:[[notification userInfo] objectForKey:@"NSDevicePath"]];
-    Media* media = [mediaByDeviceName objectForKey:deviceName];
+    MediaFile* media = [mediaByDeviceName objectForKey:deviceName];
     if (media) {
         [self _fireDidRemoveMedia:[NSArray arrayWithObject:media]];
         [mediaByDeviceName removeObjectForKey:deviceName];
@@ -249,7 +249,7 @@
     if ([self _isNamedDeviceDVD:deviceName]) {
         NSString* fingerprint = [mountPoint stringByComputingDiscIdentFingerprintForDiscAtPath];
         if (fingerprint) {
-            Media* media = [[Media alloc] initWithMediaSource:self mediaInfo:[[NSMutableDictionary alloc] initWithObjectsAndKeys:fingerprint, @"fingerprint", mountPoint, @"mountPoint", nil]];
+            MediaFile* media = [[MediaFile alloc] initWithMediaSource:self mediaInfo:[[NSMutableDictionary alloc] initWithObjectsAndKeys:fingerprint, @"fingerprint", mountPoint, @"mountPoint", nil]];
             [self _fireDidAddMedia:[NSArray arrayWithObject:media]];
             [mediaByDeviceName setObject:media forKey:deviceName];
             [media release];

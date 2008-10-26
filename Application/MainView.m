@@ -4,6 +4,8 @@
 #import "ButtonLayer.h"
 #import "MultiplexColorFactory.h"
 #import "StadiumLayoutManager.h"
+#import "LayerBackedButtonView.h"
+#import "ApplicationResources.h"
 
 #import <Toolkit/Toolkit.h>
 #import <QuartzCore/QuartzCore.h>
@@ -46,6 +48,9 @@
         nil
     ];
     [rootLayer insertSublayer:floorLayer atIndex:0];
+    
+    [fullScreenButton setButtonLayerButtonWithUpState:[ApplicationResources fullScreenButton] andDownState:[ApplicationResources fullScreenButtonDown]];
+    [fullScreenButton setNotificationNameToPost:@"MultiplexToggleFullScreen"];
     
     listOfLayersInOrder = [[NSMutableArray alloc] initWithObjects:[NSMutableArray array], nil];
     layersByID = [[NSMutableDictionary alloc] init];

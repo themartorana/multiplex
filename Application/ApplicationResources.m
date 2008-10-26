@@ -86,6 +86,24 @@
     return image;
 }
 
++ (CGImageRef) fullScreenButton 
+{
+    static CGImageRef image = NULL;
+    if (!image) {
+        image = [self CGImageFromResource:@"full-screen-icon" ofType:@"gif"];
+    }
+    return image;
+}
+
++ (CGImageRef) fullScreenButtonDown 
+{
+    static CGImageRef image = NULL;
+    if (!image) {
+        image = [self CGImageFromResource:@"full-screen-icon-down" ofType:@"gif"];
+    }
+    return image;
+}
+
 + (CGImageRef) textureForStadiumLayoutFloor
 {
     static CGImageRef image = NULL;

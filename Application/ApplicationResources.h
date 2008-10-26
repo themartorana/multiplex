@@ -19,6 +19,9 @@
 + (CGImageRef) textureForDrawerBackground;
 + (CGImageRef) textureForDrawerTopEdge;
 
++ (CGImageRef) fullScreenButton;
++ (CGImageRef) fullScreenButtonDown;
+
 + (WebPreferences*) movieDescriptionWebPreferences;
 + (WebPreferences*) userVoiceWebPreferences;
 

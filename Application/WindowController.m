@@ -97,6 +97,7 @@
     [notificationCenter addObserver:self selector:@selector(openInfoView:) name:@"MultiplexShowMovieDialog" object:nil];
     [notificationCenter addObserver:self selector:@selector(closeInfoView:) name:@"MultiplexCloseMovieDialog" object:nil];
     [notificationCenter addObserver:self selector:@selector(playSelectedMovie:) name:@"MultiplexPlayButtonClicked" object:nil];
+    [notificationCenter addObserver:self selector:@selector(toggleFullScreen:) name:@"MultiplexToggleFullScreen" object:nil];
 #if 0
     [notificationCenter addObserver:self selector:@selector(_coreDataDidSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:nil];
 #endif
@@ -201,9 +202,9 @@
     }
 }
 
-- (IBAction) swapFullScreen:(id)sender
+- (void) toggleFullScreen:(NSNotification*)notification
 {
-    NSWindow* mainWindow = [sender window];
+    NSWindow* mainWindow = [(NSView*)[notification object] window];
     
     if ([[mainWindow contentView] isInFullScreenMode]) {
         [[mainWindow contentView] exitFullScreenModeWithOptions:nil];

@@ -571,6 +571,10 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
                 if (regionCode) {
                     movie.regionCode = regionCode;
                 }
+                NSNumber* starRating = [movieInfo objectForKey:@"starRating"];
+                if (starRating) {
+                    movie.starRating = starRating;
+                }
                 NSString* theatricalReleaseDateAsString = [movieInfo objectForKey:@"theatricalReleaseDate"];
                 if ([theatricalReleaseDateAsString length]) {
                     movie.theatricalReleaseDate = [dateFormatter dateFromString:theatricalReleaseDateAsString];

@@ -4,13 +4,14 @@
 #import "MultiplexLayoutManager.h"
 
 @interface StadiumLayoutManager : NSObject <MultiplexLayoutManager> {
+    CALayer* floorLayer; // NR
+    
     CALayer* radialGradientLayer; // NR
-    
-    CALayer* hoveredMovieLayer;
-    CALayer* hoverHighlightLayer;
-    
-    CATextLayer* titleLayer;
-    
+    CALayer* hoveredMovieLayer; // NR
+    CATextLayer* titleLayer; // NR
+
+    CALayer* hoverHighlightLayer; // NR
+
     NSArray* listOfLayersInOrder;
     NSArray* arrangedListOfObjects;
     

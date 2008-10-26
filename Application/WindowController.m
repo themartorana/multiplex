@@ -180,7 +180,7 @@
           contextInfo:nil];
 }
 
-- (void)userVoicePanelDidEnd:(NSPanel*)panel returnCode:(int)returnCode contextInfo:(void*)contextInfo
+- (void) userVoicePanelDidEnd:(NSPanel*)panel returnCode:(int)returnCode contextInfo:(void*)contextInfo
 {
     [panel orderOut:self];
     [userVoiceFeedbackPanel resetFeedbackPage];

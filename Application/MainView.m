@@ -65,7 +65,6 @@
     hoverPlayLayer.hidden = YES;
     [rootLayer addSublayer:hoverPlayLayer];
     [hoverPlayLayer bind:@"hoveredMovie" toObject:self withKeyPath:@"hoveredMovie" options:nil];
-    [self setHoveredMovie:nil];
 
     [self _restartMouseTracking];
 }
@@ -81,8 +80,6 @@
 
 - (void) setFloorLayerLayoutManagerClass:(Class)class
 {
-    NSLog(@"Swapping floor layout manager");
-    
     floorLayerLayoutManagerClass = class;
     
     if (floorLayer) {
@@ -129,18 +126,17 @@
     }
 }
 
-- (void) setHoveredMovie:(Movie*)movie
+- (void) setHoveredMovie:(Movie*)_hoveredMovie
 {
-    if (movie != hoveredMovie) {
+    if (_hoveredMovie != hoveredMovie) {
         [hoveredMovie release];
-        hoveredMovie = movie;
-        hoverPlayLayer.hidden = YES;
-    }
-    hoveredMovie = [movie retain];
-    [self cancelHoverTimer];
+        hoveredMovie = [_hoveredMovie retain];
 
-    if (movie) {
-        hoverTimer = [[NSTimer scheduledTimerWithTimeInterval:0.75 target:self selector:@selector(hoverTimerTicked:) userInfo:nil repeats:NO] retain];
+        hoverPlayLayer.hidden = YES;
+        [self cancelHoverTimer];
+        if (_hoveredMovie) {
+            hoverTimer = [[NSTimer scheduledTimerWithTimeInterval:0.75 target:self selector:@selector(hoverTimerTicked:) userInfo:nil repeats:NO] retain];
+        }
     }
 }
 
@@ -171,8 +167,7 @@
         
         MovieLayer* movieLayer = [self movieLayerForPoint:p];
         if (movieLayer) {
-            Movie* movie = [movieLayer movie];
-            [content setSelectionIndex:[[content arrangedObjects] indexOfObjectIdenticalTo:movie]];
+            [content setSelectedObjects:[NSArray arrayWithObject:[movieLayer movie]]];
         }
         
         hoverPlayLayer.hidden = YES;
@@ -191,29 +186,25 @@
     CGPoint position = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
     MovieLayer* movieLayer = [self movieLayerForPoint:position];
     Movie* movie = movieLayer.movie;
-
-    if (hoverPlayLayer.hidden) {
-        CGPoint pMove;
-        float pY = position.y - hoverPlayLayer.bounds.size.height + 10.0;
-        
-        if (position.x + hoverPlayLayer.bounds.size.width < [[self window] frame].size.width) {
-            [hoverPlayLayer putLayersIntoDefaultPosition];
-            pMove = CGPointMake(position.x - 20.0, pY);
-        }
-        else {
-            [hoverPlayLayer putLayersIntoAlternatePosition];
-            pMove = CGPointMake(position.x - hoverPlayLayer.bounds.size.width + 20.0, pY);
-        }
-        
-        [hoverPlayLayer setPosition:pMove];
+    if (movie && ![[content arrangedObjects] containsObject:movie]) {
+        movie = nil;
     }
-
-    if ( movie == hoveredMovie || [hoverPlayLayer hitTest:position]) {
-        return;
-    }
-    else {
+    
+    if (movie != hoveredMovie && ![hoverPlayLayer hitTest:position]) {
         [floorLayer.layoutManager setHoveredMovieLayer:movieLayer];
         [self setHoveredMovie:movie];
+    }
+    
+    if (hoverPlayLayer.hidden) {
+        CGPoint newPosition = CGPointMake(position.x, position.y - hoverPlayLayer.bounds.size.height + 10.0);
+        if (position.x + hoverPlayLayer.bounds.size.width < [self frame].size.width) {
+            [hoverPlayLayer putLayersIntoDefaultPosition];
+            newPosition.x -= 20.0;
+        } else {
+            [hoverPlayLayer putLayersIntoAlternatePosition];
+            newPosition.x -= 20.0 + hoverPlayLayer.bounds.size.width;
+        }
+        [hoverPlayLayer setPosition:newPosition];
     }
 }
 
@@ -246,20 +237,12 @@
 
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
-    if ([@"selection.self" isEqualToString:keyPath]) {
-        if (object) {
-            if ([[object arrangedObjects] count] > 0) {
-                id a = [object valueForKeyPath:@"selection.self"];
-                if ([a isKindOfClass:[Movie class]]) {
-                    [floorLayer.layoutManager setSelectedMovie:(Movie*)a];
-                }
-                else {
-                    [floorLayer.layoutManager setSelectedMovie:nil];
-                }
-            }
-            else {
-                [floorLayer.layoutManager setSelectedMovie:nil];
-            }
+    if ([@"selection" isEqualToString:keyPath]) {
+        id selection = [change objectForKey:NSKeyValueChangeNewKey];
+        if (selection == NSNoSelectionMarker || selection == (id)kCFNull) {
+            [floorLayer.layoutManager setSelectedMovie:nil];
+        } else {
+            [floorLayer.layoutManager setSelectedMovie:selection];
         }
     }
     if ([@"content.@count" isEqualToString:keyPath]) {
@@ -292,10 +275,10 @@
             [floorLayer setNeedsLayout];
         }
     } else if ([@"arrangedObjects" isEqualToString:keyPath]) {
+        [self setHoveredMovie:nil];
+        
         NSArray* arrangedObjects = [object arrangedObjects];
         [((id<MultiplexLayoutManager>)floorLayer.layoutManager) setListOfArrangedObjects:arrangedObjects];
-        
-        [self setHoveredMovie:nil];
         
         int count = [arrangedObjects count];
         for (int i = [listOfLayersInOrder count] - 1; i > 0; i--) {

@@ -166,13 +166,14 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
      *  conform to our MediaSource protocol before we fire up an instance and
      *  try to connect ourselves to it.
      */
+    NSLog(@"Loading Plugins (%@):", baseFolder);
     for (NSString* pluginFile in [[NSFileManager defaultManager] directoryContentsAtPath:baseFolder]) {
         if ([pluginFile hasSuffix:@".mediasource"]) {
             NSError* error = nil;
             NSBundle* plugin = [NSBundle bundleWithPath:[baseFolder stringByAppendingPathComponent:pluginFile]];
-            NSLog(@"Loading plugin: %@", pluginFile);
+            NSLog(@"  - Loading plugin: %@", pluginFile);
             if (![plugin loadAndReturnError:&error]) {
-                NSLog(@"Error loading plugin (%@) -- %@", pluginFile, error);
+                NSLog(@"    - Error loading plugin (%@) -- %@", pluginFile, error);
             } else {
                 id<MediaSource> mediaSource = nil;
                 Class principalClass = [plugin principalClass];
@@ -187,7 +188,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                         
                         [mediaSources addObject:mediaSource];
                     } @catch (id exception) {
-                        NSLog(@"Exception occurred while starting mediaSource -- %@", exception);
+                        NSLog(@"    - Exception occurred while starting mediaSource -- %@", exception);
                         mediaSource = nil;
                     }
                 }
@@ -507,23 +508,6 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             static NSString* pathToMDImport = @"/usr/bin/mdimport";
             [NSTask launchedTaskWithLaunchPath:pathToMDImport arguments:[NSArray arrayWithObjects:pathToMDImport, [media pathToFile], nil]];
         }
-
-#ifdef INCREMENTAL
-        /*  Build and send the message.
-         */
-        if (([addsByFingerprint count] + [updatesByFingerprint count]) >= 5) {
-            NSMutableDictionary* message = [NSMutableDictionary dictionary];
-            if ([addsByFingerprint count]) {
-                [message setObject:addsByFingerprint forKey:@"add"];
-            }
-            if ([updatesByFingerprint count]) {
-                [message setObject:updatesByFingerprint forKey:@"update"];
-            }
-            [self sendMessage:message];
-            [addsByFingerprint removeAllObjects];
-            [updatesByFingerprint removeAllObjects];
-        }
-#endif
     }
 
     /*  Build and send the message.
@@ -637,27 +621,6 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                 media.disc.infoDictionary = infoDictionary;
             }
         }
-
-#ifdef INCREMENTAL
-        /*  Build and send the message.
-         */
-        if (([addsByFingerprint count] + [updatesByFingerprint count] + [deletesByFingerprint count]) >= 5) {
-            NSMutableDictionary* message = [NSMutableDictionary dictionary];
-            if ([addsByFingerprint count]) {
-                [message setObject:addsByFingerprint forKey:@"add"];
-            }
-            if ([updatesByFingerprint count]) {
-                [message setObject:updatesByFingerprint forKey:@"update"];
-            }
-            if ([deletesByFingerprint count]) {
-                [message setObject:deletesByFingerprint forKey:@"delete"];
-            }
-            [self sendMessage:message];
-            [addsByFingerprint removeAllObjects];
-            [updatesByFingerprint removeAllObjects];
-            [deletesByFingerprint removeAllObjects];
-        }
-#endif
     }
 
     /*  Build and send the message.

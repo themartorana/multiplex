@@ -202,9 +202,9 @@
     }
 }
 
-- (void) toggleFullScreen:(NSNotification*)notification
+- (IBAction) toggleFullScreen:(id)sender
 {
-    NSWindow* mainWindow = [(NSView*)[notification object] window];
+    NSWindow* mainWindow = [sender window];
     
     if ([[mainWindow contentView] isInFullScreenMode]) {
         [[mainWindow contentView] exitFullScreenModeWithOptions:nil];

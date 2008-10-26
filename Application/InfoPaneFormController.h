@@ -19,10 +19,13 @@
     IBOutlet NSTabViewItem* discsTabViewItem;
     
     IBOutlet LayerBackedButtonView* playButtonView;
+    
+    BOOL valuesAreEditable;
 }
 
 @property (retain) Movie* movie;
 @property (readonly) NSColor* labelColor;
+@property BOOL valuesAreEditable;
 
 - (void) showHomeTab;
 - (void) showDiscsTab;

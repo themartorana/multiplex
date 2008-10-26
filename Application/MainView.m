@@ -49,9 +49,6 @@
     ];
     [rootLayer insertSublayer:floorLayer atIndex:0];
     
-    [fullScreenButton setButtonLayerButtonWithUpState:[ApplicationResources fullScreenButton] andDownState:[ApplicationResources fullScreenButtonDown]];
-    [fullScreenButton setNotificationNameToPost:@"MultiplexToggleFullScreen"];
-    
     listOfLayersInOrder = [[NSMutableArray alloc] initWithObjects:[NSMutableArray array], nil];
     layersByID = [[NSMutableDictionary alloc] init];
 

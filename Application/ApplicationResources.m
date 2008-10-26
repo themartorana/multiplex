@@ -90,7 +90,7 @@
 {
     static CGImageRef image = NULL;
     if (!image) {
-        image = [self CGImageFromResource:@"full-screen-icon" ofType:@"gif"];
+        image = [self CGImageFromResource:@"full-screen-icon" ofType:@"pdf"];
     }
     return image;
 }
@@ -99,7 +99,7 @@
 {
     static CGImageRef image = NULL;
     if (!image) {
-        image = [self CGImageFromResource:@"full-screen-icon-down" ofType:@"gif"];
+        image = [self CGImageFromResource:@"full-screen-icon-down" ofType:@"pdf"];
     }
     return image;
 }

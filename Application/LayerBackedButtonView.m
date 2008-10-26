@@ -45,7 +45,7 @@
     
     buttonLayer = [[ButtonLayer buttonLayerWithUpState:buttonUp downState:buttonDown] retain];
     buttonLayer.anchorPoint = CGPointZero;
-    buttonLayer.frame = NSRectToCGRect([self bounds]);
+    buttonLayer.frame = CGRectMake(0, 0, [self frame].size.width, [self frame].size.height);
     [[self layer] addSublayer:buttonLayer];
     [buttonLayer setNeedsDisplay];
 }

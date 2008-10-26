@@ -15,6 +15,7 @@
 @property (retain) NSString* title;
 @property (retain) NSNumber* runningTime;
 @property (retain) NSNumber* regionCode;
+@property (retain) NSDate* premiereDate;
 @property (retain) NSDate* releaseDate;
 @property (retain) NSDate* theatricalReleaseDate;
 @property (retain) NSString* rating;

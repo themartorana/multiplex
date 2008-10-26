@@ -48,7 +48,6 @@
 		557B63BF0EB37CC400DFD76F /* DrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B63BE0EB37CC400DFD76F /* DrawerController.m */; };
 		557B69460E4CCD3F0009919E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 557B69450E4CCD3F0009919E /* MainMenu.xib */; };
 		5583D1640E51D82700EB7AE6 /* Multiplex.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */; };
-		55898B160EB5078F00FA8A3A /* ImageButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 55898B150EB5078F00FA8A3A /* ImageButton.m */; };
 		558D1AF00E9D186B000F67FA /* InfoPaneDiscsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */; };
 		558D1B030E9D3F37000F67FA /* PageNumberLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1B020E9D3F37000F67FA /* PageNumberLayer.m */; };
 		558D1C3E0E9D5562000F67FA /* DiscPlayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1C3D0E9D5562000F67FA /* DiscPlayLayer.m */; };
@@ -258,7 +257,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = F9A1D6210E8350C100AB691D /* Engine */;
+			remoteGlobalIDString = F9A1D6210E8350C100AB691D;
 			remoteInfo = Engine;
 		};
 		F9D314D30E7DD99A00D99DCA /* PBXContainerItemProxy */ = {
@@ -363,8 +362,6 @@
 		557B66A20E4A2F4D0009919E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		557B69450E4CCD3F0009919E /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Multiplex.xcdatamodel; sourceTree = "<group>"; };
-		55898B140EB5078F00FA8A3A /* ImageButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageButton.h; sourceTree = "<group>"; };
-		55898B150EB5078F00FA8A3A /* ImageButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageButton.m; sourceTree = "<group>"; };
 		558D1AEE0E9D186B000F67FA /* InfoPaneDiscsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPaneDiscsView.h; sourceTree = "<group>"; };
 		558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoPaneDiscsView.m; sourceTree = "<group>"; };
 		558D1B010E9D3F37000F67FA /* PageNumberLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageNumberLayer.h; sourceTree = "<group>"; };
@@ -662,8 +659,6 @@
 				551555030EA45D84006F2674 /* SoftEditTextField.m */,
 				55743F9C0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.h */,
 				55743F9D0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.m */,
-				55898B140EB5078F00FA8A3A /* ImageButton.h */,
-				55898B150EB5078F00FA8A3A /* ImageButton.m */,
 			);
 			name = Controls;
 			sourceTree = "<group>";
@@ -1277,7 +1272,6 @@
 				55C9F6260EB26A15001B9BCD /* HalfTransparentView.m in Sources */,
 				55C9F6430EB26C5A001B9BCD /* LayerBackedButtonView.m in Sources */,
 				557B63BF0EB37CC400DFD76F /* DrawerController.m in Sources */,
-				55898B160EB5078F00FA8A3A /* ImageButton.m in Sources */,
 				5545BC040EB5171C0005A380 /* NSNumberToStringValueTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

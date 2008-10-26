@@ -28,7 +28,7 @@
     if (self == [super init]) {
         [NSDescriptionValueTransformer registerYourself];
         
-        managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
+        managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Multiplex" ofType:@"mom"]]];
         
         persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
         [persistentStoreCoordinator addPersistentStoreWithType:NSInMemoryStoreType configuration:nil URL:nil options:nil error:nil];

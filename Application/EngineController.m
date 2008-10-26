@@ -367,11 +367,14 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
     @synchronized (managedObjectContext) {
         Activity* activity = userInfo;
         @try {
-            BoxArt* boxArt = activity.userInfo;
-            if ([boxArt validateForUpdate:nil]) {
+            BoxArt* boxArt = (BoxArt*)[managedObjectContext objectRegisteredForID:activity.userInfo];
+            if (boxArt) {
                 NSString* state = error ? [error description] : @"Error";
                 boxArt.state = state;
-                [managedObjectContext save:nil];
+
+                if ([boxArt validateForUpdate:nil]) {
+                    [managedObjectContext save:nil];
+                }
             }
         } @catch (id exception) {
             [managedObjectContext rollback];
@@ -386,8 +389,8 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
     @synchronized (managedObjectContext) {
         Activity* activity = userInfo;
         @try {
-            BoxArt* boxArt = activity.userInfo;
-            if ([boxArt validateForUpdate:nil]) {
+            BoxArt* boxArt = (BoxArt*)[managedObjectContext objectRegisteredForID:activity.userInfo];
+            if (boxArt) {
                 NSString* type = [(id)UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (CFStringRef)mimeType, CFSTR("public.image")) autorelease];
                 boxArt.type = type;
                 boxArt.state = @"Loaded";
@@ -399,7 +402,9 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
                     }
                 }
                 
-                [managedObjectContext save:nil];
+                if ([boxArt validateForUpdate:nil]) {
+                    [managedObjectContext save:nil];
+                }
             }
         } @catch (id exception) {
             NSLog(@"%@", exception);
@@ -476,7 +481,9 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
                         boxArt = disc.boxArt = [[BoxArt alloc] initWithEntity:boxArtEntity insertIntoManagedObjectContext:managedObjectContext];
                         boxArt.url = frontCoverURL;
                         boxArt.state = @"Loading";
-                        [ImageQuery imageQueryWithURL:[NSURL URLWithString:frontCoverURL] delegate:self userInfo:[Activity activityWithName:kLoadingBoxArtActivityName userInfo:boxArt] startImmediately:YES];
+                        if ([managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject:boxArt] error:nil]) {
+                            [ImageQuery imageQueryWithURL:[NSURL URLWithString:frontCoverURL] delegate:self userInfo:[Activity activityWithName:kLoadingBoxArtActivityName userInfo:boxArt.objectID] startImmediately:YES];
+                        }
                     }
                 }
                 

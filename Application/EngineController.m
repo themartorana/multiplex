@@ -176,7 +176,7 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
                     
                     NSFileHandle* fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:fd closeOnDealloc:YES];
                     protocol = [MessageProtocol protocolWithDelegate:self fileHandleForReading:fileHandle fileHandleForWriting:fileHandle];
-                    protocol.userInfo = [engine.uuid retain];
+                    protocol.userInfo = [[engine objectID] retain];
                     [protocolsByUUID setObject:protocol forKey:engine.uuid];
                     [fileHandle release];
                     break;
@@ -205,14 +205,14 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
         
         MessageProtocol* protocol = [protocolsByUUID objectForKey:engine.uuid];
         if (protocol) {
-            NSString* uuid = protocol.userInfo;
-            NSAssert([uuid isEqualToString:engine.uuid], @"Why don't these match?");
+            NSManagedObjectID* objectID = protocol.userInfo;
+            NSAssert([objectID isEqual:engine.objectID], @"Why don't these match?");
             @try {
                 [protocol close];
             } @finally {
                 [protocolsByUUID removeObjectForKey:engine.uuid];
             }
-            [uuid release];
+            [objectID release];
         }
         
         engine.status = @"Not Connected";
@@ -443,18 +443,21 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
 
 - (void) protocolDidClose:(MessageProtocol*)protocol
 {
-    NSString* uuid = protocol.userInfo;
-    Engine* engine = [self _findEngineByUUID:uuid];
-    if (engine) {
-        [protocolsByUUID removeObjectForKey:engine.uuid];
-        [self performSelectorOnMainThread:@selector(disconnectEngine:) withObject:engine waitUntilDone:NO];
+    @synchronized (managedObjectContext) {
+        NSManagedObjectID* objectID = protocol.userInfo;
+        Engine* engine = (Engine*)[managedObjectContext objectWithID:objectID];
+        if (engine) {
+            [protocolsByUUID removeObjectForKey:engine.uuid];
+            [self disconnectEngine:engine];
+        }
     }
 }
 
 - (void) protocol:(MessageProtocol*)protocol didReceiveMessage:(NSDictionary*)message 
 {
     @synchronized (managedObjectContext) {
-        Engine* engine = [self _findEngineByUUID:[protocol userInfo]];
+        NSManagedObjectID* objectID = protocol.userInfo;
+        Engine* engine = (Engine*)[managedObjectContext objectWithID:objectID];
         if (!engine) {
             return;
         }
@@ -716,6 +719,7 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
         engine.netServiceName = [netService name];
         engine.name = [netService name];
         engine.status = @"Resolving";
+        [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject:engine] error:nil];
         [managedObjectContext save:nil];
     }
     

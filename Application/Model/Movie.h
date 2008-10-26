@@ -19,6 +19,7 @@
 @property (retain) NSDate* theatricalReleaseDate;
 @property (retain) NSString* rating;
 @property (retain) BoxArt* boxArt;
+@property (retain) NSNumber* starRating;
 
 @property (readonly) NSSet* allDiscs;
 

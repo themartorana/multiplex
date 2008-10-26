@@ -3,6 +3,7 @@
 #import "MovieLayer.h"
 #import "HoverPlayLayer.h"
 #import "MultiplexLayoutManager.h"
+#import "LayerBackedButtonView.h"
 
 @interface MainView : NSView {
     NSMutableDictionary* layersByID;
@@ -10,6 +11,8 @@
     
     CALayer* floorLayer; // NR
     HoverPlayLayer* hoverPlayLayer;
+
+    IBOutlet LayerBackedButtonView* fullScreenButton;
     
     NSTrackingArea* mouseTrackingArea;
     

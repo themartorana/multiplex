@@ -67,7 +67,7 @@
             CALayer* layer = [buttonLayer hitTest:p];
             
             if (layer && layer == buttonLayer) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:notificationNameToPost object:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:notificationNameToPost object:self];
             }            
         }
     }

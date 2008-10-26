@@ -29,6 +29,5 @@
 @property (readonly) NSManagedObjectContext* appManagedObjectContext;
 
 - (IBAction) showUserVoiceFeedbackSheet:(id)sender;
-- (IBAction) swapFullScreen:(id)sender;
 
 @end

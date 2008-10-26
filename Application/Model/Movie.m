@@ -16,6 +16,7 @@
 @dynamic title;
 @dynamic rating;
 @dynamic boxArt;
+@dynamic starRating;
 
 @dynamic allDiscs;
 

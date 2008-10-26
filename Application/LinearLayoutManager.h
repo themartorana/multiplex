@@ -5,7 +5,7 @@
 
 @class Movie;
 
-@interface CoverFlowLayoutManager2 : NSObject <MultiplexLayoutManager> {
+@interface LinearLayoutManager : NSObject <MultiplexLayoutManager> {
     CALayer* hoverHighlightLayer; // NR
     CALayer* selectedHighlightLayer; // NR
     CALayer* floorLayer;

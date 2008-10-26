@@ -11,7 +11,7 @@
 #import "NSDescriptionValueTransformer.h"
 
 #import "StadiumLayoutManager.h"
-#import "CoverFlowLayoutManager2.h"
+#import "LinearLayoutManager.h"
 
 #import <QuartzCore/QuartzCore.h>
 #import <Toolkit/Toolkit.h>
@@ -193,7 +193,7 @@
             BOOL isOpen = [(NSNumber*)[object valueForKeyPath:keyPath] boolValue];
             
             if (isOpen) {
-                [mainView setFloorLayerLayoutManagerClass:[CoverFlowLayoutManager2 class]];
+                [mainView setFloorLayerLayoutManagerClass:[LinearLayoutManager class]];
             }
             else {
                 [mainView setFloorLayerLayoutManagerClass:[StadiumLayoutManager class]];

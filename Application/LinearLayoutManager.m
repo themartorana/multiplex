@@ -1,4 +1,4 @@
-#import "CoverFlowLayoutManager2.h"
+#import "LinearLayoutManager.h"
 #import "MultiplexColorFactory.h"
 #import "Movie.h"
 #import "MovieLayer.h"
@@ -7,7 +7,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <Toolkit/CALayer+IndyHallLabs.h>
 
-@implementation CoverFlowLayoutManager2
+@implementation LinearLayoutManager
 @synthesize listOfLayersInOrder;
 
 - (id<MultiplexLayoutManager>) initWithManagingLayer:(CALayer*)_floorLayer

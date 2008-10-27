@@ -168,8 +168,6 @@
     
     CFDataRef msgData = CFHTTPMessageCopySerializedMessage(msg);
     @try {
-        size_t sendBufferSize = 512 * 0x400;
-        setsockopt([fileHandle fileDescriptor], SOL_SOCKET, SO_SNDBUF, (void*)&sendBufferSize, sizeof(sendBufferSize));
         [fileHandle writeData:(NSData *)msgData];
     }
     @catch (NSException* exception) {

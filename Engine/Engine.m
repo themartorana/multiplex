@@ -251,7 +251,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         netService.delegate = self;
     }
     [netService setTXTRecordData:[NSNetService dataFromTXTRecordDictionary:txtData]];
-    [netService publish];
+    [netService publishWithOptions:NSNetServiceNoAutoRename];
 }
 
 - (Disc*) _findDiscByFingerprint:(NSString*)fingerprint
@@ -507,120 +507,122 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (void) mediaFileSource:(id<MediaFileSource>)mediaSource didAddMedia:(NSArray*)arrayOfMedia
 {
-    NSMutableDictionary* addsByFingerprint = [NSMutableDictionary dictionary];
-    NSMutableDictionary* updatesByFingerprint = [NSMutableDictionary dictionary];
+    @synchronized (managedObjectContext) {
+        NSMutableDictionary* addsByFingerprint = [NSMutableDictionary dictionary];
+        NSMutableDictionary* updatesByFingerprint = [NSMutableDictionary dictionary];
 
-    for (MediaFile* media in arrayOfMedia) {
-        struct statfs64 sb;
-        bzero(&sb, sizeof(sb));
-        int error = statfs64([media.pathToFile fileSystemRepresentation], &sb);
-        if (error) {
-            NSLog(@"Unable to statfs (%@): %s", media.pathToFile, strerror(error));
-            continue;
-        }
-        
-        /*  Search for the MediaLocator using the file system ID at the
-         *  given relative path.  If we don't find a record of it, go
-         *  ahead and setup a new one.
-         */
-        NSString* fileSystemID = [NSString stringWithFormat:@"%08x%08x", sb.f_fsid.val[1], sb.f_fsid.val[0]];
-        NSString* relativePath = [media.pathToFile substringFromIndex:strlen(sb.f_mntonname)];
-        MediaLocator* mediaLocator = [self _findMediaLocatorForFileSystemID:fileSystemID relativePath:relativePath];
-        if (!mediaLocator) {
-            mediaLocator = [[MediaLocator alloc] initWithEntity:mediaLocatorEntity insertIntoManagedObjectContext:managedObjectContext];
-            mediaLocator.fileSystemID = fileSystemID;
-            mediaLocator.relativePath = relativePath;
-            mediaLocator.tag = [NSString stringWithUUID];
-        }
-        media.tag = mediaLocator.tag;
-        [mediaFileByTag setObject:media forKey:media.tag];
-        
-        NSString* mediaFingerprint = [media fingerprint];
-        if (mediaFingerprint) {
-            /*  Attempt to add this disc to a movie using the new fingerprint.
-             *  If a movie doesn't exist, create one and treat it like an add,
-             *  otherwise, we can consider this a normal update to an existing
-             *  movie.
+        for (MediaFile* media in arrayOfMedia) {
+            struct statfs64 sb;
+            bzero(&sb, sizeof(sb));
+            int error = statfs64([media.pathToFile fileSystemRepresentation], &sb);
+            if (error) {
+                NSLog(@"Unable to statfs (%@): %s", media.pathToFile, strerror(error));
+                continue;
+            }
+            
+            /*  Search for the MediaLocator using the file system ID at the
+             *  given relative path.  If we don't find a record of it, go
+             *  ahead and setup a new one.
              */
-            Disc* disc = [self _findDiscByFingerprint:mediaFingerprint];
-            if (!disc) {
-                disc = [[Disc alloc] initWithEntity:discEntity insertIntoManagedObjectContext:managedObjectContext];
-                disc.fingerprint = mediaFingerprint;
-                disc.infoDictionary = [infoDictionariesByFingerprint objectForKey:mediaFingerprint];
-                if (![disc.infoDictionary valueForKeyPath:@"meta.discident"]) {
-                    [DiscIdentQuery queryWithFingerprint:mediaFingerprint delegate:self userInfo:[disc retain] startImmediately:YES];
+            NSString* fileSystemID = [NSString stringWithFormat:@"%08x%08x", sb.f_fsid.val[1], sb.f_fsid.val[0]];
+            NSString* relativePath = [media.pathToFile substringFromIndex:strlen(sb.f_mntonname)];
+            MediaLocator* mediaLocator = [self _findMediaLocatorForFileSystemID:fileSystemID relativePath:relativePath];
+            if (!mediaLocator) {
+                mediaLocator = [[MediaLocator alloc] initWithEntity:mediaLocatorEntity insertIntoManagedObjectContext:managedObjectContext];
+                mediaLocator.fileSystemID = fileSystemID;
+                mediaLocator.relativePath = relativePath;
+                mediaLocator.tag = [NSString stringWithUUID];
+            }
+            media.tag = mediaLocator.tag;
+            [mediaFileByTag setObject:media forKey:media.tag];
+            
+            NSString* mediaFingerprint = [media fingerprint];
+            if (mediaFingerprint) {
+                /*  Attempt to add this disc to a movie using the new fingerprint.
+                 *  If a movie doesn't exist, create one and treat it like an add,
+                 *  otherwise, we can consider this a normal update to an existing
+                 *  movie.
+                 */
+                Disc* disc = [self _findDiscByFingerprint:mediaFingerprint];
+                if (!disc) {
+                    disc = [[Disc alloc] initWithEntity:discEntity insertIntoManagedObjectContext:managedObjectContext];
+                    disc.fingerprint = mediaFingerprint;
+                    disc.infoDictionary = [infoDictionariesByFingerprint objectForKey:mediaFingerprint];
+                    if (![disc.infoDictionary valueForKeyPath:@"meta.discident"]) {
+                        [DiscIdentQuery queryWithFingerprint:mediaFingerprint delegate:self userInfo:[disc retain] startImmediately:YES];
+                    }
                 }
-            }
-            mediaLocator.disc = disc;
-            mediaLocator.lastSeen = [NSDate date];
-            mediaLocator.isAvailable = (id)kCFBooleanTrue;
-            
-            /*
-             */
-            NSMutableDictionary* entry = [addsByFingerprint objectForKey:mediaFingerprint];
-            if (!entry) {
-                [addsByFingerprint setObject:
-                    entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                        [NSMutableArray arrayWithObject:media.tag],
-                        @"urls",
-                        nil
-                    ]
-                    forKey:
-                        mediaFingerprint
-                ];
-            } else {
-                [[entry objectForKey:@"urls"] addObject:media.tag];
-            }
-            [entry setObject:[self _frontCoverURLForFingerprint:media.fingerprint] forKey:@"frontCoverURL"];
-            
-            /*  Read in the info dictionary, and merge it with any that we've
-             *  already loaded.
-             */
-            NSMutableDictionary* newKeyPathsAndObjects = nil;
-            NSMutableDictionary* infoDictionary = nil;
-            [self mergeInfoForDisc:[infoDictionariesByFingerprint objectForKey:mediaFingerprint] withMediaInfo:media.infoDictionary newKeyPathsAndObjects:&newKeyPathsAndObjects mergedInfoDictionary:&infoDictionary];
-            if ([newKeyPathsAndObjects count]) {
-                NSMutableDictionary* entry = [updatesByFingerprint objectForKey:mediaFingerprint];
+                mediaLocator.disc = disc;
+                mediaLocator.lastSeen = [NSDate date];
+                mediaLocator.isAvailable = (id)kCFBooleanTrue;
+                
+                /*
+                 */
+                NSMutableDictionary* entry = [addsByFingerprint objectForKey:mediaFingerprint];
                 if (!entry) {
-                    [updatesByFingerprint setObject:[NSDictionary dictionaryWithExpandedKeyPathsAndObjects:newKeyPathsAndObjects] forKey:mediaFingerprint];
+                    [addsByFingerprint setObject:
+                        entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                            [NSMutableArray arrayWithObject:media.tag],
+                            @"urls",
+                            nil
+                        ]
+                        forKey:
+                            mediaFingerprint
+                    ];
                 } else {
-                    NSMutableDictionary* flattenedInfoForFingerprint = [entry flattenToKeyPathsAndObjects];
-                    [flattenedInfoForFingerprint addEntriesFromDictionary:newKeyPathsAndObjects];
-                    [updatesByFingerprint setObject:[NSDictionary dictionaryWithExpandedKeyPathsAndObjects:flattenedInfoForFingerprint] forKey:mediaFingerprint];
+                    [[entry objectForKey:@"urls"] addObject:media.tag];
                 }
+                [entry setObject:[self _frontCoverURLForFingerprint:media.fingerprint] forKey:@"frontCoverURL"];
+                
+                /*  Read in the info dictionary, and merge it with any that we've
+                 *  already loaded.
+                 */
+                NSMutableDictionary* newKeyPathsAndObjects = nil;
+                NSMutableDictionary* infoDictionary = nil;
+                [self mergeInfoForDisc:[infoDictionariesByFingerprint objectForKey:mediaFingerprint] withMediaInfo:media.infoDictionary newKeyPathsAndObjects:&newKeyPathsAndObjects mergedInfoDictionary:&infoDictionary];
+                if ([newKeyPathsAndObjects count]) {
+                    NSMutableDictionary* entry = [updatesByFingerprint objectForKey:mediaFingerprint];
+                    if (!entry) {
+                        [updatesByFingerprint setObject:[NSDictionary dictionaryWithExpandedKeyPathsAndObjects:newKeyPathsAndObjects] forKey:mediaFingerprint];
+                    } else {
+                        NSMutableDictionary* flattenedInfoForFingerprint = [entry flattenToKeyPathsAndObjects];
+                        [flattenedInfoForFingerprint addEntriesFromDictionary:newKeyPathsAndObjects];
+                        [updatesByFingerprint setObject:[NSDictionary dictionaryWithExpandedKeyPathsAndObjects:flattenedInfoForFingerprint] forKey:mediaFingerprint];
+                    }
 
-                [infoDictionariesByFingerprint setObject:infoDictionary forKey:mediaFingerprint];
-                disc.infoDictionary = infoDictionary;
+                    [infoDictionariesByFingerprint setObject:infoDictionary forKey:mediaFingerprint];
+                    disc.infoDictionary = infoDictionary;
+                }
+            } else {
+                static NSString* pathToMDImport = @"/usr/bin/mdimport";
+                [NSTask launchedTaskWithLaunchPath:pathToMDImport arguments:[NSArray arrayWithObjects:pathToMDImport, [media pathToFile], nil]];
             }
-        } else {
-            static NSString* pathToMDImport = @"/usr/bin/mdimport";
-            [NSTask launchedTaskWithLaunchPath:pathToMDImport arguments:[NSArray arrayWithObjects:pathToMDImport, [media pathToFile], nil]];
         }
-    }
+        
+        [managedObjectContext save:nil];
 
-    /*  Build and send the message.
-     */
-    if ([addsByFingerprint count] || [updatesByFingerprint count]) {
-        NSMutableDictionary* message = [NSMutableDictionary dictionary];
-        if ([addsByFingerprint count]) {
-            [message setObject:addsByFingerprint forKey:@"add"];
+        /*  Build and send the message.
+         */
+        if ([addsByFingerprint count] || [updatesByFingerprint count]) {
+            NSMutableDictionary* message = [NSMutableDictionary dictionary];
+            if ([addsByFingerprint count]) {
+                [message setObject:addsByFingerprint forKey:@"add"];
+            }
+            if ([updatesByFingerprint count]) {
+                [message setObject:updatesByFingerprint forKey:@"update"];
+            }
+            [self sendMessage:message];
         }
-        if ([updatesByFingerprint count]) {
-            [message setObject:updatesByFingerprint forKey:@"update"];
-        }
-        [self sendMessage:message];
     }
 }
 
 - (void) mediaFileSource:(id<MediaFileSource>)mediaSource didUpdateMedia:(NSArray*)arrayOfMedia
 {
-    NSMutableDictionary* addsByFingerprint = [NSMutableDictionary dictionary];
-    NSMutableDictionary* updatesByFingerprint = [NSMutableDictionary dictionary];
-    NSMutableDictionary* deletesByFingerprint = [NSMutableDictionary dictionary];
-    for (MediaFile* media in arrayOfMedia) {
-        NSString* mediaFingerprint = [media fingerprint];
-        
-        if (mediaFingerprint) {
+    @synchronized (managedObjectContext) {
+        NSMutableDictionary* addsByFingerprint = [NSMutableDictionary dictionary];
+        NSMutableDictionary* updatesByFingerprint = [NSMutableDictionary dictionary];
+        NSMutableDictionary* deletesByFingerprint = [NSMutableDictionary dictionary];
+        for (MediaFile* media in arrayOfMedia) {
             MediaLocator* mediaLocator = [self _findMediaLocatorForTag:media.tag];
             if (!mediaLocator) {
                 NSLog(@"Unable to find MedaLocator (%@)", media.tag);
@@ -636,19 +638,22 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             }
             
             NSString* relativePath = [media.pathToFile substringFromIndex:strlen(sb.f_mntonname)];
+            NSString* mediaFingerprint = media.fingerprint;
             NSString* discFingerprint = mediaLocator.disc.fingerprint;
-            if (![mediaFingerprint isEqualToString:discFingerprint] || ![mediaLocator.relativePath isEqualToString:relativePath]) {
+            if (mediaFingerprint && ![mediaFingerprint isEqualToString:discFingerprint] || ![mediaLocator.relativePath isEqualToString:relativePath]) {
                 /*  Remove this disc from the movie it used to match up with.  If
                  *  that causes there to be no more discs for that movie, then 
                  *  we'll need to delete it.
                  */
                 if (discFingerprint) {
                     Disc* disc = mediaLocator.disc;
-                    if (1 == [disc.allMediaLocators count]) {
+                    mediaLocator.disc = nil;
+                    if (0 == [disc.allMediaLocators count]) {
                         [managedObjectContext deleteObject:disc];
                     }
+                    [managedObjectContext deleteObject:mediaLocator];
 
-                    NSMutableDictionary* entry = [deletesByFingerprint objectForKey:mediaFingerprint];
+                    NSMutableDictionary* entry = [deletesByFingerprint objectForKey:discFingerprint];
                     if (!entry) {
                         [deletesByFingerprint setObject:
                             entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
@@ -657,7 +662,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                                 nil
                             ]
                             forKey:
-                                mediaFingerprint
+                                discFingerprint
                         ];
                     } else {
                         [[entry objectForKey:@"urls"] addObject:media.tag];
@@ -699,86 +704,96 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                     }
                     [entry setObject:[self _frontCoverURLForFingerprint:media.fingerprint] forKey:@"frontCoverURL"];
                 }
-            }
 
-            /*  Read in the info dictionary, and merge it with any that we've
-             *  already loaded.
-             */
-            NSMutableDictionary* newKeyPathsAndObjects = nil;
-            NSMutableDictionary* infoDictionary = nil;
-            [self mergeInfoForDisc:[infoDictionariesByFingerprint objectForKey:mediaFingerprint] withMediaInfo:media.infoDictionary newKeyPathsAndObjects:&newKeyPathsAndObjects mergedInfoDictionary:&infoDictionary];
-            if ([newKeyPathsAndObjects count]) {
-                NSMutableDictionary* entry = [updatesByFingerprint objectForKey:mediaFingerprint];
-                if (!entry) {
-                    [updatesByFingerprint setObject:[NSDictionary dictionaryWithExpandedKeyPathsAndObjects:newKeyPathsAndObjects] forKey:mediaFingerprint];
-                } else {
-                    NSMutableDictionary* flattenedInfoForFingerprint = [entry flattenToKeyPathsAndObjects];
-                    [flattenedInfoForFingerprint addEntriesFromDictionary:newKeyPathsAndObjects];
-                    [updatesByFingerprint setObject:[NSDictionary dictionaryWithExpandedKeyPathsAndObjects:flattenedInfoForFingerprint] forKey:mediaFingerprint];
+                /*  Read in the info dictionary, and merge it with any that we've
+                 *  already loaded.
+                 */
+                NSMutableDictionary* newKeyPathsAndObjects = nil;
+                NSMutableDictionary* infoDictionary = nil;
+                [self mergeInfoForDisc:[infoDictionariesByFingerprint objectForKey:mediaFingerprint] withMediaInfo:media.infoDictionary newKeyPathsAndObjects:&newKeyPathsAndObjects mergedInfoDictionary:&infoDictionary];
+                if ([newKeyPathsAndObjects count]) {
+                    NSMutableDictionary* entry = [updatesByFingerprint objectForKey:mediaFingerprint];
+                    if (!entry) {
+                        [updatesByFingerprint setObject:[NSDictionary dictionaryWithExpandedKeyPathsAndObjects:newKeyPathsAndObjects] forKey:mediaFingerprint];
+                    } else {
+                        NSMutableDictionary* flattenedInfoForFingerprint = [entry flattenToKeyPathsAndObjects];
+                        [flattenedInfoForFingerprint addEntriesFromDictionary:newKeyPathsAndObjects];
+                        [updatesByFingerprint setObject:[NSDictionary dictionaryWithExpandedKeyPathsAndObjects:flattenedInfoForFingerprint] forKey:mediaFingerprint];
+                    }
+                    
+                    [infoDictionariesByFingerprint setObject:infoDictionary forKey:mediaFingerprint];
+                    media.disc.infoDictionary = infoDictionary;
                 }
-                
-                [infoDictionariesByFingerprint setObject:infoDictionary forKey:mediaFingerprint];
-                media.disc.infoDictionary = infoDictionary;
             }
         }
-    }
 
-    /*  Build and send the message.
-     */
-    if ([addsByFingerprint count] || [updatesByFingerprint count] || [deletesByFingerprint count]) {
-        NSMutableDictionary* message = [NSMutableDictionary dictionary];
-        if ([addsByFingerprint count]) {
-            [message setObject:addsByFingerprint forKey:@"add"];
+        [managedObjectContext save:nil];
+
+        /*  Build and send the message.
+         */
+        if ([addsByFingerprint count] || [updatesByFingerprint count] || [deletesByFingerprint count]) {
+            NSMutableDictionary* message = [NSMutableDictionary dictionary];
+            if ([addsByFingerprint count]) {
+                [message setObject:addsByFingerprint forKey:@"add"];
+            }
+            if ([updatesByFingerprint count]) {
+                [message setObject:updatesByFingerprint forKey:@"update"];
+            }
+            if ([deletesByFingerprint count]) {
+                [message setObject:deletesByFingerprint forKey:@"delete"];
+            }
+            [self sendMessage:message];
         }
-        if ([updatesByFingerprint count]) {
-            [message setObject:updatesByFingerprint forKey:@"update"];
-        }
-        if ([deletesByFingerprint count]) {
-            [message setObject:deletesByFingerprint forKey:@"delete"];
-        }
-        [self sendMessage:message];
     }
 }
 
 - (void) mediaFileSource:(id<MediaFileSource>)mediaSource didRemoveMedia:(NSArray*)arrayOfMedia
 {
-    NSMutableDictionary* deletesByFingerprint = [NSMutableDictionary dictionary];
-    for (MediaFile* media in arrayOfMedia) {
-        [mediaFileByTag removeObjectForKey:media.tag];
+    @synchronized (managedObjectContext) {
+        NSMutableDictionary* deletesByFingerprint = [NSMutableDictionary dictionary];
+        for (MediaFile* media in arrayOfMedia) {
+            [mediaFileByTag removeObjectForKey:media.tag];
 
-        MediaLocator* mediaLocator = [self _findMediaLocatorForTag:media.tag];
-        if (mediaLocator) {
-            Disc* disc = mediaLocator.disc;
-            if (1 == [disc.allMediaLocators count]) {
-                [managedObjectContext deleteObject:disc];
+            NSString* fingerprint = nil;
+            MediaLocator* mediaLocator = [self _findMediaLocatorForTag:media.tag];
+            if (mediaLocator) {
+                Disc* disc = mediaLocator.disc;
+                fingerprint = disc.fingerprint;
+                mediaLocator.disc = nil;
+                if (0 == [disc.allMediaLocators count]) {
+                    [managedObjectContext deleteObject:disc];
+                }
+                [managedObjectContext deleteObject:mediaLocator];
+            }
+                
+            NSMutableDictionary* entry = [deletesByFingerprint objectForKey:fingerprint];
+            if (!entry) {
+                [deletesByFingerprint setObject:
+                    entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                        [NSMutableArray arrayWithObject:media.tag],
+                        @"urls",
+                        nil
+                    ]
+                    forKey:
+                        fingerprint
+                ];
+            } else {
+                [[entry objectForKey:@"urls"] addObject:media.tag];
             }
         }
-            
-        NSMutableDictionary* entry = [deletesByFingerprint objectForKey:media.fingerprint];
-        if (!entry) {
-            [deletesByFingerprint setObject:
-                entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                    [NSMutableArray arrayWithObject:media.tag],
-                    @"urls",
-                    nil
-                ]
-                forKey:
-                    media.fingerprint
-            ];
-        } else {
-            [[entry objectForKey:@"urls"] addObject:media.tag];
-        }
-    }
 
-    /*  Build and send the message.
-     */
-    if ([deletesByFingerprint count]) {
-        NSMutableDictionary* message = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-            deletesByFingerprint,
-            @"delete",
-            nil
-        ];
-        [self sendMessage:message];
+        [managedObjectContext save:nil];
+
+        /*  Build and send the message.
+         */
+        if ([deletesByFingerprint count]) {
+            NSMutableDictionary* message = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                deletesByFingerprint,
+                @"delete",
+                nil
+            ];
+            [self sendMessage:message];
+        }
     }
 }
 

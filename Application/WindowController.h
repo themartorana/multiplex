@@ -24,6 +24,7 @@
     /**/
     IBOutlet NSButton* userVoiceButton;
     /**/
+    IBOutlet NSImageView* windowResizeThumb;
     EngineController* engineController;
     NSManagedObjectModel* managedObjectModel;
     NSPersistentStoreCoordinator* persistentStoreCoordinator;

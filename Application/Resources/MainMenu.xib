@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1150"/>
+			<integer value="1151"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -562,7 +562,7 @@
 				<string key="NSWindowContentMinSize">{1000, 700}</string>
 				<object class="NSView" key="NSWindowView" id="384445475">
 					<reference key="NSNextResponder"/>
-					<int key="NSvFlags">256</int>
+					<int key="NSvFlags">274</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSCustomView" id="572135655">
@@ -906,7 +906,7 @@
 						</object>
 						<object class="NSCustomView" id="483718304">
 							<reference key="NSNextResponder" ref="384445475"/>
-							<int key="NSvFlags">-2147483347</int>
+							<int key="NSvFlags">-2147483379</int>
 							<object class="NSMutableArray" key="NSSubviews">
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSBox" id="980933245">
@@ -5125,6 +5125,14 @@ cm1hdGlvbiIgdGFiIHdoZW4gdGhpcyBtb3ZpZSBpcyBzZWxlY3RlZC4</string>
 					</object>
 					<int key="connectionID">1899</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">windowResizeThumb</string>
+						<reference key="source" ref="623785332"/>
+						<reference key="destination" ref="440268035"/>
+					</object>
+					<int key="connectionID">1904</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -8341,7 +8349,7 @@ cm1hdGlvbiIgdGFiIHdoZW4gdGhpcyBtb3ZpZSBpcyBzZWxlY3RlZC4</string>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1901</int>
+			<int key="maxID">1904</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -8612,6 +8620,7 @@ cm1hdGlvbiIgdGFiIHdoZW4gdGhpcyBtb3ZpZSBpcyBzZWxlY3RlZC4</string>
 							<string>searchView</string>
 							<string>userVoiceButton</string>
 							<string>userVoiceFeedbackPanel</string>
+							<string>windowResizeThumb</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -8625,6 +8634,7 @@ cm1hdGlvbiIgdGFiIHdoZW4gdGhpcyBtb3ZpZSBpcyBzZWxlY3RlZC4</string>
 							<string>NSView</string>
 							<string>NSButton</string>
 							<string>UserVoiceFeedbackPanel</string>
+							<string>NSImageView</string>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">

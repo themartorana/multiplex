@@ -323,11 +323,13 @@
     
     if ([[mainWindow contentView] isInFullScreenMode]) {
         [[mainWindow contentView] exitFullScreenModeWithOptions:nil];
+        [windowResizeThumb setHidden:NO];
     }
     else {
         [[mainWindow contentView] enterFullScreenMode:[NSScreen mainScreen] 
                                           withOptions:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:NSFullScreenModeAllScreens]
         ];
+        [windowResizeThumb setHidden:YES];
     }
 }
 

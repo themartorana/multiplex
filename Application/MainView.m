@@ -164,7 +164,8 @@
     hoverPlayLayer.isMouseDown = NO;
     CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
     CALayer* playButtonLayer = [hoverPlayLayer hitTest:p];
-    if ([theEvent clickCount] == 2) {
+    if (([floorLayer.layoutManager changesSelectionOnSingleClick] && [theEvent clickCount] == 1) ||
+        (![floorLayer.layoutManager changesSelectionOnSingleClick] && [theEvent clickCount] == 2)) {
         
         MovieLayer* movieLayer = [self movieLayerForPoint:p];
         if (movieLayer) {

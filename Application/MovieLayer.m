@@ -96,6 +96,7 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
             movieTitle = [(NSString*)[object valueForKeyPath:keyPath] retain];
             
             // TODO: Redraw the text layer if necessary
+            [gradientLayer setNeedsDisplay];
         }
     } else if ([keyPath isEqualToString:@"boxArt.imageData"]) {
         CGImageRef newBoxArtImage = [(Movie*)object boxArt].image;

@@ -8,6 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="1495"/>
 			<integer value="1151"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -2531,7 +2532,7 @@
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSView" id="162150624">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">269</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2896,7 +2897,7 @@
 											<reference key="NSSuperview" ref="220476942"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSTextFieldCell" key="NSCell" id="462574108">
-												<int key="NSCellFlags">-1804468671</int>
+												<int key="NSCellFlags">-1803944383</int>
 												<int key="NSCellFlags2">272630784</int>
 												<string key="NSContents"/>
 												<reference key="NSSupport" ref="707745533"/>
@@ -3809,7 +3810,7 @@
 											<reference key="NSSuperview" ref="474898351"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSButtonCell" key="NSCell" id="798664502">
-												<int key="NSCellFlags">-2080244224</int>
+												<int key="NSCellFlags">-1543373312</int>
 												<int key="NSCellFlags2">134348800</int>
 												<string key="NSContents">-</string>
 												<reference key="NSSupport" ref="26"/>
@@ -3829,7 +3830,7 @@
 											<reference key="NSSuperview" ref="474898351"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSButtonCell" key="NSCell" id="744097239">
-												<int key="NSCellFlags">-2080244224</int>
+												<int key="NSCellFlags">-1543373312</int>
 												<int key="NSCellFlags2">134348800</int>
 												<string key="NSContents">+</string>
 												<reference key="NSSupport" ref="26"/>
@@ -3849,7 +3850,7 @@
 											<reference key="NSSuperview" ref="474898351"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSButtonCell" key="NSCell" id="731173379">
-												<int key="NSCellFlags">-2080244224</int>
+												<int key="NSCellFlags">-1543373312</int>
 												<int key="NSCellFlags2">134348800</int>
 												<string key="NSContents">-</string>
 												<reference key="NSSupport" ref="26"/>
@@ -3869,7 +3870,7 @@
 											<reference key="NSSuperview" ref="474898351"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSButtonCell" key="NSCell" id="893171407">
-												<int key="NSCellFlags">-2080244224</int>
+												<int key="NSCellFlags">-1543373312</int>
 												<int key="NSCellFlags2">134348800</int>
 												<string key="NSContents">+</string>
 												<reference key="NSSupport" ref="26"/>
@@ -3902,6 +3903,7 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{800, 500}</string>
+				<reference key="NSSuperview"/>
 				<bool key="NSViewIsLayerTreeHost">YES</bool>
 			</object>
 			<object class="NSWindowTemplate" id="285385420">
@@ -5109,22 +5111,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: movie.title</string>
-						<reference key="source" ref="32848502"/>
-						<reference key="destination" ref="62536199"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="32848502"/>
-							<reference key="NSDestination" ref="62536199"/>
-							<string key="NSLabel">value: movie.title</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">movie.title</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1618</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: movie.aspectRatio</string>
 						<reference key="source" ref="134714013"/>
 						<reference key="destination" ref="62536199"/>
@@ -5408,6 +5394,35 @@
 						<reference key="destination" ref="141152956"/>
 					</object>
 					<int key="connectionID">1824</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: movie.title</string>
+						<reference key="source" ref="32848502"/>
+						<reference key="destination" ref="62536199"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="32848502"/>
+							<reference key="NSDestination" ref="62536199"/>
+							<string key="NSLabel">value: movie.title</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">movie.title</string>
+							<object class="NSDictionary" key="NSOptions">
+								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="NSMutableArray" key="dict.sortedKeys">
+									<bool key="EncodedWithXMLCoder">YES</bool>
+									<string>NSContinuouslyUpdatesValue</string>
+									<string>NSValidatesImmediately</string>
+								</object>
+								<object class="NSMutableArray" key="dict.values">
+									<bool key="EncodedWithXMLCoder">YES</bool>
+									<boolean value="YES" id="5"/>
+									<reference ref="5"/>
+								</object>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">1826</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -8854,7 +8869,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1824</int>
+			<int key="maxID">1826</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

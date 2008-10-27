@@ -46,6 +46,8 @@
 
 - (void) setListOfLayersInOrder:(NSArray*)_listOfLayersInOrder
 {
+    layoutTriggeredDueToHover = NO;
+    
     if (listOfLayersInOrder) {
         [listOfLayersInOrder release];
         listOfLayersInOrder = nil;
@@ -55,6 +57,8 @@
 
 - (void) setListOfArrangedObjects:(NSArray*)_arrangedListOfObjects
 {
+    layoutTriggeredDueToHover = NO;
+    
     if (arrangedListOfObjects) {
         [arrangedListOfObjects release];
         arrangedListOfObjects = nil;
@@ -70,6 +74,7 @@
 {
     /* IGNORED */
 }
+
 
 - (void) setHoveredMovieLayer:(MovieLayer*)_hoveredMovieLayer;
 {
@@ -104,7 +109,8 @@
         } else {
             hoverHighlightLayer.hidden = YES;
         }
-        
+
+        layoutTriggeredDueToHover = YES;
         [CATransaction commit];
     }
 }
@@ -157,6 +163,12 @@ static const CGFloat HS = 75.0;
 
 - (void) layoutSublayersOfLayer:(CALayer*)layer
 {
+    if (layoutTriggeredDueToHover) {
+        layoutTriggeredDueToHover = NO;
+        NSLog(@"Not laying out");
+        return;
+    }
+    
     DEBUG_TRACE();
     
     [CATransaction begin];

@@ -14,6 +14,8 @@
 
     NSArray* listOfLayersInOrder;
     NSArray* arrangedListOfObjects;
+    
+    BOOL layoutTriggeredDueToHover;
 }
 
 @property (copy) NSArray* listOfLayersInOrder;

@@ -5,7 +5,7 @@
 #import "ApplicationResources.h"
 
 #import <QuartzCore/QuartzCore.h>
-#import <Toolkit/CALayer+IndyHallLabs.h>
+#import <Toolkit/Toolkit.h>
 
 @implementation StadiumLayoutManager
 @synthesize listOfLayersInOrder;

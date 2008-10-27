@@ -37,8 +37,6 @@
                                          [self layer].bounds.size.width - 40.0,
                                          [self layer].bounds.size.height - 40.0);
     
-    discsHostingLayer.backgroundColor = [MultiplexColorFactory multiplexOrange];
-    
     scrollingLayer.anchorPoint = CGPointZero;
     
     pageNumbersLayer = [CALayer layer];
@@ -77,9 +75,9 @@
     }
     
     int numDiscs = [selectedMovie.allDiscs count];
-    if (numDiscs <= 1) {
+    /*if (numDiscs <= 1) {
         return;
-    }
+    }*/
     
     // Create page layers
     // Determine how many pages we need

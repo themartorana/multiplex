@@ -129,6 +129,7 @@
             for (Media* media in allMedia) {
                 if ([media.isAvailable boolValue]) {
                     // Play
+                    NSString* url = media.url;
                     [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:media.url]];
                     break;
                 }

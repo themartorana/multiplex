@@ -88,6 +88,15 @@ static CGImageRef _createCGImageFromFile(NSString* path);
     return color;
 }
 
++ (CGColorRef) blackThreeQuartersTransparent
+{
+    static CGColorRef color = NULL;
+    if (!color) {
+        color = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.25);
+    }
+    return color;
+}
+
 + (CGColorRef) moveLayerBorderColor
 {
     static CGColorRef color = NULL;

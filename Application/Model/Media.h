@@ -4,6 +4,8 @@
 @class Engine;
 
 @interface Media : NSManagedObject {
+    Disc* disc;
+    NSNumber* isAvailable;
 }
 
 @property (retain) NSString* url;

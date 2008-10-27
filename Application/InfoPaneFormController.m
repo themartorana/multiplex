@@ -43,6 +43,7 @@
     [playButtonView setNotificationNameToPost:@"MultiplexPlayButtonClicked"];
     
     [coverArtImageView bind:@"image" toObject:self withKeyPath:@"movie.boxArt.image" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
+    [infoPaneDiscsView bind:@"selectedMovie" toObject:self withKeyPath:@"movie" options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption]];
 }
 
 - (void) setMovie:(Movie*)_movie

@@ -19,7 +19,7 @@
 {
     if (self = [super init]) {
         [self setUpPlayLayer];
-        self.backgroundColor = [MultiplexColorFactory blackHalfTransparent];
+        self.backgroundColor = [MultiplexColorFactory blackThreeQuartersTransparent];
         self.borderColor = [MultiplexColorFactory black];
         self.cornerRadius = 10.0;
     }
@@ -32,20 +32,20 @@
     float universalPadding = 20.0;
     
     self.anchorPoint = CGPointZero;
-    self.bounds = CGRectMake(0.0, 0.0, 370.0, 109.0);
-    
+    self.bounds = CGRectMake(0.0, 0.0, 350.0, 100.0);
+        
     playButtonLayer = [[ButtonLayer buttonLayerWithUpState:[ApplicationResources playButton] downState:[ApplicationResources playButtonDown]] retain];
     playButtonLayer.anchorPoint = CGPointZero;
-    playButtonLayer.frame = CGRectMake(370.0 - 76.0 - universalPadding, 
-                                       (109.0/2.0) - (76.0/2.0), 
+    playButtonLayer.frame = CGRectMake(350.0 - 76.0 - universalPadding, 
+                                       (100.0/2.0) - (76.0/2.0), 
                                        76.0,
                                        76.0);
     [self addSublayer:playButtonLayer];
  
     greyPlayButtonLayer = [ButtonLayer buttonLayerWithUpState:[ApplicationResources playButtonInactive] downState:[ApplicationResources playButton]];
     greyPlayButtonLayer.anchorPoint = CGPointZero;
-    greyPlayButtonLayer.frame = CGRectMake(370.0 - 76.0 - universalPadding, 
-                                       (109.0/2.0) - (76.0/2.0), 
+    greyPlayButtonLayer.frame = CGRectMake(350.0 - 76.0 - universalPadding, 
+                                       (100.0/2.0) - (76.0/2.0), 
                                        76.0,
                                        76.0);
     [self addSublayer:greyPlayButtonLayer];
@@ -57,8 +57,8 @@
     discNumberTitle.foregroundColor = [MultiplexColorFactory discPlayLayerUnhoveredForegroundColor];
     discNumberTitle.anchorPoint = CGPointZero;
     discNumberTitle.frame = CGRectMake(universalPadding, 
-                                       109.0 - 28.0 - (universalPadding/2), 
-                                       370.0 - (universalPadding * 2.0), 
+                                       100.0 - 28.0 - (universalPadding/2), 
+                                       350.0 - (universalPadding * 2.0), 
                                        32.0);
     [self addSublayer:discNumberTitle];
     
@@ -109,17 +109,17 @@
     hovered = isHovered;
     
     if (isHovered) {
-        //self.backgroundColor = [MultiplexColorFactory black];
+        self.backgroundColor = [MultiplexColorFactory blackHalfTransparent];
         
         self.borderWidth = 2.0;
         
-        discNumberTitle.foregroundColor = [[MultiplexColorFactory multiplexYellowOrange] colorAsCGColorRef];
+        discNumberTitle.foregroundColor = [MultiplexColorFactory multiplexYellowOrangeAsCGColor];
         descriptionLayer.foregroundColor = CGColorGetConstantColor(kCGColorWhite);
 
         greyPlayButtonLayer.hidden = YES;            
     }
     else {
-        //self.backgroundColor = [MultiplexColorFactory blackOneQuarterTransparent];
+        self.backgroundColor = [MultiplexColorFactory blackThreeQuartersTransparent];
         self.borderWidth = 0.0;
 
         discNumberTitle.foregroundColor = [MultiplexColorFactory discPlayLayerUnhoveredForegroundColor];

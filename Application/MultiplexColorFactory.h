@@ -21,6 +21,7 @@
 + (CGColorRef) whiteHalfTransparent;
 + (CGColorRef) blackOneQuarterTransparent;
 + (CGColorRef) blackHalfTransparent;
++ (CGColorRef) blackThreeQuartersTransparent;
 
 + (CGColorRef) moveLayerBorderColor;
 + (CGColorRef) unhoveredGrayForDisc;

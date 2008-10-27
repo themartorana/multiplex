@@ -66,5 +66,9 @@
     }
 }
 
+- (IBAction) skipEnterUPC:(id)sender
+{
+    [drawerView setContentView:movieInfoView];
+}
 
 @end

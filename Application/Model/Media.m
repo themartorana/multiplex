@@ -1,4 +1,5 @@
 #import "Media.h"
+#import "Disc.h"
 
 @implementation Media
 
@@ -6,5 +7,7 @@
 @dynamic url;
 @dynamic engine;
 @dynamic isAvailable;
+
+//- (void) setDisc:(Disc*)_disc
 
 @end

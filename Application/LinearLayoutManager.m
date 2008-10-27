@@ -85,7 +85,7 @@
     } else {
         scrollToSelectedMovie = NO;
         selectedHighlightLayer.hidden = YES;
-
+        [floorLayer setNeedsLayout];
     }
 }
 
@@ -107,6 +107,11 @@
     }
     
     [CATransaction commit];
+}
+
+- (BOOL) changesSelectionOnSingleClick
+{
+    return YES;
 }
 
 

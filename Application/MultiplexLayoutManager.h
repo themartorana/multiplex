@@ -14,6 +14,8 @@
 - (void) setListOfLayersInOrder:(NSArray*)listOfLayersInOrder;
 - (void) setListOfArrangedObjects:(NSArray*)arrangedObjects;
 
+- (BOOL) changesSelectionOnSingleClick;
+
 // Make this concrete
 - (void) layoutSublayersOfLayer:(CALayer*)layer;
 

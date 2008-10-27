@@ -6,7 +6,7 @@
 
 @interface MainView : NSView {
     NSMutableDictionary* layersByID;
-    NSMutableArray* listOfLayersInOrder;
+    NSArray* listOfMoviesInOrder;
     
     CALayer* floorLayer; // NR
     HoverPlayLayer* hoverPlayLayer;
@@ -21,6 +21,7 @@
     BOOL needsLayout;
     
     Class <MultiplexLayoutManager> floorLayerLayoutManagerClass;
+    id<MultiplexLayoutManager> layoutManager;
 }
 
 @property (retain) id content;

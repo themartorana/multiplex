@@ -12,7 +12,6 @@
 - (void) setSelectedMovie:(Movie*)movie;
 
 - (void) setListOfLayersInOrder:(NSArray*)listOfLayersInOrder;
-- (void) setListOfArrangedObjects:(NSArray*)arrangedObjects;
 
 - (BOOL) changesSelectionOnSingleClick;
 

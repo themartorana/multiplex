@@ -60,21 +60,6 @@
     listOfLayersInOrder = [_listOfLayersInOrder copy];
 }
 
-- (void) setListOfArrangedObjects:(NSArray*)_arrangedListOfObjects
-{
-    layoutTriggeredDueToHover = NO;
-    
-    if (arrangedListOfObjects) {
-        [arrangedListOfObjects release];
-        arrangedListOfObjects = nil;
-    }
-    arrangedListOfObjects = [_arrangedListOfObjects copy];
-    
-    [self setHoveredMovieLayer:nil];
-    
-    radialGradientLayer.hidden = (!arrangedListOfObjects || [arrangedListOfObjects count] == 0);
-}
-
 - (void) setSelectedMovie:(Movie*)movie
 {
     /* IGNORED */
@@ -181,6 +166,7 @@ static const CGFloat HS = 75.0;
     
     CGFloat opacity = 1.0;
     NSMutableSet* tagged = [NSMutableSet set];
+    int totalNumberOfLayers = 0;
     for (NSArray* layersInOrder in [listOfLayersInOrder reverseObjectEnumerator]) {
         for (MovieLayer* layer in layersInOrder) {
             if (![tagged containsObject:layer.movie.objectID]) {
@@ -189,6 +175,7 @@ static const CGFloat HS = 75.0;
                     layer.opacity = opacity;
                 }
                 [tagged addObject:layer.movie.objectID];
+                totalNumberOfLayers++;
             }
         }
         opacity *= 0.2;
@@ -278,7 +265,7 @@ static const CGFloat HS = 75.0;
         
         /*  Position, scale and rotate our gradient.
          */
-        {
+        if (NO == (radialGradientLayer.hidden = (totalNumberOfLayers == 0))) {
             CGFloat tWidth = radialGradientLayer.bounds.size.width;
             CGFloat scale = width / tWidth;
             CATransform3D t = b;

@@ -11,14 +11,15 @@
 #import <QuartzCore/QuartzCore.h>
 
 @interface MainView (LayerStuff)
-- (MovieLayer*) newLayerForMovie:(Movie*)movie;
+- (MovieLayer*) _newLayerForMovie:(Movie*)movie;
 @end
 
 @interface MainView (Private)
-- (void) cancelHoverTimer;
-- (MovieLayer*) movieLayerForPoint:(CGPoint)p;
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context;
-- (void) hoverTimerTicked:(NSTimer*)timer;
+- (void) _cancelHoverTimer;
+- (NSArray*) _listOfLayersInOrder;
+- (MovieLayer*) _movieLayerForPoint:(CGPoint)p;
+- (void) _hoverTimerTicked:(NSTimer*)timer;
 - (void) _restartMouseTracking;
 @end
 
@@ -40,6 +41,7 @@
     
     floorLayer = [CALayer layer];
     floorLayer.delegate = self;
+    floorLayer.layoutManager = self;
     floorLayer.constraints = [NSArray arrayWithObjects:
         [CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY],
         [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
@@ -49,14 +51,8 @@
     ];
     [rootLayer insertSublayer:floorLayer atIndex:0];
     
-    listOfLayersInOrder = [[NSMutableArray alloc] initWithObjects:[NSMutableArray array], nil];
+    [self setFloorLayerLayoutManagerClass:[StadiumLayoutManager class]];
     layersByID = [[NSMutableDictionary alloc] init];
-
-    // Create our layout manager, for now
-    floorLayerLayoutManagerClass = [StadiumLayoutManager class];
-    if (floorLayerLayoutManagerClass && !floorLayer.layoutManager) {
-        [self setFloorLayerLayoutManagerClass:floorLayerLayoutManagerClass];
-    }
     
     hoverPlayLayer = [HoverPlayLayer layer];
     hoverPlayLayer.hidden = YES;
@@ -68,9 +64,9 @@
 
 - (void) dealloc
 {
-    [self cancelHoverTimer];
+    [self _cancelHoverTimer];
     [layersByID release];
-    [listOfLayersInOrder release];
+    [listOfMoviesInOrder release];
     [hoverPlayLayer release];
     [super dealloc];
 }
@@ -78,29 +74,17 @@
 - (void) setFloorLayerLayoutManagerClass:(Class)class
 {
     floorLayerLayoutManagerClass = class;
-    
-    if (floorLayer) {
-        
-        if (floorLayer.layoutManager) {
-            [floorLayer.layoutManager clearManagingLayerOfExtras];
-        }
-        
-        id<MultiplexLayoutManager> layoutManager = [[class alloc] initWithManagingLayer:floorLayer];
-        
-        [layoutManager setListOfLayersInOrder:listOfLayersInOrder];
-        [layoutManager setListOfArrangedObjects:[content arrangedObjects]];
-        [floorLayer setLayoutManager:layoutManager];
-        [layoutManager release];
-
-        if (content && [[content arrangedObjects] count] > 0) {
-            id a = [content valueForKeyPath:@"selection.self"];
-            if ([a isKindOfClass:[Movie class]]) {
-                [floorLayer.layoutManager setSelectedMovie:(Movie*)a];
-            }
-        }
-        
-        [floorLayer setNeedsLayout];
+    if (layoutManager) {
+        [layoutManager clearManagingLayerOfExtras];
     }
+    layoutManager = [[class alloc] initWithManagingLayer:floorLayer];
+    if (content && [[content arrangedObjects] count] > 0) {
+        id a = [content valueForKeyPath:@"selection.self"];
+        if ([a isKindOfClass:[Movie class]]) {
+            [layoutManager setSelectedMovie:(Movie*)a];
+        }
+    }
+    [floorLayer setNeedsLayout];
 }
 
 - (void) setContent:(id)_content
@@ -123,11 +107,18 @@
     }
 }
 
+- (void) layoutSublayersOfLayer:(CALayer*)layer
+{
+    NSAssert(layer == floorLayer, @"wtf?");
+    [layoutManager setListOfLayersInOrder:[self _listOfLayersInOrder]];
+    [layoutManager layoutSublayersOfLayer:floorLayer];
+}
+
 - (void) restartHoverTimer
 {
-    [self cancelHoverTimer];
+    [self _cancelHoverTimer];
     if (hoveredMovie) {
-        hoverTimer = [[NSTimer scheduledTimerWithTimeInterval:0.75 target:self selector:@selector(hoverTimerTicked:) userInfo:nil repeats:NO] retain];
+        hoverTimer = [[NSTimer scheduledTimerWithTimeInterval:0.75 target:self selector:@selector(_hoverTimerTicked:) userInfo:nil repeats:NO] retain];
     }
 }
 
@@ -137,6 +128,7 @@
         [hoveredMovie release];
         hoveredMovie = [_hoveredMovie retain];
         hoverPlayLayer.hidden = YES;
+        [layoutManager setHoveredMovieLayer:[layersByID objectForKey:_hoveredMovie.objectID]];
     }
     [self restartHoverTimer];
 }
@@ -164,16 +156,16 @@
     hoverPlayLayer.isMouseDown = NO;
     CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
     CALayer* playButtonLayer = [hoverPlayLayer hitTest:p];
-    if (([floorLayer.layoutManager changesSelectionOnSingleClick] && [theEvent clickCount] == 1) ||
-        (![floorLayer.layoutManager changesSelectionOnSingleClick] && [theEvent clickCount] == 2)) {
+    if (([layoutManager changesSelectionOnSingleClick] && [theEvent clickCount] == 1) ||
+        (![layoutManager changesSelectionOnSingleClick] && [theEvent clickCount] == 2)) {
         
-        MovieLayer* movieLayer = [self movieLayerForPoint:p];
+        MovieLayer* movieLayer = [self _movieLayerForPoint:p];
         if (movieLayer) {
             [content setSelectedObjects:[NSArray arrayWithObject:[movieLayer movie]]];
         }
         
         hoverPlayLayer.hidden = YES;
-        [self cancelHoverTimer];
+        [self _cancelHoverTimer];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexShowMovieDialog" object:nil];
     } else if (playButtonLayer) {
         if ([playButtonLayer isKindOfClass:[ButtonLayer class]]) {
@@ -186,14 +178,13 @@
 - (void) mouseMoved:(NSEvent*)theEvent
 {
     CGPoint position = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
-    MovieLayer* movieLayer = [self movieLayerForPoint:position];
+    MovieLayer* movieLayer = [self _movieLayerForPoint:position];
     Movie* movie = movieLayer.movie;
     if (movie && ![[content arrangedObjects] containsObject:movie]) {
         movie = nil;
     }
     
     if (movie != hoveredMovie && ![hoverPlayLayer hitTest:position]) {
-        [floorLayer.layoutManager setHoveredMovieLayer:movieLayer];
         [self setHoveredMovie:movie];
     } else {
         [self restartHoverTimer];
@@ -244,79 +235,61 @@
     if ([@"selection" isEqualToString:keyPath]) {
         id selection = [change objectForKey:NSKeyValueChangeNewKey];
         if (selection == NSNoSelectionMarker || selection == (id)kCFNull) {
-            [floorLayer.layoutManager setSelectedMovie:nil];
+            [layoutManager setSelectedMovie:nil];
         } else {
-            [floorLayer.layoutManager setSelectedMovie:selection];
+            [layoutManager setSelectedMovie:selection];
         }
-    }
-    if ([@"content.@count" isEqualToString:keyPath]) {
-        NSMutableArray* allLayers = [listOfLayersInOrder objectAtIndex:0];
-        int oldCount = [allLayers count];
-        NSArray* allObjects = [object content];
-        int count = [[object content] count];
-        if (oldCount != count) {
-            NSMutableArray* layersInOrder = [NSMutableArray arrayWithCapacity:count];
-            NSMutableSet* keySet = [NSMutableSet setWithArray:[layersByID allKeys]];
-            for (Movie* movie in allObjects) {
-                NSManagedObjectID* objectID = [movie objectID];
-                MovieLayer* layer = [layersByID objectForKey:objectID];
-                if (!layer) {
-                    layer = [self newLayerForMovie:movie];
-                    [floorLayer addSublayer:layer];
-                    [layersByID setObject:layer forKey:objectID];
-                }
-                [keySet removeObject:objectID];
-                [layersInOrder addObject:layer];
-            }
-            for (id keyOfLayerToDelete in keySet) {
-                MovieLayer* layerToDelete = [layersByID objectForKey:keyOfLayerToDelete];
-                [layerToDelete removeFromSuperlayer];
-                [layersByID removeObjectForKey:keyOfLayerToDelete];
-            } 
-            [listOfLayersInOrder replaceObjectAtIndex:0 withObject:layersInOrder];
-
-            [((id<MultiplexLayoutManager>)floorLayer.layoutManager) setListOfLayersInOrder:listOfLayersInOrder];
-            [floorLayer setNeedsLayout];
-        }
-    } else if ([@"arrangedObjects" isEqualToString:keyPath]) {
+    } else if ([@"content.@count" isEqualToString:keyPath]) {
+        [listOfMoviesInOrder autorelease];
+        listOfMoviesInOrder = [[NSArray alloc] initWithObjects:[[content arrangedObjects] copy], nil];
         [self setHoveredMovie:nil];
-        
+        [floorLayer setNeedsLayout];
+    } else if ([@"arrangedObjects" isEqualToString:keyPath]) {
+        [listOfMoviesInOrder autorelease];
+        NSMutableArray* newListOfMoviesInOrder = [listOfMoviesInOrder mutableCopy];
         NSArray* arrangedObjects = [object arrangedObjects];
-        [((id<MultiplexLayoutManager>)floorLayer.layoutManager) setListOfArrangedObjects:arrangedObjects];
-        
         int count = [arrangedObjects count];
-        for (int i = [listOfLayersInOrder count] - 1; i > 0; i--) {
-            if ([[listOfLayersInOrder objectAtIndex:i] count] > count) {
+        for (NSArray* moviesInOrder in [listOfMoviesInOrder reverseObjectEnumerator]) {
+            if ([moviesInOrder count] > count) {
                 break;
             }
-            [listOfLayersInOrder removeLastObject];
+            [newListOfMoviesInOrder removeLastObject];
         }
-                
-        /*  Determine which items already have layers, and which need to have
-         *  layers created for them.
-         */
-        NSMutableArray* layersInOrder = [NSMutableArray arrayWithCapacity:count];
-        for (Movie* movie in arrangedObjects) {
-            NSManagedObjectID* objectID = [movie objectID];
-            MovieLayer* layer = [layersByID objectForKey:objectID];
-            if (!layer) {
-                layer = [self newLayerForMovie:movie];
-                [floorLayer addSublayer:layer];
-                [layersByID setObject:layer forKey:objectID];
-            }
-            [layersInOrder addObject:layer];
-        }
-        
-        /*  Keep these around for next time...
-         */
-        [listOfLayersInOrder addObject:layersInOrder];
-
-        [((id<MultiplexLayoutManager>)floorLayer.layoutManager) setListOfLayersInOrder:listOfLayersInOrder];
+        [newListOfMoviesInOrder addObject:[arrangedObjects copy]]; 
+        listOfMoviesInOrder = newListOfMoviesInOrder;
+        [self setHoveredMovie:nil];
         [floorLayer setNeedsLayout];
     }
 }
 
-- (MovieLayer*) movieLayerForPoint:(CGPoint)p
+- (NSArray*) _listOfLayersInOrder
+{
+    NSMutableSet* keysOfLayersToDelete = [NSMutableSet setWithArray:[layersByID allKeys]];
+    NSMutableArray* listOfLayersInOrder = [NSMutableArray arrayWithCapacity:[listOfMoviesInOrder count]];
+    for (NSArray* movies in listOfMoviesInOrder) {
+        NSMutableArray* layers = [NSMutableArray arrayWithCapacity:[movies count]];
+        for (Movie* movie in movies) {
+            NSManagedObjectID* objectID = [movie objectID];
+            MovieLayer* layer = [layersByID objectForKey:objectID];
+            if (!layer) {
+                layer = [self _newLayerForMovie:movie];
+                [floorLayer addSublayer:layer];
+                [layersByID setObject:layer forKey:objectID];
+            } else {
+                [keysOfLayersToDelete removeObject:objectID];
+            }
+            [layers addObject:layer];
+        }
+        [listOfLayersInOrder addObject:layers];
+    }
+    for (NSManagedObjectID* objectID in keysOfLayersToDelete) {
+        [[layersByID objectForKey:objectID] removeFromSuperlayer];
+    }
+    
+    return listOfLayersInOrder;
+}
+
+- (MovieLayer*) _movieLayerForPoint:(CGPoint)p
 {
     CALayer* layer = [floorLayer hitTest:p];
     while (layer) {
@@ -328,7 +301,7 @@
     return nil;
 }
 
-- (void) cancelHoverTimer 
+- (void) _cancelHoverTimer 
 {
     if (hoverTimer) @synchronized (hoverTimer) {
         [hoverTimer invalidate];
@@ -337,7 +310,7 @@
     }
 }
 
-- (void) hoverTimerTicked:(NSTimer*)timer
+- (void) _hoverTimerTicked:(NSTimer*)timer
 {
     @synchronized (hoverTimer) {
         [hoverTimer release];
@@ -358,7 +331,7 @@ static const CGFloat H = 400.0;
 #pragma mark -
 @implementation MainView (LayerStuff)
 
-- (MovieLayer*) newLayerForMovie:(Movie*)movie
+- (MovieLayer*) _newLayerForMovie:(Movie*)movie
 {
     MovieLayer* layer = [MovieLayer layerWithMovie:movie];
     layer.frame = CGRectMake(0.0, 0.0, W, H);

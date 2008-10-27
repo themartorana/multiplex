@@ -13,7 +13,6 @@
     CALayer* hoverHighlightLayer; // NR
 
     NSArray* listOfLayersInOrder;
-    NSArray* arrangedListOfObjects;
     
     BOOL layoutTriggeredDueToHover;
 }

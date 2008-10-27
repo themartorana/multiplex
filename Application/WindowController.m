@@ -113,6 +113,8 @@
     [notificationCenter addObserver:self selector:@selector(playSelectedMovie:) name:@"MultiplexPlayButtonClicked" object:nil];
     [notificationCenter addObserver:self selector:@selector(toggleFullScreen:) name:@"MultiplexToggleFullScreen" object:nil];
     
+    [notificationCenter addObserver:self selector:@selector(mainWindowWillClose:) name:NSWindowWillCloseNotification object:[mainView window]];
+    
     engineController = [[EngineController alloc] initWithManagedObjectContext:engineManagedObjectContext];
     
     // Hook up to drawer view
@@ -143,7 +145,6 @@
             for (Media* media in allMedia) {
                 if ([media.isAvailable boolValue]) {
                     // Play
-                    NSString* url = media.url;
                     [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:media.url]];
                     break;
                 }
@@ -216,6 +217,11 @@
             }
         }
     }
+}
+
+- (void) mainWindowWillClose:(NSNotification*)notification
+{
+    [NSApp terminate:self];
 }
 
 - (IBAction) toggleFullScreen:(id)sender

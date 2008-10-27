@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1166"/>
+			<integer value="1150"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -840,7 +840,7 @@
 								</object>
 								<object class="NSTextField" id="381313983">
 									<reference key="NSNextResponder" ref="243160278"/>
-									<int key="NSvFlags">268</int>
+									<int key="NSvFlags">269</int>
 									<string key="NSFrame">{{406, 3}, {188, 11}}</string>
 									<reference key="NSSuperview" ref="243160278"/>
 									<bool key="NSEnabled">YES</bool>
@@ -5094,14 +5094,6 @@ cm1hdGlvbiIgdGFiIHdoZW4gdGhpcyBtb3ZpZSBpcyBzZWxlY3RlZC4</string>
 					<int key="connectionID">1856</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">debugWindow</string>
-						<reference key="source" ref="623785332"/>
-						<reference key="destination" ref="924156165"/>
-					</object>
-					<int key="connectionID">1861</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
 						<string key="label">makeKeyAndOrderFront:</string>
 						<reference key="source" ref="924156165"/>
@@ -7929,8 +7921,8 @@ cm1hdGlvbiIgdGFiIHdoZW4gdGhpcyBtb3ZpZSBpcyBzZWxlY3RlZC4</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{709, 73}, {1000, 700}}</string>
-					<string>{{709, 73}, {1000, 700}}</string>
+					<string>{{294, 55}, {1000, 700}}</string>
+					<string>{{294, 55}, {1000, 700}}</string>
 					<reference ref="9"/>
 					<reference ref="9"/>
 					<string>{1000, 700}</string>

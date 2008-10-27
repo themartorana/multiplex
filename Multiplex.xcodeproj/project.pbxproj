@@ -174,6 +174,8 @@
 		F9D315290E7DDBB200D99DCA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9D315280E7DDBB200D99DCA /* Cocoa.framework */; };
 		F9D315310E7DDBEF00D99DCA /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9D312A40E7DD88100D99DCA /* ApplicationServices.framework */; };
 		F9D315390E7DDC4400D99DCA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9D3129F0E7DD85200D99DCA /* Foundation.framework */; };
+		F9D4F92D0EB671E000B89FF4 /* NSBundle+IndyHallLabs.h in Headers */ = {isa = PBXBuildFile; fileRef = F9D4F92B0EB671E000B89FF4 /* NSBundle+IndyHallLabs.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F9D4F92E0EB671E000B89FF4 /* NSBundle+IndyHallLabs.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D4F92C0EB671E000B89FF4 /* NSBundle+IndyHallLabs.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -592,6 +594,8 @@
 		F9D314CF0E7DD99500D99DCA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F9D315230E7DDB9900D99DCA /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F9D315280E7DDBB200D99DCA /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		F9D4F92B0EB671E000B89FF4 /* NSBundle+IndyHallLabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+IndyHallLabs.h"; sourceTree = "<group>"; };
+		F9D4F92C0EB671E000B89FF4 /* NSBundle+IndyHallLabs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+IndyHallLabs.m"; sourceTree = "<group>"; };
 		F9DA5B480E61C1BC00E96C0D /* DVDMediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVDMediaSource.h; sourceTree = "<group>"; };
 		F9DA5B490E61C1BC00E96C0D /* DVDMediaSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVDMediaSource.m; sourceTree = "<group>"; };
 		F9DA5B4B0E61C1C900E96C0D /* PhysicalMediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicalMediaSource.h; sourceTree = "<group>"; };
@@ -1078,6 +1082,8 @@
 				F9CE81A30EA68BED00602750 /* CALayer+IndyHallLabs.m */,
 				F966E4BA0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.h */,
 				F966E4BB0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.m */,
+				F9D4F92B0EB671E000B89FF4 /* NSBundle+IndyHallLabs.h */,
+				F9D4F92C0EB671E000B89FF4 /* NSBundle+IndyHallLabs.m */,
 				F9CE81A60EA68BED00602750 /* NSColor+IndyHallLabs.h */,
 				F9CE81A70EA68BED00602750 /* NSColor+IndyHallLabs.m */,
 				F9CE81A80EA68BED00602750 /* NSDate+IndyHallLabs.h */,
@@ -1174,6 +1180,7 @@
 				F9CE81BD0EA68BED00602750 /* NSImage+IndyHallLabs.h in Headers */,
 				F9CE81C10EA68BED00602750 /* NSString+IndyHallLabs.h in Headers */,
 				F9B8DB370EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.h in Headers */,
+				F9D4F92D0EB671E000B89FF4 /* NSBundle+IndyHallLabs.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1662,6 +1669,7 @@
 				F9CE81BE0EA68BED00602750 /* NSImage+IndyHallLabs.m in Sources */,
 				F9CE81C20EA68BED00602750 /* NSString+IndyHallLabs.m in Sources */,
 				F9B8DB380EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.m in Sources */,
+				F9D4F92E0EB671E000B89FF4 /* NSBundle+IndyHallLabs.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

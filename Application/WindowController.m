@@ -212,6 +212,11 @@
     [[self window] makeFirstResponder:searchView];
 }
 
+- (IBAction) checkForUpdates:(id)sender
+{
+    [[SUUpdater sharedUpdater] checkForUpdates:sender];
+}
+
 - (IBAction) showUserVoiceFeedbackSheet:(id)sender
 {
     [userVoiceFeedbackPanel setFrame:[self.window.contentView frame] display:YES];
@@ -261,9 +266,18 @@
         NSLog(@"%@", parameters);
         if (nil != parameters) {
             if ([parameters objectForKey:@"Expires"]) {
-//                [someView setTimeRemainingForTrial:[[NSDate dateWithString:[parameters objectForKey:@"Expires"]] timeIntervalSinceDate:[NSDate date]]];
+                NSTimeInterval timeRemainingForTrial = [[NSDate dateWithString:[parameters objectForKey:@"Expires"]] timeIntervalSinceDate:[NSDate date]];
+                NSString* text = nil;
+                if (timeRemainingForTrial < 0) {
+                    text = [NSString stringWithFormat:NSLocalizedString(@"Trial Expired", @"")];
+                } else if (timeRemainingForTrial < (24 * 60 * 60)) {
+                    text = [NSString stringWithFormat:NSLocalizedString(@"Expires Today", @"")];
+                } else {
+                    text = [NSString stringWithFormat:NSLocalizedString(@"%d days remaining", @""), (int)(timeRemainingForTrial / (24 * 60 * 60)) + 1];
+                }
+                [licensingAndVersionInfo setStringValue:[NSString stringWithFormat:@"%@ - %@", text, [[NSBundle mainBundle] version]]];
             } else {
-//                [someView setRegisteredOwner:[parameters objectForKey:@"Name"]];
+                [licensingAndVersionInfo setStringValue:[NSString stringWithFormat:@"Property of %@ - %@", [parameters objectForKey:@"Name"], [[NSBundle mainBundle] version]]];
             }
         }
         SUUpdater* updater = [SUUpdater sharedUpdater];

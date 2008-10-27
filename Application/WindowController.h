@@ -8,11 +8,11 @@
 
 @interface WindowController : NSWindowController {
     NSDictionary* parameters;
+    IBOutlet NSTextField* licensingAndVersionInfo;
     /**/
     IBOutlet NSArrayController* movies;
     /**/
     IBOutlet MainView* mainView;
-    /**/
     IBOutlet DrawerView* drawerView;
     /**/
     IBOutlet NSView* infoPaneView;
@@ -33,6 +33,7 @@
 @property (readonly) NSManagedObjectContext* appManagedObjectContext;
 @property (retain) NSDictionary* parameters;
 
+- (IBAction) checkForUpdates:(id)sender;
 - (IBAction) showUserVoiceFeedbackSheet:(id)sender;
 - (IBAction) toggleFullScreen:(id)sender;
 

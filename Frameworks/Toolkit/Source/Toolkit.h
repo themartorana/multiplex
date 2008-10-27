@@ -1,5 +1,6 @@
 #import <Toolkit/CALayer+IndyHallLabs.h>
 #import <Toolkit/NSBezierPath+IndyHallLabs.h>
+#import <Toolkit/NSBundle+IndyHallLabs.h>
 #import <Toolkit/NSColor+IndyHallLabs.h>
 #import <Toolkit/NSDate+IndyHallLabs.h>
 #import <Toolkit/NSDictionary+IndyHallLabs.h>

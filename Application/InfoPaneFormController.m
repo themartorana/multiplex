@@ -18,6 +18,7 @@
 
 @synthesize movie;
 @synthesize labelColor;
+@synthesize valuesAreEditable;
 
 - (InfoPaneFormController*) init
 {

@@ -35,6 +35,9 @@
 		553477810EA3AD5100436A8C /* multiplex-mark01a.icns in Resources */ = {isa = PBXBuildFile; fileRef = 553477800EA3AD5100436A8C /* multiplex-mark01a.icns */; };
 		5535D98F0E4E3F5400A45761 /* EngineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5535D98E0E4E3F5400A45761 /* EngineController.m */; };
 		554282C70EB3D69B00FF7E44 /* full-screen-icon.gif in Resources */ = {isa = PBXBuildFile; fileRef = 554282C60EB3D69B00FF7E44 /* full-screen-icon.gif */; };
+		5545BC040EB5171C0005A380 /* NSNumberToStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5545BC030EB5171C0005A380 /* NSNumberToStringValueTransformer.m */; };
+		555327790EB4103F0044B302 /* full-screen-icon-down.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 555327770EB4103F0044B302 /* full-screen-icon-down.pdf */; };
+		5553277A0EB4103F0044B302 /* full-screen-icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 555327780EB4103F0044B302 /* full-screen-icon.pdf */; };
 		556550D90EAE7FD600265A45 /* StadiumLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 55654E7A0EAD97D400265A45 /* StadiumLayoutManager.m */; };
 		556BD78C0E9444ED00EC698A /* WorkingStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 556BD78B0E9444ED00EC698A /* WorkingStatusView.m */; };
 		556BD7900E94470600EC698A /* Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 556BD78F0E94470600EC698A /* Activity.m */; };
@@ -254,7 +257,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = F9A1D6210E8350C100AB691D /* Engine */;
+			remoteGlobalIDString = F9A1D6210E8350C100AB691D;
 			remoteInfo = Engine;
 		};
 		F9D314D30E7DD99A00D99DCA /* PBXContainerItemProxy */ = {
@@ -338,6 +341,10 @@
 		5535D98D0E4E3F5400A45761 /* EngineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngineController.h; sourceTree = "<group>"; };
 		5535D98E0E4E3F5400A45761 /* EngineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngineController.m; sourceTree = "<group>"; };
 		554282C60EB3D69B00FF7E44 /* full-screen-icon.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "full-screen-icon.gif"; sourceTree = "<group>"; };
+		5545BC020EB5171C0005A380 /* NSNumberToStringValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSNumberToStringValueTransformer.h; sourceTree = "<group>"; };
+		5545BC030EB5171C0005A380 /* NSNumberToStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSNumberToStringValueTransformer.m; sourceTree = "<group>"; };
+		555327770EB4103F0044B302 /* full-screen-icon-down.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "full-screen-icon-down.pdf"; sourceTree = "<group>"; };
+		555327780EB4103F0044B302 /* full-screen-icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "full-screen-icon.pdf"; sourceTree = "<group>"; };
 		55654E790EAD97D400265A45 /* StadiumLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StadiumLayoutManager.h; sourceTree = "<group>"; };
 		55654E7A0EAD97D400265A45 /* StadiumLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StadiumLayoutManager.m; sourceTree = "<group>"; };
 		55654E7C0EAD981000265A45 /* MultiplexLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiplexLayoutManager.h; sourceTree = "<group>"; };
@@ -603,6 +610,8 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				555327770EB4103F0044B302 /* full-screen-icon-down.pdf */,
+				555327780EB4103F0044B302 /* full-screen-icon.pdf */,
 				5531A7440EB3EC24009562A2 /* full-screen-icon-down.gif */,
 				554282C60EB3D69B00FF7E44 /* full-screen-icon.gif */,
 				F966E6880EAFB38B001D0B3B /* drag-drop-no-image.pdf */,
@@ -726,6 +735,8 @@
 			children = (
 				550D086E0E9AFDF4008F0275 /* NSDescriptionValueTransformer.h */,
 				550D086F0E9AFDF4008F0275 /* NSDescriptionValueTransformer.m */,
+				5545BC020EB5171C0005A380 /* NSNumberToStringValueTransformer.h */,
+				5545BC030EB5171C0005A380 /* NSNumberToStringValueTransformer.m */,
 			);
 			name = ValueTransformers;
 			sourceTree = "<group>";
@@ -1154,6 +1165,8 @@
 				F966E6890EAFB38B001D0B3B /* drag-drop-no-image.pdf in Resources */,
 				554282C70EB3D69B00FF7E44 /* full-screen-icon.gif in Resources */,
 				5531A7450EB3EC24009562A2 /* full-screen-icon-down.gif in Resources */,
+				555327790EB4103F0044B302 /* full-screen-icon-down.pdf in Resources */,
+				5553277A0EB4103F0044B302 /* full-screen-icon.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1259,6 +1272,7 @@
 				55C9F6260EB26A15001B9BCD /* HalfTransparentView.m in Sources */,
 				55C9F6430EB26C5A001B9BCD /* LayerBackedButtonView.m in Sources */,
 				557B63BF0EB37CC400DFD76F /* DrawerController.m in Sources */,
+				5545BC040EB5171C0005A380 /* NSNumberToStringValueTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

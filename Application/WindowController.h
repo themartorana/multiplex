@@ -19,6 +19,8 @@
     IBOutlet InfoPaneFormController* infoPaneFormController;
     IBOutlet UserVoiceFeedbackPanel* userVoiceFeedbackPanel;
     /**/
+    IBOutlet NSButton* userVoiceButton;
+    /**/
     EngineController* engineController;
     NSManagedObjectModel* managedObjectModel;
     NSPersistentStoreCoordinator* persistentStoreCoordinator;
@@ -29,5 +31,6 @@
 @property (readonly) NSManagedObjectContext* appManagedObjectContext;
 
 - (IBAction) showUserVoiceFeedbackSheet:(id)sender;
+- (IBAction) toggleFullScreen:(id)sender;
 
 @end

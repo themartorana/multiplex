@@ -1,10 +1,12 @@
-#import <QuartzCore/QuartzCore.h>
 #import "InfoPaneDiscsView.h"
 #import "PageNumberLayer.h"
 #import "DiscPlayLayer.h"
 #import "ButtonLayer.h"
 #import "Movie.h"
 #import "Disc.h"
+#import "MultiplexColorFactory.h"
+
+#import <QuartzCore/QuartzCore.h>
 #import <Toolkit/Toolkit.h>
 
 @implementation InfoPaneDiscsView
@@ -34,6 +36,8 @@
                                          30.0, 
                                          [self layer].bounds.size.width - 40.0,
                                          [self layer].bounds.size.height - 40.0);
+    
+    discsHostingLayer.backgroundColor = [MultiplexColorFactory multiplexOrange];
     
     scrollingLayer.anchorPoint = CGPointZero;
     

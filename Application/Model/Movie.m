@@ -6,6 +6,7 @@
 @dynamic genre;
 @dynamic gtin;
 @dynamic productionYear;
+@dynamic premiereDate;
 @dynamic regionCode;
 @dynamic releaseDate;
 @dynamic review;

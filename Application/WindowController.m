@@ -109,8 +109,9 @@
      */
     [mainView setContent:movies];
 
-    /*  Setup bindings.
+    /*  Setup Bindings & Observations.
      */
+    [self addObserver:self forKeyPath:@"parameters" options:0 context:nil];
     [infoPaneFormController bind:@"movie" toObject:movies withKeyPath:@"selection.self" options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption]];
     
     /*  Do the licensing stuff.
@@ -265,7 +266,15 @@
 //                [someView setRegisteredOwner:[parameters objectForKey:@"Name"]];
             }
         }
-        [[SUUpdater sharedUpdater] setDelegate:self];
+        SUUpdater* updater = [SUUpdater sharedUpdater];
+        [updater setDelegate:self];
+        if (!parameters) {
+            [updater checkForUpdates:self];
+            CIFilter* blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
+            [blurFilter setDefaults];
+            [blurFilter setValue:[NSNumber numberWithDouble:3.0] forKey:@"inputRadius"];
+            [[[self window] contentView] layer].filters = [NSArray arrayWithObject:blurFilter];
+        }
     }    
 }
 

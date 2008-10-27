@@ -177,6 +177,7 @@
 		F9D315390E7DDC4400D99DCA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9D3129F0E7DD85200D99DCA /* Foundation.framework */; };
 		F9D4F92D0EB671E000B89FF4 /* NSBundle+IndyHallLabs.h in Headers */ = {isa = PBXBuildFile; fileRef = F9D4F92B0EB671E000B89FF4 /* NSBundle+IndyHallLabs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F9D4F92E0EB671E000B89FF4 /* NSBundle+IndyHallLabs.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D4F92C0EB671E000B89FF4 /* NSBundle+IndyHallLabs.m */; };
+		F9D4F9CF0EB67E2200B89FF4 /* window-resize-thumb.gif in Resources */ = {isa = PBXBuildFile; fileRef = F9D4F9CE0EB67E2200B89FF4 /* window-resize-thumb.gif */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -593,6 +594,7 @@
 		F9D315280E7DDBB200D99DCA /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		F9D4F92B0EB671E000B89FF4 /* NSBundle+IndyHallLabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+IndyHallLabs.h"; sourceTree = "<group>"; };
 		F9D4F92C0EB671E000B89FF4 /* NSBundle+IndyHallLabs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+IndyHallLabs.m"; sourceTree = "<group>"; };
+		F9D4F9CE0EB67E2200B89FF4 /* window-resize-thumb.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "window-resize-thumb.gif"; sourceTree = "<group>"; };
 		F9DA5B480E61C1BC00E96C0D /* DVDMediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVDMediaSource.h; sourceTree = "<group>"; };
 		F9DA5B490E61C1BC00E96C0D /* DVDMediaSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVDMediaSource.m; sourceTree = "<group>"; };
 		F9DA5B4B0E61C1C900E96C0D /* PhysicalMediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicalMediaSource.h; sourceTree = "<group>"; };
@@ -910,6 +912,7 @@
 		F96430AE0EB6412300D49FA0 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				F9D4F9CE0EB67E2200B89FF4 /* window-resize-thumb.gif */,
 				F914CB0F0EAD7C8700877991 /* drawer-background-pattern-96x96.gif */,
 				557440640EABD786002E0B80 /* uservoice-hover.png */,
 				557440650EABD786002E0B80 /* uservoice-normal.png */,
@@ -1484,6 +1487,7 @@
 				553198C10EB6162A0031D118 /* expand-screen.pdf in Resources */,
 				F96432720EB64C0300D49FA0 /* license.plist in Resources */,
 				5551FB7C0EB65A310022147A /* drive.pdf in Resources */,
+				F9D4F9CF0EB67E2200B89FF4 /* window-resize-thumb.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

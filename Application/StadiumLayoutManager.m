@@ -7,6 +7,12 @@
 #import <QuartzCore/QuartzCore.h>
 #import <Toolkit/Toolkit.h>
 
+#ifdef DEBUG
+#define DEBUG_TRACE()   NSLog(@"% 4d %s", __LINE__, __PRETTY_FUNCTION__)
+#else
+#define DEBUG_TRACE()
+#endif
+
 @implementation StadiumLayoutManager
 @synthesize listOfLayersInOrder;
 
@@ -148,8 +154,6 @@ static const CGFloat HS = 75.0;
         nil
     ];
 }
-
-#define DEBUG_TRACE()   NSLog(@"% 4d %s", __LINE__, __PRETTY_FUNCTION__)
 
 - (void) layoutSublayersOfLayer:(CALayer*)layer
 {

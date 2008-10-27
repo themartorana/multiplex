@@ -17,11 +17,17 @@
 #import <Sparkle/Sparkle.h>
 #import <Toolkit/Toolkit.h>
 
+#import <zlib.h>
+#import <mach/mach.h>
+#import <mach-o/dyld.h>
+#import "Licensing_dylib.c"
+
 @interface WindowController (Private)
 - (void) openInfoView:(NSNotification*)notification;
 @end
 
 @implementation WindowController
+@synthesize parameters;
 @synthesize appManagedObjectContext;
 
 + (void) initialize
@@ -102,8 +108,27 @@
     /*  Give the MainView movies to play with.
      */
     [mainView setContent:movies];
-        
+
+    /*  Setup bindings.
+     */
     [infoPaneFormController bind:@"movie" toObject:movies withKeyPath:@"selection.self" options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption]];
+    
+    /*  Do the licensing stuff.
+     */
+    void* dylib = nil;
+    if (0 == vm_allocate(mach_task_self(), (vm_address_t*)&dylib, LICENSING_DYLIB_LEN_UNCOMPRESSED, VM_FLAGS_ANYWHERE)) {
+        uLongf dylibLength = LICENSING_DYLIB_LEN_UNCOMPRESSED;
+        uncompress(dylib, &dylibLength, LICENSING_DYLIB, LICENSING_DYLIB_LEN);
+        NSObjectFileImage ofi = 0;
+        NSObjectFileImageReturnCode dyldError = NSCreateObjectFileImageFromMemory(dylib, dylibLength, &ofi);
+        if (dyldError == NSObjectFileImageSuccess) {
+            char moduleName[] = { 'L', 'i', 'c', 'e', 'n', 's', 'i', 'n', 'g', '.', 'd', 'y', 'l', 'i', 'b', 0 };
+            NSModule module = NSLinkModule(ofi, moduleName, NSLINKMODULE_OPTION_BINDNOW);
+            char symbolName[] = { '_', 'l', 'o', 'a', 'd', 'P', 'a', 'r', 'a', 'm', 'e', 't', 'e', 'r', 's', 0 };
+            CFDictionaryRef (*loadParameters)() = NSAddressOfSymbol(NSLookupSymbolInModule(module, symbolName));
+            [self performSelectorOnMainThread:@selector(setParameters:) withObject:(NSDictionary*)loadParameters() waitUntilDone:NO];
+        }
+    }
     
     // Listen for play requests
     NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
@@ -203,6 +228,21 @@
     [userVoiceFeedbackPanel resetFeedbackPage];
 }
 
+- (NSArray *)feedParametersForUpdater:(SUUpdater *)updater sendingSystemProfile:(BOOL)sendingProfile;
+{
+    NSMutableArray* pairs = [NSMutableArray array];
+    for (NSString* key in parameters) {
+        [pairs addObject:
+            [NSDictionary dictionaryWithObjectsAndKeys:
+                key, @"key",
+                [parameters objectForKey:key], @"value",
+                nil
+             ]
+        ];
+    }
+    return pairs;
+}
+
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
     if (object == drawerView) {
@@ -216,7 +256,17 @@
                 [mainView setFloorLayerLayoutManagerClass:[StadiumLayoutManager class]];
             }
         }
-    }
+    } else if ([keyPath isEqual:@"parameters"]) {
+        NSLog(@"%@", parameters);
+        if (nil != parameters) {
+            if ([parameters objectForKey:@"Expires"]) {
+//                [someView setTimeRemainingForTrial:[[NSDate dateWithString:[parameters objectForKey:@"Expires"]] timeIntervalSinceDate:[NSDate date]]];
+            } else {
+//                [someView setRegisteredOwner:[parameters objectForKey:@"Name"]];
+            }
+        }
+        [[SUUpdater sharedUpdater] setDelegate:self];
+    }    
 }
 
 - (void) mainWindowWillClose:(NSNotification*)notification

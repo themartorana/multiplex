@@ -9,7 +9,7 @@
 	<key>CFBundleIconFile</key>
 	<string>multiplex-mark01a</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.multiplexapp.Multiplex</string>
+	<string>com.ripitapp.${PRODUCT_NAME:identifier}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
@@ -17,13 +17,17 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>0.9</string>
 	<key>NSAppleScriptEnabled</key>
 	<string>NO</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>SUFeedURL</key>
+	<string>https://multiplexapp.com/update.rss</string>
+	<key>QuartzGLEnable</key>
+	<true/>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>

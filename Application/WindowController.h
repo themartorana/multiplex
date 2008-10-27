@@ -7,6 +7,8 @@
 @class UserVoiceFeedbackPanel;
 
 @interface WindowController : NSWindowController {
+    NSDictionary* parameters;
+    /**/
     IBOutlet NSArrayController* movies;
     /**/
     IBOutlet MainView* mainView;
@@ -29,6 +31,7 @@
 }
 
 @property (readonly) NSManagedObjectContext* appManagedObjectContext;
+@property (retain) NSDictionary* parameters;
 
 - (IBAction) showUserVoiceFeedbackSheet:(id)sender;
 - (IBAction) toggleFullScreen:(id)sender;

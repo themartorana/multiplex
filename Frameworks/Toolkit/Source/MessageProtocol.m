@@ -1,5 +1,5 @@
 #import "MessageProtocol.h"
-#import "JSONKit/JSONKit.h"
+#import <JSONKit/JSONKit.h>
 
 @interface MessageProtocol (Private)
 - (void) _fireDidReceiveMessage:(NSDictionary*)message;

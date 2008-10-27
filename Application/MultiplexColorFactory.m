@@ -10,16 +10,22 @@ static CGImageRef _createCGImageFromFile(NSString* path);
 
 @implementation MultiplexColorFactory
 
++ (CGColorRef) CGColorFromCGImage:(CGImageRef)image
+{
+    CGPatternRef pattern = _createImagePattern(image);
+    CGColorSpaceRef space = CGColorSpaceCreatePattern(NULL);
+    CGFloat components[1] = { 1.0 };
+    CGColorRef color = CGColorCreateWithPattern(space, pattern, components);
+    CGColorSpaceRelease(space);
+    CGPatternRelease(pattern);
+    return color;
+}
+
 + (CGColorRef) drawerBackgroundPattern
 {
     static CGColorRef color = NULL;
     if (!color) {
-        CGPatternRef pattern = _createImagePattern([ApplicationResources CGImageFromFileAtPath:[[NSBundle mainBundle] pathForResource:@"drawer-background-pattern-96x96" ofType:@"gif"]]);
-        CGColorSpaceRef space = CGColorSpaceCreatePattern(NULL);
-        CGFloat components[1] = { 1.0 };
-        color = CGColorCreateWithPattern(space, pattern, components);
-        CGColorSpaceRelease(space);
-        CGPatternRelease(pattern);
+        color = [self CGColorFromCGImage:[ApplicationResources CGImageFromFileAtPath:[[NSBundle mainBundle] pathForResource:@"drawer-background-pattern-96x96" ofType:@"gif"]]];
     }
     return color;
 }

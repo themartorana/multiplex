@@ -9,6 +9,7 @@
 #import "InfoPaneFormController.h"
 #import "UserVoiceFeedbackPanel.h"
 #import "NSDescriptionValueTransformer.h"
+#import "ApplicationResources.h"
 
 #import "StadiumLayoutManager.h"
 #import "LinearLayoutManager.h"
@@ -148,6 +149,10 @@
     // Put uservoice button forward
     [userVoiceButton setWantsLayer:YES];
     [[userVoiceButton layer] setZPosition:2000.0];
+    
+    // No discs view
+    [noDiscsView setWantsLayer:YES];
+    [[noDiscsView layer] setDelegate:self]; 
 }
 
 - (void) applicationDidFinishLaunching:(NSNotification*)notification

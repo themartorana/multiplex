@@ -17,6 +17,7 @@
     /**/
     IBOutlet NSView* infoPaneView;
     IBOutlet NSView* searchView;
+    IBOutlet NSView* noDiscsView;
     /**/
     IBOutlet InfoPaneFormController* infoPaneFormController;
     IBOutlet UserVoiceFeedbackPanel* userVoiceFeedbackPanel;

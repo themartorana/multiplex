@@ -51,6 +51,8 @@
 		5535D98F0E4E3F5400A45761 /* EngineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5535D98E0E4E3F5400A45761 /* EngineController.m */; };
 		554282C70EB3D69B00FF7E44 /* full-screen-icon.gif in Resources */ = {isa = PBXBuildFile; fileRef = 554282C60EB3D69B00FF7E44 /* full-screen-icon.gif */; };
 		5545BC040EB5171C0005A380 /* NSNumberToStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5545BC030EB5171C0005A380 /* NSNumberToStringValueTransformer.m */; };
+		5551FB7C0EB65A310022147A /* drive.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 5551FB7B0EB65A310022147A /* drive.pdf */; };
+		5551FB9E0EB65F3C0022147A /* NoDiscsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5551FB9D0EB65F3C0022147A /* NoDiscsView.m */; };
 		555327790EB4103F0044B302 /* full-screen-icon-down.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 555327770EB4103F0044B302 /* full-screen-icon-down.pdf */; };
 		5553277A0EB4103F0044B302 /* full-screen-icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 555327780EB4103F0044B302 /* full-screen-icon.pdf */; };
 		55570B990EB5A0970051D576 /* network-icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55570B930EB5A0970051D576 /* network-icon.pdf */; };
@@ -116,7 +118,6 @@
 		F9970F430E7B9D94009A1B6A /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
 		F9970F490E7B9DCB009A1B6A /* JSONKit.framework in Copy Files to Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
 		F9970F4C0E7B9DD4009A1B6A /* DiscIdentKit.framework in Copy Files to Frameworks */ = {isa = PBXBuildFile; fileRef = F94A06060E7B9B5800C8A8B7 /* DiscIdentKit.framework */; };
-		F99D81B10EA8F2BD00338DF7 /* Toolkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9CE81560EA6894500602750 /* Toolkit.framework */; };
 		F9A1D62C0E8350D800AB691D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9D3129F0E7DD85200D99DCA /* Foundation.framework */; };
 		F9A1D6360E83511E00AB691D /* Engine.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA2D00E4C9ECA00438E14 /* Engine.m */; };
 		F9A1D6380E83511E00AB691D /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A1D5170E8342C700AB691D /* HTTPServer.m */; };
@@ -269,13 +270,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
 			remoteInfo = JSONKit;
-		};
-		F99D81CD0EA8F30000338DF7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F9CE81550EA6894500602750;
-			remoteInfo = Toolkit;
 		};
 		F9A1D1810E82E4FC00AB691D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -446,6 +440,9 @@
 		554282C60EB3D69B00FF7E44 /* full-screen-icon.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "full-screen-icon.gif"; sourceTree = "<group>"; };
 		5545BC020EB5171C0005A380 /* NSNumberToStringValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSNumberToStringValueTransformer.h; sourceTree = "<group>"; };
 		5545BC030EB5171C0005A380 /* NSNumberToStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSNumberToStringValueTransformer.m; sourceTree = "<group>"; };
+		5551FB7B0EB65A310022147A /* drive.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = drive.pdf; sourceTree = "<group>"; };
+		5551FB9C0EB65F3C0022147A /* NoDiscsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoDiscsView.h; sourceTree = "<group>"; };
+		5551FB9D0EB65F3C0022147A /* NoDiscsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoDiscsView.m; sourceTree = "<group>"; };
 		555327770EB4103F0044B302 /* full-screen-icon-down.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "full-screen-icon-down.pdf"; sourceTree = "<group>"; };
 		555327780EB4103F0044B302 /* full-screen-icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "full-screen-icon.pdf"; sourceTree = "<group>"; };
 		55570B930EB5A0970051D576 /* network-icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "network-icon.pdf"; sourceTree = "<group>"; };
@@ -645,7 +642,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F9C2B0300E7B919B00474D97 /* JSONKit.framework in Frameworks */,
-				F99D81B10EA8F2BD00338DF7 /* Toolkit.framework in Frameworks */,
 				F9D315310E7DDBEF00D99DCA /* ApplicationServices.framework in Frameworks */,
 				F9D315390E7DDC4400D99DCA /* Foundation.framework in Frameworks */,
 			);
@@ -925,6 +921,7 @@
 		F96430AF0EB6412900D49FA0 /* PDFs */ = {
 			isa = PBXGroup;
 			children = (
+				5551FB7B0EB65A310022147A /* drive.pdf */,
 				553198C00EB6162A0031D118 /* expand-screen.pdf */,
 				55570B930EB5A0970051D576 /* network-icon.pdf */,
 				55570B940EB5A0970051D576 /* stadium-view.pdf */,
@@ -987,6 +984,8 @@
 				F967AFF50E7E13ED00C12B92 /* MainView.m */,
 				556BD78A0E9444ED00EC698A /* WorkingStatusView.h */,
 				556BD78B0E9444ED00EC698A /* WorkingStatusView.m */,
+				5551FB9C0EB65F3C0022147A /* NoDiscsView.h */,
+				5551FB9D0EB65F3C0022147A /* NoDiscsView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1276,7 +1275,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				F99D81CE0EA8F30000338DF7 /* PBXTargetDependency */,
 				F9C2B0140E7B912C00474D97 /* PBXTargetDependency */,
 			);
 			name = DVD.mdimporter;
@@ -1485,6 +1483,7 @@
 				55570B9E0EB5A0970051D576 /* collapse-screen.pdf in Resources */,
 				553198C10EB6162A0031D118 /* expand-screen.pdf in Resources */,
 				F96432720EB64C0300D49FA0 /* license.plist in Resources */,
+				5551FB7C0EB65A310022147A /* drive.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1544,7 +1543,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\n#  Strip Everything\n\nif [ \"$ACTION\" = \"build\" ]; then\n  if [ \"$BUILD_STYLE\" = \"Release\" ]; then\n    echo -n \"Stripping all executables and libraries...\"\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type f -perm 755 -exec strip -x \\{} +\n    echo \"ok\"\n\n    echo -n \"Removing all framework header files...\"\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type f -name '*.h' -exec rm -rf \\{} +\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type l -name 'Headers' -exec rm -rf \\{} +\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type d -name 'Headers' -exec rm -rf \\{} +\n    echo \"ok\"\n  fi\nfi\n\n#  Fixup the Spotlight Importer\n\ninstall_name_tool \\\n  -change \\\n    @executable_path/../Frameworks/JSONKit.framework/Versions/A/JSONKit \\\n    @loader_path/../../../../../Frameworks/JSONKit.framework/Versions/A/JSONKit \\\n  ${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/Spotlight/DVD.mdimporter/Contents/MacOS/DVD\n\ninstall_name_tool \\\n  -change \\\n    @executable_path/../Frameworks/Toolkit.framework/Versions/A/Toolkit \\\n    @loader_path/../../../../../Frameworks/Toolkit.framework/Versions/A/Toolkit \\\n  ${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/Spotlight/DVD.mdimporter/Contents/MacOS/DVD\n";
+			shellScript = "\n#  Strip Everything\n\nif [ \"$ACTION\" = \"build\" ]; then\n  if [ \"$BUILD_STYLE\" = \"Release\" ]; then\n    echo -n \"Stripping all executables and libraries...\"\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type f -perm 755 -exec strip -x \\{} +\n    echo \"ok\"\n\n    echo -n \"Removing all framework header files...\"\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type f -name '*.h' -exec rm -rf \\{} +\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type l -name 'Headers' -exec rm -rf \\{} +\n    find $TARGET_BUILD_DIR/${WRAPPER_NAME} -type d -name 'Headers' -exec rm -rf \\{} +\n    echo \"ok\"\n  fi\nfi\n\n#  Fixup the Spotlight Importer\n\ninstall_name_tool \\\n  -change \\\n    @executable_path/../Frameworks/JSONKit.framework/Versions/A/JSONKit \\\n    @loader_path/../../../../../Frameworks/JSONKit.framework/Versions/A/JSONKit \\\n  ${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/Spotlight/DVD.mdimporter/Contents/MacOS/DVD\n";
 			showEnvVarsInLog = 0;
 		};
 		F9A1D62E0E83510100AB691D /* ShellScript */ = {
@@ -1604,6 +1603,7 @@
 				55C9F6430EB26C5A001B9BCD /* LayerBackedButtonView.m in Sources */,
 				557B63BF0EB37CC400DFD76F /* DrawerController.m in Sources */,
 				5545BC040EB5171C0005A380 /* NSNumberToStringValueTransformer.m in Sources */,
+				5551FB9E0EB65F3C0022147A /* NoDiscsView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1731,11 +1731,6 @@
 			isa = PBXTargetDependency;
 			name = JSONKit;
 			targetProxy = F9970F410E7B9D8C009A1B6A /* PBXContainerItemProxy */;
-		};
-		F99D81CE0EA8F30000338DF7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F9CE81550EA6894500602750 /* Toolkit */;
-			targetProxy = F99D81CD0EA8F30000338DF7 /* PBXContainerItemProxy */;
 		};
 		F9A1D1820E82E4FC00AB691D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

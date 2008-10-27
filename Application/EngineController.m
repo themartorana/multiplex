@@ -640,7 +640,6 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
                     Media* media = [self _findMediaByEngine:engine URL:url];
                     if (media) {
                         Disc* disc = media.disc;
-                        [managedObjectContext deleteObject:media];
                         int zeroCount = 0;
                         int total = 0;
                         Movie* movie = disc.movie;
@@ -652,6 +651,7 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
                         if (zeroCount == total) {
                             [managedObjectContext deleteObject:movie];
                         }
+                        [managedObjectContext deleteObject:media];
                     }
                 }
             }

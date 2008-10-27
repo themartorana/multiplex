@@ -7,7 +7,7 @@
     void* mediaInfo;
     NSString* fingerprint;
     Disc* disc;
-    NSURL* url;
+    NSString* tag;
     id<MediaFileSource> mediaFileSource;
 }
 
@@ -16,7 +16,7 @@
 @property (readonly) void* mediaInfo;
 
 @property (retain) Disc* disc;
-@property (retain) NSURL* url;
+@property (retain) NSString* tag;
 @property (retain) NSString* fingerprint;
 @property (readonly) NSString* pathToFile;
 @property (readonly) id<MediaFileSource> mediaFileSource;

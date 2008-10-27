@@ -13,7 +13,7 @@ extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
 @synthesize fingerprint;
 @synthesize mediaInfo;
 @synthesize disc;
-@synthesize url;
+@synthesize tag;
 @synthesize mediaFileSource;
 @synthesize frontCover;
 
@@ -30,7 +30,7 @@ extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
 {
     [fingerprint release];
     [disc release];
-    [url release];    
+    [tag release];    
     [super dealloc];
 }
 

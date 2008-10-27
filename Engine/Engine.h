@@ -9,8 +9,9 @@
     NSPersistentStoreCoordinator* persistentStoreCoordinator;
     NSManagedObjectContext* managedObjectContext;
     NSEntityDescription* discEntity;
+    NSEntityDescription* mediaLocatorEntity;
     /**/
-    NSMutableDictionary* mediaByURL;
+    NSMutableDictionary* mediaFileByTag;
     NSMutableDictionary* infoDictionariesByFingerprint;
     NSMutableArray* protocols;
     NSString* machineId;

@@ -92,7 +92,6 @@
 		F9A1D62C0E8350D800AB691D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9D3129F0E7DD85200D99DCA /* Foundation.framework */; };
 		F9A1D6360E83511E00AB691D /* Engine.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA2D00E4C9ECA00438E14 /* Engine.m */; };
 		F9A1D6380E83511E00AB691D /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A1D5170E8342C700AB691D /* HTTPServer.m */; };
-		F9A1D63A0E83512400AB691D /* Disc.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA6FB0E4E290B00438E14 /* Disc.m */; };
 		F9A1D6490E83517000AB691D /* AmazonQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F93B04A60E6F57CF006CB915 /* AmazonQuery.m */; };
 		F9A1D64C0E83518300AB691D /* DiscIdentKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F94A06060E7B9B5800C8A8B7 /* DiscIdentKit.framework */; };
 		F9A1D64D0E83518600AB691D /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
@@ -134,6 +133,8 @@
 		F9D10CCB0EB50A68007B8B73 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9D315230E7DDB9900D99DCA /* CoreData.framework */; };
 		F9D10DC20EB51E70007B8B73 /* MediaFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D10DC00EB51E70007B8B73 /* MediaFile.m */; };
 		F9D10E330EB522A0007B8B73 /* Engine.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = F9D10CBD0EB509A8007B8B73 /* Engine.xcdatamodel */; };
+		F9D10F8E0EB5621D007B8B73 /* Disc.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D10F8D0EB5621D007B8B73 /* Disc.m */; };
+		F9D10FC80EB56D4D007B8B73 /* MediaLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D10FC70EB56D4D007B8B73 /* MediaLocator.m */; };
 		F9D30D6D0E7DD63600D99DCA /* PhysicalMediaSource.m in Sources */ = {isa = PBXBuildFile; fileRef = F9DA5B4C0E61C1C900E96C0D /* PhysicalMediaSource.m */; };
 		F9D314BA0E7DD95000D99DCA /* PhysicalMedia.mediasource in Copy Files to Plugins */ = {isa = PBXBuildFile; fileRef = F9D30D610E7DD5B500D99DCA /* PhysicalMedia.mediasource */; };
 		F9D314D80E7DD9C700D99DCA /* DVDMedia.mediasource in Copy Files to Plugins */ = {isa = PBXBuildFile; fileRef = F9D314CE0E7DD99500D99DCA /* DVDMedia.mediasource */; };
@@ -400,8 +401,6 @@
 		F94EA2BF0E4C9DBF00438E14 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F94EA2CF0E4C9ECA00438E14 /* Engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Engine.h; sourceTree = "<group>"; };
 		F94EA2D00E4C9ECA00438E14 /* Engine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Engine.m; sourceTree = "<group>"; };
-		F94EA6FA0E4E290B00438E14 /* Disc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Disc.h; sourceTree = "<group>"; };
-		F94EA6FB0E4E290B00438E14 /* Disc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Disc.m; sourceTree = "<group>"; };
 		F966E49A0EAF9215001D0B3B /* DragDropTargetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragDropTargetView.h; sourceTree = "<group>"; };
 		F966E49B0EAF9215001D0B3B /* DragDropTargetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragDropTargetView.m; sourceTree = "<group>"; };
 		F966E4BA0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+IndyHallLabs.h"; sourceTree = "<group>"; };
@@ -465,6 +464,10 @@
 		F9D10DBF0EB51E70007B8B73 /* MediaFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaFile.h; sourceTree = "<group>"; };
 		F9D10DC00EB51E70007B8B73 /* MediaFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaFile.m; sourceTree = "<group>"; };
 		F9D10DC10EB51E70007B8B73 /* MediaFileSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaFileSource.h; sourceTree = "<group>"; };
+		F9D10F8C0EB5621D007B8B73 /* Disc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Disc.h; sourceTree = "<group>"; };
+		F9D10F8D0EB5621D007B8B73 /* Disc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Disc.m; sourceTree = "<group>"; };
+		F9D10FC60EB56D4D007B8B73 /* MediaLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaLocator.h; sourceTree = "<group>"; };
+		F9D10FC70EB56D4D007B8B73 /* MediaLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaLocator.m; sourceTree = "<group>"; };
 		F9D30D610E7DD5B500D99DCA /* PhysicalMedia.mediasource */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhysicalMedia.mediasource; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9D30D620E7DD5B500D99DCA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F9D30D6F0E7DD69A00D99DCA /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -935,8 +938,10 @@
 			isa = PBXGroup;
 			children = (
 				F9D10CBD0EB509A8007B8B73 /* Engine.xcdatamodel */,
-				F94EA6FA0E4E290B00438E14 /* Disc.h */,
-				F94EA6FB0E4E290B00438E14 /* Disc.m */,
+				F9D10F8C0EB5621D007B8B73 /* Disc.h */,
+				F9D10F8D0EB5621D007B8B73 /* Disc.m */,
+				F9D10FC60EB56D4D007B8B73 /* MediaLocator.h */,
+				F9D10FC70EB56D4D007B8B73 /* MediaLocator.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1290,13 +1295,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				F9D10CBE0EB509A8007B8B73 /* Engine.xcdatamodel in Sources */,
-				F9A1D63A0E83512400AB691D /* Disc.m in Sources */,
 				553477520EA3A9E400436A8C /* ImageQuery.m in Sources */,
 				F9A1D64F0E83519300AB691D /* main.m in Sources */,
 				F9A1D6490E83517000AB691D /* AmazonQuery.m in Sources */,
 				F9A1D6360E83511E00AB691D /* Engine.m in Sources */,
 				F9A1D6380E83511E00AB691D /* HTTPServer.m in Sources */,
 				F9D10DC20EB51E70007B8B73 /* MediaFile.m in Sources */,
+				F9D10F8E0EB5621D007B8B73 /* Disc.m in Sources */,
+				F9D10FC80EB56D4D007B8B73 /* MediaLocator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

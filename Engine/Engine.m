@@ -444,7 +444,10 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     NSArray* parts = [[url path] componentsSeparatedByString:@"/"];
     NSString* fingerprint = nil;
     if ([parts count] == 3 && [@"FrontCover" isEqualToString:[parts objectAtIndex:2]] && [fingerprint = [parts objectAtIndex:1] length] == 36) {
-        Disc* disc = [self _findDiscByFingerprint:fingerprint];
+        Disc* disc = nil;
+        @synchronized (managedObjectContext) {
+            disc = [self _findDiscByFingerprint:fingerprint];
+        }
         if (disc) {
             NSData* frontCover = nil;
             for (NSString* mediaURL in disc.mediaURLs) {
@@ -473,6 +476,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     for (MediaFile* media in arrayOfMedia) {
         NSString* mediaFingerprint = [media fingerprint];
         media.url = [NSURL fileURLWithPath:[media pathToFile] isDirectory:YES];
+        [mediaByURL setObject:media forKey:[media.url absoluteString]];
         if (mediaFingerprint) {
             /*  Attempt to add this disc to a movie using the new fingerprint.
              *  If a movie doesn't exist, create one and treat it like an add,
@@ -483,12 +487,13 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             if (!disc) {
                 disc = [[Disc alloc] initWithEntity:discEntity insertIntoManagedObjectContext:managedObjectContext];
                 disc.fingerprint = mediaFingerprint;
+                disc.mediaURLs = [NSMutableSet set];
                 
                 if (![infoDictionariesByFingerprint valueForKeyPath:@"meta.discident"]) {
                     [DiscIdentQuery queryWithFingerprint:mediaFingerprint delegate:self userInfo:[disc retain] startImmediately:YES];
                 }
             }
-            [disc.mediaURLs addObject:media.url];
+            [disc.mediaURLs addObject:[media.url absoluteString]];
             
             /*
              */
@@ -558,6 +563,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         
         if (mediaFingerprint) {
             if (![mediaFingerprint isEqualToString:discFingerprint] || ![[media url] isEqual:[NSURL fileURLWithPath:media.pathToFile]]) {
+                [mediaByURL removeObjectForKey:[media.url absoluteString]];
 
                 /*  Remove this disc from the movie it used to match up with.  If
                  *  that causes there to be no more discs for that movie, then 
@@ -566,7 +572,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                 if (discFingerprint) {
                     
                     Disc* disc = [self _findDiscByFingerprint:discFingerprint];
-                    [disc.mediaURLs removeObject:media.url];
+                    [disc.mediaURLs removeObject:[media.url absoluteString]];
                     if (![disc.mediaURLs count]) {
                         [self _findDiscByFingerprint:discFingerprint];
                         [infoDictionariesByFingerprint removeObjectForKey:discFingerprint];
@@ -596,13 +602,15 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                  *  movie.
                  */
                 media.url = [NSURL fileURLWithPath:media.pathToFile isDirectory:YES];
+                [mediaByURL setObject:media forKey:[media.url absoluteString]];
                 if (mediaFingerprint) {
                     Disc* disc = [self _findDiscByFingerprint:mediaFingerprint];
                     if (!disc) {
                         disc = [[Disc alloc] initWithEntity:discEntity insertIntoManagedObjectContext:managedObjectContext];
                         disc.fingerprint = mediaFingerprint;
+                        disc.mediaURLs = [NSMutableSet set];
                     }
-                    [disc.mediaURLs addObject:media.url];
+                    [disc.mediaURLs addObject:[media.url absoluteString]];
                 
                     NSMutableDictionary* entry = [addsByFingerprint objectForKey:mediaFingerprint];
                     if (!entry) {
@@ -665,10 +673,12 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 {
     NSMutableDictionary* deletesByFingerprint = [NSMutableDictionary dictionary];
     for (MediaFile* media in arrayOfMedia) {
+        [mediaByURL removeObjectForKey:[media.url absoluteString]];
+
         Disc* disc = [media disc];
         if (disc) {
             NSString* discFingerprint = [disc fingerprint];
-            [disc.mediaURLs removeObject:media.url];
+            [disc.mediaURLs removeObject:[media.url absoluteString]];
             if (![disc.mediaURLs count]) {
                 [self _findDiscByFingerprint:discFingerprint];
                 [infoDictionariesByFingerprint removeObjectForKey:discFingerprint];

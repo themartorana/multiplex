@@ -154,6 +154,15 @@
     // No discs view
     [noDiscsView setWantsLayer:YES];
     [[noDiscsView layer] setDelegate:self]; 
+    
+    // Delayed binding
+    // TODO: Rethink this
+    [self performSelector:@selector(bindNoMoviesDisplay) withObject:nil afterDelay:10.0];
+}
+
+- (void) bindNoMoviesDisplay
+{
+    [noDiscsView bind:@"hidden" toObject:movies withKeyPath:@"content.@count" options:nil];
 }
 
 - (void) applicationDidFinishLaunching:(NSNotification*)notification

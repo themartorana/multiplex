@@ -5,6 +5,6 @@
 
 @property (retain) NSString* fingerprint;
 @property (retain) NSDictionary* infoDictionary;
-@property (retain) NSMutableSet* mediaURLs;
+@property (retain) NSMutableSet* allMediaLocators;
 
 @end

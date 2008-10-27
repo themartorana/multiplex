@@ -4,6 +4,6 @@
 @implementation Disc
 @dynamic fingerprint;
 @dynamic infoDictionary;
-@dynamic mediaURLs;
+@dynamic allMediaLocators;
 
 @end

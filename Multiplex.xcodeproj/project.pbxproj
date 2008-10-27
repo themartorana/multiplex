@@ -230,35 +230,35 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = F96430F20EB6431900D49FA0 /* Licensing */;
+			remoteGlobalIDString = F96430F20EB6431900D49FA0;
 			remoteInfo = Licensing;
 		};
 		F96431270EB644E400D49FA0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = F96431210EB644D400D49FA0 /* make-data */;
+			remoteGlobalIDString = F96431210EB644D400D49FA0;
 			remoteInfo = "make-data";
 		};
 		F96431390EB6450C00D49FA0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = F96431330EB644EF00D49FA0 /* compress */;
+			remoteGlobalIDString = F96431330EB644EF00D49FA0;
 			remoteInfo = compress;
 		};
 		F96431410EB6454F00D49FA0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = F964310D0EB643EB00D49FA0 /* Build Licensing and Generate C Source */;
+			remoteGlobalIDString = F964310D0EB643EB00D49FA0;
 			remoteInfo = "Build Licensing and Generate C Source";
 		};
 		F96432050EB6476400D49FA0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F9C2AE540E7B747B00474D97 /* JSONKit.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 8DC2EF4F0486A6940098B216 /* JSONKit */;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
 			remoteInfo = JSONKit;
 		};
 		F9970F410E7B9D8C009A1B6A /* PBXContainerItemProxy */ = {

@@ -11,7 +11,6 @@
     CALayer* floorLayer;
     
     NSArray* listOfLayersInOrder;
-    NSArray* arrangedListOfObjects;
     
     Movie* selectedMovie;
     

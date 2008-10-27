@@ -58,17 +58,6 @@
     listOfLayersInOrder = [_listOfLayersInOrder copy];
 }
 
-- (void) setListOfArrangedObjects:(NSArray*)_arrangedListOfObjects
-{
-    if (arrangedListOfObjects) {
-        [arrangedListOfObjects release];
-        arrangedListOfObjects = nil;
-    }
-    arrangedListOfObjects = [_arrangedListOfObjects copy];
-    
-    [self setHoveredMovieLayer:nil];
-}
-
 - (void) setSelectedMovie:(Movie*)movie
 {
     if (selectedMovie) {

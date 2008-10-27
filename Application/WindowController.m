@@ -14,6 +14,7 @@
 #import "LinearLayoutManager.h"
 
 #import <QuartzCore/QuartzCore.h>
+#import <Sparkle/Sparkle.h>
 #import <Toolkit/Toolkit.h>
 
 @interface WindowController (Private)
@@ -22,6 +23,19 @@
 
 @implementation WindowController
 @synthesize appManagedObjectContext;
+
++ (void) initialize
+{
+    if ([self class] == [WindowController class]) {
+        /*  Setup our user defaults.
+         */
+        [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
+            [NSNumber numberWithInt:24 * 60 * 60], @"SUScheduledCheckInterval",
+            kCFBooleanTrue, @"SUEnableAutomaticChecks",
+            nil
+        ]];
+    }
+}
 
 - (id) init 
 {

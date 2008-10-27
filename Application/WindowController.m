@@ -157,12 +157,12 @@
     
     // Delayed binding
     // TODO: Rethink this
-    [self performSelector:@selector(bindNoMoviesDisplay) withObject:nil afterDelay:10.0];
+    [self performSelector:@selector(bindNoMoviesDisplay) withObject:nil afterDelay:7.0];
 }
 
 - (void) bindNoMoviesDisplay
 {
-    [noDiscsView bind:@"hidden" toObject:movies withKeyPath:@"content.@count" options:nil];
+    [movies addObserver:self forKeyPath:@"content.@count" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew context:nil];
 }
 
 - (void) applicationDidFinishLaunching:(NSNotification*)notification
@@ -265,7 +265,13 @@
 
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
-    if (object == drawerView) {
+    if (object == movies) {
+        BOOL toSet = [(NSNumber*)[movies valueForKeyPath:keyPath] boolValue];
+        if (!toSet == [noDiscsView isHidden]) {
+            [[noDiscsView animator] setHidden:toSet];
+        }
+    }
+    else if (object == drawerView) {
         if ([@"isOpen" isEqualToString:keyPath]) {
             BOOL isOpen = [(NSNumber*)[object valueForKeyPath:keyPath] boolValue];
             

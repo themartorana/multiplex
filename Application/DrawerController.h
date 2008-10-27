@@ -14,4 +14,6 @@
     IBOutlet NSView* enterUPCView;
 }
 
+- (IBAction) skipEnterUPC:(id)sender;
+
 @end

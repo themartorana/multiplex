@@ -33,4 +33,8 @@
 - (IBAction) showUserVoiceFeedbackSheet:(id)sender;
 - (IBAction) toggleFullScreen:(id)sender;
 
+- (IBAction) switchToStadiumLayoutManager:(id)sender;
+- (IBAction) switchToGridLayoutManager:(id)sender;
+- (IBAction) switchToLinearLayoutManager:(id)sender;
+
 @end

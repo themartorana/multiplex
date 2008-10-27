@@ -217,6 +217,21 @@
     }
 }
 
+- (IBAction) switchToStadiumLayoutManager:(id)sender
+{
+    [mainView setFloorLayerLayoutManagerClass:[StadiumLayoutManager class]];
+}
+
+- (IBAction) switchToGridLayoutManager:(id)sender
+{
+    //[[mainView setFloorLayerLayoutManagerClass:[GridLayoutManager class]];    
+}
+
+- (IBAction) switchToLinearLayoutManager:(id)sender
+{
+    [mainView setFloorLayerLayoutManagerClass:[LinearLayoutManager class]];
+}
+
 @end
 
 

@@ -140,8 +140,6 @@
     [notificationCenter addObserver:self selector:@selector(playSelectedMovie:) name:@"MultiplexPlayButtonClicked" object:nil];
     [notificationCenter addObserver:self selector:@selector(toggleFullScreen:) name:@"MultiplexToggleFullScreen" object:nil];
     
-    [notificationCenter addObserver:self selector:@selector(mainWindowWillClose:) name:NSWindowWillCloseNotification object:[mainView window]];
-    
     engineController = [[EngineController alloc] initWithManagedObjectContext:engineManagedObjectContext];
     
     // Hook up to drawer view
@@ -172,7 +170,14 @@
 
 - (void) applicationWillTerminate:(NSNotification*)notification
 {
+    [[self window] close];
     [engineController shutdown];
+}
+
+- (BOOL) applicationShouldHandleReopen:(NSApplication*)theApplication hasVisibleWindows:(BOOL)flag
+{
+    [[self window] makeKeyAndOrderFront:nil];
+    return NO;
 }
 
 - (void) playDiscRequest:(NSNotification*)notification
@@ -310,11 +315,6 @@
             [[[self window] contentView] layer].filters = [NSArray arrayWithObject:blurFilter];
         }
     }    
-}
-
-- (void) mainWindowWillClose:(NSNotification*)notification
-{
-    [NSApp terminate:self];
 }
 
 - (IBAction) toggleFullScreen:(id)sender

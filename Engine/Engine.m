@@ -323,11 +323,11 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             NSMutableDictionary* adds = [NSMutableDictionary dictionary];
             NSMutableDictionary* updates = [NSMutableDictionary dictionary];
             for (Disc* disc in results) {
-                NSMutableArray* urls = [NSMutableArray array];
+                NSMutableArray* tags = [NSMutableArray array];
                 for (MediaLocator* mediaLocator in disc.allMediaLocators) {
-                    [urls addObject:mediaLocator.tag];
+                    [tags addObject:mediaLocator.tag];
                 }
-                [adds setObject:[NSDictionary dictionaryWithObjectsAndKeys:urls, @"urls", [self _frontCoverURLForFingerprint:disc.fingerprint], @"frontCoverURL", nil] forKey:disc.fingerprint];
+                [adds setObject:[NSDictionary dictionaryWithObjectsAndKeys:tags, @"tags", [self _frontCoverURLForFingerprint:disc.fingerprint], @"frontCoverURL", nil] forKey:disc.fingerprint];
                 [updates setObject:disc.infoDictionary forKey:disc.fingerprint];
             }
             [protocol sendMessage:[NSDictionary dictionaryWithObjectsAndKeys:adds, @"add", updates, @"update", nil]];
@@ -563,14 +563,14 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                     [addsByFingerprint setObject:
                         entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                             [NSMutableArray arrayWithObject:media.tag],
-                            @"urls",
+                            @"tags",
                             nil
                         ]
                         forKey:
                             mediaFingerprint
                     ];
                 } else {
-                    [[entry objectForKey:@"urls"] addObject:media.tag];
+                    [[entry objectForKey:@"tags"] addObject:media.tag];
                 }
                 [entry setObject:[self _frontCoverURLForFingerprint:media.fingerprint] forKey:@"frontCoverURL"];
                 
@@ -658,14 +658,14 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                         [deletesByFingerprint setObject:
                             entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                 [NSMutableArray arrayWithObject:media.tag],
-                                @"urls",
+                                @"tags",
                                 nil
                             ]
                             forKey:
                                 discFingerprint
                         ];
                     } else {
-                        [[entry objectForKey:@"urls"] addObject:media.tag];
+                        [[entry objectForKey:@"tags"] addObject:media.tag];
                     }
                 }
 
@@ -693,14 +693,14 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                         [addsByFingerprint setObject:
                             entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                 [NSMutableArray arrayWithObject:media.tag],
-                                @"urls",
+                                @"tags",
                                 nil
                             ]
                             forKey:
                                 mediaFingerprint
                         ];
                     } else {
-                        [[entry objectForKey:@"urls"] addObject:media.tag];
+                        [[entry objectForKey:@"tags"] addObject:media.tag];
                     }
                     [entry setObject:[self _frontCoverURLForFingerprint:media.fingerprint] forKey:@"frontCoverURL"];
                 }
@@ -771,14 +771,14 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                 [deletesByFingerprint setObject:
                     entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                         [NSMutableArray arrayWithObject:media.tag],
-                        @"urls",
+                        @"tags",
                         nil
                     ]
                     forKey:
                         fingerprint
                 ];
             } else {
-                [[entry objectForKey:@"urls"] addObject:media.tag];
+                [[entry objectForKey:@"tags"] addObject:media.tag];
             }
         }
 

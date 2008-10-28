@@ -4,10 +4,9 @@
 @implementation Media
 
 @dynamic disc;
-@dynamic url;
+@dynamic tag;
+@dynamic type;
 @dynamic engine;
 @dynamic isAvailable;
-
-//- (void) setDisc:(Disc*)_disc
 
 @end

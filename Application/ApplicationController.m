@@ -48,15 +48,11 @@
 {
     if (self == [super init]) {
         [NSDescriptionValueTransformer registerYourself];
-        
         managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Multiplex" ofType:@"mom"]]];
-        
         persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
         [persistentStoreCoordinator addPersistentStoreWithType:NSInMemoryStoreType configuration:nil URL:nil options:nil error:nil];
-
         engineManagedObjectContext = [[NSManagedObjectContext alloc] init];
         [engineManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
-
         appManagedObjectContext = [[NSManagedObjectContext alloc] init];
         [appManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
 
@@ -190,7 +186,7 @@
             for (Media* media in allMedia) {
                 if ([media.isAvailable boolValue]) {
                     // Play
-                    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:media.url]];
+                    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:media.tag]];
                     break;
                 }
             } 

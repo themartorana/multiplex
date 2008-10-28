@@ -493,11 +493,12 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
                 /*  For each URL provided, create a media object to represent it,
                  *  and attached it to our disc.
                  */
-                for (NSString* url in [info objectForKey:@"urls"]) {
+                for (NSString* tag in [info objectForKey:@"tags"]) {
                     Media* media = [[Media alloc] initWithEntity:mediaEntity insertIntoManagedObjectContext:managedObjectContext];
-                    media.url = url;
+                    media.tag = tag;
                     media.engine = engine;
                     media.disc = disc;
+                    media.type = @"public.dvdmedia";
                     [media release];
                 }
             }
@@ -636,7 +637,7 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
         if (delete && [delete isKindOfClass:[NSDictionary class]]) {
             for (NSString* fingerprint in delete) {
                 NSDictionary* info = [delete objectForKey:fingerprint];
-                for (NSString* url in [info objectForKey:@"urls"]) {
+                for (NSString* url in [info objectForKey:@"tags"]) {
                     Media* media = [self _findMediaByEngine:engine URL:url];
                     if (media) {
                         Disc* disc = media.disc;

@@ -21,17 +21,12 @@
     [super dealloc];
 }
 
-- (void) setSelectedMovie:(Movie*)m
+- (void) setSelectedMovie:(Movie*)_selectedMovie
 {   
-    if (selectedMovie) {
+    if (selectedMovie != _selectedMovie) {
         [selectedMovie release];
-        selectedMovie = nil;
-    }
-    
-    selectedMovie = [m retain];
-    
-    if (drawerView.isOpen) {
-        [self changeDrawerView:YES];
+        selectedMovie = [_selectedMovie retain];
+        [self changeDrawerView:drawerView.isOpen];
     }
 }
 
@@ -47,22 +42,14 @@
 
 - (void) changeDrawerView:(BOOL)isOpen
 {
-  if (isOpen) {
-        // Put in the appropriate view
-        if (selectedMovie) {
-            if (selectedMovie.gtin && ![selectedMovie.gtin isEqualToString:@""]) {
-                [drawerView setContentView:movieInfoView];
-            }
-            else {
-                [drawerView setContentView:enterUPCView];
-            }
-        }
-        else {
-            [drawerView setContentView:noMovieSelectedView];
-        }
-    }
-    else {
+    if (!isOpen) {
         [drawerView setContentView:nil];
+    } else if ([selectedMovie.gtin length] > 0) {
+        [drawerView setContentView:movieInfoView];
+    } else if (selectedMovie) {
+        [drawerView setContentView:enterUPCView];
+    } else {
+        [drawerView setContentView:noMovieSelectedView];
     }
 }
 

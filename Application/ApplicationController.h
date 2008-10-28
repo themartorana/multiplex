@@ -6,7 +6,7 @@
 @class InfoPaneFormController;
 @class UserVoiceFeedbackPanel;
 
-@interface WindowController : NSWindowController {
+@interface ApplicationController : NSWindowController {
     NSDictionary* parameters;
     IBOutlet NSTextField* licensingAndVersionInfo;
     /**/

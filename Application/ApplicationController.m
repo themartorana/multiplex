@@ -1,4 +1,4 @@
-#import "WindowController.h"
+#import "ApplicationController.h"
 #import "EngineController.h"
 #import "MainView.h"
 #import "DrawerView.h"
@@ -23,17 +23,17 @@
 #import <mach-o/dyld.h>
 #import "Licensing_dylib.c"
 
-@interface WindowController (Private)
+@interface ApplicationController (Private)
 - (void) openInfoView:(NSNotification*)notification;
 @end
 
-@implementation WindowController
+@implementation ApplicationController
 @synthesize parameters;
 @synthesize appManagedObjectContext;
 
 + (void) initialize
 {
-    if ([self class] == [WindowController class]) {
+    if ([self class] == [ApplicationController class]) {
         /*  Setup our user defaults.
          */
         [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:

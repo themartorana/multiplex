@@ -108,7 +108,7 @@
 		F966E5270EAF9A53001D0B3B /* CoverArtImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F966E5260EAF9A53001D0B3B /* CoverArtImageView.m */; };
 		F966E6890EAFB38B001D0B3B /* drag-drop-no-image.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F966E6880EAFB38B001D0B3B /* drag-drop-no-image.pdf */; };
 		F967AFF60E7E13ED00C12B92 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = F967AFF50E7E13ED00C12B92 /* MainView.m */; };
-		F967B02D0E7E16DE00C12B92 /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F967B02C0E7E16DE00C12B92 /* WindowController.m */; };
+		F967B02D0E7E16DE00C12B92 /* ApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = F967B02C0E7E16DE00C12B92 /* ApplicationController.m */; };
 		F967B0800E7E1F3100C12B92 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F967B07F0E7E1F3100C12B92 /* QuartzCore.framework */; };
 		F967B0D80E7E22BF00C12B92 /* MovieLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = F967B0D70E7E22BF00C12B92 /* MovieLayer.m */; };
 		F98DC70E0B63013B00371A83 /* GetMetadataForFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F98DC70A0B63013B00371A83 /* GetMetadataForFile.m */; };
@@ -524,8 +524,8 @@
 		F966E6880EAFB38B001D0B3B /* drag-drop-no-image.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "drag-drop-no-image.pdf"; sourceTree = "<group>"; };
 		F967AFF40E7E13ED00C12B92 /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
 		F967AFF50E7E13ED00C12B92 /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
-		F967B02B0E7E16DE00C12B92 /* WindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowController.h; sourceTree = "<group>"; };
-		F967B02C0E7E16DE00C12B92 /* WindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindowController.m; sourceTree = "<group>"; };
+		F967B02B0E7E16DE00C12B92 /* ApplicationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationController.h; sourceTree = "<group>"; };
+		F967B02C0E7E16DE00C12B92 /* ApplicationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationController.m; sourceTree = "<group>"; };
 		F967B07F0E7E1F3100C12B92 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F967B0D60E7E22BF00C12B92 /* MovieLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieLayer.h; sourceTree = "<group>"; };
 		F967B0D70E7E22BF00C12B92 /* MovieLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieLayer.m; sourceTree = "<group>"; };
@@ -852,8 +852,8 @@
 		557B69710E4CD0660009919E /* UI Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				F967B02B0E7E16DE00C12B92 /* WindowController.h */,
-				F967B02C0E7E16DE00C12B92 /* WindowController.m */,
+				F967B02B0E7E16DE00C12B92 /* ApplicationController.h */,
+				F967B02C0E7E16DE00C12B92 /* ApplicationController.m */,
 				550D082A0E9AE14E008F0275 /* InfoPaneFormController.h */,
 				550D082B0E9AE14E008F0275 /* InfoPaneFormController.m */,
 				557B63BD0EB37CC400DFD76F /* DrawerController.h */,
@@ -1580,7 +1580,7 @@
 				F9CA17A90E7C79CE0049CD3E /* Media.m in Sources */,
 				F9CA18F50E7CB6310049CD3E /* Engine.m in Sources */,
 				F967AFF60E7E13ED00C12B92 /* MainView.m in Sources */,
-				F967B02D0E7E16DE00C12B92 /* WindowController.m in Sources */,
+				F967B02D0E7E16DE00C12B92 /* ApplicationController.m in Sources */,
 				F967B0D80E7E22BF00C12B92 /* MovieLayer.m in Sources */,
 				55D390750E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m in Sources */,
 				5598E60C0E91D294005FCC91 /* ButtonLayer.m in Sources */,

@@ -283,7 +283,7 @@
 - (void) openInfoView:(NSNotification*)notification
 {
     [drawerView openDrawer];
-    [[self window] makeFirstResponder:infoPaneView];
+    [[self window] makeFirstResponder:drawerView];
 }
 
 - (void) closeInfoView:(NSNotification*)notification

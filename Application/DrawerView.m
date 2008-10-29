@@ -6,6 +6,7 @@
 @implementation DrawerView
 @synthesize isOpen;
 @synthesize contentView;
+@synthesize upperView;
 
 - (void) awakeFromNib
 {
@@ -144,6 +145,11 @@
     } else {
         [self openDrawer];
     }
+}
+
+- (void) keyDown:(NSEvent*)event
+{
+    NSLog(@"%@", event);
 }
 
 @end

@@ -22,6 +22,6 @@
 @property (retain) BoxArt* boxArt;
 @property (retain) NSNumber* starRating;
 
-@property (readonly) NSSet* allDiscs;
+@property (readonly) NSMutableSet* allDiscs;
 
 @end

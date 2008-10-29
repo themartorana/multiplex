@@ -258,7 +258,7 @@ static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, DVDMediaSou
         @try {
             [delegate mediaFileSource:self didRemoveMedia:media];
         } @catch (id exception) {
-            NSLog(@"%s: %@", __PRETTY_FUNCTION__, exception);
+            NSLog(@"%s: %@", __PRETTY_FUNCTION__, [exception callStackReturnAddresses]);
         }
     } else {
         [self performSelectorOnMainThread:@selector(_fireDidRemoveMedia:) withObject:media waitUntilDone:NO];

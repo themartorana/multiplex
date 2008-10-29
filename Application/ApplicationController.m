@@ -49,8 +49,27 @@
     if (self == [super init]) {
         [NSDescriptionValueTransformer registerYourself];
         managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Multiplex" ofType:@"mom"]]];
+
+        NSFileManager* fileManager = [NSFileManager defaultManager];
+        NSString* baseFolder = @"/Library/Application Support/Multiplex";
+        NSString* pathToDatabase = [baseFolder stringByAppendingPathComponent:@"Movie.database"];
+        BOOL isDirectory = NO;
+        if (![fileManager fileExistsAtPath:baseFolder isDirectory:&isDirectory] || !isDirectory) {
+            [fileManager removeItemAtPath:baseFolder error:nil];
+            if (![fileManager createDirectoryAtPath:baseFolder attributes:nil]) {
+                /* TODO: Handle this condition */;
+            }
+        }
+
+        NSError* error = nil;
         persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
-        [persistentStoreCoordinator addPersistentStoreWithType:NSInMemoryStoreType configuration:nil URL:nil options:nil error:nil];
+        if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabase] options:nil error:&error]) {
+            [fileManager removeItemAtPath:pathToDatabase error:nil];
+            if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabase] options:nil error:&error]) {
+                [NSException raise:NSStringFromClass([self class]) format:@"Unable to create a fresh database."];
+            }
+        }
+        
         engineManagedObjectContext = [[NSManagedObjectContext alloc] init];
         [engineManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
         appManagedObjectContext = [[NSManagedObjectContext alloc] init];

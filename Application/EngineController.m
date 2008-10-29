@@ -20,7 +20,7 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
 - (Disc*) _findDiscByFingerprint:(NSString*)fingerprint;
 - (BoxArt*) _findBoxArtByURL:(NSString*)url;
 - (Movie*) _findMovieByGTIN:(NSString*)gtin;
-- (Media*) _findMediaByEngine:(Engine*)engine URL:(NSString*)url;
+- (Media*) _findMediaByEngine:(Engine*)engine tag:(NSString*)tag;
 - (Engine*) _findEngineByUUID:(NSString*)UUID;
 - (Engine*) _findEngineByNetServiceName:(NSString*)netServiceName;
 - (void) _deleteMovieIfNoMediaRemainForAnyDisc:(Movie*)movie;
@@ -70,6 +70,22 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
         movieEntity = [[NSEntityDescription entityForName:@"Movie" inManagedObjectContext:managedObjectContext] retain];
         boxArtEntity = [[NSEntityDescription entityForName:@"BoxArt" inManagedObjectContext:managedObjectContext] retain];
 
+        /*
+         */
+        NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+        [fetchRequest setEntity:engineEntity];
+        NSArray* enginesToDelete = [managedObjectContext executeFetchRequest:fetchRequest error:nil];
+        if ([enginesToDelete count]) {
+            for (Engine* engine in enginesToDelete) {
+                for (Media* media in [engine allMedia]) {
+                    [managedObjectContext deleteObject:media];
+                }
+                [managedObjectContext deleteObject:engine];
+            }
+            [managedObjectContext save:nil];
+        }
+        [fetchRequest release];
+        
         /*  Grab (or generate) our local machine's Engine UUID.
          */
         static CFStringRef const kEngineMachineIdKey = CFSTR("machine-id");
@@ -275,11 +291,11 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
     return nil;
 }
 
-- (Media*) _findMediaByEngine:(Engine*)engine URL:(NSString*)url
+- (Media*) _findMediaByEngine:(Engine*)engine tag:(NSString*)tag
 {
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:mediaEntity];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"engine == %@ && url == %@", engine, url]]; 
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"engine == %@ && tag == %@", engine, tag]]; 
     NSError* error = nil;
     NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
     [fetchRequest release];
@@ -478,7 +494,7 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
                 }
                 
                 NSString* frontCoverURL = [info objectForKey:@"frontCoverURL"];
-                if (frontCoverURL) {
+                if (!disc.boxArt && frontCoverURL) {
                     BoxArt* boxArt = [self _findBoxArtByURL:frontCoverURL];
                     if (!boxArt) {
                         boxArt = disc.boxArt = [[BoxArt alloc] initWithEntity:boxArtEntity insertIntoManagedObjectContext:managedObjectContext];
@@ -494,12 +510,14 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
                  *  and attached it to our disc.
                  */
                 for (NSString* tag in [info objectForKey:@"tags"]) {
-                    Media* media = [[Media alloc] initWithEntity:mediaEntity insertIntoManagedObjectContext:managedObjectContext];
-                    media.tag = tag;
-                    media.engine = engine;
+                    Media* media = [self _findMediaByEngine:engine tag:tag];
+                    if (!media) {
+                        media = [[[Media alloc] initWithEntity:mediaEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
+                        media.tag = tag;
+                        media.engine = engine;
+                    }
                     media.disc = disc;
                     media.type = @"public.dvdmedia";
-                    [media release];
                 }
             }
         }
@@ -637,22 +655,26 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
         if (delete && [delete isKindOfClass:[NSDictionary class]]) {
             for (NSString* fingerprint in delete) {
                 NSDictionary* info = [delete objectForKey:fingerprint];
-                for (NSString* url in [info objectForKey:@"tags"]) {
-                    Media* media = [self _findMediaByEngine:engine URL:url];
+                for (NSString* tag in [info objectForKey:@"tags"]) {
+                    Media* media = [self _findMediaByEngine:engine tag:tag];
                     if (media) {
                         Disc* disc = media.disc;
+                        [managedObjectContext deleteObject:media];
+                        Movie* movie = disc.movie;
+                        NSAssert(movie, @"wtf?");
                         int zeroCount = 0;
                         int total = 0;
-                        Movie* movie = disc.movie;
                         for (Disc* otherDisc in movie.allDiscs) {
                             int count = [otherDisc.allMedia count];
                             zeroCount += (disc == otherDisc && (count == 1)) || (count == 0);
                             total++;
                         }
                         if (zeroCount == total) {
+                            for (Disc* disc in movie.allDiscs) {
+                                [managedObjectContext deleteObject:disc];
+                            }
                             [managedObjectContext deleteObject:movie];
                         }
-                        [managedObjectContext deleteObject:media];
                     }
                 }
             }
@@ -698,7 +720,7 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
         [managedObjectContext save:nil];
     }
     
-    if (YES || [uuid isEqualToString:localMachineUUID]) {
+    if (NO || [uuid isEqualToString:localMachineUUID]) {
         [self connectEngine:engine];
     }
 }
@@ -715,12 +737,14 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
 
     Engine* engine = nil;
     @synchronized (managedObjectContext) {
-        engine = [[Engine alloc] initWithEntity:engineEntity insertIntoManagedObjectContext:managedObjectContext];
-        NSAssert(engine, @"no engine?");
-        engine.netServiceName = [netService name];
+        engine = [self _findEngineByNetServiceName:[netService name]];
+        if (!engine) {
+            engine = [[Engine alloc] initWithEntity:engineEntity insertIntoManagedObjectContext:managedObjectContext];
+            [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject:engine] error:nil];
+        }
         engine.name = [netService name];
+        engine.netServiceName = [netService name];
         engine.status = @"Resolving";
-        [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject:engine] error:nil];
         [managedObjectContext save:nil];
     }
     

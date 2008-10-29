@@ -13,6 +13,6 @@
 @property (retain) NSString* side;
 @property (retain) NSString* synopsis;
 
-@property (readonly) NSSet* allMedia;
+@property (readonly) NSMutableSet* allMedia;
 
 @end

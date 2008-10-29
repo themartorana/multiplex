@@ -12,7 +12,6 @@
     NSEntityDescription* mediaLocatorEntity;
     /**/
     NSMutableDictionary* mediaFileByTag;
-    NSMutableDictionary* infoDictionariesByFingerprint;
     NSMutableArray* protocols;
     NSString* machineId;
     NSString* machineName;

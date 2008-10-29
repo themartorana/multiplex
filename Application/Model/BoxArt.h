@@ -9,6 +9,6 @@
 @property (retain) NSString* state;
 @property (retain) NSData *imageData;
 
-@property (retain) NSSet *allDiscs;
+@property (retain) NSMutableSet *allDiscs;
 
 @end

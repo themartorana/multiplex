@@ -8,6 +8,6 @@
 @property (retain) NSString* netServiceName;
 @property (retain) NSString* status;
 
-@property (retain) NSSet* allMedia;
+@property (retain) NSMutableSet* allMedia;
 
 @end

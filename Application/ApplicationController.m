@@ -36,6 +36,10 @@
 + (void) initialize
 {
     if ([self class] == [ApplicationController class]) {
+        /*  Register our value transformers.
+         */
+        [NSDescriptionValueTransformer registerYourself];
+
         /*  Setup our user defaults.
          */
         [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -49,8 +53,6 @@
 - (id) init 
 {
     if (self == [super init]) {
-        [NSDescriptionValueTransformer registerYourself];
-        managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Multiplex" ofType:@"mom"]]];
 
         NSError* error = nil;
 
@@ -108,6 +110,7 @@
             }
         }
 
+        managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Multiplex" ofType:@"mom"]]];
         persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
         if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabase] options:nil error:&error]) {
             [fileManager removeItemAtPath:pathToDatabase error:nil];

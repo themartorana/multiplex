@@ -45,8 +45,6 @@
 		551558440EA53C1D006F2674 /* MultiplexColorFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 551558430EA53C1D006F2674 /* MultiplexColorFactory.m */; };
 		553198C10EB6162A0031D118 /* expand-screen.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 553198C00EB6162A0031D118 /* expand-screen.pdf */; };
 		5531A7450EB3EC24009562A2 /* full-screen-icon-down.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5531A7440EB3EC24009562A2 /* full-screen-icon-down.gif */; };
-		5534774D0EA3A9CA00436A8C /* ImageQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 5534774C0EA3A9CA00436A8C /* ImageQuery.m */; };
-		553477520EA3A9E400436A8C /* ImageQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 5534774C0EA3A9CA00436A8C /* ImageQuery.m */; };
 		553477810EA3AD5100436A8C /* multiplex-mark01a.icns in Resources */ = {isa = PBXBuildFile; fileRef = 553477800EA3AD5100436A8C /* multiplex-mark01a.icns */; };
 		5535D98F0E4E3F5400A45761 /* EngineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5535D98E0E4E3F5400A45761 /* EngineController.m */; };
 		554282C70EB3D69B00FF7E44 /* full-screen-icon.gif in Resources */ = {isa = PBXBuildFile; fileRef = 554282C60EB3D69B00FF7E44 /* full-screen-icon.gif */; };
@@ -121,7 +119,6 @@
 		F9A1D62C0E8350D800AB691D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9D3129F0E7DD85200D99DCA /* Foundation.framework */; };
 		F9A1D6360E83511E00AB691D /* Engine.m in Sources */ = {isa = PBXBuildFile; fileRef = F94EA2D00E4C9ECA00438E14 /* Engine.m */; };
 		F9A1D6380E83511E00AB691D /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A1D5170E8342C700AB691D /* HTTPServer.m */; };
-		F9A1D6490E83517000AB691D /* AmazonQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F93B04A60E6F57CF006CB915 /* AmazonQuery.m */; };
 		F9A1D64C0E83518300AB691D /* DiscIdentKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F94A06060E7B9B5800C8A8B7 /* DiscIdentKit.framework */; };
 		F9A1D64D0E83518600AB691D /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
 		F9A1D64F0E83519300AB691D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B66A20E4A2F4D0009919E /* main.m */; };
@@ -178,6 +175,8 @@
 		F9D4F92D0EB671E000B89FF4 /* NSBundle+IndyHallLabs.h in Headers */ = {isa = PBXBuildFile; fileRef = F9D4F92B0EB671E000B89FF4 /* NSBundle+IndyHallLabs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F9D4F92E0EB671E000B89FF4 /* NSBundle+IndyHallLabs.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D4F92C0EB671E000B89FF4 /* NSBundle+IndyHallLabs.m */; };
 		F9D4F9CF0EB67E2200B89FF4 /* window-resize-thumb.gif in Resources */ = {isa = PBXBuildFile; fileRef = F9D4F9CE0EB67E2200B89FF4 /* window-resize-thumb.gif */; };
+		F9D4FC020EB7B2B000B89FF4 /* AmazonQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D4FBFF0EB7B2B000B89FF4 /* AmazonQuery.m */; };
+		F9D4FC030EB7B2B000B89FF4 /* ImageQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D4FC010EB7B2B000B89FF4 /* ImageQuery.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -433,8 +432,6 @@
 		551558430EA53C1D006F2674 /* MultiplexColorFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiplexColorFactory.m; sourceTree = "<group>"; };
 		553198C00EB6162A0031D118 /* expand-screen.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "expand-screen.pdf"; sourceTree = "<group>"; };
 		5531A7440EB3EC24009562A2 /* full-screen-icon-down.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "full-screen-icon-down.gif"; sourceTree = "<group>"; };
-		5534774B0EA3A9CA00436A8C /* ImageQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageQuery.h; sourceTree = "<group>"; };
-		5534774C0EA3A9CA00436A8C /* ImageQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageQuery.m; sourceTree = "<group>"; };
 		553477800EA3AD5100436A8C /* multiplex-mark01a.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "multiplex-mark01a.icns"; sourceTree = "<group>"; };
 		5535D98D0E4E3F5400A45761 /* EngineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngineController.h; sourceTree = "<group>"; };
 		5535D98E0E4E3F5400A45761 /* EngineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngineController.m; sourceTree = "<group>"; };
@@ -500,8 +497,6 @@
 		F914C9CE0EAD657900877991 /* DrawerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawerView.h; sourceTree = "<group>"; };
 		F914C9CF0EAD657900877991 /* DrawerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawerView.m; sourceTree = "<group>"; };
 		F914CB0F0EAD7C8700877991 /* drawer-background-pattern-96x96.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "drawer-background-pattern-96x96.gif"; sourceTree = "<group>"; };
-		F93B04A50E6F57CF006CB915 /* AmazonQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmazonQuery.h; sourceTree = "<group>"; };
-		F93B04A60E6F57CF006CB915 /* AmazonQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmazonQuery.m; sourceTree = "<group>"; };
 		F94A05FD0E7B9B5800C8A8B7 /* DiscIdentKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DiscIdentKit.xcodeproj; path = Frameworks/DiscIdentKit/DiscIdentKit.xcodeproj; sourceTree = "<group>"; };
 		F94EA2BF0E4C9DBF00438E14 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F94EA2CF0E4C9ECA00438E14 /* Engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Engine.h; sourceTree = "<group>"; };
@@ -595,6 +590,10 @@
 		F9D4F92B0EB671E000B89FF4 /* NSBundle+IndyHallLabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+IndyHallLabs.h"; sourceTree = "<group>"; };
 		F9D4F92C0EB671E000B89FF4 /* NSBundle+IndyHallLabs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+IndyHallLabs.m"; sourceTree = "<group>"; };
 		F9D4F9CE0EB67E2200B89FF4 /* window-resize-thumb.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "window-resize-thumb.gif"; sourceTree = "<group>"; };
+		F9D4FBFE0EB7B2B000B89FF4 /* AmazonQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmazonQuery.h; sourceTree = "<group>"; };
+		F9D4FBFF0EB7B2B000B89FF4 /* AmazonQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmazonQuery.m; sourceTree = "<group>"; };
+		F9D4FC000EB7B2B000B89FF4 /* ImageQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageQuery.h; sourceTree = "<group>"; };
+		F9D4FC010EB7B2B000B89FF4 /* ImageQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageQuery.m; sourceTree = "<group>"; };
 		F9DA5B480E61C1BC00E96C0D /* DVDMediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVDMediaSource.h; sourceTree = "<group>"; };
 		F9DA5B490E61C1BC00E96C0D /* DVDMediaSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVDMediaSource.m; sourceTree = "<group>"; };
 		F9DA5B4B0E61C1C900E96C0D /* PhysicalMediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicalMediaSource.h; sourceTree = "<group>"; };
@@ -831,7 +830,6 @@
 				557B66A20E4A2F4D0009919E /* main.m */,
 				F9E3F82D0E7579B300DCA2A8 /* Model */,
 				F9D30D680E7DD60000D99DCA /* Plugins */,
-				F9E3F82C0E7579A300DCA2A8 /* Queries */,
 				557B668B0E4A2DD70009919E /* Classes */,
 				F94EA2BD0E4C9D7100438E14 /* Resources */,
 			);
@@ -1042,6 +1040,7 @@
 				F967AFF30E7E13D400C12B92 /* Views */,
 				5535DE020E508D3D00A45761 /* Model */,
 				557B69710E4CD0660009919E /* UI Controllers */,
+				F9D4FBFD0EB7B2B000B89FF4 /* Queries */,
 				2A37F4ABFDCFA73011CA2CEA /* Classes */,
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
 			);
@@ -1135,13 +1134,13 @@
 			path = DVDMedia;
 			sourceTree = "<group>";
 		};
-		F9E3F82C0E7579A300DCA2A8 /* Queries */ = {
+		F9D4FBFD0EB7B2B000B89FF4 /* Queries */ = {
 			isa = PBXGroup;
 			children = (
-				5534774B0EA3A9CA00436A8C /* ImageQuery.h */,
-				5534774C0EA3A9CA00436A8C /* ImageQuery.m */,
-				F93B04A50E6F57CF006CB915 /* AmazonQuery.h */,
-				F93B04A60E6F57CF006CB915 /* AmazonQuery.m */,
+				F9D4FBFE0EB7B2B000B89FF4 /* AmazonQuery.h */,
+				F9D4FBFF0EB7B2B000B89FF4 /* AmazonQuery.m */,
+				F9D4FC000EB7B2B000B89FF4 /* ImageQuery.h */,
+				F9D4FC010EB7B2B000B89FF4 /* ImageQuery.m */,
 			);
 			path = Queries;
 			sourceTree = "<group>";
@@ -1591,7 +1590,6 @@
 				558D1AF00E9D186B000F67FA /* InfoPaneDiscsView.m in Sources */,
 				558D1B030E9D3F37000F67FA /* PageNumberLayer.m in Sources */,
 				558D1C3E0E9D5562000F67FA /* DiscPlayLayer.m in Sources */,
-				5534774D0EA3A9CA00436A8C /* ImageQuery.m in Sources */,
 				551554A00EA456C8006F2674 /* SoftEditTextFieldCell.m in Sources */,
 				551555040EA45D84006F2674 /* SoftEditTextField.m in Sources */,
 				551555610EA46220006F2674 /* HoverPlayLayer.m in Sources */,
@@ -1608,6 +1606,8 @@
 				557B63BF0EB37CC400DFD76F /* DrawerController.m in Sources */,
 				5545BC040EB5171C0005A380 /* NSNumberToStringValueTransformer.m in Sources */,
 				5551FB9E0EB65F3C0022147A /* NoDiscsView.m in Sources */,
+				F9D4FC020EB7B2B000B89FF4 /* AmazonQuery.m in Sources */,
+				F9D4FC030EB7B2B000B89FF4 /* ImageQuery.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1649,9 +1649,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F9D10CBE0EB509A8007B8B73 /* Engine.xcdatamodel in Sources */,
-				553477520EA3A9E400436A8C /* ImageQuery.m in Sources */,
 				F9A1D64F0E83519300AB691D /* main.m in Sources */,
-				F9A1D6490E83517000AB691D /* AmazonQuery.m in Sources */,
 				F9A1D6360E83511E00AB691D /* Engine.m in Sources */,
 				F9A1D6380E83511E00AB691D /* HTTPServer.m in Sources */,
 				F9D10DC20EB51E70007B8B73 /* MediaFile.m in Sources */,

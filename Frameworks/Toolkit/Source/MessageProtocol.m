@@ -95,8 +95,13 @@
     NSAssert(buffer, @"This protocol has been closed.");
     @synchronized (self) {
         NSData* jsonData = [NSData dataWithObjectAsJSON:message];
-        [fileHandleForWriting writeData:[[NSString stringWithFormat:@"%d\n", [jsonData length]] dataUsingEncoding:NSUTF8StringEncoding]];
-        [fileHandleForWriting writeData:jsonData];
+        @try {
+            [fileHandleForWriting writeData:[[NSString stringWithFormat:@"%d\n", [jsonData length]] dataUsingEncoding:NSUTF8StringEncoding]];
+            [fileHandleForWriting writeData:jsonData];
+        }
+        @catch (NSException* exception) {
+            NSLog(@"Error while sending response: %@", [exception reason]);
+        }
     }
 }
 

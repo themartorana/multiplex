@@ -25,7 +25,7 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>SUFeedURL</key>
-	<string>https://multiplexapp.com/update.rss</string>
+	<string>http://multiplexapp.com/update.rss</string>
 	<key>QuartzGLEnable</key>
 	<true/>
 	<key>UTExportedTypeDeclarations</key>

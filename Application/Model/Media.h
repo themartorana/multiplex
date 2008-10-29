@@ -9,6 +9,7 @@
 }
 
 @property (retain) NSString* url;
+@property (retain) NSString* playUrl;
 @property (retain) Disc* disc;
 @property (retain) Engine* engine;
 @property (retain) NSNumber* isAvailable;

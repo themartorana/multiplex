@@ -185,7 +185,8 @@
             for (Media* media in allMedia) {
                 if ([media.isAvailable boolValue]) {
                     // Play
-                    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:media.url]];
+                    NSLog(@"Going to play %@", media.playUrl);
+                    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:media.playUrl]];
                     break;
                 }
             } 

@@ -324,10 +324,20 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             NSMutableDictionary* updates = [NSMutableDictionary dictionary];
             for (Disc* disc in results) {
                 NSMutableArray* urls = [NSMutableArray array];
+                NSMutableArray* playUrls = [NSMutableArray array];
                 for (MediaLocator* mediaLocator in disc.allMediaLocators) {
                     [urls addObject:mediaLocator.tag];
+                    [playUrls addObject:mediaLocator.playUrl];
                 }
-                [adds setObject:[NSDictionary dictionaryWithObjectsAndKeys:urls, @"urls", [self _frontCoverURLForFingerprint:disc.fingerprint], @"frontCoverURL", nil] forKey:disc.fingerprint];
+                [adds setObject:[NSDictionary dictionaryWithObjectsAndKeys:
+                                 urls, 
+                                 @"urls", 
+                                 [self _frontCoverURLForFingerprint:disc.fingerprint], 
+                                 @"frontCoverURL", 
+                                 playUrls,
+                                 @"playUrls",
+                                 nil] 
+                         forKey:disc.fingerprint];
                 [updates setObject:disc.infoDictionary forKey:disc.fingerprint];
             }
             [protocol sendMessage:[NSDictionary dictionaryWithObjectsAndKeys:adds, @"add", updates, @"update", nil]];
@@ -532,6 +542,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                 mediaLocator.fileSystemID = fileSystemID;
                 mediaLocator.relativePath = relativePath;
                 mediaLocator.tag = [NSString stringWithUUID];
+                mediaLocator.playUrl = [[NSURL fileURLWithPath:media.pathToFile] absoluteString];
             }
             media.tag = mediaLocator.tag;
             [mediaFileByTag setObject:media forKey:media.tag];
@@ -558,12 +569,15 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                 
                 /*
                  */
+                NSString* playURL = [[NSURL fileURLWithPath:media.pathToFile] absoluteString];
                 NSMutableDictionary* entry = [addsByFingerprint objectForKey:mediaFingerprint];
                 if (!entry) {
                     [addsByFingerprint setObject:
                         entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                             [NSMutableArray arrayWithObject:media.tag],
                             @"urls",
+                                 [NSMutableArray arrayWithObject:playURL],
+                                 @"playUrls",
                             nil
                         ]
                         forKey:
@@ -571,6 +585,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                     ];
                 } else {
                     [[entry objectForKey:@"urls"] addObject:media.tag];
+                    [[entry objectForKey:@"playUrls"] addObject:playURL];
                 }
                 [entry setObject:[self _frontCoverURLForFingerprint:media.fingerprint] forKey:@"frontCoverURL"];
                 
@@ -629,6 +644,8 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                 continue;
             }
             
+            mediaLocator.playUrl = [[NSURL fileURLWithPath:media.pathToFile] absoluteString];
+            
             struct statfs64 sb;
             bzero(&sb, sizeof(sb));
             int error = statfs64([media.pathToFile fileSystemRepresentation], &sb);
@@ -653,12 +670,15 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                     }
                     [managedObjectContext deleteObject:mediaLocator];
 
+                    NSString* playURL = [[NSURL fileURLWithPath:media.pathToFile] absoluteString];
                     NSMutableDictionary* entry = [deletesByFingerprint objectForKey:discFingerprint];
                     if (!entry) {
                         [deletesByFingerprint setObject:
                             entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                 [NSMutableArray arrayWithObject:media.tag],
                                 @"urls",
+                                [NSMutableArray arrayWithObject:playURL],
+                                @"playUrls",
                                 nil
                             ]
                             forKey:
@@ -666,6 +686,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                         ];
                     } else {
                         [[entry objectForKey:@"urls"] addObject:media.tag];
+                        [[entry objectForKey:@"playUrls"] addObject:playURL];
                     }
                 }
 
@@ -688,12 +709,16 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                     }
                     mediaLocator.disc = disc;
                 
+                    NSString* playURL = [[NSURL fileURLWithPath:media.pathToFile] absoluteString];
                     NSMutableDictionary* entry = [addsByFingerprint objectForKey:mediaFingerprint];
                     if (!entry) {
                         [addsByFingerprint setObject:
                             entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                 [NSMutableArray arrayWithObject:media.tag],
                                 @"urls",
+                                     [NSMutableArray arrayWithObject:playURL],
+                                     @"playUrls",
+
                                 nil
                             ]
                             forKey:
@@ -701,6 +726,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                         ];
                     } else {
                         [[entry objectForKey:@"urls"] addObject:media.tag];
+                        [[entry objectForKey:@"playUrls"] addObject:playURL];
                     }
                     [entry setObject:[self _frontCoverURLForFingerprint:media.fingerprint] forKey:@"frontCoverURL"];
                 }
@@ -756,6 +782,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
             NSString* fingerprint = nil;
             MediaLocator* mediaLocator = [self _findMediaLocatorForTag:media.tag];
+            mediaLocator.playUrl = [[NSURL fileURLWithPath:media.pathToFile] absoluteString];
             if (mediaLocator) {
                 Disc* disc = mediaLocator.disc;
                 fingerprint = disc.fingerprint;
@@ -766,12 +793,16 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                 [managedObjectContext deleteObject:mediaLocator];
             }
                 
+            NSString* playURL = [[NSURL fileURLWithPath:media.pathToFile] absoluteString];
             NSMutableDictionary* entry = [deletesByFingerprint objectForKey:fingerprint];
             if (!entry) {
                 [deletesByFingerprint setObject:
                     entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                         [NSMutableArray arrayWithObject:media.tag],
                         @"urls",
+                             [NSMutableArray arrayWithObject:playURL],
+                             @"playUrls",
+
                         nil
                     ]
                     forKey:
@@ -779,6 +810,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                 ];
             } else {
                 [[entry objectForKey:@"urls"] addObject:media.tag];
+                [[entry objectForKey:@"playUrls"] addObject:playURL];
             }
         }
 

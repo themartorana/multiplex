@@ -7,6 +7,7 @@
 @dynamic url;
 @dynamic engine;
 @dynamic isAvailable;
+@dynamic playUrl;
 
 //- (void) setDisc:(Disc*)_disc
 

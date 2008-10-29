@@ -8,5 +8,6 @@
 @dynamic lastSeen;
 @dynamic tag;
 @dynamic disc;
+@dynamic playUrl;
 
 @end

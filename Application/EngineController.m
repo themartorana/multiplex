@@ -493,9 +493,12 @@ NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
                 /*  For each URL provided, create a media object to represent it,
                  *  and attached it to our disc.
                  */
-                for (NSString* url in [info objectForKey:@"urls"]) {
+                NSArray* urls = [info objectForKey:@"urls"];
+                NSArray* playUrls = [info objectForKey:@"playUrls"];
+                for (int i = 0; i < [urls count]; i++) {
                     Media* media = [[Media alloc] initWithEntity:mediaEntity insertIntoManagedObjectContext:managedObjectContext];
-                    media.url = url;
+                    media.url = [urls objectAtIndex:i];
+                    media.playUrl = [playUrls objectAtIndex:i];
                     media.engine = engine;
                     media.disc = disc;
                     [media release];

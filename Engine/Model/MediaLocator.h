@@ -11,5 +11,6 @@
 @property (retain) NSDate* lastSeen;
 @property (retain) NSString* tag;
 @property (retain) Disc* disc;
+@property (retain) NSString* playUrl;
 
 @end

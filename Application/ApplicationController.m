@@ -90,13 +90,9 @@
                 
                 
                 // Try something here
-                const char *temp = [baseFolder cString];
-                int len = strlen(temp);
-                char installPath [len+1];
-                strcpy(installPath, temp);
-                
+                const char* installPath = [baseFolder fileSystemRepresentation];
                 char myToolPath[] = "/bin/mkdir";
-                char *myArguments[] = { "-m", "777", installPath, NULL };
+                char *myArguments[] = { "-m", "777", (char*)installPath, NULL };
                 FILE *myCommunicationsPipe = NULL;
                 
                 authFlags = kAuthorizationFlagDefaults; 

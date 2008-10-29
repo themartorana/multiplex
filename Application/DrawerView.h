@@ -10,6 +10,7 @@
 
 @property BOOL isOpen;
 @property (retain) NSView* contentView;
+@property (readonly) NSView* upperView;
 
 - (IBAction) toggle:(id)sender;
 

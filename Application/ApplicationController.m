@@ -23,6 +23,8 @@
 #import <mach-o/dyld.h>
 #import "Licensing_dylib.c"
 
+#import <Security/Security.h>
+
 @interface ApplicationController (Private)
 - (void) openInfoView:(NSNotification*)notification;
 @end
@@ -50,18 +52,62 @@
         [NSDescriptionValueTransformer registerYourself];
         managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Multiplex" ofType:@"mom"]]];
 
+        NSError* error = nil;
+
         NSFileManager* fileManager = [NSFileManager defaultManager];
         NSString* baseFolder = @"/Library/Application Support/Multiplex";
         NSString* pathToDatabase = [baseFolder stringByAppendingPathComponent:@"Movie.database"];
         BOOL isDirectory = NO;
         if (![fileManager fileExistsAtPath:baseFolder isDirectory:&isDirectory] || !isDirectory) {
-            [fileManager removeItemAtPath:baseFolder error:nil];
+            [fileManager removeItemAtPath:baseFolder error:&error];
             if (![fileManager createDirectoryAtPath:baseFolder attributes:nil]) {
                 /* TODO: Handle this condition */;
+                NSLog(@"no.");
+                
+                AuthorizationItem myItems[1];
+                myItems[0].name = "system.finder.folder.create";
+                myItems[0].valueLength = 0;
+                myItems[0].value = NULL;
+                myItems[0].flags = 0;
+                
+                AuthorizationRights authSet;
+                authSet.count = 1;
+                authSet.items = myItems;
+                
+                AuthorizationFlags authFlags = kAuthorizationFlagDefaults | 
+                    kAuthorizationFlagInteractionAllowed |
+                    kAuthorizationFlagExtendRights;
+                
+                AuthorizationRef myAuthorizationRef;
+                OSStatus myStatus;
+                
+                myStatus = AuthorizationCreate(&authSet, 
+                                               kAuthorizationEmptyEnvironment, 
+                                               authFlags, 
+                                               &myAuthorizationRef);
+                
+                
+                // Try something here
+                const char *temp = [baseFolder cString];
+                int len = strlen(temp);
+                char installPath [len+1];
+                strcpy(installPath, temp);
+                
+                char myToolPath[] = "/bin/mkdir";
+                char *myArguments[] = { "-m", "777", installPath, NULL };
+                FILE *myCommunicationsPipe = NULL;
+                
+                authFlags = kAuthorizationFlagDefaults; 
+                myStatus = AuthorizationExecuteWithPrivileges(myAuthorizationRef, 
+                                                              myToolPath, 
+                                                              authFlags, 
+                                                              myArguments,
+                                                              &myCommunicationsPipe);
+                
+                AuthorizationFree(myAuthorizationRef, kAuthorizationFlagDestroyRights);
             }
         }
 
-        NSError* error = nil;
         persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
         if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabase] options:nil error:&error]) {
             [fileManager removeItemAtPath:pathToDatabase error:nil];

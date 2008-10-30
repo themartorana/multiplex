@@ -15,7 +15,6 @@
 
 @property (readonly) void* mediaInfo;
 
-@property (retain) Disc* disc;
 @property (retain) NSString* tag;
 @property (retain) NSString* fingerprint;
 @property (readonly) NSString* pathToFile;

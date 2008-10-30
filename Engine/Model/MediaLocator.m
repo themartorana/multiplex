@@ -2,11 +2,10 @@
 
 @implementation MediaLocator
 
-@dynamic fileSystemID;
-@dynamic relativePath;
-@dynamic isAvailable;
-@dynamic lastSeen;
+@dynamic pathToFile;
 @dynamic tag;
-@dynamic disc;
+@dynamic lastSeen;
+@dynamic fingerprint;
+@dynamic isAvailable;
 
 @end

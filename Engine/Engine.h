@@ -8,7 +8,6 @@
     NSManagedObjectModel* managedObjectModel;
     NSPersistentStoreCoordinator* persistentStoreCoordinator;
     NSManagedObjectContext* managedObjectContext;
-    NSEntityDescription* discEntity;
     NSEntityDescription* mediaLocatorEntity;
     /**/
     NSMutableDictionary* mediaFileByTag;
@@ -19,7 +18,7 @@
     int networkPort;
     NSNetService* netService;
     NSMutableArray* mediaSources;
-    NSURL* baseImageURL;
+    NSURL* baseWebServerURL;
     HTTPServer* imageServer;
 }
 

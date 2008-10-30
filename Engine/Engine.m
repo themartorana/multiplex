@@ -1,8 +1,6 @@
 #import "Engine.h"
-#import "Model/Disc.h"
 #import "Model/MediaLocator.h"
 
-#import <DiscIdentKit/DiscIdentKit.h>
 #import <CoreData/CoreData.h>
 #import <Toolkit/Toolkit.h>
 #import <JSONKit/JSONKit.h>
@@ -20,7 +18,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 - (void) _loadMediaSourcePlugins;
 - (void) _stopMediaSourcePlugins;
 - (void) _republishNetService;
-- (NSString*) _frontCoverURLForFingerprint:(NSString*)fingeprint;
+- (NSString*) _frontCoverURLForTag:(NSString*)fingeprint;
 
 @end
 
@@ -96,13 +94,34 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             NSURL* modelURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Engine" ofType:@"mom"]];
             managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
             persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
-            [persistentStoreCoordinator addPersistentStoreWithType:NSInMemoryStoreType configuration:nil URL:nil options:nil error:nil];
+            if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:@"/Library/Application Support/Multiplex/Engine.database"] options:nil error:nil]) {
+                [persistentStoreCoordinator addPersistentStoreWithType:NSInMemoryStoreType configuration:nil URL:nil options:nil error:nil];
+            }
             managedObjectContext = [[NSManagedObjectContext alloc] init];
             [managedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
             
             NSDictionary* entitiesByName = [managedObjectModel entitiesByName];
-            discEntity = [entitiesByName objectForKey:@"Disc"];
             mediaLocatorEntity = [entitiesByName objectForKey:@"MediaLocator"];
+
+            
+            NSDate* now = [NSDate date];
+            NSDate* thirtyDaysAgo = [NSDate dateWithTimeIntervalSinceNow:-(30 * 24 * 60 * 60)];
+            NSFileManager* fileManager = [NSFileManager defaultManager];
+            NSFetchRequest* fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+            [fetchRequest setEntity:mediaLocatorEntity];
+            for (MediaLocator* mediaLocator in [managedObjectContext executeFetchRequest:fetchRequest error:nil]) {
+                BOOL isAvailable = [fileManager fileExistsAtPath:mediaLocator.pathToFile];
+                if (isAvailable) {
+                    mediaLocator.lastSeen = now;
+                    mediaLocator.isAvailable = (id)kCFBooleanTrue;
+                } else {
+                    if (thirtyDaysAgo == [mediaLocator.lastSeen laterDate:thirtyDaysAgo]) {
+                        [managedObjectContext deleteObject:mediaLocator];
+                    } else {
+                        mediaLocator.isAvailable = (id)kCFBooleanFalse;
+                    }
+                }
+            }
         }
         
         {
@@ -114,8 +133,8 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             sin6.sin6_addr = in6addr_any;
             NSSocketPort* serverSocket = [[NSSocketPort alloc] initWithProtocolFamily:PF_INET6 socketType:SOCK_STREAM protocol:0 address:[NSData dataWithBytesNoCopy:&sin6 length:sizeof(sin6) freeWhenDone:NO]];
             struct sockaddr_in6* psin6 = (struct sockaddr_in6*)[[serverSocket address] bytes];
-            baseImageURL = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"http://%@.local:%d/", SCDynamicStoreCopyLocalHostName(NULL,NULL), ntohs(psin6->sin6_port)]];
-            NSLog(@"%@", baseImageURL);
+            baseWebServerURL = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"http://%@.local:%d/", SCDynamicStoreCopyLocalHostName(NULL,NULL), ntohs(psin6->sin6_port)]];
+            NSLog(@"%@", baseWebServerURL);
             imageServer = [[HTTPServer alloc] initWithSocketPort:serverSocket delegate:self];
         }
         
@@ -252,25 +271,11 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     [netService publishWithOptions:NSNetServiceNoAutoRename];
 }
 
-- (Disc*) _findDiscByFingerprint:(NSString*)fingerprint
-{
-    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:discEntity];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"fingerprint == %@", fingerprint]];
-    NSError* error = nil;
-    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    [fetchRequest release];
-    if (!error && [results count]) {
-        return [results objectAtIndex:0];
-    }
-    return nil;
-}
-
-- (MediaLocator*) _findMediaLocatorForFileSystemID:(NSString*)fileSystemID relativePath:(NSString*)relativePath
+- (MediaLocator*) _findMediaLocatorByPathToFile:(NSString*)pathToFile fingerprint:(NSString*)fingeprint 
 {
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:mediaLocatorEntity];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"fileSystemID == %@ and relativePath == %@", fileSystemID, relativePath]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"pathToFile == %@ and fingerprint == %@", pathToFile, fingeprint]];
     NSError* error = nil;
     NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
     [fetchRequest release];
@@ -280,7 +285,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     return nil;
 }
 
-- (MediaLocator*) _findMediaLocatorForTag:(NSString*)tag 
+- (MediaLocator*) _findMediaLocatorByTag:(NSString*)tag 
 {
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:mediaLocatorEntity];
@@ -294,9 +299,14 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     return nil;
 }
 
-- (NSString*) _frontCoverURLForFingerprint:(NSString*)fingerprint
+- (NSString*) _infoURLForTag:(NSString*)tag
 {
-    return [[NSURL URLWithString:[NSString stringWithFormat:@"/%@/FrontCover", fingerprint] relativeToURL:baseImageURL] absoluteString];
+    return [[NSURL URLWithString:[NSString stringWithFormat:@"/%@/Info.json", tag] relativeToURL:baseWebServerURL] absoluteString];
+}
+
+- (NSString*) _frontCoverURLForTag:(NSString*)tag
+{
+    return [[NSURL URLWithString:[NSString stringWithFormat:@"/%@/FrontCover", tag] relativeToURL:baseWebServerURL] absoluteString];
 }
 
 - (void) acceptConnection:(NSNotification*)notification 
@@ -313,145 +323,26 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         setsockopt(fd, SOL_SOCKET, SO_RCVBUF, (void*)&receiveBufferSize, sizeof(receiveBufferSize));
         
         protocol = [MessageProtocol protocolWithDelegate:self fileHandleForReading:connection fileHandleForWriting:connection];
-        
-        NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-        [fetchRequest setEntity:discEntity];
-        NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:nil];
-        if ([results count]) {
-            NSMutableDictionary* adds = [NSMutableDictionary dictionary];
-            NSMutableDictionary* updates = [NSMutableDictionary dictionary];
-            for (Disc* disc in results) {
-                NSMutableArray* tags = [NSMutableArray array];
-                for (MediaLocator* mediaLocator in disc.allMediaLocators) {
-                    [tags addObject:mediaLocator.tag];
+
+        NSMutableDictionary* adds = nil;
+        @synchronized (managedObjectContext) {
+            NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+            [fetchRequest setEntity:mediaLocatorEntity];
+            [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"isAvailable == YES"]];
+            NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:nil];
+            if ([results count]) {
+                adds = [NSMutableDictionary dictionary];
+                for (MediaLocator* mediaLocator in results) {
+                    [adds setObject:[NSDictionary dictionaryWithObjectsAndKeys:mediaLocator.pathToFile, @"pathToFile", mediaLocator.fingerprint, @"fingerprint", nil] forKey:mediaLocator.tag];
                 }
-                [adds setObject:[NSDictionary dictionaryWithObjectsAndKeys:tags, @"tags", [self _frontCoverURLForFingerprint:disc.fingerprint], @"frontCoverURL", nil] forKey:disc.fingerprint];
-                [updates setObject:disc.infoDictionary forKey:disc.fingerprint];
             }
-            [protocol sendMessage:[NSDictionary dictionaryWithObjectsAndKeys:adds, @"add", updates, @"update", nil]];
+        }
+        if (adds) {  
+            [protocol sendMessage:[NSDictionary dictionaryWithObjectsAndKeys:adds, @"add", nil]];
         }
         [protocols addObject:protocol];
     } @catch (id exception) {
         [protocol close];
-    }
-}
-
-- (NSMutableDictionary*) determineChangedKeysUsingDictionary:(NSMutableDictionary*)ad andDictionary:(NSMutableDictionary*)bd
-{
-    NSMutableDictionary* newKeys = nil;
-    NSEnumerator* a = [[[ad allKeys] sortedArrayUsingSelector:@selector(compare:)] objectEnumerator];
-    NSEnumerator* b = [[[bd allKeys] sortedArrayUsingSelector:@selector(compare:)] objectEnumerator];
-    NSString* ak = [a nextObject], *bk = [b nextObject];
-    id bv = [bd objectForKey:bk];
-    while (bk && ak) {
-        int v = [bk compare:ak];
-        if (v > 0) {
-            ak = [a nextObject];
-        } else if (v < 0) {
-            if (!newKeys) {
-                newKeys = [NSMutableDictionary dictionary];
-            }
-            [newKeys setObject:[bd objectForKey:bk] forKey:bk];
-            bk = [b nextObject];
-            bv = [bd objectForKey:bk];
-        } else if (v == 0) {
-            if (![bv isEqual:[ad objectForKey:bk]]) {
-                if (!newKeys) {
-                    newKeys = [NSMutableDictionary dictionary];
-                }
-                [newKeys setObject:[bd objectForKey:bk] forKey:bk];
-            }
-            bk = [b nextObject];
-            bv = [bd objectForKey:bk];
-        }
-    }
-    if (bk) {
-        if (!newKeys) {
-            newKeys = [NSMutableDictionary dictionary];
-        }
-        do {
-            [newKeys setObject:bv forKey:bk];
-        } while ((bk = [b nextObject]) && (bv = [bd objectForKey:bk]));
-    }
-    return newKeys;
-}
-
-- (void) mergeInfoForDisc:(NSDictionary*)discInfo withMediaInfo:(NSDictionary*)mediaInfo newKeyPathsAndObjects:(NSMutableDictionary**)newKeyPathsAndObjects mergedInfoDictionary:(NSMutableDictionary**)mergedInfoDictionary 
-{
-    /*  Grab the relevant parts of the Disc Info
-     */
-    NSMutableDictionary* infoA = [NSMutableDictionary dictionaryWithDictionary:discInfo];
-    NSMutableDictionary* movieA = [infoA objectForKey:@"movie"];
-    if (!movieA) {
-        [infoA setObject:movieA = [NSMutableDictionary dictionary] forKey:@"movie"];
-    }
-    NSMutableArray* synthesizedKeysA = [movieA objectForKey:@"synthesized-keys"];
-    if (!synthesizedKeysA) {
-        [movieA setObject:synthesizedKeysA = [NSMutableArray array] forKey:@"synthesized-keys"];
-    }
-    NSMutableArray* userKeysA = [NSMutableArray arrayWithArray:[movieA allKeys]];
-    [userKeysA removeObjectsInArray:synthesizedKeysA];
-
-    /*  Grab the relevant parts of the MediaFile Info
-     */
-    NSMutableDictionary* infoB = [NSMutableDictionary dictionaryWithDictionary:mediaInfo];
-    NSMutableDictionary* movieB = [infoB objectForKey:@"movie"];
-    if (!movieB) {
-        [infoB setObject:movieB = [NSMutableDictionary dictionary] forKey:@"movie"];
-    }
-    NSMutableArray* synthesizedKeysB = [movieB objectForKey:@"synthesized-keys"];
-    if (!synthesizedKeysB) {
-        [movieB setObject:synthesizedKeysB = [NSMutableArray array] forKey:@"synthesized-keys"];
-    }
-    NSMutableArray* userKeysB = [NSMutableArray arrayWithArray:[movieB allKeys]];
-    [userKeysB removeObjectsInArray:synthesizedKeysB];
-        
-    /*  Merge the user and synthesized keys arrays from both dictionaries (into
-     *  userKeysB and synthesizedKeysB, respectively).
-     */
-    NSMutableSet* mergedSynthesizedKeys = [NSMutableSet setWithArray:synthesizedKeysA];
-    NSMutableSet* mergedUserKeys = [NSMutableSet setWithArray:userKeysA];
-    [mergedUserKeys addObjectsFromArray:userKeysB];
-    [mergedSynthesizedKeys addObjectsFromArray:synthesizedKeysB];
-    [mergedSynthesizedKeys minusSet:mergedUserKeys];
-    /**/
-    [userKeysB removeAllObjects];
-    [userKeysB addObjectsFromArray:[mergedUserKeys allObjects]];
-    [synthesizedKeysB removeAllObjects];
-    [synthesizedKeysB addObjectsFromArray:[mergedSynthesizedKeys allObjects]];
-    
-    /*  Grab any second-level meta keys that aren't prefixed with an "_" and 
-     *  merge them into the movieB dictionary as synthesized keys.
-     */
-    NSMutableDictionary* topLevelB = [infoB objectForKey:@"meta"];
-    for (NSString* topLevelKeyB in topLevelB) {
-        NSMutableDictionary* secondLevelB = [topLevelB objectForKey:topLevelKeyB];
-        for (NSString* secondLevelKeyB in secondLevelB) {
-            if (![secondLevelKeyB hasPrefix:@"_"] && ![mergedUserKeys containsObject:secondLevelKeyB]) {
-                id object = [secondLevelB objectForKey:secondLevelKeyB];
-                [movieB setObject:object forKey:secondLevelKeyB];
-                if (![synthesizedKeysB containsObject:secondLevelKeyB]) {
-                    [synthesizedKeysB addObject:secondLevelKeyB];
-                }
-            }
-        }
-    }
-    [synthesizedKeysB sortUsingSelector:@selector(compare:)];
-
-    /*  Flatten infoA and infoB and merge them into a new dictionary, and assign
-     *  that to the disc.infoDictionary property.
-     */
-    NSMutableDictionary* flattenedInfoA = [infoA flattenToKeyPathsAndObjects];
-    NSMutableDictionary* flattenedInfoB = [infoB flattenToKeyPathsAndObjects];
-    NSMutableDictionary* changedKeys = [self determineChangedKeysUsingDictionary:flattenedInfoA andDictionary:flattenedInfoB];
-    if ([changedKeys count]) {
-        if (mergedInfoDictionary) {
-            [flattenedInfoA addEntriesFromDictionary:changedKeys];
-            *mergedInfoDictionary = [NSDictionary dictionaryWithExpandedKeyPathsAndObjects:flattenedInfoA];
-        }
-        if (newKeyPathsAndObjects) {
-            *newKeyPathsAndObjects = changedKeys;
-        }
     }
 }
 
@@ -476,27 +367,23 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 - (void) processURL:(NSURL*)url connection:(HTTPConnection*)connection;
 {
     NSArray* parts = [[url path] componentsSeparatedByString:@"/"];
-    NSString* fingerprint = nil;
-    if ([parts count] == 3 && [@"FrontCover" isEqualToString:[parts objectAtIndex:2]] && [fingerprint = [parts objectAtIndex:1] length] == 36) {
-        Disc* disc = nil;
-        @synchronized (managedObjectContext) {
-            disc = [self _findDiscByFingerprint:fingerprint];
+    NSString* tag = nil;
+    if ([parts count] == 3 && [@"FrontCover" isEqualToString:[parts objectAtIndex:2]] && [tag = [parts objectAtIndex:1] length] == 36) {
+        MediaFile* mediaFile = [mediaFileByTag objectForKey:tag];
+        NSData* frontCover = mediaFile.frontCover;
+        if (frontCover) {
+            [connection replyWithData:frontCover MIMEType:@"image/png"];
+            return;
         }
-        if (disc) {
-            NSData* frontCover = nil;
-            for (MediaLocator* mediaLocator in disc.allMediaLocators) {
-                MediaFile* mediaFile = [mediaFileByTag objectForKey:mediaLocator.tag];
-                frontCover = mediaFile.frontCover;
-                if (frontCover) {
-                    break;
-                }
-            }
-            if (frontCover) {
-                [connection replyWithData:frontCover MIMEType:@"image/png"];
-                return;
-            }
+    } else if ([parts count] == 3 && [@"Info.json" isEqualToString:[parts objectAtIndex:2]] && [tag = [parts objectAtIndex:1] length] == 36) {
+        MediaFile* mediaFile = [mediaFileByTag objectForKey:tag];
+        NSData* infoJSON = [NSData dataWithObjectAsJSON:mediaFile.infoDictionary];
+        if (infoJSON) {
+            [connection replyWithData:infoJSON MIMEType:@"text/json"];
+            return;
         }
     }
+        
     [connection replyWithStatusCode:404 message:nil];
 }
 
@@ -506,114 +393,55 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 - (void) mediaFileSource:(id<MediaFileSource>)mediaSource didAddMedia:(NSArray*)arrayOfMedia
 {
     @synchronized (managedObjectContext) {
-        NSMutableDictionary* addsByFingerprint = [NSMutableDictionary dictionary];
-        NSMutableDictionary* updatesByFingerprint = [NSMutableDictionary dictionary];
-
-        for (MediaFile* media in arrayOfMedia) {
-            struct statfs64 sb;
-            bzero(&sb, sizeof(sb));
-            int error = statfs64([media.pathToFile fileSystemRepresentation], &sb);
-            if (error) {
-                NSLog(@"Unable to statfs (%@): %s", media.pathToFile, strerror(error));
-                continue;
-            }
-            
-            /*  Search for the MediaLocator using the file system ID at the
-             *  given relative path.  If we don't find a record of it, go
-             *  ahead and setup a new one.
-             */
-            NSString* fileSystemID = [NSString stringWithFormat:@"%08x%08x", sb.f_fsid.val[1], sb.f_fsid.val[0]];
-            NSString* relativePath = [media.pathToFile substringFromIndex:strlen(sb.f_mntonname)];
-            MediaLocator* mediaLocator = [self _findMediaLocatorForFileSystemID:fileSystemID relativePath:relativePath];
-            if (!mediaLocator) {
-                mediaLocator = [[MediaLocator alloc] initWithEntity:mediaLocatorEntity insertIntoManagedObjectContext:managedObjectContext];
-                mediaLocator.fileSystemID = fileSystemID;
-                mediaLocator.relativePath = relativePath;
-                mediaLocator.tag = [NSString stringWithUUID];
-            }
-            mediaLocator.lastSeen = [NSDate date];
-            mediaLocator.isAvailable = (id)kCFBooleanTrue;
-            media.tag = mediaLocator.tag;
-            [mediaFileByTag setObject:media forKey:media.tag];
-            
-            NSString* mediaFingerprint = [media fingerprint];
-            if (mediaFingerprint) {
-                /*  Attempt to add this disc to a movie using the new fingerprint.
-                 *  If a movie doesn't exist, create one and treat it like an add,
-                 *  otherwise, we can consider this a normal update to an existing
-                 *  movie.
-                 */
-                Disc* disc = [self _findDiscByFingerprint:mediaFingerprint];
-                if (!disc) {
-                    disc = [[Disc alloc] initWithEntity:discEntity insertIntoManagedObjectContext:managedObjectContext];
-                    disc.fingerprint = mediaFingerprint;
-                    [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject:disc] error:nil];
-                    if (![disc.infoDictionary valueForKeyPath:@"meta.discident"]) {
-                        [DiscIdentQuery queryWithFingerprint:mediaFingerprint delegate:self userInfo:[disc.objectID retain] startImmediately:YES];
-                    }
-                }
-                mediaLocator.disc = disc;
-                
-                /*
-                 */
-                NSMutableDictionary* entry = [addsByFingerprint objectForKey:mediaFingerprint];
-                if (!entry) {
-                    [addsByFingerprint setObject:
-                        entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                            [NSMutableArray arrayWithObject:media.tag],
-                            @"tags",
-                            nil
-                        ]
-                        forKey:
-                            mediaFingerprint
-                    ];
-                } else {
-                    [[entry objectForKey:@"tags"] addObject:media.tag];
-                }
-                [entry setObject:[self _frontCoverURLForFingerprint:media.fingerprint] forKey:@"frontCoverURL"];
-                
-                /*  Read in the info dictionary, and merge it with any that we've
-                 *  already loaded.
-                 */
-                NSMutableDictionary* newKeyPathsAndObjects = nil;
-                NSMutableDictionary* infoDictionary = nil;
-                [self mergeInfoForDisc:disc.infoDictionary withMediaInfo:media.infoDictionary newKeyPathsAndObjects:&newKeyPathsAndObjects mergedInfoDictionary:&infoDictionary];
-                if ([newKeyPathsAndObjects count]) {
-                    NSMutableDictionary* entry = [updatesByFingerprint objectForKey:mediaFingerprint];
-                    if (!entry) {
-                        [updatesByFingerprint setObject:[NSDictionary dictionaryWithExpandedKeyPathsAndObjects:newKeyPathsAndObjects] forKey:mediaFingerprint];
+        NSMutableDictionary* adds = [NSMutableDictionary dictionary];
+        NSMutableDictionary* updates = [NSMutableDictionary dictionary];
+        NSDate* now = [NSDate date];
+        
+        for (MediaFile* mediaFile in arrayOfMedia) {            
+            if (mediaFile.fingerprint) {
+                NSMutableDictionary* addOrUpdate = nil;
+                MediaLocator* mediaLocator = [self _findMediaLocatorByPathToFile:mediaFile.pathToFile fingerprint:mediaFile.fingerprint];
+                if (mediaLocator) {
+                    if ([mediaLocator.isAvailable boolValue]) {
+                        addOrUpdate = updates;
                     } else {
-                        NSMutableDictionary* flattenedInfoForFingerprint = [entry flattenToKeyPathsAndObjects];
-                        [flattenedInfoForFingerprint addEntriesFromDictionary:newKeyPathsAndObjects];
-                        [updatesByFingerprint setObject:[NSDictionary dictionaryWithExpandedKeyPathsAndObjects:flattenedInfoForFingerprint] forKey:mediaFingerprint];
+                        addOrUpdate = adds;
                     }
-                    disc.infoDictionary = infoDictionary;
-                    for (MediaLocator* mediaLocator in disc.allMediaLocators) {
-                        MediaFile* mediaFile = [mediaFileByTag objectForKey:mediaLocator.tag];
-                        if (mediaFile) {
-                            mediaFile.infoDictionary = infoDictionary;
-                        }
-                    }
+                } else {
+                    addOrUpdate = adds;
+                    mediaLocator = [[[MediaLocator alloc] initWithEntity:mediaLocatorEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
+                    mediaLocator.tag = [NSString stringWithUUID];
                 }
+                mediaLocator.lastSeen = now;
+                mediaLocator.pathToFile = mediaFile.pathToFile;
+                mediaLocator.fingerprint = mediaFile.fingerprint;
+                mediaLocator.isAvailable = (id)kCFBooleanTrue;
+
+                mediaFile.tag = mediaLocator.tag;
+                [mediaFileByTag setObject:mediaFile forKey:mediaFile.tag];
+
+                NSAssert(addOrUpdate, @"wtf?");
+                [addOrUpdate setObject:[NSDictionary dictionaryWithObjectsAndKeys:[self _infoURLForTag:mediaFile.tag], @"infoURL", [self _frontCoverURLForTag:mediaFile.tag], @"frontCoverURL", mediaLocator.pathToFile, @"pathToFile", mediaLocator.fingerprint, @"fingerprint", nil] forKey:mediaLocator.tag];
             } else {
-                static NSString* pathToMDImport = @"/usr/bin/mdimport";
-                [NSTask launchedTaskWithLaunchPath:pathToMDImport arguments:[NSArray arrayWithObjects:pathToMDImport, [media pathToFile], nil]];
+                [NSTask launchedTaskWithLaunchPath:@"/usr/bin/mdimport" arguments:[NSArray arrayWithObjects:@"mdimport", mediaFile.pathToFile, nil]];
             }
         }
         
-        NSError* error = nil;
-        [managedObjectContext save:&error];
-        NSLog(@"%s - %@ - %@", __PRETTY_FUNCTION__, error, error.userInfo);
-
         /*  Build and send the message.
          */
-        if ([addsByFingerprint count] || [updatesByFingerprint count]) {
-            NSMutableDictionary* message = [NSMutableDictionary dictionary];
-            if ([addsByFingerprint count]) {
-                [message setObject:addsByFingerprint forKey:@"add"];
+        if ([adds count] || [updates count]) {
+            NSError* error = nil;
+            [managedObjectContext save:&error];
+            if (error) {
+                NSLog(@"%s - %@ - %@", __PRETTY_FUNCTION__, error, error.userInfo);
             }
-            if ([updatesByFingerprint count]) {
-                [message setObject:updatesByFingerprint forKey:@"update"];
+            
+            NSMutableDictionary* message = [NSMutableDictionary dictionary];
+            if ([adds count]) {
+                [message setObject:adds forKey:@"add"];
+            }
+            if ([updates count]) {
+                [message setObject:updates forKey:@"update"];
             }
             [self sendMessage:message];
         }
@@ -623,140 +451,62 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 - (void) mediaFileSource:(id<MediaFileSource>)mediaSource didUpdateMedia:(NSArray*)arrayOfMedia
 {
     @synchronized (managedObjectContext) {
-        NSMutableDictionary* addsByFingerprint = [NSMutableDictionary dictionary];
-        NSMutableDictionary* updatesByFingerprint = [NSMutableDictionary dictionary];
-        NSMutableDictionary* deletesByFingerprint = [NSMutableDictionary dictionary];
-        for (MediaFile* media in arrayOfMedia) {
-            MediaLocator* mediaLocator = [self _findMediaLocatorForTag:media.tag];
-            if (!mediaLocator) {
-                NSLog(@"Unable to find MedaLocator (%@)", media.tag);
-                continue;
-            }
+        NSMutableDictionary* adds = [NSMutableDictionary dictionary];
+        NSMutableDictionary* updates = [NSMutableDictionary dictionary];
+        NSMutableArray* deletes = [NSMutableArray array];
+        NSMutableDictionary* change = [NSMutableDictionary dictionary];
+
+        for (MediaFile* mediaFile in arrayOfMedia) {
+            MediaLocator* mediaLocator = [self _findMediaLocatorByTag:mediaFile.tag];
+            NSAssert(mediaLocator, @"wtf?");
             
-            struct statfs64 sb;
-            bzero(&sb, sizeof(sb));
-            int error = statfs64([media.pathToFile fileSystemRepresentation], &sb);
-            if (error) {
-                NSLog(@"Unable to statfs (%@): %s", media.pathToFile, strerror(error));
-                continue;
-            }
-            
-            NSString* relativePath = [media.pathToFile substringFromIndex:strlen(sb.f_mntonname)];
-            NSString* mediaFingerprint = media.fingerprint;
-            NSString* discFingerprint = mediaLocator.disc.fingerprint;
-            if (mediaFingerprint && ![mediaFingerprint isEqualToString:discFingerprint] || ![mediaLocator.relativePath isEqualToString:relativePath]) {
-                /*  Remove this disc from the movie it used to match up with.  If
-                 *  that causes there to be no more discs for that movie, then 
-                 *  we'll need to delete it.
-                 */
-                if (discFingerprint) {
-                    Disc* disc = mediaLocator.disc;
-                    [managedObjectContext deleteObject:mediaLocator];
-                    if (disc) {
-                        [disc.allMediaLocators removeObject:mediaLocator];
-                        if (0 == [disc.allMediaLocators count]) {
-                            [managedObjectContext deleteObject:disc];
-                        }
-                        NSMutableDictionary* entry = [deletesByFingerprint objectForKey:disc.fingerprint];
-                        if (!entry) {
-                            [deletesByFingerprint setObject:
-                             entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                    [NSMutableArray arrayWithObject:media.tag],
-                                    @"tags",
-                                    nil
-                                ]
-                                forKey:
-                                    disc.fingerprint
-                             ];
-                        } else {
-                            [[entry objectForKey:@"tags"] addObject:media.tag];
-                        }
-                    }
+            [mediaFile reload];
+
+            if (!mediaFile.fingerprint) {
+                mediaLocator.isAvailable = (id)kCFBooleanFalse;
+                [deletes addObject:mediaFile.tag];
+            } else {
+                if (![mediaFile.pathToFile isEqualToString:mediaLocator.pathToFile]) {
+                    mediaLocator.pathToFile = mediaFile.pathToFile;
+                    [change setObject:mediaFile.pathToFile forKey:@"pathToFile"];
                 }
-
-                [media reload];
-
-                /*  Attempt to add this disc to a movie using the new fingerprint.
-                 *  If a movie doesn't exist, create one and treat it like an add,
-                 *  otherwise, we can consider this a normal update to an existing
-                 *  movie.
-                 */
-                mediaLocator.relativePath = relativePath;
-                mediaLocator.lastSeen = [NSDate date];
-                mediaLocator.isAvailable = (id)kCFBooleanTrue;
-                
-                Disc* disc = nil;
-                if (mediaFingerprint) {
-                    disc = [self _findDiscByFingerprint:mediaFingerprint];
-                    if (!disc) {
-                        disc = [[Disc alloc] initWithEntity:discEntity insertIntoManagedObjectContext:managedObjectContext];
-                        disc.fingerprint = mediaFingerprint;
-                        [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject:disc] error:nil];
-                        if (![disc.infoDictionary valueForKeyPath:@"meta.discident"]) {
-                            [DiscIdentQuery queryWithFingerprint:mediaFingerprint delegate:self userInfo:[disc.objectID retain] startImmediately:YES];
-                        }
-                    }
-                    mediaLocator.disc = disc;
-                
-                    NSMutableDictionary* entry = [addsByFingerprint objectForKey:mediaFingerprint];
-                    if (!entry) {
-                        [addsByFingerprint setObject:
-                            entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                [NSMutableArray arrayWithObject:media.tag],
-                                @"tags",
-                                nil
-                            ]
-                            forKey:
-                                mediaFingerprint
-                        ];
-                    } else {
-                        [[entry objectForKey:@"tags"] addObject:media.tag];
-                    }
-                    [entry setObject:[self _frontCoverURLForFingerprint:media.fingerprint] forKey:@"frontCoverURL"];
+                if (![mediaFile.fingerprint isEqualToString:mediaLocator.fingerprint]) {
+                    mediaLocator.fingerprint = mediaFile.fingerprint;
+                    [change setObject:mediaFile.fingerprint forKey:@"fingerprint"];
                 }
-
-                /*  Read in the info dictionary, and merge it with any that we've
-                 *  already loaded.
-                 */
-                NSMutableDictionary* newKeyPathsAndObjects = nil;
-                NSMutableDictionary* infoDictionary = nil;
-                [self mergeInfoForDisc:media.disc.infoDictionary withMediaInfo:media.infoDictionary newKeyPathsAndObjects:&newKeyPathsAndObjects mergedInfoDictionary:&infoDictionary];
-                if ([newKeyPathsAndObjects count]) {
-                    NSMutableDictionary* entry = [updatesByFingerprint objectForKey:mediaFingerprint];
-                    if (!entry) {
-                        [updatesByFingerprint setObject:[NSDictionary dictionaryWithExpandedKeyPathsAndObjects:newKeyPathsAndObjects] forKey:mediaFingerprint];
+                
+                if ([change count]) {
+                    if ([mediaLocator.isAvailable boolValue]) {
+                        [updates setObject:change forKey:mediaFile.tag];
                     } else {
-                        NSMutableDictionary* flattenedInfoForFingerprint = [entry flattenToKeyPathsAndObjects];
-                        [flattenedInfoForFingerprint addEntriesFromDictionary:newKeyPathsAndObjects];
-                        [updatesByFingerprint setObject:[NSDictionary dictionaryWithExpandedKeyPathsAndObjects:flattenedInfoForFingerprint] forKey:mediaFingerprint];
+                        mediaLocator.isAvailable = (id)kCFBooleanTrue;
+                        [change setObject:[self _infoURLForTag:mediaFile.tag] forKey:@"infoURL"];
+                        [change setObject:[self _frontCoverURLForTag:mediaFile.tag] forKey:@"frontCoverURL"];
+                        [adds setObject:change forKey:mediaFile.tag];
                     }
-                    disc.infoDictionary = infoDictionary;
-                    for (MediaLocator* mediaLocator in disc.allMediaLocators) {
-                        MediaFile* mediaFile = [mediaFileByTag objectForKey:mediaLocator.tag];
-                        if (mediaFile) {
-                            mediaFile.infoDictionary = infoDictionary;
-                        }
-                    }
+                    change = [NSMutableDictionary dictionary];
                 }
             }
         }
 
-        NSError* error = nil;
-        [managedObjectContext save:&error];
-        NSLog(@"%s - %@ - %@", __PRETTY_FUNCTION__, error, error.userInfo);
-        
         /*  Build and send the message.
          */
-        if ([addsByFingerprint count] || [updatesByFingerprint count] || [deletesByFingerprint count]) {
+        if ([adds count] || [updates count] || [deletes count]) {
+            NSError* error = nil;
+            [managedObjectContext save:&error];
+            if (error) {
+                NSLog(@"%s - %@ - %@", __PRETTY_FUNCTION__, error, error.userInfo);
+            }
+            
             NSMutableDictionary* message = [NSMutableDictionary dictionary];
-            if ([addsByFingerprint count]) {
-                [message setObject:addsByFingerprint forKey:@"add"];
+            if ([adds count]) {
+                [message setObject:adds forKey:@"add"];
             }
-            if ([updatesByFingerprint count]) {
-                [message setObject:updatesByFingerprint forKey:@"update"];
+            if ([updates count]) {
+                [message setObject:updates forKey:@"update"];
             }
-            if ([deletesByFingerprint count]) {
-                [message setObject:deletesByFingerprint forKey:@"delete"];
+            if ([deletes count]) {
+                [message setObject:deletes forKey:@"delete"];
             }
             [self sendMessage:message];
         }
@@ -766,45 +516,29 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 - (void) mediaFileSource:(id<MediaFileSource>)mediaSource didRemoveMedia:(NSArray*)arrayOfMedia
 {
     @synchronized (managedObjectContext) {
-        NSMutableDictionary* deletesByFingerprint = [NSMutableDictionary dictionary];
+        NSMutableArray* deletes = [NSMutableArray array];
         for (MediaFile* media in arrayOfMedia) {
             [mediaFileByTag removeObjectForKey:media.tag];
-            MediaLocator* mediaLocator = [self _findMediaLocatorForTag:media.tag];
-            if (mediaLocator) {
-                [managedObjectContext deleteObject:mediaLocator];
-                Disc* disc = mediaLocator.disc;
-                if (1 == [disc.allMediaLocators count]) {
-                    [managedObjectContext deleteObject:disc];
-                }
-                NSMutableDictionary* entry = [deletesByFingerprint objectForKey:disc.fingerprint];
-                if (!entry) {
-                    [deletesByFingerprint setObject:
-                     entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                            [NSMutableArray arrayWithObject:media.tag],
-                            @"tags",
-                            nil
-                        ]
-                        forKey:
-                            disc.fingerprint
-                     ];
-                } else {
-                    [[entry objectForKey:@"tags"] addObject:media.tag];
-                }
-            }
+            
+            MediaLocator* mediaLocator = [self _findMediaLocatorByTag:media.tag];
+            NSAssert(mediaLocator, @"wtf?");
+            
+            mediaLocator.isAvailable = (id)kCFBooleanFalse;
+
+            [deletes addObject:mediaLocator.tag];
         }
 
-        NSError* error = nil;
-        [managedObjectContext save:&error];
-        NSLog(@"%s - %@ - %@", __PRETTY_FUNCTION__, error, error.userInfo);
-        
         /*  Build and send the message.
          */
-        if ([deletesByFingerprint count]) {
-            NSMutableDictionary* message = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                deletesByFingerprint,
-                @"delete",
-                nil
-            ];
+        if ([deletes count]) {
+            NSError* error = nil;
+            [managedObjectContext save:&error];
+            if (error) {
+                NSLog(@"%s - %@ - %@", __PRETTY_FUNCTION__, error, error.userInfo);
+            }
+            
+            NSMutableDictionary* message = [NSMutableDictionary dictionary];
+            [message setObject:deletes forKey:@"delete"];
             [self sendMessage:message];
         }
     }
@@ -834,39 +568,6 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 - (void) protocolDidClose:(MessageProtocol*)protocol
 {
     [protocols removeObject:protocol];
-}
-
-
-#pragma mark DiscIdentQueryDelegate
-
-- (void) discIdentQuery:(DiscIdentQuery*)query didFailWithError:(NSError*)error userInfo:(void*)userInfo
-{
-    [(NSManagedObjectID*)userInfo release];
-}
-
-- (void) discIdentQuery:(DiscIdentQuery*)query didReceiveResponse:(NSDictionary*)response userInfo:(void*)userInfo
-{
-    @synchronized (managedObjectContext) {
-        NSManagedObjectID* objectID = userInfo;
-        Disc* disc = (Disc*)[managedObjectContext objectWithID:objectID];
-        if (disc) {
-            NSMutableDictionary* newKeyPathsAndObjects = nil;
-            NSMutableDictionary* infoDictionary = nil;
-            [self mergeInfoForDisc:disc.infoDictionary withMediaInfo:[NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:response forKey:@"discident"] forKey:@"meta"] newKeyPathsAndObjects:&newKeyPathsAndObjects mergedInfoDictionary:&infoDictionary];
-            if ([newKeyPathsAndObjects count]) {
-                disc.infoDictionary = infoDictionary;
-                for (MediaLocator* mediaLocator in disc.allMediaLocators) {
-                    MediaFile* mediaFile = [mediaFileByTag objectForKey:mediaLocator.tag];
-                    if (mediaFile) {
-                        mediaFile.infoDictionary = infoDictionary;
-                    }
-                }
-                [managedObjectContext save:nil];
-                [self sendMessage:[NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithExpandedKeyPathsAndObjects:newKeyPathsAndObjects] forKey:disc.fingerprint] forKey:@"update"]];
-            }
-        }
-        [objectID release];
-    }
 }
 
 @end

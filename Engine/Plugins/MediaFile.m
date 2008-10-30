@@ -12,7 +12,6 @@ extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
 
 @synthesize fingerprint;
 @synthesize mediaInfo;
-@synthesize disc;
 @synthesize tag;
 @synthesize mediaFileSource;
 @synthesize frontCover;

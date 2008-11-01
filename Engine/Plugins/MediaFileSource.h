@@ -14,6 +14,7 @@
 - (void) setFrontCover:(NSData*)frontCover forMedia:(MediaFile*)media;
 - (NSString*) pathToFileForMedia:(MediaFile*)media;
 - (NSString*) fingerprintForMedia:(MediaFile*)media;
+- (NSString*) typeForMedia:(MediaFile*)media;
 - (void) reloadMedia:(MediaFile*)media;
 @end
 

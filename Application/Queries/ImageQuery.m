@@ -1,15 +1,8 @@
 #import "ImageQuery.h"
-
-#pragma mark -
-@interface ImageQuery (Private)
-- (void) _fireDidFailWithError:(NSError*)error;
-@end
+#import "Query+Private.h"
 
 #pragma mark -
 @implementation ImageQuery
-@synthesize delegate;
-@synthesize URL;
-@synthesize userInfo;
 
 + (id) imageQueryWithURL:(NSURL*)url
 {
@@ -28,82 +21,25 @@
     return query;
 }
 
-- (id) initWithURL:(NSURL*)_url
+- (void) _fireDidReceiveData:(NSData*)data ofType:(NSString*)type 
 {
-    NSAssert(_url, @"url must not be nil.");
-    if (self = [super init]) {
-        URL = [_url retain];
-    }
-    return self;
-}
-
-- (void) dealloc
-{
-    [response release];
-    [URL release];
-    [connection release];
-    [request release];
-    [receivedData release];
-    [userInfo release];
-    [super dealloc];
-}
-
-- (void) start
-{
-    NSAssert(!connection, @"This query has already been started.");
-    request = [[NSMutableURLRequest requestWithURL:URL] retain];
-    [request setTimeoutInterval:5.0];
-    connection = [[NSURLConnection alloc] initWithRequest:request delegate:[self retain] startImmediately:YES];
-}
-
-- (void) cancel
-{
-    [connection cancel];
-}
-
-@end
-
-#pragma mark -
-@implementation ImageQuery (NSURLConnectionDelegate)
-
-- (void) connection:(NSURLConnection*)connection didReceiveResponse:(NSURLResponse*)_response 
-{
-    response = [_response retain];
-    receivedData = [[NSMutableData alloc] init];
-}
-
-- (void) connection:(NSURLConnection*)connection didReceiveData:(NSData*)data 
-{
-    [receivedData appendData:data];
-}
-
-- (void) connection:(NSURLConnection*)connection didFailWithError:(NSError*)error 
-{
-    [receivedData release];
-    receivedData = nil;
-    [self _fireDidFailWithError:error];
-    [self autorelease];
-}
-
-- (void) connectionDidFinishLoading:(NSURLConnection *)connection 
-{
-    if (![receivedData length]) {
+    if (![data length]) {
         [self _fireDidFailWithError:nil];
         return;
     }
     
     if ([delegate respondsToSelector:@selector(imageQuery:didReceiveData:ofType:userInfo:)]) {
         @try {
-            [delegate imageQuery:self didReceiveData:receivedData ofType:[[response allHeaderFields] objectForKey:@"Content-Type"] userInfo:userInfo];
+            [delegate imageQuery:self didReceiveData:data ofType:type userInfo:userInfo];
         } @catch (id _exception) {
             NSLog(@"%@: Exception during %s -- %@", NSStringFromClass([self class]), __PRETTY_FUNCTION__, _exception);
         }
     }
-
+    
     if ([delegate respondsToSelector:@selector(imageQuery:didReceiveImage:userInfo:)]) {
         NSImage* image = nil;
         @try {
-            image = [[NSImage alloc] initWithData:receivedData];
+            image = [[NSImage alloc] initWithData:data];
             [delegate imageQuery:self didReceiveImage:image userInfo:userInfo];
         } @catch (id _exception) {
             NSLog(@"%@: Exception during %s -- %@", NSStringFromClass([self class]), __PRETTY_FUNCTION__, _exception);
@@ -112,7 +48,7 @@
     }
     
     if ([delegate respondsToSelector:@selector(imageQuery:didReceiveImageSource:userInfo:)]) {
-        CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)receivedData, nil);
+        CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)data, nil);
         if (imageSource) {
             @try {
                 [delegate imageQuery:self didReceiveImageSource:imageSource userInfo:userInfo];
@@ -122,16 +58,7 @@
             CFRelease(imageSource);
         }
     }
-
-    [receivedData release];
-    receivedData = nil;
-    [self autorelease];
 }
-
-@end
-
-#pragma mark -
-@implementation ImageQuery (Private)
 
 - (void) _fireDidFailWithError:(NSError*)error
 {

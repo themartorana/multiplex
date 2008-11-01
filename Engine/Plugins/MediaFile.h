@@ -17,6 +17,7 @@
 
 @property (retain) NSString* tag;
 @property (retain) NSString* fingerprint;
+@property (readonly) NSString* type;
 @property (readonly) NSString* pathToFile;
 @property (readonly) id<MediaFileSource> mediaFileSource;
 @property (assign) NSMutableDictionary* infoDictionary;

@@ -226,6 +226,12 @@ static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, DVDMediaSou
     return [pathToFile autorelease];
 }
 
+- (NSString*) typeForMedia:(MediaFile*)media
+{
+    NSAssert(media.mediaFileSource == self, @"This media doesn't belong to me.");
+    return @"public.dvdmedia";
+}
+
 - (void) _fireDidAddMedia:(NSArray*)media
 {
     if ([NSThread currentThread] == [NSThread mainThread]) {

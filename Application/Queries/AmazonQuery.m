@@ -1,16 +1,9 @@
 #import "AmazonQuery.h"
-
-#pragma mark -
-@interface AmazonQuery (Private)
-- (void) _fireDidFailWithError:(NSError*)error;
-- (void) _fireDidReceiveResponse:(NSDictionary*)response;
-@end
+#import "Query+Private.h"
 
 #pragma mark -
 @implementation AmazonQuery
-@synthesize delegate;
 @synthesize ean;
-@synthesize userInfo;
 
 + (id) amazonQueryWithAccessKey:(NSString*)accessKey ean:(NSString*)ean
 {
@@ -34,7 +27,18 @@
     NSAssert(_accessKey, @"accessKey must not be nil.");
     NSAssert(_ean, @"ean must not be nil.");
     NSAssert([_ean length] == 13, @"ean must not be exactly 13 digits long.");
-    if (self = [super init]) {
+    NSString* url = [NSString stringWithFormat:
+       @"http://webservices.amazon.com/onca/xml?Service=AWSECommerceService" \
+        "&SubscriptionId=%@" \
+        "&Operation=ItemLookup" \
+        "&ResponseGroup=Small,ItemAttributes,Images,EditorialReview" \
+        "&IdType=EAN"\
+        "&SearchIndex=DVD"\
+        "&ItemId=%@",
+        _accessKey,
+        _ean
+    ];
+    if (self = [super initWithURL:[NSURL URLWithString:url]]) {
         accessKey = [_accessKey retain];
         ean = [_ean retain];
     }
@@ -45,65 +49,15 @@
 {
     [accessKey release];
     [ean release];
-    [connection release];
-    [request release];
-    [receivedData release];
-    [userInfo release];
     [super dealloc];
 }
 
-- (void) start
-{
-    NSAssert(!connection, @"This query has already been started.");
-    NSMutableString* url = [NSMutableString stringWithCapacity:1024];
-    [url appendFormat:
-        @"http://webservices.amazon.com/onca/xml?Service=AWSECommerceService" \
-         "&SubscriptionId=%@" \
-         "&Operation=ItemLookup" \
-         "&ResponseGroup=Small,ItemAttributes,Images,EditorialReview" \
-         "&IdType=EAN"
-         "&SearchIndex=DVD",
-         accessKey
-    ];
-    [url appendFormat:@"&ItemId=%@", ean];
-    request = [[NSURLRequest requestWithURL:[NSURL URLWithString:url]] retain];
-    connection = [[NSURLConnection alloc] initWithRequest:request delegate:[self retain] startImmediately:YES];
-}
-
-- (void) cancel
-{
-    [connection cancel];
-}
-
-@end
-
-#pragma mark -
-@implementation AmazonQuery (NSURLConnectionDelegate)
-
-- (void) connection:(NSURLConnection*)connection didReceiveResponse:(NSURLResponse*)response 
-{
-    receivedData = [[NSMutableData alloc] init];
-}
-
-- (void) connection:(NSURLConnection*)connection didReceiveData:(NSData*)data 
-{
-    [receivedData appendData:data];
-}
-
-- (void) connection:(NSURLConnection*)connection didFailWithError:(NSError*)error 
-{
-    [receivedData release];
-    receivedData = nil;
-    [self _fireDidFailWithError:error];
-    [self autorelease];
-}
-
-- (void) connectionDidFinishLoading:(NSURLConnection *)connection 
+- (void) _fireDidReceiveData:(NSData*)data ofType:(NSString*)type
 {
     NSMutableDictionary* response = nil;
     NSError* error = nil;
-    if ([receivedData length] > 0) {
-        NSXMLDocument* xml = [[NSXMLDocument alloc] initWithData:receivedData options:NSXMLDocumentTidyXML error:&error];
+    if ([data length] > 0) {
+        NSXMLDocument* xml = [[NSXMLDocument alloc] initWithData:data options:NSXMLDocumentTidyXML error:&error];
         NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] initWithDateFormat:@"%Y-%m-%d" allowNaturalLanguage:NO];
         NSNumberFormatter* numberFormatter = [[NSNumberFormatter alloc] init];
         [numberFormatter setNumberStyle:NSNumberFormatterNoStyle];
@@ -235,21 +189,19 @@
         [xml release];
     }
     
-    [receivedData release];
-    receivedData = nil;
-    
     if (![response count] || error) {
         [self _fireDidFailWithError:error];
     } else {
-        [self _fireDidReceiveResponse:response];
+        if ([delegate respondsToSelector:@selector(amazonQuery:didReceiveResponse:userInfo:)]) {
+            @try {
+                [delegate amazonQuery:self didReceiveResponse:response userInfo:userInfo];
+            } @catch (id _exception) {
+                NSLog(@"AmazonQuery: Exception during amazonQuery:didReceiveResponse: -- %@", _exception);
+            }
+        }
     }
     [self autorelease];
 }
-
-@end
-
-#pragma mark -
-@implementation AmazonQuery (Private)
 
 - (void) _fireDidFailWithError:(NSError*)error
 {
@@ -258,17 +210,6 @@
             [delegate amazonQuery:self didFailWithError:error userInfo:userInfo];
         } @catch (id _exception) {
             NSLog(@"AmazonQuery: Exception during amazonQuery:didFailWithError: -- %@", _exception);
-        }
-    }
-}
-
-- (void) _fireDidReceiveResponse:(NSDictionary*)response  
-{
-    if ([delegate respondsToSelector:@selector(amazonQuery:didReceiveResponse:userInfo:)]) {
-        @try {
-            [delegate amazonQuery:self didReceiveResponse:response userInfo:userInfo];
-        } @catch (id _exception) {
-            NSLog(@"AmazonQuery: Exception during amazonQuery:didReceiveResponse: -- %@", _exception);
         }
     }
 }

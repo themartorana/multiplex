@@ -51,6 +51,12 @@ extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
     return [mediaFileSource pathToFileForMedia:self];
 }
 
+- (NSString*) type
+{
+    NSAssert(mediaFileSource, @"No mediaSource?");
+    return [mediaFileSource typeForMedia:self];
+}
+
 - (NSMutableDictionary*) infoDictionary
 {
     NSAssert(mediaFileSource, @"No mediaSource?");

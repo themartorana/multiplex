@@ -93,6 +93,7 @@
 		F914C9C80EAD653300877991 /* plus-36x36.png in Resources */ = {isa = PBXBuildFile; fileRef = F914C9C70EAD653300877991 /* plus-36x36.png */; };
 		F914C9D00EAD657900877991 /* DrawerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F914C9CF0EAD657900877991 /* DrawerView.m */; };
 		F914CB100EAD7C8700877991 /* drawer-background-pattern-96x96.gif in Resources */ = {isa = PBXBuildFile; fileRef = F914CB0F0EAD7C8700877991 /* drawer-background-pattern-96x96.gif */; };
+		F917CCA80EBA53CF00B21587 /* Query.m in Sources */ = {isa = PBXBuildFile; fileRef = F917CCA70EBA53CF00B21587 /* Query.m */; };
 		F96430360EB63DCA00D49FA0 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F96430090EB63D6100D49FA0 /* Sparkle.framework */; };
 		F96430410EB63DD100D49FA0 /* Sparkle.framework in Copy Files to Frameworks */ = {isa = PBXBuildFile; fileRef = F96430090EB63D6100D49FA0 /* Sparkle.framework */; };
 		F96430F70EB6433E00D49FA0 /* Licensing.m in Sources */ = {isa = PBXBuildFile; fileRef = F96430A30EB640F700D49FA0 /* Licensing.m */; };
@@ -100,7 +101,6 @@
 		F96431380EB6450700D49FA0 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = F96431150EB6449A00D49FA0 /* compress.c */; };
 		F964314F0EB645E000D49FA0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9D3129F0E7DD85200D99DCA /* Foundation.framework */; };
 		F96432040EB6475200D49FA0 /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
-		F96432720EB64C0300D49FA0 /* license.plist in Resources */ = {isa = PBXBuildFile; fileRef = F96432710EB64C0300D49FA0 /* license.plist */; };
 		F966E49C0EAF9215001D0B3B /* DragDropTargetView.m in Sources */ = {isa = PBXBuildFile; fileRef = F966E49B0EAF9215001D0B3B /* DragDropTargetView.m */; };
 		F966E4BC0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.h in Headers */ = {isa = PBXBuildFile; fileRef = F966E4BA0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F966E4BD0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.m in Sources */ = {isa = PBXBuildFile; fileRef = F966E4BB0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.m */; };
@@ -177,6 +177,8 @@
 		F9D4F9CF0EB67E2200B89FF4 /* window-resize-thumb.gif in Resources */ = {isa = PBXBuildFile; fileRef = F9D4F9CE0EB67E2200B89FF4 /* window-resize-thumb.gif */; };
 		F9D4FC020EB7B2B000B89FF4 /* AmazonQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D4FBFF0EB7B2B000B89FF4 /* AmazonQuery.m */; };
 		F9D4FC030EB7B2B000B89FF4 /* ImageQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D4FC010EB7B2B000B89FF4 /* ImageQuery.m */; };
+		F9F4C07F0EBCC302000843C3 /* license.plist in Resources */ = {isa = PBXBuildFile; fileRef = F9F4C07E0EBCC302000843C3 /* license.plist */; };
+		F9F4C1140EBCCA80000843C3 /* JSONQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F9F4C1130EBCCA80000843C3 /* JSONQuery.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -498,6 +500,9 @@
 		F914C9CE0EAD657900877991 /* DrawerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawerView.h; sourceTree = "<group>"; };
 		F914C9CF0EAD657900877991 /* DrawerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawerView.m; sourceTree = "<group>"; };
 		F914CB0F0EAD7C8700877991 /* drawer-background-pattern-96x96.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "drawer-background-pattern-96x96.gif"; sourceTree = "<group>"; };
+		F917CCA60EBA53CF00B21587 /* Query.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Query.h; sourceTree = "<group>"; };
+		F917CCA70EBA53CF00B21587 /* Query.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Query.m; sourceTree = "<group>"; };
+		F917CCBF0EBA551B00B21587 /* Query+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Query+Private.h"; sourceTree = "<group>"; };
 		F94A05FD0E7B9B5800C8A8B7 /* DiscIdentKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DiscIdentKit.xcodeproj; path = Frameworks/DiscIdentKit/DiscIdentKit.xcodeproj; sourceTree = "<group>"; };
 		F94EA2BF0E4C9DBF00438E14 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F94EA2CF0E4C9ECA00438E14 /* Engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Engine.h; sourceTree = "<group>"; };
@@ -510,7 +515,6 @@
 		F96431150EB6449A00D49FA0 /* compress.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compress.c; sourceTree = "<group>"; };
 		F96431220EB644D400D49FA0 /* make-data */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "make-data"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F96431340EB644EF00D49FA0 /* compress */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = compress; sourceTree = BUILT_PRODUCTS_DIR; };
-		F96432710EB64C0300D49FA0 /* license.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = license.plist; sourceTree = "<group>"; };
 		F966E49A0EAF9215001D0B3B /* DragDropTargetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragDropTargetView.h; sourceTree = "<group>"; };
 		F966E49B0EAF9215001D0B3B /* DragDropTargetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragDropTargetView.m; sourceTree = "<group>"; };
 		F966E4BA0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+IndyHallLabs.h"; sourceTree = "<group>"; };
@@ -597,6 +601,9 @@
 		F9DA5B490E61C1BC00E96C0D /* DVDMediaSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVDMediaSource.m; sourceTree = "<group>"; };
 		F9DA5B4B0E61C1C900E96C0D /* PhysicalMediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicalMediaSource.h; sourceTree = "<group>"; };
 		F9DA5B4C0E61C1C900E96C0D /* PhysicalMediaSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhysicalMediaSource.m; sourceTree = "<group>"; };
+		F9F4C07E0EBCC302000843C3 /* license.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = license.plist; sourceTree = "<group>"; };
+		F9F4C1120EBCCA80000843C3 /* JSONQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONQuery.h; sourceTree = "<group>"; };
+		F9F4C1130EBCCA80000843C3 /* JSONQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONQuery.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -765,7 +772,7 @@
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				557B69450E4CCD3F0009919E /* MainMenu.xib */,
 				553477800EA3AD5100436A8C /* multiplex-mark01a.icns */,
-				F96432710EB64C0300D49FA0 /* license.plist */,
+				F9F4C07E0EBCC302000843C3 /* license.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1138,10 +1145,15 @@
 		F9D4FBFD0EB7B2B000B89FF4 /* Queries */ = {
 			isa = PBXGroup;
 			children = (
+				F917CCA60EBA53CF00B21587 /* Query.h */,
+				F917CCBF0EBA551B00B21587 /* Query+Private.h */,
+				F917CCA70EBA53CF00B21587 /* Query.m */,
 				F9D4FBFE0EB7B2B000B89FF4 /* AmazonQuery.h */,
 				F9D4FBFF0EB7B2B000B89FF4 /* AmazonQuery.m */,
 				F9D4FC000EB7B2B000B89FF4 /* ImageQuery.h */,
 				F9D4FC010EB7B2B000B89FF4 /* ImageQuery.m */,
+				F9F4C1120EBCCA80000843C3 /* JSONQuery.h */,
+				F9F4C1130EBCCA80000843C3 /* JSONQuery.m */,
 			);
 			path = Queries;
 			sourceTree = "<group>";
@@ -1483,9 +1495,9 @@
 				55570B9D0EB5A0970051D576 /* coverflow-view.pdf in Resources */,
 				55570B9E0EB5A0970051D576 /* collapse-screen.pdf in Resources */,
 				553198C10EB6162A0031D118 /* expand-screen.pdf in Resources */,
-				F96432720EB64C0300D49FA0 /* license.plist in Resources */,
 				5551FB7C0EB65A310022147A /* drive.pdf in Resources */,
 				F9D4F9CF0EB67E2200B89FF4 /* window-resize-thumb.gif in Resources */,
+				F9F4C07F0EBCC302000843C3 /* license.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1607,6 +1619,8 @@
 				5551FB9E0EB65F3C0022147A /* NoDiscsView.m in Sources */,
 				F9D4FC020EB7B2B000B89FF4 /* AmazonQuery.m in Sources */,
 				F9D4FC030EB7B2B000B89FF4 /* ImageQuery.m in Sources */,
+				F917CCA80EBA53CF00B21587 /* Query.m in Sources */,
+				F9F4C1140EBCCA80000843C3 /* JSONQuery.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

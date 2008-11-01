@@ -12,6 +12,7 @@
 @property (retain) NSNumber* number;
 @property (retain) NSString* side;
 @property (retain) NSString* synopsis;
+@property (retain) NSNumber* availableMediaCount;
 
 @property (readonly) NSMutableSet* allMedia;
 

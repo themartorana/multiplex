@@ -8,6 +8,7 @@
 @dynamic number;
 @dynamic side;
 @dynamic synopsis;
+@dynamic availableMediaCount;
 
 @dynamic allMedia;
 

@@ -256,8 +256,29 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
         engine.status = @"Not Connected";
         [managedObjectContext save:nil];
 
+        BOOL isLocalMachine = [localMachineUUID isEqualToString:engine.uuid];
         for (Media* media in [engine allMedia]) {
-            [managedObjectContext deleteObject:media];
+            if (isLocalMachine) {
+                media.isAvailable = (id)kCFBooleanFalse;
+            } else {
+                Disc* disc = media.disc;
+                [managedObjectContext deleteObject:media];
+                Movie* movie = disc.movie;
+                NSAssert(movie, @"wtf?");
+                int zeroCount = 0;
+                int total = 0;
+                for (Disc* otherDisc in movie.allDiscs) {
+                    int count = [otherDisc.localMediaCount intValue];
+                    zeroCount += (disc == otherDisc && (count == 1)) || (count == 0);
+                    total++;
+                }
+                if (zeroCount == total) {
+                    for (Disc* disc in movie.allDiscs) {
+                        [managedObjectContext deleteObject:disc];
+                    }
+                    [managedObjectContext deleteObject:movie];
+                }
+            }
         }
         NSError* error = nil;
         [managedObjectContext save:&error];
@@ -786,7 +807,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                 if (!media) {
                     continue;
                 }
-                if ([media.isLocal boolValue]) {
+                if (isLocalMachine) {
                     media.isAvailable = (id)kCFBooleanFalse;
                 } else {
                     Disc* disc = media.disc;
@@ -850,7 +871,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
         [managedObjectContext save:nil];
     }
     
-    if (NO || [uuid isEqualToString:localMachineUUID]) {
+    if (YES || [uuid isEqualToString:localMachineUUID]) {
         [self connectEngine:engine];
     }
 }

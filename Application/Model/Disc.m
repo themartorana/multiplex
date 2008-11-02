@@ -10,6 +10,7 @@
 @dynamic side;
 @dynamic synopsis;
 @dynamic availableMediaCount;
+@dynamic localMediaCount;
 
 @dynamic allMedia;
 

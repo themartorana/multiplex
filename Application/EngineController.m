@@ -796,7 +796,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                     int zeroCount = 0;
                     int total = 0;
                     for (Disc* otherDisc in movie.allDiscs) {
-                        int count = [otherDisc.allMedia count];
+                        int count = [otherDisc.localMediaCount intValue];
                         zeroCount += (disc == otherDisc && (count == 1)) || (count == 0);
                         total++;
                     }

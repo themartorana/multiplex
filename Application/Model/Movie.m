@@ -3,6 +3,7 @@
 @implementation Movie
 
 @dynamic aspectRatio;
+@dynamic availableDiscCount;
 @dynamic boxArt;
 @dynamic genre;
 @dynamic gtin;

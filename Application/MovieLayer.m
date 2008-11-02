@@ -60,6 +60,7 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
         ];
         [self addSublayer:boxImageLayer];
 
+        [movie addObserver:self forKeyPath:@"availableDiscCount" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
         [movie addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
         [movie addObserver:self forKeyPath:@"boxArt.imageData" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
     }
@@ -68,6 +69,7 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
 
 - (void) dealloc
 {
+    [movie removeObserver:self forKeyPath:@"availableDiscCount"];
     [movie removeObserver:self forKeyPath:@"title"];
     [movie removeObserver:self forKeyPath:@"boxArt.imageData"];
     [movie release];
@@ -87,7 +89,27 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
 
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
-    if ([keyPath isEqualToString:@"title"]) {
+    if ([keyPath isEqualToString:@"availableDiscCount"]) {
+        int availableDiscCount = [[movie availableDiscCount] intValue];
+        if (smokeLayer && availableDiscCount) {
+            [smokeLayer removeFromSuperlayer];
+            smokeLayer = nil;
+        } else if (!smokeLayer && !availableDiscCount) {
+            smokeLayer = [CALayer layer];
+            smokeLayer.zPosition = 1;
+            smokeLayer.backgroundColor = [MultiplexColorFactory blackOneQuarterTransparent];
+            smokeLayer.borderColor = [MultiplexColorFactory multiplexOrange];
+            smokeLayer.borderWidth = 10;
+            smokeLayer.constraints = [NSArray arrayWithObjects:
+                [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
+                [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
+                [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:1.0 offset:20],
+                [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:1.0 offset:20],
+                nil
+            ];
+            [self addSublayer:smokeLayer];
+        }
+    } else if ([keyPath isEqualToString:@"title"]) {
         if ([keyPath isEqualToString:@"title"]) {
             if (movieTitle) {
                 [movieTitle release];

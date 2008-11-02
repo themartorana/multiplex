@@ -10,11 +10,9 @@ extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
 
 @implementation MediaFile
 
-@synthesize fingerprint;
-@synthesize mediaInfo;
 @synthesize tag;
 @synthesize mediaFileSource;
-@synthesize frontCover;
+@synthesize mediaInfo;
 
 - (id) initWithMediaSource:(id<MediaFileSource>)_mediaFileSource mediaInfo:(void*)_mediaInfo;
 {
@@ -27,8 +25,6 @@ extern void MDItemRemoveAttribute(MDItemRef, CFStringRef);
 
 - (void) dealloc
 {
-    [fingerprint release];
-    [disc release];
     [tag release];    
     [super dealloc];
 }

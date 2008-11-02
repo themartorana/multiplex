@@ -404,30 +404,30 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         NSDate* now = [NSDate date];
         
         for (MediaFile* mediaFile in arrayOfMedia) {            
-            if (mediaFile.fingerprint) {
-                NSMutableDictionary* addOrUpdate = nil;
-                MediaLocator* mediaLocator = [self _findMediaLocatorByPathToFile:mediaFile.pathToFile fingerprint:mediaFile.fingerprint];
-                if (mediaLocator) {
-                    if ([mediaLocator.isAvailable boolValue]) {
-                        addOrUpdate = updates;
-                    } else {
-                        addOrUpdate = adds;
-                    }
+            NSMutableDictionary* addOrUpdate = nil;
+            MediaLocator* mediaLocator = [self _findMediaLocatorByPathToFile:mediaFile.pathToFile fingerprint:mediaFile.fingerprint];
+            if (mediaLocator) {
+                if ([mediaLocator.isAvailable boolValue]) {
+                    addOrUpdate = updates;
                 } else {
                     addOrUpdate = adds;
-                    mediaLocator = [[[MediaLocator alloc] initWithEntity:mediaLocatorEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
-                    mediaLocator.tag = [NSString stringWithUUID];
                 }
-                mediaLocator.lastSeen = now;
-                mediaLocator.pathToFile = mediaFile.pathToFile;
-                mediaLocator.fingerprint = mediaFile.fingerprint;
-                mediaLocator.isAvailable = (id)kCFBooleanTrue;
-                mediaLocator.type = mediaFile.type;
-                
-                mediaFile.tag = mediaLocator.tag;
-                [mediaFileByTag setObject:mediaFile forKey:mediaFile.tag];
+            } else {
+                addOrUpdate = adds;
+                mediaLocator = [[[MediaLocator alloc] initWithEntity:mediaLocatorEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
+                mediaLocator.tag = [NSString stringWithUUID];
+            }
+            mediaLocator.lastSeen = now;
+            mediaLocator.pathToFile = mediaFile.pathToFile;
+            mediaLocator.fingerprint = mediaFile.fingerprint;
+            mediaLocator.type = mediaFile.type;
+            
+            mediaFile.tag = mediaLocator.tag;
+            [mediaFileByTag setObject:mediaFile forKey:mediaFile.tag];
 
-                NSAssert(addOrUpdate, @"wtf?");
+            NSAssert(addOrUpdate, @"wtf?");
+            if (mediaFile.fingerprint) {
+                mediaLocator.isAvailable = (id)kCFBooleanTrue;
                 NSMutableDictionary* entry = [NSMutableDictionary dictionaryWithObjectsAndKeys:mediaLocator.isAvailable, @"isAvailable", mediaLocator.type, @"type", mediaLocator.pathToFile, @"pathToFile", mediaLocator.fingerprint, @"fingerprint", nil];
                 if (mediaFile.infoDictionary) {
                     mediaLocator.hasInfo = (id)kCFBooleanTrue;
@@ -439,19 +439,20 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                 }
                 [addOrUpdate setObject:entry forKey:mediaLocator.tag];
             } else {
+                mediaLocator.isAvailable = (id)kCFBooleanFalse;
                 [NSTask launchedTaskWithLaunchPath:@"/usr/bin/mdimport" arguments:[NSArray arrayWithObjects:@"mdimport", mediaFile.pathToFile, nil]];
             }
         }
         
+        NSError* error = nil;
+        [managedObjectContext save:&error];
+        if (error) {
+            NSLog(@"%s - %@ - %@", __PRETTY_FUNCTION__, error, error.userInfo);
+        }
+
         /*  Build and send the message.
          */
         if ([adds count] || [updates count]) {
-            NSError* error = nil;
-            [managedObjectContext save:&error];
-            if (error) {
-                NSLog(@"%s - %@ - %@", __PRETTY_FUNCTION__, error, error.userInfo);
-            }
-            
             NSMutableDictionary* message = [NSMutableDictionary dictionary];
             if ([adds count]) {
                 [message setObject:adds forKey:@"add"];
@@ -478,64 +479,80 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             
             [mediaFile reload];
 
-            if (!mediaFile.fingerprint) {
+            if (nil == mediaFile.fingerprint) {
                 mediaLocator.isAvailable = (id)kCFBooleanFalse;
                 [deletes addObject:mediaFile.tag];
             } else {
-                if (![mediaFile.type isEqualToString:mediaLocator.type]) {
-                    mediaLocator.type = mediaFile.type;
-                    [change setObject:mediaFile.type forKey:@"type"];
-                }
-                
-                if (![mediaFile.pathToFile isEqualToString:mediaLocator.pathToFile]) {
-                    mediaLocator.pathToFile = mediaFile.pathToFile;
-                    [change setObject:mediaFile.pathToFile forKey:@"pathToFile"];
-                }
-                
-                if (![mediaFile.fingerprint isEqualToString:mediaLocator.fingerprint]) {
-                    mediaLocator.fingerprint = mediaFile.fingerprint;
-                    [change setObject:mediaFile.fingerprint forKey:@"fingerprint"];
-                }
-                
-                NSDictionary* infoDictionary = mediaFile.infoDictionary;
-                if (![mediaLocator.hasInfo boolValue] && infoDictionary) {
-                    mediaLocator.hasInfo = (id)kCFBooleanTrue;
-                    [change setObject:[self _infoURLForTag:mediaLocator.tag] forKey:@"infoURL"];
-                } else if ([mediaLocator.hasInfo boolValue] && !infoDictionary) {
-                    mediaLocator.hasInfo = (id)kCFBooleanFalse;
-                    [change setObject:(id)kCFNull forKey:@"infoURL"];
-                }
-
-                NSData* frontCover = mediaFile.frontCover;
-                if (![mediaLocator.hasFrontCover boolValue] && frontCover) {
-                    mediaLocator.hasFrontCover = (id)kCFBooleanTrue;
-                    [change setObject:[self _frontCoverURLForTag:mediaLocator.tag] forKey:@"frontCoverURL"];    
-                } else if ([mediaLocator.hasFrontCover boolValue] && !frontCover) {
-                    mediaLocator.hasFrontCover = (id)kCFBooleanFalse;
-                    [change setObject:(id)kCFNull forKey:@"frontCoverURL"];
-                }
-                
-                if ([change count]) {
-                    if ([mediaLocator.isAvailable boolValue]) {
-                        [updates setObject:change forKey:mediaFile.tag];
-                    } else {
-                        mediaLocator.isAvailable = (id)kCFBooleanTrue;
-                        [adds setObject:change forKey:mediaFile.tag];
+                if ([mediaLocator.isAvailable boolValue]) {
+                    if (![mediaLocator.type isEqualToString:mediaFile.type]) {
+                        mediaLocator.type = mediaFile.type;
+                        [change setObject:mediaFile.type forKey:@"type"];
                     }
+                    
+                    if (![mediaLocator.pathToFile isEqualToString:mediaFile.pathToFile]) {
+                        mediaLocator.pathToFile = mediaFile.pathToFile;
+                        [change setObject:mediaFile.pathToFile forKey:@"pathToFile"];
+                    }
+                    
+                    if (![mediaLocator.fingerprint isEqualToString:mediaFile.fingerprint]) {
+                        mediaLocator.fingerprint = mediaFile.fingerprint;
+                        [change setObject:mediaFile.fingerprint forKey:@"fingerprint"];
+                    }
+                    
+                    NSDictionary* infoDictionary = mediaFile.infoDictionary;
+                    if (![mediaLocator.hasInfo boolValue] && infoDictionary) {
+                        mediaLocator.hasInfo = (id)kCFBooleanTrue;
+                        [change setObject:[self _infoURLForTag:mediaLocator.tag] forKey:@"infoURL"];
+                    } else if ([mediaLocator.hasInfo boolValue] && !infoDictionary) {
+                        mediaLocator.hasInfo = (id)kCFBooleanFalse;
+                        [change setObject:(id)kCFNull forKey:@"infoURL"];
+                    }
+                    
+                    NSData* frontCover = mediaFile.frontCover;
+                    if (![mediaLocator.hasFrontCover boolValue] && frontCover) {
+                        mediaLocator.hasFrontCover = (id)kCFBooleanTrue;
+                        [change setObject:[self _frontCoverURLForTag:mediaLocator.tag] forKey:@"frontCoverURL"];    
+                    } else if ([mediaLocator.hasFrontCover boolValue] && !frontCover) {
+                        mediaLocator.hasFrontCover = (id)kCFBooleanFalse;
+                        [change setObject:(id)kCFNull forKey:@"frontCoverURL"];
+                    }
+
+                    if ([change count]) {
+                        [updates setObject:change forKey:mediaFile.tag];
+                        change = [NSMutableDictionary dictionary];
+                    }
+                } else {
+                    mediaLocator.isAvailable = (id)kCFBooleanTrue;
+                    mediaLocator.fingerprint = mediaFile.fingerprint;
+                    
+                    [change setObject:mediaLocator.isAvailable forKey:@"isAvailable"];
+                    [change setObject:mediaLocator.type forKey:@"type"];
+                    [change setObject:mediaLocator.pathToFile forKey:@"pathToFile"];
+                    [change setObject:mediaFile.fingerprint forKey:@"fingerprint"];
+                    if (mediaFile.infoDictionary) {
+                        mediaLocator.hasInfo = (id)kCFBooleanTrue;
+                        [change setObject:[self _infoURLForTag:mediaLocator.tag] forKey:@"infoURL"];
+                    }
+                    if (mediaFile.frontCover) {
+                        mediaLocator.hasFrontCover = (id)kCFBooleanTrue;
+                        [change setObject:[self _frontCoverURLForTag:mediaLocator.tag] forKey:@"frontCoverURL"];    
+                    }
+                    
+                    [adds setObject:change forKey:mediaFile.tag];
                     change = [NSMutableDictionary dictionary];
                 }
             }
         }
 
+        NSError* error = nil;
+        [managedObjectContext save:&error];
+        if (error) {
+            NSLog(@"%s - %@ - %@", __PRETTY_FUNCTION__, error, error.userInfo);
+        }
+        
         /*  Build and send the message.
          */
         if ([adds count] || [updates count] || [deletes count]) {
-            NSError* error = nil;
-            [managedObjectContext save:&error];
-            if (error) {
-                NSLog(@"%s - %@ - %@", __PRETTY_FUNCTION__, error, error.userInfo);
-            }
-            
             NSMutableDictionary* message = [NSMutableDictionary dictionary];
             if ([adds count]) {
                 [message setObject:adds forKey:@"add"];
@@ -566,15 +583,15 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             [deletes addObject:mediaLocator.tag];
         }
 
+        NSError* error = nil;
+        [managedObjectContext save:&error];
+        if (error) {
+            NSLog(@"%s - %@ - %@", __PRETTY_FUNCTION__, error, error.userInfo);
+        }
+
         /*  Build and send the message.
          */
         if ([deletes count]) {
-            NSError* error = nil;
-            [managedObjectContext save:&error];
-            if (error) {
-                NSLog(@"%s - %@ - %@", __PRETTY_FUNCTION__, error, error.userInfo);
-            }
-            
             NSMutableDictionary* message = [NSMutableDictionary dictionary];
             [message setObject:deletes forKey:@"delete"];
             [self sendMessage:message];

@@ -248,9 +248,10 @@
         
         if ([allMedia count] > 0) {
             for (Media* media in allMedia) {
-                if ([media.isAvailable boolValue]) {
-                    // Play
-                    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:media.tag]];
+                if ([media.isAvailable boolValue] && [media.isLocal boolValue]) {
+                    NSWorkspace* workspace = [NSWorkspace sharedWorkspace];
+                    NSString* pathToExecutable = [workspace absolutePathForAppBundleWithIdentifier:@"com.apple.DVDPlayer"];
+                    [workspace openFile:media.pathToFile withApplication:pathToExecutable];
                     break;
                 }
             } 

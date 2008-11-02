@@ -10,6 +10,7 @@
 @property (retain) NSDate* premiereDate;
 @property (retain) NSDate* releaseDate;
 @property (retain) NSDate* theatricalReleaseDate;
+@property (retain) NSNumber* availableDiscCount;
 @property (retain) NSNumber* productionYear;
 @property (retain) NSNumber* regionCode;
 @property (retain) NSNumber* runningTime;

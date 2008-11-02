@@ -8,6 +8,7 @@
 @interface MovieLayer : CALayer {
     CALayer* gradientLayer;
     CATiledLayer* boxImageLayer; 
+    CALayer* smokeLayer;
     /**/
     Movie* movie;
     id boxArtImage;

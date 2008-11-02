@@ -644,76 +644,135 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
         }
         BOOL isLocalMachine = [localMachineUUID isEqualToString:engine.uuid]; 
         
-        /*  Add or Update
+        /*  Add
          */
-        NSMutableDictionary* addsAndUpdates = [NSMutableDictionary dictionary];
         NSDictionary* add = [message objectForKey:@"add"];
         if (add && [add isKindOfClass:[NSDictionary class]]) {
-            [addsAndUpdates addEntriesFromDictionary:add];
+            for (NSString* tag in add) {
+                NSDictionary* info = [add objectForKey:tag];
+                
+                NSString* fingerprint = [info objectForKey:@"fingerprint"];
+                NSNumber* isAvailable = [info objectForKey:@"isAvailable"];
+                NSString* pathToFile = [info objectForKey:@"pathToFile"];
+                NSString* type = [info objectForKey:@"type"];
+                NSString* title = [[pathToFile lastPathComponent] stringByDeletingPathExtension];
+
+                Disc* disc = [self _findDiscByFingerprint:fingerprint];
+                if (!disc) {
+                    disc = [[[Disc alloc] initWithEntity:discEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
+                    disc.fingerprint = fingerprint;
+                }
+
+                Movie* movie = disc.movie;
+                if (!disc.movie) {
+                    movie = [[[Movie alloc] initWithEntity:movieEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
+                    disc.movie = movie;
+                    movie.title = title;
+                }
+                
+                Media* media = [self _findMediaByEngine:engine tag:tag];
+                if (!media) {
+                    media = [[[Media alloc] initWithEntity:mediaEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
+                    media.tag = tag;
+                    media.engine = engine;
+                }
+                media.isAvailable = isAvailable;
+                media.isLocal = (id)(isLocalMachine ? kCFBooleanTrue : kCFBooleanFalse);
+                media.disc = disc;
+                media.type = type;
+                if (isLocalMachine) {
+                    media.pathToFile = pathToFile;
+                }
+
+                /*  Make sure that we get permanent IDs for the things we just 
+                 *  made.
+                 */
+                [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObjects:media, disc, movie, nil] error:nil];
+                
+                /*  Fire off a query to get additional info, if necessary.
+                 */
+                NSString* infoURL = [info objectForKey:@"infoURL"];
+                if (infoURL && !movie.metadataAcceptedDate) {
+                    [JSONQuery JSONQueryWithURL:[NSURL URLWithString:infoURL] delegate:self userInfo:[Activity activityWithName:kLoadingDiscInfo userInfo:media.objectID] startImmediately:YES];
+                }
+                
+                /*  Fire off a query to get box art, if necessary.
+                 */
+                NSString* frontCoverURL = [info objectForKey:@"frontCoverURL"];
+                if (frontCoverURL && !disc.boxArt) {
+                    BoxArt* boxArt = [self _findBoxArtByURL:frontCoverURL];
+                    if (!boxArt) {
+                        boxArt = disc.boxArt = [[BoxArt alloc] initWithEntity:boxArtEntity insertIntoManagedObjectContext:managedObjectContext];
+                        boxArt.url = frontCoverURL;
+                        boxArt.state = @"Loading";
+                        [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObjects:boxArt, nil] error:nil];
+                        [ImageQuery imageQueryWithURL:[NSURL URLWithString:frontCoverURL] delegate:self userInfo:[Activity activityWithName:kLoadingBoxArtActivityName userInfo:boxArt.objectID] startImmediately:YES];
+                    }
+                }
+            }
         }
+
+        /*  Update
+         */
         NSDictionary* update = [message objectForKey:@"update"];
         if (update && [update isKindOfClass:[NSDictionary class]]) {
-            [addsAndUpdates addEntriesFromDictionary:update];
-        }
-        for (NSString* tag in addsAndUpdates) {
-            NSDictionary* info = [add objectForKey:tag];
-            
-            NSString* fingerprint = [info objectForKey:@"fingerprint"];
-            NSString* infoURL = [info objectForKey:@"infoURL"];
-            NSString* frontCoverURL = [info objectForKey:@"frontCoverURL"];
-            NSNumber* isAvailable = [info objectForKey:@"isAvailable"];
-            NSString* pathToFile = [info objectForKey:@"pathToFile"];
-            NSString* type = [info objectForKey:@"type"];
-            NSString* title = [[pathToFile lastPathComponent] stringByDeletingPathExtension];
+            for (NSString* tag in update) {
+                NSDictionary* info = [add objectForKey:tag];
+                Media* media = [self _findMediaByEngine:engine tag:tag];
+                NSAssert(media, @"wtf?");
 
-            Disc* disc = [self _findDiscByFingerprint:fingerprint];
-            if (!disc) {
-                disc = [[[Disc alloc] initWithEntity:discEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
-                disc.fingerprint = fingerprint;
-            }
+                NSString* fingerprint = [info objectForKey:@"fingerprint"];
+                Disc* disc = media.disc;
+                if (fingerprint && ![fingerprint isEqualToString:disc.fingerprint]) {
+                    Disc* disc = [self _findDiscByFingerprint:fingerprint];
+                    if (!disc) {
+                        disc = [[[Disc alloc] initWithEntity:discEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
+                        disc.fingerprint = fingerprint;
+                    }
+                    media.disc = disc;
+                }
 
-            Movie* movie = disc.movie;
-            if (!disc.movie) {
-                movie = [[[Movie alloc] initWithEntity:movieEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
-                disc.movie = movie;
-                movie.title = title;
-            }
-            
-            Media* media = [self _findMediaByEngine:engine tag:tag];
-            if (!media) {
-                media = [[[Media alloc] initWithEntity:mediaEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
-                media.tag = tag;
-                media.engine = engine;
-            }
-            media.isAvailable = isAvailable;
-            media.isLocal = (id)(isLocalMachine ? kCFBooleanTrue : kCFBooleanFalse);
-            media.disc = disc;
-            media.type = type;
-            if (isLocalMachine) {
-                media.pathToFile = pathToFile;
-            }
+                NSNumber* isAvailable = [info objectForKey:@"isAvailable"];
+                if (isAvailable && [isAvailable isNotEqualTo:media.isAvailable]) {
+                    media.isAvailable = isAvailable;
+                }
+                
+                NSString* type = [info objectForKey:@"type"];
+                if (type && [type isNotEqualTo:media.type]) {
+                    media.type = type;
+                }
 
-            /*  Make sure that we get permanent IDs for the things we just 
-             *  made.
-             */
-            [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObjects:media, disc, movie, nil] error:nil];
-            
-            /*  Fire off a query to get additional info, if necessary.
-             */
-            if (infoURL && !movie.metadataAcceptedDate) {
-                [JSONQuery JSONQueryWithURL:[NSURL URLWithString:infoURL] delegate:self userInfo:[Activity activityWithName:kLoadingDiscInfo userInfo:media.objectID] startImmediately:YES];
-            }
-            
-            /*  Fire off a query to get box art, if necessary.
-             */
-            if (frontCoverURL && !disc.boxArt) {
-                BoxArt* boxArt = [self _findBoxArtByURL:frontCoverURL];
-                if (!boxArt) {
-                    boxArt = disc.boxArt = [[BoxArt alloc] initWithEntity:boxArtEntity insertIntoManagedObjectContext:managedObjectContext];
-                    boxArt.url = frontCoverURL;
-                    boxArt.state = @"Loading";
-                    [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObjects:boxArt, nil] error:nil];
-                    [ImageQuery imageQueryWithURL:[NSURL URLWithString:frontCoverURL] delegate:self userInfo:[Activity activityWithName:kLoadingBoxArtActivityName userInfo:boxArt.objectID] startImmediately:YES];
+                NSString* pathToFile = [info objectForKey:@"pathToFile"];
+                if (pathToFile && [pathToFile isNotEqualTo:media.pathToFile]) {
+                    media.pathToFile = pathToFile;
+                }
+                
+                Movie* movie = disc.movie;
+                if (!disc.movie) {
+                    movie = [[[Movie alloc] initWithEntity:movieEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
+                    disc.movie = movie;
+                    movie.title =  [[pathToFile lastPathComponent] stringByDeletingPathExtension];
+                }
+                
+                /*  Fire off a query to get additional info, if necessary.
+                 */
+                NSString* infoURL = [info objectForKey:@"infoURL"];
+                if (infoURL && !movie.metadataAcceptedDate) {
+                    [JSONQuery JSONQueryWithURL:[NSURL URLWithString:infoURL] delegate:self userInfo:[Activity activityWithName:kLoadingDiscInfo userInfo:media.objectID] startImmediately:YES];
+                }
+                
+                /*  Fire off a query to get box art, if necessary.
+                 */
+                NSString* frontCoverURL = [info objectForKey:@"frontCoverURL"];
+                if (frontCoverURL && !disc.boxArt) {
+                    BoxArt* boxArt = [self _findBoxArtByURL:frontCoverURL];
+                    if (!boxArt) {
+                        boxArt = disc.boxArt = [[BoxArt alloc] initWithEntity:boxArtEntity insertIntoManagedObjectContext:managedObjectContext];
+                        boxArt.url = frontCoverURL;
+                        boxArt.state = @"Loading";
+                        [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObjects:boxArt, nil] error:nil];
+                        [ImageQuery imageQueryWithURL:[NSURL URLWithString:frontCoverURL] delegate:self userInfo:[Activity activityWithName:kLoadingBoxArtActivityName userInfo:boxArt.objectID] startImmediately:YES];
+                    }
                 }
             }
         }

@@ -9,9 +9,8 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="983"/>
+			<integer value="1166"/>
 			<integer value="1685"/>
-			<integer value="1150"/>
-			<integer value="1425"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -652,7 +651,7 @@
 											<double key="NSSize">1.300000e+01</double>
 											<int key="NSfFlags">1044</int>
 										</object>
-										<string key="NSPlaceholderString">All</string>
+										<string key="NSPlaceholderString">predicate</string>
 										<reference key="NSControlView" ref="268782376"/>
 										<bool key="NSDrawsBackground">YES</bool>
 										<int key="NSTextBezelStyle">1</int>
@@ -1560,7 +1559,7 @@
 													<int key="NSsFlags">1</int>
 													<reference key="NSTarget" ref="62709703"/>
 													<string key="NSAction">_doScroller:</string>
-													<double key="NSPercent">9.984025e-01</double>
+													<double key="NSPercent">5.565450e-01</double>
 												</object>
 												<object class="NSClipView" id="179671101">
 													<reference key="NSNextResponder" ref="62709703"/>
@@ -2115,6 +2114,7 @@
 					<string>theatricalReleaseDate</string>
 					<string>movie.productionYear</string>
 					<string>movie.allDiscs.@count</string>
+					<string>availableDiscCount</string>
 				</object>
 				<string key="NSObjectClassName">Movie</string>
 				<bool key="NSEditable">YES</bool>
@@ -2139,6 +2139,7 @@
 					<string>media.@count</string>
 					<string>allMedia</string>
 					<string>allMedia.@count</string>
+					<string>availableMediaCount</string>
 				</object>
 				<bool key="NSEditable">YES</bool>
 				<bool key="NSAutomaticallyPreparesContent">YES</bool>
@@ -3836,7 +3837,7 @@ cm1hdGlvbiIgdGFiIHdoZW4gdGhpcyBtb3ZpZSBpcyBzZWxlY3RlZC4</string>
 				<nil key="NSViewClass"/>
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<object class="NSView" key="NSWindowView" id="453702912">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3864,7 +3865,6 @@ cm1hdGlvbiIgdGFiIHdoZW4gdGhpcyBtb3ZpZSBpcyBzZWxlY3RlZC4</string>
 							</object>
 							<string key="NSFrameSize">{732, 513}</string>
 							<reference key="NSSuperview" ref="453702912"/>
-							<reference key="NSNextKeyView"/>
 							<string key="FrameName"/>
 							<string key="GroupName"/>
 							<reference key="Preferences" ref="896147280"/>
@@ -3893,7 +3893,6 @@ cm1hdGlvbiIgdGFiIHdoZW4gdGhpcyBtb3ZpZSBpcyBzZWxlY3RlZC4</string>
 						</object>
 					</object>
 					<string key="NSFrameSize">{732, 513}</string>
-					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1600, 1178}}</string>
 				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
@@ -4267,22 +4266,6 @@ cm1hdGlvbiIgdGFiIHdoZW4gdGhpcyBtb3ZpZSBpcyBzZWxlY3RlZC4</string>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: arrangedObjects.allMedia.@count</string>
-						<reference key="source" ref="707610602"/>
-						<reference key="destination" ref="782886067"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="707610602"/>
-							<reference key="NSDestination" ref="782886067"/>
-							<string key="NSLabel">value: arrangedObjects.allMedia.@count</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">arrangedObjects.allMedia.@count</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1097</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: arrangedObjects.uuid</string>
 						<reference key="source" ref="266571516"/>
 						<reference key="destination" ref="661566203"/>
@@ -4364,35 +4347,6 @@ cm1hdGlvbiIgdGFiIHdoZW4gdGhpcyBtb3ZpZSBpcyBzZWxlY3RlZC4</string>
 						<reference key="destination" ref="697403151"/>
 					</object>
 					<int key="connectionID">1155</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">predicate: filterPredicate</string>
-						<reference key="source" ref="268782376"/>
-						<reference key="destination" ref="697403151"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="268782376"/>
-							<reference key="NSDestination" ref="697403151"/>
-							<string key="NSLabel">predicate: filterPredicate</string>
-							<string key="NSBinding">predicate</string>
-							<string key="NSKeyPath">filterPredicate</string>
-							<object class="NSDictionary" key="NSOptions">
-								<bool key="EncodedWithXMLCoder">YES</bool>
-								<object class="NSMutableArray" key="dict.sortedKeys">
-									<bool key="EncodedWithXMLCoder">YES</bool>
-									<string>NSDisplayName</string>
-									<string>NSPredicateFormat</string>
-								</object>
-								<object class="NSMutableArray" key="dict.values">
-									<bool key="EncodedWithXMLCoder">YES</bool>
-									<string>predicate</string>
-									<string>title contains[c] $value</string>
-								</object>
-							</object>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1164</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -5040,6 +4994,51 @@ cm1hdGlvbiIgdGFiIHdoZW4gdGhpcyBtb3ZpZSBpcyBzZWxlY3RlZC4</string>
 						<reference key="destination" ref="268782376"/>
 					</object>
 					<int key="connectionID">1942</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: arrangedObjects.availableMediaCount</string>
+						<reference key="source" ref="707610602"/>
+						<reference key="destination" ref="782886067"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="707610602"/>
+							<reference key="NSDestination" ref="782886067"/>
+							<string key="NSLabel">value: arrangedObjects.availableMediaCount</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">arrangedObjects.availableMediaCount</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">1943</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">predicate: filterPredicate</string>
+						<reference key="source" ref="268782376"/>
+						<reference key="destination" ref="697403151"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="268782376"/>
+							<reference key="NSDestination" ref="697403151"/>
+							<string key="NSLabel">predicate: filterPredicate</string>
+							<string key="NSBinding">predicate</string>
+							<string key="NSKeyPath">filterPredicate</string>
+							<object class="NSDictionary" key="NSOptions">
+								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="NSMutableArray" key="dict.sortedKeys">
+									<bool key="EncodedWithXMLCoder">YES</bool>
+									<string>NSDisplayName</string>
+									<string>NSPredicateFormat</string>
+								</object>
+								<object class="NSMutableArray" key="dict.values">
+									<bool key="EncodedWithXMLCoder">YES</bool>
+									<string>predicate</string>
+									<string>title contains[c] $value</string>
+								</object>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">1961</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -7874,8 +7873,8 @@ cm1hdGlvbiIgdGFiIHdoZW4gdGhpcyBtb3ZpZSBpcyBzZWxlY3RlZC4</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{294, 55}, {1000, 700}}</string>
-					<string>{{294, 55}, {1000, 700}}</string>
+					<string>{{598, 76}, {1000, 700}}</string>
+					<string>{{598, 76}, {1000, 700}}</string>
 					<reference ref="9"/>
 					<reference ref="9"/>
 					<string>{1000, 700}</string>
@@ -8302,7 +8301,7 @@ cm1hdGlvbiIgdGFiIHdoZW4gdGhpcyBtb3ZpZSBpcyBzZWxlY3RlZC4</string>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1942</int>
+			<int key="maxID">1961</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -8563,6 +8562,20 @@ cm1hdGlvbiIgdGFiIHdoZW4gdGhpcyBtb3ZpZSBpcyBzZWxlY3RlZC4</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Application/Queries/ImageQuery.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Application/Queries/JSONQuery.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Application/Queries/Query.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

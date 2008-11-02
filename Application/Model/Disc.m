@@ -1,4 +1,5 @@
 #import "Disc.h"
+#import "Movie.h"
 
 @implementation Disc
 
@@ -11,5 +12,41 @@
 @dynamic availableMediaCount;
 
 @dynamic allMedia;
+
+- (void) setMovie:(Movie*)_movie
+{
+    BOOL isAvailable = 0 < [[self primitiveValueForKey:@"availableDiscCount"] intValue];
+    Movie* movie = [self primitiveValueForKey:@"movie"];
+    if (movie != _movie) {
+        [super willChangeValueForKey:@"movie"];
+        [self setPrimitiveValue:_movie forKey:@"movie"];
+        if (isAvailable) {
+            if (movie) {
+                movie.availableDiscCount = [NSNumber numberWithInt:[movie.availableDiscCount intValue] - 1];
+            }
+            if (_movie) {
+                _movie.availableDiscCount = [NSNumber numberWithInt:[_movie.availableDiscCount intValue] + 1];
+            }
+        }
+        [super didChangeValueForKey:@"movie"];
+    }
+}
+
+- (void) setAvailableMediaCount:(NSNumber*)_availableMediaCount
+{
+    [super willChangeValueForKey:@"availableDiscCount"];
+    BOOL oldValue = 0 < [[self primitiveValueForKey:@"availableDiscCount"] intValue];
+    BOOL newValue = 0 < [_availableMediaCount intValue];
+    Movie* movie = [self primitiveValueForKey:@"movie"];
+    [self setPrimitiveValue:_availableMediaCount forKey:@"availableDiscCount"];
+    if (movie && (oldValue != newValue)) {
+        if (newValue) {
+            movie.availableDiscCount = [NSNumber numberWithInt:[movie.availableDiscCount intValue] + 1];
+        } else {
+            movie.availableDiscCount = [NSNumber numberWithInt:[movie.availableDiscCount intValue] - 1];
+        }
+    }
+    [super didChangeValueForKey:@"availableDiscCount"];
+}
 
 @end

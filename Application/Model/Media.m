@@ -13,55 +13,37 @@
 
 - (void) setDisc:(Disc*)_disc
 {
-    [super willChangeValueForKey:@"disc"];
-    
-    if (disc) {
+    Disc* disc = [self primitiveValueForKey:@"disc"];
+    if (disc != _disc) {
+        [super willChangeValueForKey:@"disc"];
+        BOOL isAvailable = [[self primitiveValueForKey:@"isAvailable"] boolValue];
+        [self setPrimitiveValue:_disc forKey:@"disc"];
         if (isAvailable) {
-            disc.availableMediaCount = [NSNumber numberWithInt:[disc.availableMediaCount intValue] - 1];
+            if (disc) {
+                disc.availableMediaCount = [NSNumber numberWithInt:[disc.availableMediaCount intValue] - 1];
+            }
+            if (_disc) {
+                _disc.availableMediaCount = [NSNumber numberWithInt:[_disc.availableMediaCount intValue] + 1];
+            }
         }
-        
-        [disc release];
-        disc = nil;
+        [super didChangeValueForKey:@"disc"];
     }
-    
-    disc = [_disc retain];
-    
-    if (disc && isAvailable) {
-        disc.availableMediaCount = [NSNumber numberWithInt:[disc.availableMediaCount intValue] + 1];
-    }
-    
-    [super didChangeValueForKey:@"disc"];
 }
-
 
 - (void) setIsAvailable:(NSNumber*)_isAvailable
 {
     [super willChangeValueForKey:@"isAvailable"];
-    
-    BOOL oldValue = FALSE;
-    BOOL newValue = FALSE;
-    
-    if (isAvailable) {
-        oldValue = [isAvailable boolValue];
-        
-        [isAvailable release];
-        isAvailable = nil;
-    }
-    if (_isAvailable) {
-        newValue = [_isAvailable boolValue];
-    }
-    
-    isAvailable = [_isAvailable retain];
-    
+    BOOL oldValue = [[self primitiveValueForKey:@"isAvailable"] boolValue];
+    BOOL newValue = [_isAvailable boolValue];
+    Disc* disc = [self primitiveValueForKey:@"disc"];
+    [self setPrimitiveValue:_isAvailable forKey:@"isAvailable"];
     if (disc && (oldValue != newValue)) {
         if (newValue) {
             disc.availableMediaCount = [NSNumber numberWithInt:[disc.availableMediaCount intValue] + 1];
-        }
-        else {
+        } else {
             disc.availableMediaCount = [NSNumber numberWithInt:[disc.availableMediaCount intValue] - 1];
         }
     }
-
     [super didChangeValueForKey:@"isAvailable"];
 }
 

@@ -5,8 +5,6 @@
 
 @interface MediaFile : NSObject {
     void* mediaInfo;
-    NSString* fingerprint;
-    Disc* disc;
     NSString* tag;
     id<MediaFileSource> mediaFileSource;
 }
@@ -16,7 +14,7 @@
 @property (readonly) void* mediaInfo;
 
 @property (retain) NSString* tag;
-@property (retain) NSString* fingerprint;
+@property (readonly) NSString* fingerprint;
 @property (readonly) NSString* type;
 @property (readonly) NSString* pathToFile;
 @property (readonly) id<MediaFileSource> mediaFileSource;

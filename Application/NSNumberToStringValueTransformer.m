@@ -13,7 +13,7 @@
         return str;
     }
     else {
-        return nil;
+        return @"";
     }
 }
 

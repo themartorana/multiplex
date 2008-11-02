@@ -3,7 +3,9 @@
 
 #pragma mark -
 @implementation AmazonQuery
+
 @synthesize ean;
+@synthesize queryType;
 
 + (id) amazonQueryWithAccessKey:(NSString*)accessKey ean:(NSString*)ean
 {
@@ -22,8 +24,27 @@
     return query;
 }
 
++ (id) amazonQueryWithAccessKey:(NSString*)accessKey titleKeywords:(NSString*)titleKeywords
+{
+    return [[[AmazonQuery alloc] initWithAccessKey:accessKey titleKeywords:titleKeywords] autorelease];
+}
+
++ (id) amazonQueryWithAccessKey:(NSString*)accessKey titleKeywords:(NSString*)titleKeywords delegate:(id)delegate userInfo:(id)userInfo startImmediately:(BOOL)startImmediately
+{
+    NSAssert(delegate, @"The delegate must not be nil.");
+    AmazonQuery* query = [AmazonQuery amazonQueryWithAccessKey:accessKey titleKeywords:titleKeywords];
+    query.delegate = delegate;
+    query.userInfo = userInfo;
+    if (startImmediately) {
+        [query start];
+    }
+    return query;
+}
+
 - (id) initWithAccessKey:(NSString*)_accessKey ean:(NSString*)_ean
 {
+    queryType = AmazonQueryTypeEAN;
+    
     NSAssert(_accessKey, @"accessKey must not be nil.");
     NSAssert(_ean, @"ean must not be nil.");
     NSAssert([_ean length] == 13, @"ean must not be exactly 13 digits long.");
@@ -45,6 +66,31 @@
     return self;
 }
 
+- (id) initWithAccessKey:(NSString*)_accessKey titleKeywords:(NSString*)_titleKeywords
+{
+    queryType = AmazonQueryTypeTitle;
+    
+    NSAssert(_accessKey, @"accessKey must not be nil.");
+    NSAssert(_titleKeywords, @"ean must not be nil.");
+    NSString* url = [NSString stringWithFormat:
+                     @"http://webservices.amazon.com/onca/xml?Service=AWSECommerceService" \
+                     "&SubscriptionId=%@" \
+                     "&Operation=ItemSearch" \
+                     "&ResponseGroup=Small,ItemAttributes,Images,EditorialReview" \
+                     "&IdType=EAN"\
+                     "&SearchIndex=DVD"\
+                     "&Title=%@",
+                     _accessKey,
+                     _titleKeywords
+                     ];
+    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    if (self = [super initWithURL:[NSURL URLWithString:url]]) {
+        accessKey = [_accessKey retain];
+        titleKeywords = [_titleKeywords retain];
+    }
+    return self;
+}
+
 - (void) dealloc
 {
     [accessKey release];
@@ -54,7 +100,7 @@
 
 - (void) _fireDidReceiveData:(NSData*)data ofType:(NSString*)type
 {
-    NSMutableDictionary* response = nil;
+    NSMutableArray* response = nil;
     NSError* error = nil;
     if ([data length] > 0) {
         NSXMLDocument* xml = [[NSXMLDocument alloc] initWithData:data options:NSXMLDocumentTidyXML error:&error];
@@ -105,81 +151,87 @@
                 error:&error
             ];
             if ([items count]) {
-                NSXMLElement* item = [items objectAtIndex:0];
-                response = [NSMutableDictionary dictionary];
+                response = [NSMutableArray array];
                 
-                NSString* amazonId = [[item attributeForName:@"_id"] stringValue];
-                if ([amazonId length]) {
-                    [response setObject:amazonId forKey:@"_id"];
-                }
-                
-                NSString* coverImageURL = [[item attributeForName:@"_cover_image_url"] stringValue];
-                if ([coverImageURL length]) {
-                    [response setObject:coverImageURL forKey:@"_coverImageURL"];
-                }
-                
-                NSString* detailPageURL = [[item attributeForName:@"_detail_page_url"] stringValue];
-                if ([detailPageURL length]) {
-                    [response setObject:detailPageURL forKey:@"_detailPageURL"];
-                }
-                
-                NSString* aspectRatio = [[item attributeForName:@"aspect_ratio"] stringValue];
-                if ([aspectRatio length]) {
-                    [response setObject:aspectRatio forKey:@"aspectRatio"];
-                }
-                
-                NSString* audienceRating = [[item attributeForName:@"audience_rating"] stringValue];
-                if ([audienceRating length]) {
-                    [response setObject:audienceRating forKey:@"audienceRating"];
-                }
-                
-                NSArray* actors = [[[item attributeForName:@"actors"] stringValue] componentsSeparatedByString:@"|"];
-                if ([actors count]) {
-                    [response setObject:actors forKey:@"actors"];
-                }
-                
-                NSString* synopsis = [[item attributeForName:@"synopsis"] stringValue];
-                if ([synopsis length]) {
-                    [response setObject:synopsis forKey:@"synopsis"];
-                }
-
-                NSString* review = [[item attributeForName:@"review"] stringValue];
-                if ([review length]) {
-                    [response setObject:review forKey:@"review"];
-                }
-                
-                NSDate* releaseDate = [NSDate dateWithNaturalLanguageString:[[item attributeForName:@"release_date"] stringValue]];      
-                if (releaseDate) {
-                    [response setObject:[dateFormatter stringFromDate:releaseDate] forKey:@"releaseDate"];
-                }
-                
-                NSDate* theatricalReleaseDate = [NSDate dateWithNaturalLanguageString:[[item attributeForName:@"theatrical_release_date"] stringValue]];      
-                if (theatricalReleaseDate) {
-                    [response setObject:[dateFormatter stringFromDate:theatricalReleaseDate] forKey:@"theatricalReleaseDate"];
-                }
-                
-                NSString* studio = [[item attributeForName:@"studio"] stringValue];
-                if ([studio length]) {
-                    [response setObject:studio forKey:@"studio"];
-                }
-                
-                NSString* title = [[item attributeForName:@"title"] stringValue];
-                if ([title length]) {
-                    [response setObject:title forKey:@"title"];
-                }
-                
-                NSString* regionCode = [[item attributeForName:@"region_code"] stringValue];
-                if ([regionCode length]) {
-                    int value = [[numberFormatter numberFromString:regionCode] intValue];
-                    if (value >= 0 && value <= 8) {
-                        [response setObject:[NSNumber numberWithInt:value] forKey:@"regionCode"];
+                for (NSXMLElement* item in items) {
+                    NSMutableDictionary* responseDict = [NSMutableDictionary dictionary];
+                    [response addObject:responseDict];
+                    
+                    NSString* amazonId = [[item attributeForName:@"_id"] stringValue];
+                    if ([amazonId length]) {
+                        [responseDict setObject:amazonId forKey:@"_id"];
                     }
+                    
+                    NSString* coverImageURL = [[item attributeForName:@"_cover_image_url"] stringValue];
+                    if ([coverImageURL length]) {
+                        [responseDict setObject:coverImageURL forKey:@"_coverImageURL"];
+                    }
+                    
+                    NSString* detailPageURL = [[item attributeForName:@"_detail_page_url"] stringValue];
+                    if ([detailPageURL length]) {
+                        [responseDict setObject:detailPageURL forKey:@"_detailPageURL"];
+                    }
+                    
+                    NSString* aspectRatio = [[item attributeForName:@"aspect_ratio"] stringValue];
+                    if ([aspectRatio length]) {
+                        [responseDict setObject:aspectRatio forKey:@"aspectRatio"];
+                    }
+                    
+                    NSString* audienceRating = [[item attributeForName:@"audience_rating"] stringValue];
+                    if ([audienceRating length]) {
+                        [responseDict setObject:audienceRating forKey:@"audienceRating"];
+                    }
+                    
+                    NSArray* actors = [[[item attributeForName:@"actors"] stringValue] componentsSeparatedByString:@"|"];
+                    if ([actors count]) {
+                        [responseDict setObject:actors forKey:@"actors"];
+                    }
+                    
+                    NSString* synopsis = [[item attributeForName:@"synopsis"] stringValue];
+                    if ([synopsis length]) {
+                        [responseDict setObject:synopsis forKey:@"synopsis"];
+                    }
+                    
+                    NSString* review = [[item attributeForName:@"review"] stringValue];
+                    if ([review length]) {
+                        [responseDict setObject:review forKey:@"review"];
+                    }
+                    
+                    NSDate* releaseDate = [NSDate dateWithNaturalLanguageString:[[item attributeForName:@"release_date"] stringValue]];      
+                    if (releaseDate) {
+                        [responseDict setObject:[dateFormatter stringFromDate:releaseDate] forKey:@"releaseDate"];
+                    }
+                    
+                    NSDate* theatricalReleaseDate = [NSDate dateWithNaturalLanguageString:[[item attributeForName:@"theatrical_release_date"] stringValue]];      
+                    if (theatricalReleaseDate) {
+                        [responseDict setObject:[dateFormatter stringFromDate:theatricalReleaseDate] forKey:@"theatricalReleaseDate"];
+                    }
+                    
+                    NSString* studio = [[item attributeForName:@"studio"] stringValue];
+                    if ([studio length]) {
+                        [responseDict setObject:studio forKey:@"studio"];
+                    }
+                    
+                    NSString* title = [[item attributeForName:@"title"] stringValue];
+                    if ([title length]) {
+                        [responseDict setObject:title forKey:@"title"];
+                    }
+                    
+                    NSString* regionCode = [[item attributeForName:@"region_code"] stringValue];
+                    if ([regionCode length]) {
+                        int value = [[numberFormatter numberFromString:regionCode] intValue];
+                        if (value >= 0 && value <= 8) {
+                            [responseDict setObject:[NSNumber numberWithInt:value] forKey:@"regionCode"];
+                        }
+                    }
+                    
+                    NSString* runningTime = [[item attributeForName:@"running_time"] stringValue];
+                    if ([runningTime length]) {
+                        [responseDict setObject:[numberFormatter numberFromString:runningTime] forKey:@"runningTime"];
+                    }
+                    
                 }
                 
-                NSString* runningTime = [[item attributeForName:@"running_time"] stringValue];
-                if ([runningTime length]) {
-                    [response setObject:[numberFormatter numberFromString:runningTime] forKey:@"runningTime"];
-                }
             }
         } @catch (id exception) {
             NSLog(@"AmazonQuery:  Exception during parse -- %@", exception);
@@ -200,7 +252,6 @@
             }
         }
     }
-    [self autorelease];
 }
 
 - (void) _fireDidFailWithError:(NSError*)error

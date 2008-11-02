@@ -8,7 +8,6 @@
 @dynamic genre;
 @dynamic gtin;
 @dynamic metadataAcceptedDate;
-@dynamic premiereDate;
 @dynamic productionYear;
 @dynamic rating;
 @dynamic regionCode;

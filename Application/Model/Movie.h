@@ -7,7 +7,6 @@
 
 @property (retain) BoxArt* boxArt;
 @property (retain) NSDate* metadataAcceptedDate;
-@property (retain) NSDate* premiereDate;
 @property (retain) NSDate* releaseDate;
 @property (retain) NSDate* theatricalReleaseDate;
 @property (retain) NSNumber* availableDiscCount;

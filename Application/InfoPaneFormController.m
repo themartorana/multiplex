@@ -52,14 +52,14 @@
         [self willChangeValueForKey:@"movie"];
         [movie release];
         movie = [_movie retain];
-        [[descriptionWebView mainFrame] loadHTMLString:movie ? movie.review : @"" baseURL:[NSURL URLWithString:@""]];
+        [[descriptionWebView mainFrame] loadHTMLString:movie ? movie.synopsis : @"" baseURL:[NSURL URLWithString:@""]];
         [self didChangeValueForKey:@"movie"];
     }
 }
 
 - (void) webViewDidEndEditing:(NSNotification*)notification
 {
-    movie.review = [(id)[[[[[descriptionWebView mainFrame] DOMDocument] documentElement] getElementsByTagName:@"body"] item:0] innerHTML];
+    movie.synopsis = [(id)[[[[[descriptionWebView mainFrame] DOMDocument] documentElement] getElementsByTagName:@"body"] item:0] innerHTML];
 }
 
 - (void) tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem
@@ -76,6 +76,7 @@
 - (void) showHomeTab
 {
     [infoTabView selectTabViewItem:[[infoTabView tabViewItems] objectAtIndex:0]];
+    [[descriptionWebView mainFrame] loadHTMLString:movie ? movie.synopsis : @"" baseURL:[NSURL URLWithString:@""]];
 }
 
 - (void) showDiscsTab

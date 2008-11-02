@@ -10,8 +10,9 @@ static CGPDFDocumentRef radial = nil;
 
 - (id) init
 {
-	if (self = [super init]) {
-		[self setNeedsDisplayOnBoundsChange:YES];
+    if (self = [super init]) {
+        
+        [self setNeedsDisplayOnBoundsChange:YES];
 		
 		NSMutableArray* steps = [NSMutableArray array];
 		float time = 0.0;

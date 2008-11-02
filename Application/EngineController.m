@@ -723,12 +723,13 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                 if (frontCoverURL && !disc.boxArt) {
                     BoxArt* boxArt = [self _findBoxArtByURL:frontCoverURL];
                     if (!boxArt) {
-                        boxArt = disc.boxArt = [[BoxArt alloc] initWithEntity:boxArtEntity insertIntoManagedObjectContext:managedObjectContext];
+                        boxArt = [[BoxArt alloc] initWithEntity:boxArtEntity insertIntoManagedObjectContext:managedObjectContext];
                         boxArt.url = frontCoverURL;
                         boxArt.state = @"Loading";
                         [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObjects:boxArt, nil] error:nil];
                         [ImageQuery imageQueryWithURL:[NSURL URLWithString:frontCoverURL] delegate:self userInfo:[Activity activityWithName:kLoadingBoxArtActivityName userInfo:boxArt.objectID] startImmediately:YES];
                     }
+                    disc.boxArt = boxArt;
                 }
             }
         }
@@ -788,12 +789,13 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                 if (frontCoverURL && !disc.boxArt) {
                     BoxArt* boxArt = [self _findBoxArtByURL:frontCoverURL];
                     if (!boxArt) {
-                        boxArt = disc.boxArt = [[BoxArt alloc] initWithEntity:boxArtEntity insertIntoManagedObjectContext:managedObjectContext];
+                        boxArt = [[BoxArt alloc] initWithEntity:boxArtEntity insertIntoManagedObjectContext:managedObjectContext];
                         boxArt.url = frontCoverURL;
                         boxArt.state = @"Loading";
                         [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObjects:boxArt, nil] error:nil];
                         [ImageQuery imageQueryWithURL:[NSURL URLWithString:frontCoverURL] delegate:self userInfo:[Activity activityWithName:kLoadingBoxArtActivityName userInfo:boxArt.objectID] startImmediately:YES];
                     }
+                    disc.boxArt = boxArt;
                 }
             }
         }

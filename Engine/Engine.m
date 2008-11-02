@@ -267,7 +267,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         netService.delegate = self;
     }
     [netService setTXTRecordData:[NSNetService dataFromTXTRecordDictionary:txtData]];
-    [netService publishWithOptions:NSNetServiceNoAutoRename];
+    [netService publishWithOptions:0];
 }
 
 - (MediaLocator*) _findMediaLocatorByPathToFile:(NSString*)pathToFile fingerprint:(NSString*)fingeprint 

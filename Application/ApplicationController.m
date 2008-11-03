@@ -273,12 +273,18 @@
     }
 }
 
-- (void) showMovieDetailAndSelectHomeTabForMovie:(Movie*)movie
+- (void) showMovieDetailForMovie:(Movie*)movie
 {
     if (!movieDetailController) {
         movieDetailController = [[MovieDetailController alloc] initWithApplicationController:self drawerView:drawerView];
     }
     [movieDetailController startWithMovie:selectedMovie];
+}
+
+- (void) showMovieDetailAndSelectHomeTabForMovie:(Movie*)movie
+{
+    [self showMovieDetailForMovie:movie];
+    [movieDetailController showHomeTab];
 }
 
 - (void) showMovieLookupForMovie:(Movie*)movie
@@ -343,7 +349,7 @@
     if (!drawerView.isOpen) {
         [drawerView setContentView:nil];
     } else if ([selectedMovie.gtin length] > 0 || selectedMovie.metadataAcceptedDate != nil) {
-        [self showMovieDetailAndSelectHomeTabForMovie:selectedMovie];
+        [self showMovieDetailForMovie:selectedMovie];
     } else if (selectedMovie) {
         [self showMovieLookupForMovie:selectedMovie];
     } else {

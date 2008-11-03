@@ -63,7 +63,6 @@
 {
     [self setMovie:_movie];
     [drawerView setContentView:infoPaneView];
-    [infoTabView selectTabViewItem:[[infoTabView tabViewItems] objectAtIndex:0]];
     [[descriptionWebView mainFrame] loadHTMLString:movie ? movie.synopsis : @"" baseURL:[NSURL URLWithString:@""]];
 }
 

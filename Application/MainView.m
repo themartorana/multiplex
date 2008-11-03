@@ -156,14 +156,15 @@
     hoverPlayLayer.isMouseDown = NO;
     CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
     CALayer* playButtonLayer = [hoverPlayLayer hitTest:p];
-    if (([layoutManager changesSelectionOnSingleClick] && [theEvent clickCount] == 1) ||
+
+    MovieLayer* movieLayer = [self _movieLayerForPoint:p];
+    if (![[listOfMoviesInOrder objectAtIndex:[listOfMoviesInOrder count] - 1] containsObject:movieLayer.movie]) {
+        movieLayer = nil;
+    }
+    if (movieLayer && ([layoutManager changesSelectionOnSingleClick] && [theEvent clickCount] == 1) ||
         (![layoutManager changesSelectionOnSingleClick] && [theEvent clickCount] == 2)) {
         
-        MovieLayer* movieLayer = [self _movieLayerForPoint:p];
-        if (movieLayer) {
-            [content setSelectedObjects:[NSArray arrayWithObject:[movieLayer movie]]];
-        }
-        
+        [content setSelectedObjects:[NSArray arrayWithObject:[movieLayer movie]]];
         hoverPlayLayer.hidden = YES;
         [self _cancelHoverTimer];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexShowMovieDialog" object:nil];

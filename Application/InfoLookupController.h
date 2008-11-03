@@ -2,6 +2,7 @@
 
 @class Activity;
 @class AmazonQuery;
+@class ApplicationController;
 @class DiscIdentQuery;
 @class ImageQuery;
 @class WebView;
@@ -10,31 +11,25 @@
 @class CoverArtImageView;
 @class InfoPaneFormController;
 
-static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
-
-@interface DrawerController : NSObject {
-    Movie* selectedMovie;
+@interface InfoLookupController : NSObject {
+    Movie* movie;
     
+    IBOutlet ApplicationController* applicationController;
     IBOutlet NSArrayController* movies;
     IBOutlet DrawerView* drawerView;
-    
-    IBOutlet NSView* movieInfoView;
-    IBOutlet NSView* noMovieSelectedView;
     
     ///////////////////////////////////
     /// 
     /// LOOKUP STUFF
     /// 
     ///////////////////////////////////
-
+    
     IBOutlet NSView* searchForMovieView;
     IBOutlet NSView* searchingView;
     IBOutlet NSView* searchResultsView;
     
     NSArray* amazonQueryResults;
     int resultIndex;
-    
-    Movie* movie;
     
     IBOutlet NSTextField* upcTextField;
     IBOutlet NSTextField* titleTextField;
@@ -45,11 +40,13 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     
     IBOutlet WebView* searchResultsDescriptionWebView; 
     
-    IBOutlet InfoPaneFormController* formController;
-    
     AmazonQuery* amazonQuery;
     ImageQuery* imageQuery;
 }
+
+@property (retain) Movie* movie;
+
+- (void) beginLookupForMovie:(Movie*)movie;
 
 - (IBAction) skipEnterUPC:(id)sender;
 

@@ -1,4 +1,5 @@
-#import "DrawerController.h"
+#import "InfoLookupController.h"
+#import "ApplicationController.h"
 #import "DrawerView.h"
 #import "Movie.h"
 #import "Activity.h"
@@ -14,78 +15,34 @@
 #import <WebKit/WebKit.h>
 #import <Toolkit/Toolkit.h>
 
-@interface DrawerController (Private)
+static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
+
+@interface InfoLookupController (Private)
 - (void) changeDrawerView:(BOOL)isOpen;
 - (void) showResultAtIndex:(int)index;
 @end
 
 
-@implementation DrawerController
-
-- (DrawerController*) init
-{
-    if (self = [super init]) {
-        resultIndex = -1;
-    }
-    
-    return self;
-}
+@implementation InfoLookupController
+@synthesize movie;
 
 - (void) awakeFromNib
 {
-    [self bind:@"selectedMovie" toObject:movies withKeyPath:@"selection.self" options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption]];
-    [drawerView addObserver:self forKeyPath:@"isOpen" options:NSKeyValueObservingOptionNew context:nil];
-    
     [searchResultsDescriptionWebView setDrawsBackground:NO];
     [searchResultsDescriptionWebView setPreferences:[ApplicationResources movieDescriptionWebPreferences]];
-    
-    [searchResultsBoxArt bind:@"image" toObject:self withKeyPath:@"selectedMovie.boxArt.image" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
+    [searchResultsBoxArt bind:@"image" toObject:self withKeyPath:@"movie.boxArt.image" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
 }
 
-- (void) dealloc
+- (void) beginLookupForMovie:(Movie*)_movie
 {
-    [selectedMovie release];
-    [super dealloc];
-}
-
-- (void) setSelectedMovie:(Movie*)_selectedMovie
-{   
-    if (selectedMovie != _selectedMovie) {
-        [selectedMovie release];
-        selectedMovie = [_selectedMovie retain];
-        [self changeDrawerView:drawerView.isOpen];
-    }
-}
-
-- (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
-{
-    if (object == drawerView) {
-        if ([@"isOpen" isEqualToString:keyPath]) {
-            BOOL isOpen = [(NSNumber*)[object valueForKeyPath:keyPath] boolValue];
-            [self changeDrawerView:isOpen];
-        }
-    }
-}
-
-- (void) changeDrawerView:(BOOL)isOpen
-{
-    if (!isOpen) {
-        [drawerView setContentView:nil];
-    } 
-    else if ([selectedMovie.gtin length] > 0 || selectedMovie.metadataAcceptedDate != nil) {
-        [drawerView setContentView:movieInfoView];
-    } 
-    else if (selectedMovie) {
-        [drawerView setContentView:searchForMovieView];
-    } 
-    else {
-        [drawerView setContentView:noMovieSelectedView];
-    }
+    resultIndex = 0;
+    self.movie = _movie;
+    [drawerView setContentView:searchForMovieView];
 }
 
 - (IBAction) skipEnterUPC:(id)sender
 {
-    [drawerView setContentView:movieInfoView];
+    [applicationController showInfoPanelAndSelectHomeTab:nil];
 }
 
 #pragma mark Lookup Methods
@@ -107,7 +64,7 @@
 - (IBAction) lookUpTitle:(id)sender
 {
     Activity* activityTitleLookup = [Activity activityWithName:@"Looking up title" userInfo:nil];
-
+    
     [drawerView setContentView:searchingView];
     
     NSMutableString* title = [NSMutableString stringWithString:[titleTextField stringValue]];
@@ -117,44 +74,37 @@
 - (IBAction) selectResult:(id)sender
 {
     NSError* error = nil;
-    [[selectedMovie managedObjectContext] save:&error];
+    [[movie managedObjectContext] save:&error];
     
     if (error) {
         NSLog(@"%@", [error userInfo]);
         NSAssert(FALSE, @"ERROR SAVING DATA!");
     }
     
-    [drawerView setContentView:movieInfoView];
-    [formController showHomeTab];
+    [applicationController showInfoPanelAndSelectHomeTab:nil];
 }
 
 - (IBAction) showNextResult:(id)sender
 {
     resultIndex++;
-    if (resultIndex + 1 > [amazonQueryResults count]) {
-        resultIndex--;
-        return;
+    if (resultIndex >= [amazonQueryResults count]) {
+        resultIndex = 0;
     }
-    else {
-        [self showResultAtIndex:resultIndex];
-    }    
+    [self showResultAtIndex:resultIndex];
 }
 
 - (IBAction) showPreviousResult:(id)sender
 {
     resultIndex--;
     if (resultIndex < 0) {
-        resultIndex = -1;
-        return;
+        resultIndex = [amazonQueryResults count] - 1;
     } 
-    else {
-        [self showResultAtIndex:resultIndex];
-    }
+    [self showResultAtIndex:resultIndex];
 }
 
 - (IBAction) backToSearch:(id)sender
 {
-    [[selectedMovie managedObjectContext] rollback];
+    [[movie managedObjectContext] rollback];
     resultIndex = -1;
     [drawerView setContentView:searchForMovieView];
 }
@@ -171,23 +121,25 @@
     if ([resultAtIndex objectForKey:@"_coverImageURL"]) {
         NSURL* imageUrl = [NSURL URLWithString:[resultAtIndex objectForKey:@"_coverImageURL"]];
         imageQuery = [[ImageQuery imageQueryWithURL:imageUrl delegate:self userInfo:nil startImmediately:YES] retain];
+    } else {
+        movie.boxArt = nil;
     }
     
     if (resultAtIndex) {
         // Start loading in information
-        selectedMovie.title = [resultAtIndex objectForKey:@"title"];
-        selectedMovie.aspectRatio = [resultAtIndex objectForKey:@"aspectRatio"];
+        movie.title = [resultAtIndex objectForKey:@"title"];
+        movie.aspectRatio = [resultAtIndex objectForKey:@"aspectRatio"];
         //selectedMovie.genre = [resultAtIndex objectForKey:@"Genre"];
-        selectedMovie.metadataAcceptedDate = [NSDate date];
-        selectedMovie.releaseDate = [resultAtIndex objectForKey:@"releaseDate"] ? [NSDate dateFromShortDateString:[resultAtIndex objectForKey:@"releaseDate"]] : nil;
-        selectedMovie.rating = [resultAtIndex objectForKey:@"audienceRating"];
-        selectedMovie.regionCode = [resultAtIndex objectForKey:@"regionCode"];
-        selectedMovie.review = [resultAtIndex objectForKey:@"review"];
-        selectedMovie.runningTime = [resultAtIndex objectForKey:@"runningTime"];
-        selectedMovie.studio = [resultAtIndex objectForKey:@"studio"];
-        selectedMovie.synopsis = [resultAtIndex objectForKey:@"synopsis"];
-        selectedMovie.theatricalReleaseDate = [resultAtIndex objectForKey:@"theatricalReleaseDate"] ? [NSDate dateFromShortDateString:[resultAtIndex objectForKey:@"theatricalReleaseDate"]] : nil;
-        selectedMovie.productionYear = selectedMovie.theatricalReleaseDate ? [NSNumber numberWithInt:[[selectedMovie.theatricalReleaseDate descriptionWithCalendarFormat:@"%Y" timeZone:nil locale:nil] intValue]] : nil;
+        movie.metadataAcceptedDate = [NSDate date];
+        movie.releaseDate = [resultAtIndex objectForKey:@"releaseDate"] ? [NSDate dateFromShortDateString:[resultAtIndex objectForKey:@"releaseDate"]] : nil;
+        movie.rating = [resultAtIndex objectForKey:@"audienceRating"];
+        movie.regionCode = [resultAtIndex objectForKey:@"regionCode"];
+        movie.review = [resultAtIndex objectForKey:@"review"];
+        movie.runningTime = [resultAtIndex objectForKey:@"runningTime"];
+        movie.studio = [resultAtIndex objectForKey:@"studio"];
+        movie.synopsis = [resultAtIndex objectForKey:@"synopsis"];
+        movie.theatricalReleaseDate = [resultAtIndex objectForKey:@"theatricalReleaseDate"] ? [NSDate dateFromShortDateString:[resultAtIndex objectForKey:@"theatricalReleaseDate"]] : nil;
+        movie.productionYear = movie.theatricalReleaseDate ? [NSNumber numberWithInt:[[movie.theatricalReleaseDate descriptionWithCalendarFormat:@"%Y" timeZone:nil locale:nil] intValue]] : nil;
         
         // Set the GTIN?
         if (AmazonQueryTypeEAN == amazonQuery.queryType) {
@@ -197,12 +149,12 @@
             while ([gtin length] < 14) {
                 [gtin insertString:@"0" atIndex:0];
             }
-            selectedMovie.gtin = gtin;
+            movie.gtin = gtin;
         }
         
         NSString* resultCount = [NSString stringWithFormat:@"%d of %d", index + 1, [amazonQueryResults count]];
         [searchResultsRecordCount setStringValue:resultCount];
-        [[searchResultsDescriptionWebView mainFrame] loadHTMLString:selectedMovie.synopsis baseURL:[NSURL URLWithString:@""]];
+        [[searchResultsDescriptionWebView mainFrame] loadHTMLString:movie.synopsis baseURL:[NSURL URLWithString:@""]];
     }
 }
 
@@ -235,7 +187,7 @@
 - (void) amazonQuery:(AmazonQuery*)query didReceiveResponse:(NSArray*)response userInfo:(id)userInfo
 {    
     [(Activity*)userInfo terminate];
-
+    
     if (![response count]) {
         [self showNoResultsSheet];
     }
@@ -256,22 +208,22 @@
 {
     // Set the box art
     BoxArt* boxArt = nil;
-    if (selectedMovie.boxArt) {
-        boxArt = selectedMovie.boxArt;
+    if (movie.boxArt) {
+        boxArt = movie.boxArt;
     }
     else {
-        NSManagedObjectContext* managedObjectContext = [selectedMovie managedObjectContext];
+        NSManagedObjectContext* managedObjectContext = [movie managedObjectContext];
         NSEntityDescription* boxArtEntity = [NSEntityDescription entityForName:@"BoxArt" inManagedObjectContext:managedObjectContext];
         boxArt = [[BoxArt alloc] initWithEntity:boxArtEntity insertIntoManagedObjectContext:managedObjectContext];
-        selectedMovie.boxArt = boxArt;
+        movie.boxArt = boxArt;
     }
     
     CGImageRef image = CGImageSourceCreateImageAtIndex(imageSource, 0, (CFDictionaryRef)[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], kCGImageSourceCreateThumbnailFromImageAlways, nil]);
-
+    
     boxArt.state = @"Loaded";
     boxArt.url = [[query URL] absoluteString];
     boxArt.image = image;
-
+    
     CGImageRelease(image);
 }
 

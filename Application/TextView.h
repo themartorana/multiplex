@@ -2,7 +2,7 @@
 
 @class CATextLayer;
 
-@interface CATextLayerView : NSView {
+@interface TextView : NSView {
     CATextLayer* textLayer;
     
     NSString* text;

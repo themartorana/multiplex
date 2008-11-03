@@ -1,9 +1,9 @@
-#import "CATextLayerView.h"
+#import "TextView.h"
 #import "MultiplexColorFactory.h"
 
 #import <QuartzCore/QuartzCore.h>
 
-@implementation CATextLayerView
+@implementation TextView
 
 @synthesize text;
 

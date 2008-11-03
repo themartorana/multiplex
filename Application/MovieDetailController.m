@@ -6,7 +6,7 @@
 #import "ApplicationResources.h"
 #import "BoxArt.h"
 #import "LayerBackedButtonView.h"
-#import "CATextLayerView.h"
+#import "TextView.h"
 
 #import <WebKit/WebKit.h>
 

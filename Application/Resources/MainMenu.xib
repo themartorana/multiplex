@@ -8,7 +8,6 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1495"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2884,7 +2883,7 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSView" id="162150624">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">269</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -4270,11 +4269,10 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{20, 439}, {760, 46}}</string>
 						<reference key="NSSuperview" ref="162150624"/>
-						<string key="NSClassName">CATextLayerView</string>
+						<string key="NSClassName">TextView</string>
 					</object>
 				</object>
 				<string key="NSFrameSize">{800, 500}</string>
-				<reference key="NSSuperview"/>
 				<bool key="NSViewIsLayerTreeHost">YES</bool>
 			</object>
 			<object class="NSWindowTemplate" id="285385420">
@@ -9255,14 +9253,6 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">CATextLayerView</string>
-					<string key="superclassName">NSView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Application/CATextLayerView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
 					<string key="className">CoverArtImageView</string>
 					<string key="superclassName">NSView</string>
 					<object class="NSMutableDictionary" key="outlets">
@@ -9393,7 +9383,7 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>CoverArtImageView</string>
 							<string>WebView</string>
-							<string>CATextLayerView</string>
+							<string>TextView</string>
 							<string>NSTabViewItem</string>
 							<string>InfoPaneDiscsView</string>
 							<string>NSTabView</string>
@@ -9547,6 +9537,14 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Application/NoDiscsView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">TextView</string>
+					<string key="superclassName">NSView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBUserSource</string>
+						<string key="minorKey"/>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

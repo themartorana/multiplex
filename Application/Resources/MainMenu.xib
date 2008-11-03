@@ -8,9 +8,9 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="2043"/>
-			<integer value="1906"/>
-			<integer value="1685"/>
+			<integer value="1150"/>
+			<integer value="1977"/>
+			<integer value="1688"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -286,7 +286,7 @@
 									<reference key="NSOnImage" ref="756751024"/>
 									<reference key="NSMixedImage" ref="908425081"/>
 								</object>
-								<object class="NSMenuItem" id="243628274">
+								<object class="NSMenuItem" id="139546187">
 									<reference key="NSMenu" ref="468177971"/>
 									<bool key="NSIsDisabled">YES</bool>
 									<bool key="NSIsSeparator">YES</bool>
@@ -585,7 +585,7 @@
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{1000, 700}</string>
 				<object class="NSView" key="NSWindowView" id="384445475">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">274</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1115,6 +1115,7 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{1000, 700}</string>
+					<reference key="NSSuperview"/>
 					<bool key="NSViewIsLayerTreeHost">YES</bool>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1600, 1178}}</string>
@@ -2092,8 +2093,11 @@
 			<object class="NSCustomObject" id="62536199">
 				<string key="NSClassName">InfoPaneFormController</string>
 			</object>
-			<object class="NSCustomObject" id="483006462">
+			<object class="NSCustomObject" id="887771899">
 				<string key="NSClassName">DrawerController</string>
+			</object>
+			<object class="NSCustomObject" id="483006462">
+				<string key="NSClassName">InfoLookupController</string>
 			</object>
 			<object class="NSArrayController" id="697403151">
 				<object class="NSMutableArray" key="NSDeclaredKeys">
@@ -2455,7 +2459,7 @@ eW91IG1heSBzZWFyY2ggYnkgVGl0bGUgYXMgd2VsbC4</string>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomView" id="665861166">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">269</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2535,12 +2539,11 @@ eW91IG1heSBzZWFyY2ggYnkgVGl0bGUgYXMgd2VsbC4</string>
 					</object>
 				</object>
 				<string key="NSFrameSize">{627, 500}</string>
-				<reference key="NSSuperview"/>
 				<bool key="NSViewIsLayerTreeHost">YES</bool>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomView" id="29815340">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">269</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2807,6 +2810,7 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 					</object>
 				</object>
 				<string key="NSFrameSize">{627, 500}</string>
+				<reference key="NSSuperview"/>
 				<bool key="NSViewIsLayerTreeHost">YES</bool>
 				<string key="NSClassName">NSView</string>
 			</object>
@@ -5550,36 +5554,12 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 					<int key="connectionID">2117</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: selectedMovie.title</string>
-						<reference key="source" ref="825136668"/>
-						<reference key="destination" ref="483006462"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="825136668"/>
-							<reference key="NSDestination" ref="483006462"/>
-							<string key="NSLabel">value: selectedMovie.title</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">selectedMovie.title</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">2122</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">searchResultsBoxArt</string>
 						<reference key="source" ref="483006462"/>
 						<reference key="destination" ref="471715406"/>
 					</object>
 					<int key="connectionID">2124</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">formController</string>
-						<reference key="source" ref="483006462"/>
-						<reference key="destination" ref="62536199"/>
-					</object>
-					<int key="connectionID">2125</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -5644,6 +5624,86 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 						<reference key="destination" ref="491495723"/>
 					</object>
 					<int key="connectionID">2150</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">drawerController</string>
+						<reference key="source" ref="483006462"/>
+						<reference key="destination" ref="887771899"/>
+					</object>
+					<int key="connectionID">2153</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">infoLookupController</string>
+						<reference key="source" ref="887771899"/>
+						<reference key="destination" ref="483006462"/>
+					</object>
+					<int key="connectionID">2154</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">formController</string>
+						<reference key="source" ref="887771899"/>
+						<reference key="destination" ref="62536199"/>
+					</object>
+					<int key="connectionID">2155</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">movies</string>
+						<reference key="source" ref="887771899"/>
+						<reference key="destination" ref="697403151"/>
+					</object>
+					<int key="connectionID">2156</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">infoPaneView</string>
+						<reference key="source" ref="887771899"/>
+						<reference key="destination" ref="162150624"/>
+					</object>
+					<int key="connectionID">2157</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">noMovieSelectedView</string>
+						<reference key="source" ref="887771899"/>
+						<reference key="destination" ref="843854123"/>
+					</object>
+					<int key="connectionID">2158</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">searchForMovieView</string>
+						<reference key="source" ref="887771899"/>
+						<reference key="destination" ref="631342612"/>
+					</object>
+					<int key="connectionID">2159</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">drawerView</string>
+						<reference key="source" ref="887771899"/>
+						<reference key="destination" ref="243160278"/>
+					</object>
+					<int key="connectionID">2160</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: movie.title</string>
+						<reference key="source" ref="825136668"/>
+						<reference key="destination" ref="483006462"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="825136668"/>
+							<reference key="NSDestination" ref="483006462"/>
+							<string key="NSLabel">value: movie.title</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">movie.title</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2161</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -7793,7 +7853,7 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 							<reference ref="522439908"/>
 							<reference ref="4082072"/>
 							<reference ref="491495723"/>
-							<reference ref="243628274"/>
+							<reference ref="139546187"/>
 						</object>
 						<reference key="parent" ref="690609727"/>
 					</object>
@@ -8305,8 +8365,13 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">2143</int>
-						<reference key="object" ref="243628274"/>
+						<reference key="object" ref="139546187"/>
 						<reference key="parent" ref="468177971"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2151</int>
+						<reference key="object" ref="887771899"/>
+						<reference key="parent" ref="1049"/>
 					</object>
 				</object>
 			</object>
@@ -8700,6 +8765,7 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 					<string>2142.ImportedFromIB2</string>
 					<string>2143.IBPluginDependency</string>
 					<string>2143.ImportedFromIB2</string>
+					<string>2151.IBPluginDependency</string>
 					<string>217.IBPluginDependency</string>
 					<string>217.ImportedFromIB2</string>
 					<string>23.IBPluginDependency</string>
@@ -8808,8 +8874,8 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{205, 235}, {1000, 700}}</string>
-					<string>{{205, 235}, {1000, 700}}</string>
+					<string>{{693, 83}, {1000, 700}}</string>
+					<string>{{693, 83}, {1000, 700}}</string>
 					<reference ref="9"/>
 					<reference ref="9"/>
 					<string>{1000, 700}</string>
@@ -8994,7 +9060,7 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{130, 106}, {627, 500}}</string>
+					<string>{{606, 94}, {627, 500}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -9119,7 +9185,7 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{189, 351}, {627, 500}}</string>
+					<string>{{447, 262}, {627, 500}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -9175,6 +9241,7 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -9276,7 +9343,7 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2150</int>
+			<int key="maxID">2161</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -9377,65 +9444,30 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 					<string key="className">DrawerController</string>
 					<string key="superclassName">NSObject</string>
 					<object class="NSMutableDictionary" key="actions">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSMutableArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>backToSearch:</string>
-							<string>lookUpTitle:</string>
-							<string>lookUpUPC:</string>
-							<string>selectResult:</string>
-							<string>showNextResult:</string>
-							<string>showPreviousResult:</string>
-							<string>skipEnterUPC:</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-						</object>
+						<string key="NS.key.0">showInfoPanelAndSelectHomeTab:</string>
+						<string key="NS.object.0">id</string>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>backAndForwardButtons</string>
 							<string>drawerView</string>
 							<string>formController</string>
-							<string>movieInfoView</string>
+							<string>infoLookupController</string>
+							<string>infoPaneView</string>
 							<string>movies</string>
 							<string>noMovieSelectedView</string>
 							<string>searchForMovieView</string>
-							<string>searchResultsBoxArt</string>
-							<string>searchResultsDescriptionWebView</string>
-							<string>searchResultsMovieTitle</string>
-							<string>searchResultsRecordCount</string>
-							<string>searchResultsView</string>
-							<string>searchingView</string>
-							<string>titleTextField</string>
-							<string>upcTextField</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>NSSegmentedControl</string>
 							<string>DrawerView</string>
 							<string>InfoPaneFormController</string>
+							<string>InfoLookupController</string>
 							<string>NSView</string>
 							<string>NSArrayController</string>
 							<string>NSView</string>
 							<string>NSView</string>
-							<string>CoverArtImageView</string>
-							<string>WebView</string>
-							<string>NSTextField</string>
-							<string>NSTextField</string>
-							<string>NSView</string>
-							<string>NSView</string>
-							<string>NSTextField</string>
-							<string>NSTextField</string>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -9484,6 +9516,72 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Application/IndeterminateProgressIndicatorView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">InfoLookupController</string>
+					<string key="superclassName">NSObject</string>
+					<object class="NSMutableDictionary" key="actions">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSMutableArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>backToSearch:</string>
+							<string>lookUpTitle:</string>
+							<string>lookUpUPC:</string>
+							<string>selectResult:</string>
+							<string>showNextResult:</string>
+							<string>showPreviousResult:</string>
+							<string>skipEnterUPC:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="outlets">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSMutableArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>backAndForwardButtons</string>
+							<string>drawerController</string>
+							<string>drawerView</string>
+							<string>movies</string>
+							<string>searchForMovieView</string>
+							<string>searchResultsBoxArt</string>
+							<string>searchResultsDescriptionWebView</string>
+							<string>searchResultsMovieTitle</string>
+							<string>searchResultsRecordCount</string>
+							<string>searchResultsView</string>
+							<string>searchingView</string>
+							<string>titleTextField</string>
+							<string>upcTextField</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>NSSegmentedControl</string>
+							<string>DrawerController</string>
+							<string>DrawerView</string>
+							<string>NSArrayController</string>
+							<string>NSView</string>
+							<string>CoverArtImageView</string>
+							<string>WebView</string>
+							<string>NSTextField</string>
+							<string>NSTextField</string>
+							<string>NSView</string>
+							<string>NSView</string>
+							<string>NSTextField</string>
+							<string>NSTextField</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Application/InfoLookupController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

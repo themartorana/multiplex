@@ -180,6 +180,7 @@
 		F9D4FC030EB7B2B000B89FF4 /* ImageQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D4FC010EB7B2B000B89FF4 /* ImageQuery.m */; };
 		F9F4C07F0EBCC302000843C3 /* license.plist in Resources */ = {isa = PBXBuildFile; fileRef = F9F4C07E0EBCC302000843C3 /* license.plist */; };
 		F9F4C1140EBCCA80000843C3 /* JSONQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F9F4C1130EBCCA80000843C3 /* JSONQuery.m */; };
+		F9FC49FB0EBF49C8007F2769 /* InfoLookupController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FC49FA0EBF49C8007F2769 /* InfoLookupController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -607,6 +608,8 @@
 		F9F4C07E0EBCC302000843C3 /* license.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = license.plist; sourceTree = "<group>"; };
 		F9F4C1120EBCCA80000843C3 /* JSONQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONQuery.h; sourceTree = "<group>"; };
 		F9F4C1130EBCCA80000843C3 /* JSONQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONQuery.m; sourceTree = "<group>"; };
+		F9FC49F90EBF49C8007F2769 /* InfoLookupController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoLookupController.h; sourceTree = "<group>"; };
+		F9FC49FA0EBF49C8007F2769 /* InfoLookupController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoLookupController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -865,6 +868,8 @@
 				F967B02C0E7E16DE00C12B92 /* ApplicationController.m */,
 				550D082A0E9AE14E008F0275 /* InfoPaneFormController.h */,
 				550D082B0E9AE14E008F0275 /* InfoPaneFormController.m */,
+				F9FC49F90EBF49C8007F2769 /* InfoLookupController.h */,
+				F9FC49FA0EBF49C8007F2769 /* InfoLookupController.m */,
 				557B63BD0EB37CC400DFD76F /* DrawerController.h */,
 				557B63BE0EB37CC400DFD76F /* DrawerController.m */,
 			);
@@ -1627,6 +1632,7 @@
 				F917CCA80EBA53CF00B21587 /* Query.m in Sources */,
 				F9F4C1140EBCCA80000843C3 /* JSONQuery.m in Sources */,
 				552D5D280EBCDBD400A292F4 /* IndeterminateProgressIndicatorView.m in Sources */,
+				F9FC49FB0EBF49C8007F2769 /* InfoLookupController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -33,12 +33,6 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     [searchResultsBoxArt bind:@"image" toObject:self withKeyPath:@"movie.boxArt.image" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
 }
 
-- (void) dealloc
-{
-    [movie release];
-    [super dealloc];
-}
-
 - (void) beginLookupForMovie:(Movie*)_movie
 {
     resultIndex = 0;

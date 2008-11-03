@@ -3,6 +3,7 @@
 #import "Movie.h"
 
 #import "InfoPaneFormController.h"
+#import "InfoLookupController.h"
 
 static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 

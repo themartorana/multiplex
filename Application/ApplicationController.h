@@ -4,7 +4,9 @@
 @class DrawerView;
 @class EngineController;
 @class InfoPaneFormController;
+@class InfoLookupController;
 @class UserVoiceFeedbackPanel;
+@class Movie;
 
 @interface ApplicationController : NSWindowController {
     NSDictionary* parameters;
@@ -14,12 +16,15 @@
     /**/
     IBOutlet MainView* mainView;
     IBOutlet DrawerView* drawerView;
+    IBOutlet NSSearchField* searchField;
     /**/
     IBOutlet NSView* infoPaneView;
-    IBOutlet NSView* searchView;
     IBOutlet NSView* noDiscsView;
+    IBOutlet NSView* noMovieSelectedView;
+    IBOutlet NSView* searchForMovieView;
     /**/
     IBOutlet InfoPaneFormController* infoPaneFormController;
+    IBOutlet InfoLookupController* infoLookupController;
     IBOutlet UserVoiceFeedbackPanel* userVoiceFeedbackPanel;
     /**/
     IBOutlet NSButton* userVoiceButton;
@@ -30,8 +35,11 @@
     NSPersistentStoreCoordinator* persistentStoreCoordinator;
     NSManagedObjectContext* appManagedObjectContext;
     NSManagedObjectContext* engineManagedObjectContext;
+    /**/
+    Movie* selectedMovie;
 }
 
+@property (retain) Movie* selectedMovie;
 @property (readonly) NSManagedObjectContext* appManagedObjectContext;
 @property (retain) NSDictionary* parameters;
 

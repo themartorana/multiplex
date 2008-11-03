@@ -66,7 +66,6 @@
 		557440660EABD786002E0B80 /* uservoice-hover.png in Resources */ = {isa = PBXBuildFile; fileRef = 557440640EABD786002E0B80 /* uservoice-hover.png */; };
 		557440670EABD786002E0B80 /* uservoice-normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 557440650EABD786002E0B80 /* uservoice-normal.png */; };
 		5574409D0EABDD54002E0B80 /* uservoice-feedback.css in Resources */ = {isa = PBXBuildFile; fileRef = 5574409C0EABDD54002E0B80 /* uservoice-feedback.css */; };
-		557B63BF0EB37CC400DFD76F /* DrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 557B63BE0EB37CC400DFD76F /* DrawerController.m */; };
 		557B69460E4CCD3F0009919E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 557B69450E4CCD3F0009919E /* MainMenu.xib */; };
 		5583D1640E51D82700EB7AE6 /* Multiplex.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */; };
 		558D1AF00E9D186B000F67FA /* InfoPaneDiscsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */; };
@@ -466,8 +465,6 @@
 		557440640EABD786002E0B80 /* uservoice-hover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "uservoice-hover.png"; sourceTree = "<group>"; };
 		557440650EABD786002E0B80 /* uservoice-normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "uservoice-normal.png"; sourceTree = "<group>"; };
 		5574409C0EABDD54002E0B80 /* uservoice-feedback.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = "uservoice-feedback.css"; sourceTree = "<group>"; };
-		557B63BD0EB37CC400DFD76F /* DrawerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawerController.h; sourceTree = "<group>"; };
-		557B63BE0EB37CC400DFD76F /* DrawerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawerController.m; sourceTree = "<group>"; };
 		557B66A20E4A2F4D0009919E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		557B69450E4CCD3F0009919E /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Multiplex.xcdatamodel; sourceTree = "<group>"; };
@@ -870,8 +867,6 @@
 				550D082B0E9AE14E008F0275 /* InfoPaneFormController.m */,
 				F9FC49F90EBF49C8007F2769 /* InfoLookupController.h */,
 				F9FC49FA0EBF49C8007F2769 /* InfoLookupController.m */,
-				557B63BD0EB37CC400DFD76F /* DrawerController.h */,
-				557B63BE0EB37CC400DFD76F /* DrawerController.m */,
 			);
 			name = "UI Controllers";
 			sourceTree = "<group>";
@@ -1624,7 +1619,6 @@
 				F9B8E1970EB25628008589F3 /* LinearLayoutManager.m in Sources */,
 				55C9F6260EB26A15001B9BCD /* HalfTransparentView.m in Sources */,
 				55C9F6430EB26C5A001B9BCD /* LayerBackedButtonView.m in Sources */,
-				557B63BF0EB37CC400DFD76F /* DrawerController.m in Sources */,
 				5545BC040EB5171C0005A380 /* NSNumberToStringValueTransformer.m in Sources */,
 				5551FB9E0EB65F3C0022147A /* NoDiscsView.m in Sources */,
 				F9D4FC020EB7B2B000B89FF4 /* AmazonQuery.m in Sources */,

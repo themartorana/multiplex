@@ -7,6 +7,7 @@
 #import "Media.h"
 #import "MultiplexColorFactory.h"
 #import "InfoPaneFormController.h"
+#import "InfoLookupController.h"
 #import "UserVoiceFeedbackPanel.h"
 #import "NSDescriptionValueTransformer.h"
 #import "ApplicationResources.h"
@@ -32,6 +33,7 @@
 @implementation ApplicationController
 @synthesize parameters;
 @synthesize appManagedObjectContext;
+@synthesize selectedMovie;
 
 + (void) initialize
 {
@@ -174,6 +176,8 @@
      */
     [self addObserver:self forKeyPath:@"parameters" options:0 context:nil];
     [infoPaneFormController bind:@"movie" toObject:movies withKeyPath:@"selection.self" options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption]];
+    [movies addObserver:self forKeyPath:@"selection.self" options:NSKeyValueObservingOptionNew context:nil];
+    [drawerView addObserver:self forKeyPath:@"isOpen" options:NSKeyValueObservingOptionNew context:nil];
     
     /*  Do the licensing stuff.
      */
@@ -201,9 +205,6 @@
     [notificationCenter addObserver:self selector:@selector(toggleFullScreen:) name:@"MultiplexToggleFullScreen" object:nil];
     
     engineController = [[EngineController alloc] initWithManagedObjectContext:engineManagedObjectContext];
-    
-    // Hook up to drawer view
-    [drawerView addObserver:self forKeyPath:@"isOpen" options:NSKeyValueObservingOptionNew context:nil];
     
     // Put uservoice button forward
     [userVoiceButton setWantsLayer:YES];
@@ -238,6 +239,25 @@
 {
     [[self window] makeKeyAndOrderFront:nil];
     return NO;
+}
+
+- (void) _changeDrawerView:(BOOL)isOpen
+{
+    if (!drawerView.isOpen) {
+        [drawerView setContentView:nil];
+    } else if ([selectedMovie.gtin length] > 0 || selectedMovie.metadataAcceptedDate != nil) {
+        [drawerView setContentView:infoPaneView];
+    } else if (selectedMovie) {
+        [infoLookupController beginLookupForMovie:selectedMovie];
+    } else {
+        [drawerView setContentView:noMovieSelectedView];
+    }
+}
+
+- (void) showInfoPanelAndSelectHomeTab:(id)sender
+{
+    [drawerView setContentView:infoPaneView];
+    [infoPaneFormController showHomeTab];
 }
 
 - (void) playDiscRequest:(NSNotification*)notification
@@ -289,7 +309,7 @@
 - (void) closeInfoView:(NSNotification*)notification
 {
     [drawerView closeDrawer];
-    [[self window] makeFirstResponder:searchView];
+    [[self window] makeFirstResponder:searchField];
 }
 
 - (IBAction) checkForUpdates:(id)sender
@@ -331,21 +351,26 @@
 
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
-    if (object == movies) {
-        BOOL toSet = [(NSNumber*)[movies valueForKeyPath:keyPath] boolValue];
-        if (!toSet == [noDiscsView isHidden]) {
-            [[noDiscsView animator] setHidden:toSet];
-        }
-    }
-    else if (object == drawerView) {
+    if (object == drawerView) {
         if ([@"isOpen" isEqualToString:keyPath]) {
             BOOL isOpen = [(NSNumber*)[object valueForKeyPath:keyPath] boolValue];
-            
+            [self _changeDrawerView:isOpen];
             if (isOpen) {
                 [mainView setFloorLayerLayoutManagerClass:[LinearLayoutManager class]];
             }
             else {
                 [mainView setFloorLayerLayoutManagerClass:[StadiumLayoutManager class]];
+            }
+        }
+    } else if (object == movies) {
+        if ([@"selection.self" isEqualToString:keyPath]) {
+            Movie* _selectedMovie = [movies valueForKeyPath:keyPath];
+            if (_selectedMovie == NSNoSelectionMarker) {
+                _selectedMovie = nil;
+            }
+            if (_selectedMovie != selectedMovie) {
+                [self setSelectedMovie:_selectedMovie];
+                [self _changeDrawerView:drawerView.isOpen];
             }
         }
     } else if ([keyPath isEqual:@"parameters"]) {

@@ -45,7 +45,7 @@
     
     [coverArtImageView bind:@"image" toObject:self withKeyPath:@"movie.boxArt.image" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
     [infoPaneDiscsView bind:@"selectedMovie" toObject:self withKeyPath:@"movie" options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption]];
-    [discTitleView bind:@"title" toObject:movie withKeyPath:@"title" options:nil];
+    [discTitleView bind:@"text" toObject:self withKeyPath:@"movie.title" options:nil];
 }
 
 - (void) setMovie:(Movie*)_movie

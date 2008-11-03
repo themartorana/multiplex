@@ -18,7 +18,6 @@
 static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 @interface InfoLookupController (Private)
-- (void) changeDrawerView:(BOOL)isOpen;
 - (void) showResultAtIndex:(int)index;
 @end
 

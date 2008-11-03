@@ -30,6 +30,14 @@ static CGImageRef _createCGImageFromFile(NSString* path);
     return color;
 }
 
++ (CGColorRef) clear
+{
+    static CGColorRef color = NULL;
+    if (!color) {
+        color = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.0);
+    }
+    return color;
+}
 
 + (CGColorRef) drawerBackgroundBaseColor
 {

@@ -18,6 +18,7 @@
 
 + (CGColorRef) white;
 + (CGColorRef) black;
++ (CGColorRef) clear;
 
 + (CGColorRef) whiteOneQuarterTransparent;
 + (CGColorRef) whiteHalfTransparent;

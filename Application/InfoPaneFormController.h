@@ -5,6 +5,7 @@
 @class InfoPaneDiscsView;
 @class CoverArtImageView;
 @class LayerBackedButtonView;
+@class CATextLayerView;
 
 @interface InfoPaneFormController : NSObject {
     Movie* movie;
@@ -17,6 +18,8 @@
     
     IBOutlet NSTabView* infoTabView;
     IBOutlet NSTabViewItem* discsTabViewItem;
+    
+    IBOutlet CATextLayerView* discTitleView;
     
     IBOutlet LayerBackedButtonView* playButtonView;
     

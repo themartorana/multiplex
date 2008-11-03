@@ -3,8 +3,8 @@
 @class MainView;
 @class DrawerView;
 @class EngineController;
-@class InfoPaneFormController;
-@class InfoLookupController;
+@class MovieDetailController;
+@class MovieLookupController;
 @class UserVoiceFeedbackPanel;
 @class Movie;
 
@@ -23,8 +23,8 @@
     IBOutlet NSView* noMovieSelectedView;
     IBOutlet NSView* searchForMovieView;
     /**/
-    IBOutlet InfoPaneFormController* infoPaneFormController;
-    IBOutlet InfoLookupController* infoLookupController;
+    IBOutlet MovieDetailController* infoPaneFormController;
+    IBOutlet MovieLookupController* infoLookupController;
     IBOutlet UserVoiceFeedbackPanel* userVoiceFeedbackPanel;
     /**/
     IBOutlet NSButton* userVoiceButton;

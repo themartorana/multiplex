@@ -1,4 +1,4 @@
-#import "InfoPaneFormController.h"
+#import "MovieDetailController.h"
 #import "Movie.h"
 #import "InfoPaneDiscsView.h"
 #import "MultiplexColorFactory.h"
@@ -15,13 +15,13 @@
 - (void) setHorizontalScrollingModeLocked:(BOOL)locked;
 @end
 
-@implementation InfoPaneFormController
+@implementation MovieDetailController
 
 @synthesize movie;
 @synthesize labelColor;
 @synthesize valuesAreEditable;
 
-- (InfoPaneFormController*) init
+- (MovieDetailController*) init
 {
     if (self = [super init]) {
         labelColor = [MultiplexColorFactory multiplexYellowOrange];

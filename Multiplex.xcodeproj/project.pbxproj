@@ -37,7 +37,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		550D082C0E9AE14E008F0275 /* InfoPaneFormController.m in Sources */ = {isa = PBXBuildFile; fileRef = 550D082B0E9AE14E008F0275 /* InfoPaneFormController.m */; };
+		550D082C0E9AE14E008F0275 /* MovieDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 550D082B0E9AE14E008F0275 /* MovieDetailController.m */; };
 		550D08700E9AFDF4008F0275 /* NSDescriptionValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 550D086F0E9AFDF4008F0275 /* NSDescriptionValueTransformer.m */; };
 		551554A00EA456C8006F2674 /* SoftEditTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5515549F0EA456C8006F2674 /* SoftEditTextFieldCell.m */; };
 		551555040EA45D84006F2674 /* SoftEditTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 551555030EA45D84006F2674 /* SoftEditTextField.m */; };
@@ -180,7 +180,7 @@
 		F9D4FC030EB7B2B000B89FF4 /* ImageQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D4FC010EB7B2B000B89FF4 /* ImageQuery.m */; };
 		F9F4C07F0EBCC302000843C3 /* license.plist in Resources */ = {isa = PBXBuildFile; fileRef = F9F4C07E0EBCC302000843C3 /* license.plist */; };
 		F9F4C1140EBCCA80000843C3 /* JSONQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F9F4C1130EBCCA80000843C3 /* JSONQuery.m */; };
-		F9FC49FB0EBF49C8007F2769 /* InfoLookupController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FC49FA0EBF49C8007F2769 /* InfoLookupController.m */; };
+		F9FC49FB0EBF49C8007F2769 /* MovieLookupController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FC49FA0EBF49C8007F2769 /* MovieLookupController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -422,8 +422,8 @@
 /* Begin PBXFileReference section */
 		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		550D082A0E9AE14E008F0275 /* InfoPaneFormController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPaneFormController.h; sourceTree = "<group>"; };
-		550D082B0E9AE14E008F0275 /* InfoPaneFormController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoPaneFormController.m; sourceTree = "<group>"; };
+		550D082A0E9AE14E008F0275 /* MovieDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieDetailController.h; sourceTree = "<group>"; };
+		550D082B0E9AE14E008F0275 /* MovieDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieDetailController.m; sourceTree = "<group>"; };
 		550D086E0E9AFDF4008F0275 /* NSDescriptionValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDescriptionValueTransformer.h; sourceTree = "<group>"; };
 		550D086F0E9AFDF4008F0275 /* NSDescriptionValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDescriptionValueTransformer.m; sourceTree = "<group>"; };
 		5515549E0EA456C8006F2674 /* SoftEditTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoftEditTextFieldCell.h; sourceTree = "<group>"; };
@@ -608,8 +608,8 @@
 		F9F4C07E0EBCC302000843C3 /* license.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = license.plist; sourceTree = "<group>"; };
 		F9F4C1120EBCCA80000843C3 /* JSONQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONQuery.h; sourceTree = "<group>"; };
 		F9F4C1130EBCCA80000843C3 /* JSONQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONQuery.m; sourceTree = "<group>"; };
-		F9FC49F90EBF49C8007F2769 /* InfoLookupController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoLookupController.h; sourceTree = "<group>"; };
-		F9FC49FA0EBF49C8007F2769 /* InfoLookupController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoLookupController.m; sourceTree = "<group>"; };
+		F9FC49F90EBF49C8007F2769 /* MovieLookupController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieLookupController.h; sourceTree = "<group>"; };
+		F9FC49FA0EBF49C8007F2769 /* MovieLookupController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieLookupController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -866,10 +866,10 @@
 			children = (
 				F967B02B0E7E16DE00C12B92 /* ApplicationController.h */,
 				F967B02C0E7E16DE00C12B92 /* ApplicationController.m */,
-				550D082A0E9AE14E008F0275 /* InfoPaneFormController.h */,
-				550D082B0E9AE14E008F0275 /* InfoPaneFormController.m */,
-				F9FC49F90EBF49C8007F2769 /* InfoLookupController.h */,
-				F9FC49FA0EBF49C8007F2769 /* InfoLookupController.m */,
+				550D082A0E9AE14E008F0275 /* MovieDetailController.h */,
+				550D082B0E9AE14E008F0275 /* MovieDetailController.m */,
+				F9FC49F90EBF49C8007F2769 /* MovieLookupController.h */,
+				F9FC49FA0EBF49C8007F2769 /* MovieLookupController.m */,
 			);
 			name = "UI Controllers";
 			sourceTree = "<group>";
@@ -1606,7 +1606,7 @@
 				5598E60C0E91D294005FCC91 /* ButtonLayer.m in Sources */,
 				556BD78C0E9444ED00EC698A /* WorkingStatusView.m in Sources */,
 				556BD7900E94470600EC698A /* Activity.m in Sources */,
-				550D082C0E9AE14E008F0275 /* InfoPaneFormController.m in Sources */,
+				550D082C0E9AE14E008F0275 /* MovieDetailController.m in Sources */,
 				550D08700E9AFDF4008F0275 /* NSDescriptionValueTransformer.m in Sources */,
 				558D1AF00E9D186B000F67FA /* InfoPaneDiscsView.m in Sources */,
 				558D1B030E9D3F37000F67FA /* PageNumberLayer.m in Sources */,
@@ -1632,7 +1632,7 @@
 				F9F4C1140EBCCA80000843C3 /* JSONQuery.m in Sources */,
 				552D5D280EBCDBD400A292F4 /* IndeterminateProgressIndicatorView.m in Sources */,
 				5573686E0EBF6ACE0054C36D /* CATextLayerView.m in Sources */,
-				F9FC49FB0EBF49C8007F2769 /* InfoLookupController.m in Sources */,
+				F9FC49FB0EBF49C8007F2769 /* MovieLookupController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

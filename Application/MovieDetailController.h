@@ -7,7 +7,7 @@
 @class LayerBackedButtonView;
 @class CATextLayerView;
 
-@interface InfoPaneFormController : NSObject {
+@interface MovieDetailController : NSObject {
     Movie* movie;
     
     NSColor* labelColor;

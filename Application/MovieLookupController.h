@@ -9,9 +9,9 @@
 @class DrawerView;
 @class Movie;
 @class CoverArtImageView;
-@class InfoPaneFormController;
+@class MovieDetailController;
 
-@interface InfoLookupController : NSObject {
+@interface MovieLookupController : NSObject {
     Movie* movie;
     
     IBOutlet ApplicationController* applicationController;

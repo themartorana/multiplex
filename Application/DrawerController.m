@@ -131,25 +131,19 @@
 - (IBAction) showNextResult:(id)sender
 {
     resultIndex++;
-    if (resultIndex + 1 > [amazonQueryResults count]) {
-        resultIndex--;
-        return;
+    if (resultIndex >= [amazonQueryResults count]) {
+        resultIndex = 0;
     }
-    else {
-        [self showResultAtIndex:resultIndex];
-    }    
+    [self showResultAtIndex:resultIndex];
 }
 
 - (IBAction) showPreviousResult:(id)sender
 {
     resultIndex--;
     if (resultIndex < 0) {
-        resultIndex = -1;
-        return;
+        resultIndex = [amazonQueryResults count] - 1;
     } 
-    else {
-        [self showResultAtIndex:resultIndex];
-    }
+    [self showResultAtIndex:resultIndex];
 }
 
 - (IBAction) backToSearch:(id)sender
@@ -171,6 +165,8 @@
     if ([resultAtIndex objectForKey:@"_coverImageURL"]) {
         NSURL* imageUrl = [NSURL URLWithString:[resultAtIndex objectForKey:@"_coverImageURL"]];
         imageQuery = [[ImageQuery imageQueryWithURL:imageUrl delegate:self userInfo:nil startImmediately:YES] retain];
+    } else {
+        selectedMovie.boxArt = nil;
     }
     
     if (resultAtIndex) {

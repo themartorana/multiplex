@@ -2,6 +2,7 @@
 #import <WebKit/WebKit.h>
 
 @class Movie;
+@class DrawerView;
 @class InfoPaneDiscsView;
 @class CoverArtImageView;
 @class LayerBackedButtonView;
@@ -11,7 +12,10 @@
     Movie* movie;
     
     NSColor* labelColor;
-    
+
+    IBOutlet DrawerView* drawerView;
+    IBOutlet NSView* infoPaneView;
+
     IBOutlet WebView* descriptionWebView;
     IBOutlet InfoPaneDiscsView* infoPaneDiscsView;
     IBOutlet CoverArtImageView* coverArtImageView;
@@ -29,6 +33,8 @@
 @property (retain) Movie* movie;
 @property (readonly) NSColor* labelColor;
 @property BOOL valuesAreEditable;
+
+- (IBAction) startWithMovie:(Movie*)movie;
 
 - (void) showHomeTab;
 - (void) showDiscsTab;

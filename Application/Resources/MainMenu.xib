@@ -5016,14 +5016,6 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">infoPaneFormController</string>
-						<reference key="source" ref="623785332"/>
-						<reference key="destination" ref="62536199"/>
-					</object>
-					<int key="connectionID">1611</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">coverArtImageView</string>
 						<reference key="source" ref="62536199"/>
 						<reference key="destination" ref="26031902"/>
@@ -5473,14 +5465,6 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">infoLookupController</string>
-						<reference key="source" ref="623785332"/>
-						<reference key="destination" ref="483006462"/>
-					</object>
-					<int key="connectionID">2162</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">searchForMovieView</string>
 						<reference key="source" ref="623785332"/>
 						<reference key="destination" ref="631342612"/>
@@ -5542,6 +5526,38 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 						<reference key="destination" ref="511146060"/>
 					</object>
 					<int key="connectionID">2170</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">movieLookupController</string>
+						<reference key="source" ref="623785332"/>
+						<reference key="destination" ref="483006462"/>
+					</object>
+					<int key="connectionID">2181</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">drawerView</string>
+						<reference key="source" ref="62536199"/>
+						<reference key="destination" ref="243160278"/>
+					</object>
+					<int key="connectionID">2182</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">infoPaneView</string>
+						<reference key="source" ref="62536199"/>
+						<reference key="destination" ref="162150624"/>
+					</object>
+					<int key="connectionID">2183</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">movieDetailController</string>
+						<reference key="source" ref="623785332"/>
+						<reference key="destination" ref="62536199"/>
+					</object>
+					<int key="connectionID">2184</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -8703,8 +8719,8 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{569, 125}, {1000, 700}}</string>
-					<string>{{569, 125}, {1000, 700}}</string>
+					<string>{{569, 73}, {1000, 700}}</string>
+					<string>{{569, 73}, {1000, 700}}</string>
 					<reference ref="9"/>
 					<reference ref="9"/>
 					<string>{1000, 700}</string>
@@ -9171,7 +9187,7 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2180</int>
+			<int key="maxID">2184</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -9207,11 +9223,11 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>drawerView</string>
-							<string>infoLookupController</string>
-							<string>infoPaneFormController</string>
 							<string>infoPaneView</string>
 							<string>licensingAndVersionInfo</string>
 							<string>mainView</string>
+							<string>movieDetailController</string>
+							<string>movieLookupController</string>
 							<string>movies</string>
 							<string>noDiscsView</string>
 							<string>noMovieSelectedView</string>
@@ -9224,11 +9240,11 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>DrawerView</string>
-							<string>MovieLookupController</string>
-							<string>MovieDetailController</string>
 							<string>NSView</string>
 							<string>NSTextField</string>
 							<string>MainView</string>
+							<string>MovieDetailController</string>
+							<string>MovieLookupController</string>
 							<string>NSArrayController</string>
 							<string>NSView</string>
 							<string>NSView</string>
@@ -9365,8 +9381,20 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">Movie</string>
+					<string key="superclassName">NSManagedObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Application/Model/Movie.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">MovieDetailController</string>
 					<string key="superclassName">NSObject</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">startWithMovie:</string>
+						<string key="NS.object.0">Movie</string>
+					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSMutableArray" key="dict.sortedKeys">
@@ -9375,7 +9403,9 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 							<string>descriptionWebView</string>
 							<string>discTitleView</string>
 							<string>discsTabViewItem</string>
+							<string>drawerView</string>
 							<string>infoPaneDiscsView</string>
+							<string>infoPaneView</string>
 							<string>infoTabView</string>
 							<string>playButtonView</string>
 						</object>
@@ -9385,7 +9415,9 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 							<string>WebView</string>
 							<string>TextView</string>
 							<string>NSTabViewItem</string>
+							<string>DrawerView</string>
 							<string>InfoPaneDiscsView</string>
+							<string>NSView</string>
 							<string>NSTabView</string>
 							<string>LayerBackedButtonView</string>
 						</object>
@@ -9537,6 +9569,14 @@ dGhhdCBtYXRjaGVzLCBzZWxlY3QgaXQuA</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Application/NoDiscsView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">TextView</string>
+					<string key="superclassName">NSView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Application/TextView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

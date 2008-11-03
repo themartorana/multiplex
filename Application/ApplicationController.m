@@ -175,7 +175,6 @@
     /*  Setup Bindings & Observations.
      */
     [self addObserver:self forKeyPath:@"parameters" options:0 context:nil];
-    [infoPaneFormController bind:@"movie" toObject:movies withKeyPath:@"selection.self" options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption]];
     [movies addObserver:self forKeyPath:@"selection.self" options:NSKeyValueObservingOptionNew context:nil];
     [drawerView addObserver:self forKeyPath:@"isOpen" options:NSKeyValueObservingOptionNew context:nil];
     
@@ -241,19 +240,6 @@
     return NO;
 }
 
-- (void) _changeDrawerView:(BOOL)isOpen
-{
-    if (!drawerView.isOpen) {
-        [drawerView setContentView:nil];
-    } else if ([selectedMovie.gtin length] > 0 || selectedMovie.metadataAcceptedDate != nil) {
-        [drawerView setContentView:infoPaneView];
-    } else if (selectedMovie) {
-        [infoLookupController beginLookupForMovie:selectedMovie];
-    } else {
-        [drawerView setContentView:noMovieSelectedView];
-    }
-}
-
 - (void) playDiscRequest:(NSNotification*)notification
 {
     if ([notification object]) {
@@ -283,14 +269,14 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayDisc" object:d];
     } else if (movie && [movie.allDiscs count] > 1) {
         [self openInfoView:nil];
-        [infoPaneFormController showDiscsTab];
+        [movieDetailController showDiscsTab];
     }
 }
 
 - (IBAction) showInfoPanelAndSelectHomeTab:(id)sender
 {
     [drawerView setContentView:infoPaneView];
-    [infoPaneFormController showHomeTab];
+    [movieDetailController showHomeTab];
 }
 
 - (void) openInfoView:(NSNotification*)notification
@@ -327,7 +313,7 @@
     [userVoiceFeedbackPanel resetFeedbackPage];
 }
 
-- (NSArray *)feedParametersForUpdater:(SUUpdater *)updater sendingSystemProfile:(BOOL)sendingProfile;
+- (NSArray*) feedParametersForUpdater:(SUUpdater*)updater sendingSystemProfile:(BOOL)sendingProfile;
 {
     NSMutableArray* pairs = [NSMutableArray array];
     for (NSString* key in parameters) {
@@ -340,6 +326,19 @@
         ];
     }
     return pairs;
+}
+
+- (void) _changeDrawerView:(BOOL)isOpen
+{
+    if (!drawerView.isOpen) {
+        [drawerView setContentView:nil];
+    } else if ([selectedMovie.gtin length] > 0 || selectedMovie.metadataAcceptedDate != nil) {
+        [movieDetailController startWithMovie:selectedMovie];
+    } else if (selectedMovie) {
+        [movieLookupController startWithMovie:selectedMovie];
+    } else {
+        [drawerView setContentView:noMovieSelectedView];
+    }
 }
 
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
@@ -428,6 +427,7 @@
 }
 
 @end
+
 
 
 

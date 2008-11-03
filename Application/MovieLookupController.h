@@ -46,7 +46,7 @@
 
 @property (retain) Movie* movie;
 
-- (void) beginLookupForMovie:(Movie*)movie;
+- (void) startWithMovie:(Movie*)movie;
 
 - (IBAction) skipEnterUPC:(id)sender;
 

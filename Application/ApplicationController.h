@@ -23,8 +23,8 @@
     IBOutlet NSView* noMovieSelectedView;
     IBOutlet NSView* searchForMovieView;
     /**/
-    IBOutlet MovieDetailController* infoPaneFormController;
-    IBOutlet MovieLookupController* infoLookupController;
+    IBOutlet MovieDetailController* movieDetailController;
+    IBOutlet MovieLookupController* movieLookupController;
     IBOutlet UserVoiceFeedbackPanel* userVoiceFeedbackPanel;
     /**/
     IBOutlet NSButton* userVoiceButton;

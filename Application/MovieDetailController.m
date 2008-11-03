@@ -4,6 +4,7 @@
 #import "MultiplexColorFactory.h"
 #import "DragDropTargetView.h"
 #import "ApplicationResources.h"
+#import "DrawerView.h"
 #import "BoxArt.h"
 #import "LayerBackedButtonView.h"
 #import "TextView.h"
@@ -44,7 +45,6 @@
     [playButtonView setNotificationNameToPost:@"MultiplexPlayButtonClicked"];
     
     [coverArtImageView bind:@"image" toObject:self withKeyPath:@"movie.boxArt.image" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
-    [infoPaneDiscsView bind:@"selectedMovie" toObject:self withKeyPath:@"movie" options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption]];
     [discTitleView bind:@"text" toObject:self withKeyPath:@"movie.title" options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption]];
 }
 
@@ -75,9 +75,16 @@
 #endif
 }
 
+- (IBAction) startWithMovie:(Movie*)_movie
+{
+    [self setMovie:_movie];
+    [drawerView setContentView:infoPaneView];
+    [infoTabView selectTabViewItem:[[infoTabView tabViewItems] objectAtIndex:0]];
+}
+
+
 - (void) showHomeTab
 {
-    [infoTabView selectTabViewItem:[[infoTabView tabViewItems] objectAtIndex:0]];
     [[descriptionWebView mainFrame] loadHTMLString:movie ? movie.synopsis : @"" baseURL:[NSURL URLWithString:@""]];
 }
 

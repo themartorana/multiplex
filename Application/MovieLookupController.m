@@ -48,7 +48,9 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 - (void) startWithMovie:(Movie*)_movie
 {
     resultIndex = 0;
-    self.movie = _movie;
+    [self setMovie:_movie];
+    managedObjectContext = [movie managedObjectContext];
+    boxArtEntity = [NSEntityDescription entityForName:@"BoxArt" inManagedObjectContext:managedObjectContext];
     [drawerView setContentView:searchForMovieView];
 }
 
@@ -58,30 +60,21 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     [applicationController showMovieDetailAndSelectHomeTabForMovie:movie];
 }
 
-#pragma mark Lookup Methods
-
 - (IBAction) lookUpUPC:(id)sender
 {
-    Activity* activityUPCLookup = [Activity activityWithName:@"Looking up UPC code" userInfo:nil];
-    
-    [drawerView setContentView:searchingView];
-    
     NSMutableString* ean = [NSMutableString stringWithString:[upcTextField stringValue]];
     while ([ean length] < 13) {
         [ean insertString:@"0" atIndex:0];
     }
-    
-    amazonQuery = [[AmazonQuery amazonQueryWithAccessKey:kAmazonAccessKey ean:ean delegate:self userInfo:activityUPCLookup startImmediately:YES] retain];
+    amazonQuery = [[AmazonQuery amazonQueryWithAccessKey:kAmazonAccessKey ean:ean delegate:self userInfo:[Activity activityWithName:@"Looking up by UPC code" userInfo:nil] startImmediately:YES] retain];
+    [drawerView setContentView:searchingView];
 }
 
 - (IBAction) lookUpTitle:(id)sender
 {
-    Activity* activityTitleLookup = [Activity activityWithName:@"Looking up title" userInfo:nil];
-    
-    [drawerView setContentView:searchingView];
-    
     NSMutableString* title = [NSMutableString stringWithString:[titleTextField stringValue]];
-    amazonQuery = [[AmazonQuery amazonQueryWithAccessKey:kAmazonAccessKey titleKeywords:title delegate:self userInfo:activityTitleLookup startImmediately:YES] retain];
+    amazonQuery = [[AmazonQuery amazonQueryWithAccessKey:kAmazonAccessKey titleKeywords:title delegate:self userInfo:[Activity activityWithName:@"Looking up by title" userInfo:nil] startImmediately:YES] retain];
+    [drawerView setContentView:searchingView];
 }
 
 - (IBAction) selectResult:(id)sender
@@ -128,10 +121,22 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     
     NSDictionary* resultAtIndex = [amazonQueryResults objectAtIndex:index];
     
-    // TODO: NO BOX ART??
     if ([resultAtIndex objectForKey:@"_coverImageURL"]) {
-        NSURL* imageUrl = [NSURL URLWithString:[resultAtIndex objectForKey:@"_coverImageURL"]];
-        imageQuery = [[ImageQuery imageQueryWithURL:imageUrl delegate:self userInfo:nil startImmediately:YES] retain];
+        NSString* urlAsString = [resultAtIndex objectForKey:@"_coverImageURL"];
+        NSFetchRequest* fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"url == %@", urlAsString];
+        fetchRequest.entity = boxArtEntity;
+        NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:nil];
+        BoxArt* boxArt = nil;
+        if ([results count]) {
+            boxArt = [results objectAtIndex:0];
+        } else {
+            boxArt = [[BoxArt alloc] initWithEntity:boxArtEntity insertIntoManagedObjectContext:managedObjectContext];
+            boxArt.state = @"Loading";
+            boxArt.url = urlAsString;
+            imageQuery = [[ImageQuery imageQueryWithURL:[NSURL URLWithString:urlAsString] delegate:self userInfo:[Activity activityWithName:@"Loading Box Art" userInfo:boxArt.objectID] startImmediately:YES] retain];
+        }
+        movie.boxArt = boxArt;
     } else {
         movie.boxArt = nil;
     }
@@ -175,9 +180,8 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     NSString* message = nil;
     
     if (upc && [upc length]) {
-        message = [NSString stringWithFormat:@"No results were found for the UPC code %@", upc];
-    }
-    else {
+        message = [NSString stringWithFormat:@"No results were found for the UPC code (%@).", upc];
+    } else {
         message = @"No results were found.";
     }
     NSAlert* alert = [NSAlert alertWithMessageText:message defaultButton:@"Ok" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Please check your information and try again.."];
@@ -188,55 +192,62 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (void) amazonQuery:(AmazonQuery*)query didFailWithError:(NSError*)error userInfo:(id)userInfo
 {
-    [(Activity*)userInfo terminate];
-    
-    NSLog(@"AMAZON QUERY ERROR: %@", error);
-    [drawerView setContentView:searchForMovieView];
-    [self showNoResultsSheet];
+    Activity* activity = userInfo;
+    @try {
+        NSLog(@"AMAZON QUERY ERROR: %@", error);
+        [drawerView setContentView:searchForMovieView];
+        [self showNoResultsSheet];
+    } @finally {
+        [activity terminate];
+    }
 }
 
 - (void) amazonQuery:(AmazonQuery*)query didReceiveResponse:(NSArray*)response userInfo:(id)userInfo
 {    
-    [(Activity*)userInfo terminate];
-    
-    if (![response count]) {
-        [self showNoResultsSheet];
-    }
-    else {
-        if (amazonQueryResults) {
-            [amazonQueryResults release];
-            amazonQueryResults = nil;
+    Activity* activity = userInfo;
+    @try {
+        if (![response count]) {
+            [self showNoResultsSheet];
+        } else {
+            if (amazonQueryResults) {
+                [amazonQueryResults release];
+                amazonQueryResults = nil;
+            }
+            amazonQueryResults = [response retain];
+            resultIndex = 0;
+            [self showResultAtIndex:0];
         }
-        amazonQueryResults = [response retain];
-        resultIndex = 0;
-        [self showResultAtIndex:0];
+    } @finally {
+        [activity terminate];
     }
 }
 
 #pragma mark "ImageQuery delegate methods"
 
-- (void) imageQuery:(ImageQuery*)query didReceiveImageSource:(CGImageSourceRef)imageSource userInfo:(id)userInfo;
+- (void) imageQuery:(ImageQuery*)quert didFailWithError:(NSError*)error userInfo:(id)userInfo
 {
-    // Set the box art
-    BoxArt* boxArt = nil;
-    if (movie.boxArt) {
-        boxArt = movie.boxArt;
+    Activity* activity = userInfo;
+    @try {
+        NSLog(@"IMAGE QUERY ERROR: %@", error);
+        BoxArt* boxArt = (BoxArt*)[managedObjectContext objectWithID:activity.userInfo];
+        boxArt.state = @"Error";
+    } @finally {
+        [activity terminate];
     }
-    else {
-        NSManagedObjectContext* managedObjectContext = [movie managedObjectContext];
-        NSEntityDescription* boxArtEntity = [NSEntityDescription entityForName:@"BoxArt" inManagedObjectContext:managedObjectContext];
-        boxArt = [[BoxArt alloc] initWithEntity:boxArtEntity insertIntoManagedObjectContext:managedObjectContext];
-        movie.boxArt = boxArt;
-    }
-    
-    CGImageRef image = CGImageSourceCreateImageAtIndex(imageSource, 0, (CFDictionaryRef)[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], kCGImageSourceCreateThumbnailFromImageAlways, nil]);
-    
-    boxArt.state = @"Loaded";
-    boxArt.url = [[query URL] absoluteString];
-    boxArt.image = image;
-    
-    CGImageRelease(image);
 }
 
+- (void) imageQuery:(ImageQuery*)query didReceiveImageSource:(CGImageSourceRef)imageSource userInfo:(id)userInfo;
+{
+    Activity* activity = userInfo;
+    @try {
+        BoxArt* boxArt = (BoxArt*)[managedObjectContext objectWithID:activity.userInfo];
+        CGImageRef image = CGImageSourceCreateImageAtIndex(imageSource, 0, (CFDictionaryRef)[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], kCGImageSourceCreateThumbnailFromImageAlways, nil]);
+        boxArt.state = @"Loaded";
+        boxArt.image = image;
+        CGImageRelease(image);
+    } @finally {
+        [activity terminate];
+    }
+}
 
 @end

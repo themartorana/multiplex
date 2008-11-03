@@ -15,6 +15,8 @@
     ApplicationController* applicationController;
     DrawerView* drawerView;
     Movie* movie;
+    NSManagedObjectContext* managedObjectContext;
+    NSEntityDescription* boxArtEntity;
     
     ///////////////////////////////////
     /// 

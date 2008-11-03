@@ -1,5 +1,5 @@
 #import "InfoLookupController.h"
-#import "DrawerController.h"
+#import "ApplicationController.h"
 #import "DrawerView.h"
 #import "Movie.h"
 #import "Activity.h"
@@ -42,7 +42,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (IBAction) skipEnterUPC:(id)sender
 {
-    [drawerController showInfoPanelAndSelectHomeTab:nil];
+    [applicationController showInfoPanelAndSelectHomeTab:nil];
 }
 
 #pragma mark Lookup Methods
@@ -81,7 +81,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         NSAssert(FALSE, @"ERROR SAVING DATA!");
     }
     
-    [drawerController showInfoPanelAndSelectHomeTab:nil];
+    [applicationController showInfoPanelAndSelectHomeTab:nil];
 }
 
 - (IBAction) showNextResult:(id)sender

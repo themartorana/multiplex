@@ -2,7 +2,7 @@
 
 @class Activity;
 @class AmazonQuery;
-@class DrawerController;
+@class ApplicationController;
 @class DiscIdentQuery;
 @class ImageQuery;
 @class WebView;
@@ -14,7 +14,7 @@
 @interface InfoLookupController : NSObject {
     Movie* movie;
     
-    IBOutlet DrawerController* drawerController;
+    IBOutlet ApplicationController* applicationController;
     IBOutlet NSArrayController* movies;
     IBOutlet DrawerView* drawerView;
     

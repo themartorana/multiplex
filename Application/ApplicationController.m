@@ -254,12 +254,6 @@
     }
 }
 
-- (void) showInfoPanelAndSelectHomeTab:(id)sender
-{
-    [drawerView setContentView:infoPaneView];
-    [infoPaneFormController showHomeTab];
-}
-
 - (void) playDiscRequest:(NSNotification*)notification
 {
     if ([notification object]) {
@@ -281,23 +275,22 @@
 
 - (void) playSelectedMovie:(NSNotification*)notification
 {
-    Movie* movie = nil;
-    
-    if ([notification object] && [[notification object] isKindOfClass:[Movie class]]) {
-        movie = (Movie*)[notification object];
-    }
-    else {
-        movie = (Movie*)[[movies selectedObjects] objectAtIndex:0];
-    }
+    Movie* movie = [notification object];
+    NSAssert(movie && [movie isKindOfClass:[Movie class]], @"wtf?");
     
     if (movie && [movie.allDiscs count] == 1) {
         Disc* d = (Disc*)[[movie.allDiscs allObjects] objectAtIndex:0];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayDisc" object:d];
     } else if (movie && [movie.allDiscs count] > 1) {
-        // We want to show the dialog
         [self openInfoView:nil];
         [infoPaneFormController showDiscsTab];
     }
+}
+
+- (IBAction) showInfoPanelAndSelectHomeTab:(id)sender
+{
+    [drawerView setContentView:infoPaneView];
+    [infoPaneFormController showHomeTab];
 }
 
 - (void) openInfoView:(NSNotification*)notification

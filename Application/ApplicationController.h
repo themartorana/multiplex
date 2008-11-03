@@ -51,4 +51,6 @@
 - (IBAction) switchToGridLayoutManager:(id)sender;
 - (IBAction) switchToLinearLayoutManager:(id)sender;
 
+- (IBAction) showInfoPanelAndSelectHomeTab:(id)sender;
+
 @end

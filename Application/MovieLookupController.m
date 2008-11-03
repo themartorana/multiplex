@@ -1,4 +1,4 @@
-#import "InfoLookupController.h"
+#import "MovieLookupController.h"
 #import "ApplicationController.h"
 #import "DrawerView.h"
 #import "Movie.h"
@@ -6,7 +6,6 @@
 #import "ApplicationResources.h"
 #import "CoverArtImageView.h"
 #import "BoxArt.h"
-#import "InfoPaneFormController.h"
 
 #import "AmazonQuery.h"
 #import "ImageQuery.h"
@@ -17,12 +16,12 @@
 
 static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
-@interface InfoLookupController (Private)
+@interface MovieLookupController (Private)
 - (void) showResultAtIndex:(int)index;
 @end
 
 
-@implementation InfoLookupController
+@implementation MovieLookupController
 @synthesize movie;
 
 - (void) awakeFromNib

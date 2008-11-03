@@ -1,4 +1,4 @@
-#import "InfoPaneDiscsView.h"
+#import "MovieDetailDiscsView.h"
 #import "PageNumberLayer.h"
 #import "DiscPlayLayer.h"
 #import "ButtonLayer.h"
@@ -9,9 +9,9 @@
 #import <QuartzCore/QuartzCore.h>
 #import <Toolkit/Toolkit.h>
 
-@implementation InfoPaneDiscsView
+@implementation MovieDetailDiscsView
 
-@synthesize selectedMovie;
+@synthesize movie;
 
 - (void) awakeFromNib
 {
@@ -51,11 +51,11 @@
     [self addTrackingArea:mouseTrackingArea];
 }
 
-- (void) setSelectedMovie:(Movie*)_selectedMovie
+- (void) setMovie:(Movie*)_selectedMovie
 {
-    if (selectedMovie != _selectedMovie) {
-        [selectedMovie release];
-        selectedMovie = [_selectedMovie retain];
+    if (movie != _selectedMovie) {
+        [movie release];
+        movie = [_selectedMovie retain];
     }
     [self setUpDiscLayers];
 }
@@ -70,11 +70,11 @@
     [pageNumbersLayer removeAllSublayers];
     [discsHostingLayer addSublayer:scrollingLayer];
     
-    if (!selectedMovie) {
+    if (!movie) {
         return;
     }
     
-    int numDiscs = [selectedMovie.allDiscs count];
+    int numDiscs = [movie.allDiscs count];
     /*if (numDiscs <= 1) {
         return;
     }*/
@@ -108,7 +108,7 @@
     int currentPage = 1;
     
     // Get our discs in order
-    NSMutableArray* discs = [NSMutableArray arrayWithArray:[selectedMovie.allDiscs allObjects]];
+    NSMutableArray* discs = [NSMutableArray arrayWithArray:[movie.allDiscs allObjects]];
     [discs sortUsingDescriptors:[NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"number" ascending:YES] autorelease]]];
     
     // Lay out our discs

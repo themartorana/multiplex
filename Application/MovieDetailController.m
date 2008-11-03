@@ -1,6 +1,6 @@
 #import "MovieDetailController.h"
 #import "Movie.h"
-#import "InfoPaneDiscsView.h"
+#import "MovieDetailDiscsView.h"
 #import "MultiplexColorFactory.h"
 #import "DragDropTargetView.h"
 #import "ApplicationResources.h"
@@ -57,6 +57,17 @@
 - (void) webViewDidEndEditing:(NSNotification*)notification
 {
     movie.synopsis = [(id)[[[[[descriptionWebView mainFrame] DOMDocument] documentElement] getElementsByTagName:@"body"] item:0] innerHTML];
+}
+
+- (void) setMovie:(Movie*)_movie
+{
+    if (movie != _movie) {
+        [self willChangeValueForKey:@"movie"];
+        [movie release];
+        movie = [_movie retain];
+        [discsView setMovie:movie];
+        [self didChangeValueForKey:@"movie"];
+    }
 }
 
 - (IBAction) startWithMovie:(Movie*)_movie

@@ -4,8 +4,8 @@
 @class DiscPlayLayer;
 @class ButtonLayer;
 
-@interface InfoPaneDiscsView : NSView {
-    Movie* selectedMovie;
+@interface MovieDetailDiscsView : NSView {
+    Movie* movie;
     
     CALayer* viewLayer;
     CALayer* scrollingLayer;
@@ -18,7 +18,7 @@
     ButtonLayer* playButtonDownLayer;
 }
 
-@property (retain) Movie* selectedMovie;
+@property (retain) Movie* movie;
 
 - (void) setUpDiscLayers;
 - (void) unhoverHoveredLayer;

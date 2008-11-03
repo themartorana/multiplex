@@ -69,7 +69,7 @@
 		5574409D0EABDD54002E0B80 /* uservoice-feedback.css in Resources */ = {isa = PBXBuildFile; fileRef = 5574409C0EABDD54002E0B80 /* uservoice-feedback.css */; };
 		557B69460E4CCD3F0009919E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 557B69450E4CCD3F0009919E /* MainMenu.xib */; };
 		5583D1640E51D82700EB7AE6 /* Multiplex.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */; };
-		558D1AF00E9D186B000F67FA /* InfoPaneDiscsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */; };
+		558D1AF00E9D186B000F67FA /* MovieDetailDiscsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1AEF0E9D186B000F67FA /* MovieDetailDiscsView.m */; };
 		558D1B030E9D3F37000F67FA /* PageNumberLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1B020E9D3F37000F67FA /* PageNumberLayer.m */; };
 		558D1C3E0E9D5562000F67FA /* DiscPlayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1C3D0E9D5562000F67FA /* DiscPlayLayer.m */; };
 		558D1EB10E9E65A8000F67FA /* close-click128x128.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 558D1EAB0E9E65A8000F67FA /* close-click128x128.pdf */; };
@@ -475,8 +475,8 @@
 		557B66A20E4A2F4D0009919E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		557B69450E4CCD3F0009919E /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Multiplex.xcdatamodel; sourceTree = "<group>"; };
-		558D1AEE0E9D186B000F67FA /* InfoPaneDiscsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPaneDiscsView.h; sourceTree = "<group>"; };
-		558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoPaneDiscsView.m; sourceTree = "<group>"; };
+		558D1AEE0E9D186B000F67FA /* MovieDetailDiscsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieDetailDiscsView.h; sourceTree = "<group>"; };
+		558D1AEF0E9D186B000F67FA /* MovieDetailDiscsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieDetailDiscsView.m; sourceTree = "<group>"; };
 		558D1B010E9D3F37000F67FA /* PageNumberLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageNumberLayer.h; sourceTree = "<group>"; };
 		558D1B020E9D3F37000F67FA /* PageNumberLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageNumberLayer.m; sourceTree = "<group>"; };
 		558D1C3C0E9D5562000F67FA /* DiscPlayLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscPlayLayer.h; sourceTree = "<group>"; };
@@ -995,28 +995,28 @@
 		F967AFF30E7E13D400C12B92 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				55C9F6410EB26C5A001B9BCD /* LayerBackedButtonView.h */,
-				55C9F6420EB26C5A001B9BCD /* LayerBackedButtonView.m */,
-				55C9F6240EB26A15001B9BCD /* HalfTransparentView.h */,
-				55C9F6250EB26A15001B9BCD /* HalfTransparentView.m */,
 				F966E5250EAF9A53001D0B3B /* CoverArtImageView.h */,
 				F966E5260EAF9A53001D0B3B /* CoverArtImageView.m */,
 				F966E49A0EAF9215001D0B3B /* DragDropTargetView.h */,
 				F966E49B0EAF9215001D0B3B /* DragDropTargetView.m */,
 				F914C9CE0EAD657900877991 /* DrawerView.h */,
 				F914C9CF0EAD657900877991 /* DrawerView.m */,
-				558D1AEE0E9D186B000F67FA /* InfoPaneDiscsView.h */,
-				558D1AEF0E9D186B000F67FA /* InfoPaneDiscsView.m */,
-				F967AFF40E7E13ED00C12B92 /* MainView.h */,
-				F967AFF50E7E13ED00C12B92 /* MainView.m */,
-				556BD78A0E9444ED00EC698A /* WorkingStatusView.h */,
-				556BD78B0E9444ED00EC698A /* WorkingStatusView.m */,
-				5551FB9C0EB65F3C0022147A /* NoDiscsView.h */,
-				5551FB9D0EB65F3C0022147A /* NoDiscsView.m */,
+				55C9F6240EB26A15001B9BCD /* HalfTransparentView.h */,
+				55C9F6250EB26A15001B9BCD /* HalfTransparentView.m */,
 				552D5D260EBCDBD400A292F4 /* IndeterminateProgressIndicatorView.h */,
 				552D5D270EBCDBD400A292F4 /* IndeterminateProgressIndicatorView.m */,
+				55C9F6410EB26C5A001B9BCD /* LayerBackedButtonView.h */,
+				55C9F6420EB26C5A001B9BCD /* LayerBackedButtonView.m */,
+				F967AFF40E7E13ED00C12B92 /* MainView.h */,
+				F967AFF50E7E13ED00C12B92 /* MainView.m */,
+				558D1AEE0E9D186B000F67FA /* MovieDetailDiscsView.h */,
+				558D1AEF0E9D186B000F67FA /* MovieDetailDiscsView.m */,
+				5551FB9C0EB65F3C0022147A /* NoDiscsView.h */,
+				5551FB9D0EB65F3C0022147A /* NoDiscsView.m */,
 				5573686C0EBF6ACE0054C36D /* TextView.h */,
 				5573686D0EBF6ACE0054C36D /* TextView.m */,
+				556BD78A0E9444ED00EC698A /* WorkingStatusView.h */,
+				556BD78B0E9444ED00EC698A /* WorkingStatusView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1624,7 +1624,7 @@
 				556BD7900E94470600EC698A /* Activity.m in Sources */,
 				550D082C0E9AE14E008F0275 /* MovieDetailController.m in Sources */,
 				550D08700E9AFDF4008F0275 /* NSDescriptionValueTransformer.m in Sources */,
-				558D1AF00E9D186B000F67FA /* InfoPaneDiscsView.m in Sources */,
+				558D1AF00E9D186B000F67FA /* MovieDetailDiscsView.m in Sources */,
 				558D1B030E9D3F37000F67FA /* PageNumberLayer.m in Sources */,
 				558D1C3E0E9D5562000F67FA /* DiscPlayLayer.m in Sources */,
 				551554A00EA456C8006F2674 /* SoftEditTextFieldCell.m in Sources */,

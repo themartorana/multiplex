@@ -45,12 +45,22 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     [searchResultsBoxArt bind:@"image" toObject:self withKeyPath:@"movie.boxArt.image" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
 }
 
+- (void) setMovie:(Movie*)_movie
+{
+    if (movie != _movie) {
+        [self willChangeValueForKey:@"movie"];
+        [movie release];
+        movie = [_movie retain];
+        managedObjectContext = [movie managedObjectContext];
+        boxArtEntity = [NSEntityDescription entityForName:@"BoxArt" inManagedObjectContext:managedObjectContext];
+        [self didChangeValueForKey:@"movie"];
+    }
+}
+
 - (void) startWithMovie:(Movie*)_movie
 {
     resultIndex = 0;
     [self setMovie:_movie];
-    managedObjectContext = [movie managedObjectContext];
-    boxArtEntity = [NSEntityDescription entityForName:@"BoxArt" inManagedObjectContext:managedObjectContext];
     [drawerView setContentView:searchForMovieView];
 }
 
@@ -157,10 +167,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         movie.theatricalReleaseDate = [resultAtIndex objectForKey:@"theatricalReleaseDate"] ? [NSDate dateFromShortDateString:[resultAtIndex objectForKey:@"theatricalReleaseDate"]] : nil;
         movie.productionYear = movie.theatricalReleaseDate ? [NSNumber numberWithInt:[[movie.theatricalReleaseDate descriptionWithCalendarFormat:@"%Y" timeZone:nil locale:nil] intValue]] : nil;
         
-        // Set the GTIN?
         if (AmazonQueryTypeEAN == amazonQuery.queryType) {
-            // TODO: Push back to DiscIdent
-            
             NSMutableString* gtin = [NSMutableString stringWithString:[upcTextField stringValue]];
             while ([gtin length] < 14) {
                 [gtin insertString:@"0" atIndex:0];

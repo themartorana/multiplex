@@ -8,6 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="1906"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3143,6 +3144,62 @@
 					</object>
 					<int key="connectionID">2169</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">undo:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="173469911"/>
+					</object>
+					<int key="connectionID">2185</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">redo:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="367858701"/>
+					</object>
+					<int key="connectionID">2186</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">cut:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="214378909"/>
+					</object>
+					<int key="connectionID">2187</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">copy:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="827486090"/>
+					</object>
+					<int key="connectionID">2188</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">paste:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="522439908"/>
+					</object>
+					<int key="connectionID">2189</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">delete:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="4082072"/>
+					</object>
+					<int key="connectionID">2190</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">selectAll:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="491495723"/>
+					</object>
+					<int key="connectionID">2191</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -5043,7 +5100,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2184</int>
+			<int key="maxID">2191</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -5056,7 +5113,6 @@
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>checkForUpdates:</string>
-							<string>showMovieDetailAndSelectHomeTab:</string>
 							<string>showUserVoiceFeedbackSheet:</string>
 							<string>switchToGridLayoutManager:</string>
 							<string>switchToLinearLayoutManager:</string>
@@ -5065,7 +5121,6 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -5081,7 +5136,6 @@
 							<string>drawerView</string>
 							<string>licensingAndVersionInfo</string>
 							<string>mainView</string>
-							<string>movieLookupController</string>
 							<string>movies</string>
 							<string>noDiscsView</string>
 							<string>noMovieSelectedView</string>
@@ -5096,7 +5150,6 @@
 							<string>DrawerView</string>
 							<string>NSTextField</string>
 							<string>MainView</string>
-							<string>MovieLookupController</string>
 							<string>NSArrayController</string>
 							<string>NSView</string>
 							<string>NSView</string>
@@ -5118,18 +5171,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">CoverArtImageView</string>
-					<string key="superclassName">NSView</string>
-					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">image</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Application/CoverArtImageView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -5178,74 +5219,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Application/MainView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">MovieLookupController</string>
-					<string key="superclassName">NSObject</string>
-					<object class="NSMutableDictionary" key="actions">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSMutableArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>backToSearch:</string>
-							<string>cancel:</string>
-							<string>lookUpTitle:</string>
-							<string>lookUpUPC:</string>
-							<string>selectResult:</string>
-							<string>showNextResult:</string>
-							<string>showPreviousResult:</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-						</object>
-					</object>
-					<object class="NSMutableDictionary" key="outlets">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSMutableArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>backAndForwardButtons</string>
-							<string>searchForMovieView</string>
-							<string>searchResultsBoxArt</string>
-							<string>searchResultsDescriptionWebView</string>
-							<string>searchResultsMovieTitle</string>
-							<string>searchResultsRecordCount</string>
-							<string>searchResultsView</string>
-							<string>searchingView</string>
-							<string>titleTextField</string>
-							<string>upcTextField</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>NSSegmentedControl</string>
-							<string>NSView</string>
-							<string>CoverArtImageView</string>
-							<string>WebView</string>
-							<string>NSTextField</string>
-							<string>NSTextField</string>
-							<string>NSView</string>
-							<string>NSView</string>
-							<string>NSTextField</string>
-							<string>NSTextField</string>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Application/MovieLookupController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">MovieLookupController</string>
-					<string key="superclassName">NSObject</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBUserSource</string>
-						<string key="minorKey"/>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

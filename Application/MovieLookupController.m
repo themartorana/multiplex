@@ -24,6 +24,20 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 @implementation MovieLookupController
 @synthesize movie;
 
+- (id) initWithApplicationController:(ApplicationController*)_applicationController drawerView:(DrawerView*)_drawerView
+{
+    NSAssert(_applicationController, @"wtf?");
+    NSAssert(_drawerView, @"wtf?");
+    if (self = [super init]) {
+        applicationController = [_applicationController retain];
+        drawerView = [_drawerView retain];
+        if (![NSBundle loadNibNamed:@"MovieLookup" owner:self]) {
+            return nil;
+        }
+    }
+    return self;
+}
+
 - (void) awakeFromNib
 {
     [searchResultsDescriptionWebView setDrawsBackground:NO];
@@ -38,9 +52,10 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     [drawerView setContentView:searchForMovieView];
 }
 
-- (IBAction) skipEnterUPC:(id)sender
+- (IBAction) cancel:(id)sender
 {
-    [applicationController showInfoPanelAndSelectHomeTab:nil];
+    [[movie managedObjectContext] rollback];
+    [applicationController showMovieDetailAndSelectHomeTabForMovie:movie];
 }
 
 #pragma mark Lookup Methods
@@ -73,13 +88,11 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 {
     NSError* error = nil;
     [[movie managedObjectContext] save:&error];
-    
     if (error) {
         NSLog(@"%@", [error userInfo]);
         NSAssert(FALSE, @"ERROR SAVING DATA!");
     }
-    
-    [applicationController showInfoPanelAndSelectHomeTab:nil];
+    [applicationController showMovieDetailAndSelectHomeTabForMovie:nil];
 }
 
 - (IBAction) showNextResult:(id)sender

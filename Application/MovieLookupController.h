@@ -12,11 +12,9 @@
 @class MovieDetailController;
 
 @interface MovieLookupController : NSObject {
+    ApplicationController* applicationController;
+    DrawerView* drawerView;
     Movie* movie;
-    
-    IBOutlet ApplicationController* applicationController;
-    IBOutlet NSArrayController* movies;
-    IBOutlet DrawerView* drawerView;
     
     ///////////////////////////////////
     /// 
@@ -46,9 +44,11 @@
 
 @property (retain) Movie* movie;
 
+- (id) initWithApplicationController:(ApplicationController*)_applicationController drawerView:(DrawerView*)_drawerView;
+
 - (void) startWithMovie:(Movie*)movie;
 
-- (IBAction) skipEnterUPC:(id)sender;
+- (IBAction) cancel:(id)sender;
 
 - (IBAction) lookUpUPC:(id)sender;
 - (IBAction) lookUpTitle:(id)sender;

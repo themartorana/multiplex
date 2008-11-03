@@ -18,13 +18,12 @@
     IBOutlet DrawerView* drawerView;
     IBOutlet NSSearchField* searchField;
     /**/
-    IBOutlet NSView* infoPaneView;
     IBOutlet NSView* noDiscsView;
     IBOutlet NSView* noMovieSelectedView;
     IBOutlet NSView* searchForMovieView;
     /**/
-    IBOutlet MovieDetailController* movieDetailController;
-    IBOutlet MovieLookupController* movieLookupController;
+    MovieDetailController* movieDetailController;
+    MovieLookupController* movieLookupController;
     IBOutlet UserVoiceFeedbackPanel* userVoiceFeedbackPanel;
     /**/
     IBOutlet NSButton* userVoiceButton;
@@ -51,6 +50,7 @@
 - (IBAction) switchToGridLayoutManager:(id)sender;
 - (IBAction) switchToLinearLayoutManager:(id)sender;
 
-- (IBAction) showInfoPanelAndSelectHomeTab:(id)sender;
+- (void) showMovieDetailAndSelectHomeTabForMovie:(Movie*)movie;
+- (void) showMovieLookupForMovie:(Movie*)movie;
 
 @end

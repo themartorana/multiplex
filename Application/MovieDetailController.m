@@ -4,6 +4,7 @@
 #import "MultiplexColorFactory.h"
 #import "DragDropTargetView.h"
 #import "ApplicationResources.h"
+#import "ApplicationController.h"
 #import "DrawerView.h"
 #import "BoxArt.h"
 #import "LayerBackedButtonView.h"
@@ -17,17 +18,22 @@
 @end
 
 @implementation MovieDetailController
-
 @synthesize movie;
 @synthesize labelColor;
 @synthesize valuesAreEditable;
 
-- (MovieDetailController*) init
+- (id) initWithApplicationController:(ApplicationController*)_applicationController drawerView:(DrawerView*)_drawerView;
 {
+    NSAssert(_applicationController, @"wtf?");
+    NSAssert(_drawerView, @"wtf?");
     if (self = [super init]) {
+        applicationController = [_applicationController retain];
+        drawerView = [_drawerView retain];
         labelColor = [MultiplexColorFactory multiplexYellowOrange];
+        if (![NSBundle loadNibNamed:@"MovieDetail" owner:self]) {
+            return nil;
+        }
     }
-    
     return self;
 }
 
@@ -48,31 +54,9 @@
     [discTitleView bind:@"text" toObject:self withKeyPath:@"movie.title" options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption]];
 }
 
-- (void) setMovie:(Movie*)_movie
-{
-    if (movie != _movie) {
-        [self willChangeValueForKey:@"movie"];
-        [movie release];
-        movie = [_movie retain];
-        [[descriptionWebView mainFrame] loadHTMLString:movie ? movie.synopsis : @"" baseURL:[NSURL URLWithString:@""]];
-        [self didChangeValueForKey:@"movie"];
-    }
-}
-
 - (void) webViewDidEndEditing:(NSNotification*)notification
 {
     movie.synopsis = [(id)[[[[[descriptionWebView mainFrame] DOMDocument] documentElement] getElementsByTagName:@"body"] item:0] innerHTML];
-}
-
-- (void) tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem
-{
-#if 0
-    if (tabViewItem == discsTabViewItem) {
-        [bigPlayButtonView setHidden:YES];
-    } else {
-        [bigPlayButtonView setHidden:NO];
-    }
-#endif
 }
 
 - (IBAction) startWithMovie:(Movie*)_movie
@@ -80,12 +64,12 @@
     [self setMovie:_movie];
     [drawerView setContentView:infoPaneView];
     [infoTabView selectTabViewItem:[[infoTabView tabViewItems] objectAtIndex:0]];
+    [[descriptionWebView mainFrame] loadHTMLString:movie ? movie.synopsis : @"" baseURL:[NSURL URLWithString:@""]];
 }
-
 
 - (void) showHomeTab
 {
-    [[descriptionWebView mainFrame] loadHTMLString:movie ? movie.synopsis : @"" baseURL:[NSURL URLWithString:@""]];
+    [infoTabView selectTabViewItem:[[infoTabView tabViewItems] objectAtIndex:0]];
 }
 
 - (void) showDiscsTab

@@ -273,10 +273,20 @@
     }
 }
 
-- (IBAction) showInfoPanelAndSelectHomeTab:(id)sender
+- (void) showMovieDetailAndSelectHomeTabForMovie:(Movie*)movie
 {
-    [drawerView setContentView:infoPaneView];
-    [movieDetailController showHomeTab];
+    if (!movieDetailController) {
+        movieDetailController = [[MovieDetailController alloc] initWithApplicationController:self drawerView:drawerView];
+    }
+    [movieDetailController startWithMovie:selectedMovie];
+}
+
+- (void) showMovieLookupForMovie:(Movie*)movie
+{
+    if (!movieLookupController) {
+        movieLookupController = [[MovieLookupController alloc] initWithApplicationController:self drawerView:drawerView];
+    }
+    [movieLookupController startWithMovie:selectedMovie];
 }
 
 - (void) openInfoView:(NSNotification*)notification
@@ -333,9 +343,9 @@
     if (!drawerView.isOpen) {
         [drawerView setContentView:nil];
     } else if ([selectedMovie.gtin length] > 0 || selectedMovie.metadataAcceptedDate != nil) {
-        [movieDetailController startWithMovie:selectedMovie];
+        [self showMovieDetailAndSelectHomeTabForMovie:selectedMovie];
     } else if (selectedMovie) {
-        [movieLookupController startWithMovie:selectedMovie];
+        [self showMovieLookupForMovie:selectedMovie];
     } else {
         [drawerView setContentView:noMovieSelectedView];
     }

@@ -2,6 +2,7 @@
 #import <WebKit/WebKit.h>
 
 @class Movie;
+@class ApplicationController;
 @class DrawerView;
 @class InfoPaneDiscsView;
 @class CoverArtImageView;
@@ -9,26 +10,24 @@
 @class TextView;
 
 @interface MovieDetailController : NSObject {
-    Movie* movie;
-    
-    NSColor* labelColor;
-
-    IBOutlet DrawerView* drawerView;
+    ApplicationController* applicationController;
+    DrawerView* drawerView;
+    /**/
     IBOutlet NSView* infoPaneView;
-
     IBOutlet WebView* descriptionWebView;
     IBOutlet InfoPaneDiscsView* infoPaneDiscsView;
     IBOutlet CoverArtImageView* coverArtImageView;
-    
     IBOutlet NSTabView* infoTabView;
     IBOutlet NSTabViewItem* discsTabViewItem;
-    
     IBOutlet TextView* discTitleView;
-    
     IBOutlet LayerBackedButtonView* playButtonView;
-    
+    /**/
+    Movie* movie;
+    NSColor* labelColor;
     BOOL valuesAreEditable;
 }
+
+- (id) initWithApplicationController:(ApplicationController*)_applicationController drawerView:(DrawerView*)_drawerView;
 
 @property (retain) Movie* movie;
 @property (readonly) NSColor* labelColor;

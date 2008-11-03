@@ -60,6 +60,8 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 - (void) startWithMovie:(Movie*)_movie
 {
     resultIndex = 0;
+    [titleTextField setStringValue:@""];
+    [upcTextField setStringValue:@""];
     [self setMovie:_movie];
     [drawerView setContentView:searchForMovieView];
 }

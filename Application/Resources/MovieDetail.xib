@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1467"/>
+			<integer value="1495"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -51,7 +51,7 @@
 							<object class="NSTabViewItem" id="966988208">
 								<string key="NSIdentifier">1</string>
 								<object class="NSView" key="NSView" id="259575740">
-									<reference key="NSNextResponder" ref="124333960"/>
+									<nil key="NSNextResponder"/>
 									<int key="NSvFlags">256</int>
 									<object class="NSMutableArray" key="NSSubviews">
 										<bool key="EncodedWithXMLCoder">YES</bool>
@@ -254,7 +254,6 @@
 										</object>
 									</object>
 									<string key="NSFrame">{{10, 33}, {754, 388}}</string>
-									<reference key="NSSuperview" ref="124333960"/>
 								</object>
 								<string key="NSLabel">Basic Info</string>
 								<reference key="NSColor" ref="288047085"/>
@@ -274,7 +273,7 @@
 							<object class="NSTabViewItem" id="723910753">
 								<string key="NSIdentifier">2</string>
 								<object class="NSView" key="NSView" id="220476942">
-									<nil key="NSNextResponder"/>
+									<reference key="NSNextResponder" ref="124333960"/>
 									<int key="NSvFlags">274</int>
 									<object class="NSMutableArray" key="NSSubviews">
 										<bool key="EncodedWithXMLCoder">YES</bool>
@@ -476,7 +475,7 @@
 											<object class="NSTextFieldCell" key="NSCell" id="844063980">
 												<int key="NSCellFlags">68288064</int>
 												<int key="NSCellFlags2">71304192</int>
-												<string key="NSContents">MPAA/TV Rating</string>
+												<string key="NSContents">Content Rating</string>
 												<reference key="NSSupport" ref="707745533"/>
 												<reference key="NSControlView" ref="123405135"/>
 												<reference key="NSBackgroundColor" ref="288047085"/>
@@ -1037,6 +1036,7 @@
 										</object>
 									</object>
 									<string key="NSFrame">{{10, 33}, {754, 388}}</string>
+									<reference key="NSSuperview" ref="124333960"/>
 								</object>
 								<string key="NSLabel">Detailed Info</string>
 								<reference key="NSColor" ref="288047085"/>
@@ -1487,14 +1487,14 @@
 								<reference key="NSTabView" ref="124333960"/>
 							</object>
 						</object>
-						<reference key="NSSelectedTabViewItem" ref="966988208"/>
+						<reference key="NSSelectedTabViewItem" ref="723910753"/>
 						<reference key="NSFont" ref="707745533"/>
 						<int key="NSTvFlags">0</int>
 						<bool key="NSAllowTruncatedLabels">YES</bool>
 						<bool key="NSDrawsBackground">YES</bool>
 						<object class="NSMutableArray" key="NSSubviews">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="259575740"/>
+							<reference ref="220476942"/>
 						</object>
 					</object>
 					<object class="NSCustomView" id="511146060">
@@ -1508,6 +1508,9 @@
 				<string key="NSFrameSize">{800, 500}</string>
 				<reference key="NSSuperview"/>
 				<bool key="NSViewIsLayerTreeHost">YES</bool>
+			</object>
+			<object class="NSUserDefaultsController" id="614429464">
+				<bool key="NSSharedInstance">YES</bool>
 			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -1576,6 +1579,202 @@
 						<reference key="destination" ref="162150624"/>
 					</object>
 					<int key="connectionID">2195</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: movie.title</string>
+						<reference key="source" ref="32848502"/>
+						<reference key="destination" ref="1021"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="32848502"/>
+							<reference key="NSDestination" ref="1021"/>
+							<string key="NSLabel">value: movie.title</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">movie.title</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSValidatesImmediately</string>
+								<boolean value="YES" key="NS.object.0"/>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2198</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: movie.genre</string>
+						<reference key="source" ref="815353052"/>
+						<reference key="destination" ref="1021"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="815353052"/>
+							<reference key="NSDestination" ref="1021"/>
+							<string key="NSLabel">value: movie.genre</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">movie.genre</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2200</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: movie.studio</string>
+						<reference key="source" ref="898653106"/>
+						<reference key="destination" ref="1021"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="898653106"/>
+							<reference key="NSDestination" ref="1021"/>
+							<string key="NSLabel">value: movie.studio</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">movie.studio</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2202</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: movie.rating</string>
+						<reference key="source" ref="762755384"/>
+						<reference key="destination" ref="1021"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="762755384"/>
+							<reference key="NSDestination" ref="1021"/>
+							<string key="NSLabel">value: movie.rating</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">movie.rating</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2207</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: movie.starRating</string>
+						<reference key="source" ref="728059404"/>
+						<reference key="destination" ref="1021"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="728059404"/>
+							<reference key="NSDestination" ref="1021"/>
+							<string key="NSLabel">value: movie.starRating</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">movie.starRating</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2209</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: movie.productionYear</string>
+						<reference key="source" ref="279505182"/>
+						<reference key="destination" ref="1021"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="279505182"/>
+							<reference key="NSDestination" ref="1021"/>
+							<string key="NSLabel">value: movie.productionYear</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">movie.productionYear</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2213</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: movie.theatricalReleaseDate</string>
+						<reference key="source" ref="509797995"/>
+						<reference key="destination" ref="1021"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="509797995"/>
+							<reference key="NSDestination" ref="1021"/>
+							<string key="NSLabel">value: movie.theatricalReleaseDate</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">movie.theatricalReleaseDate</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2216</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: movie.allDiscs.@count</string>
+						<reference key="source" ref="411719104"/>
+						<reference key="destination" ref="1021"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="411719104"/>
+							<reference key="NSDestination" ref="1021"/>
+							<string key="NSLabel">value: movie.allDiscs.@count</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">movie.allDiscs.@count</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2219</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: movie.aspectRatio</string>
+						<reference key="source" ref="324255121"/>
+						<reference key="destination" ref="1021"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="324255121"/>
+							<reference key="NSDestination" ref="1021"/>
+							<string key="NSLabel">value: movie.aspectRatio</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">movie.aspectRatio</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2222</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: movie.regionCode</string>
+						<reference key="source" ref="513014998"/>
+						<reference key="destination" ref="1021"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="513014998"/>
+							<reference key="NSDestination" ref="1021"/>
+							<string key="NSLabel">value: movie.regionCode</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">movie.regionCode</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2224</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: movie.releaseDate</string>
+						<reference key="source" ref="624742211"/>
+						<reference key="destination" ref="1021"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="624742211"/>
+							<reference key="NSDestination" ref="1021"/>
+							<string key="NSLabel">value: movie.releaseDate</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">movie.releaseDate</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2226</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: movie.rating</string>
+						<reference key="source" ref="1003202171"/>
+						<reference key="destination" ref="1021"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="1003202171"/>
+							<reference key="NSDestination" ref="1021"/>
+							<string key="NSLabel">value: movie.rating</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">movie.rating</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2228</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2513,6 +2712,11 @@
 						<reference key="object" ref="904934807"/>
 						<reference key="parent" ref="825284101"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2210</int>
+						<reference key="object" ref="614429464"/>
+						<reference key="parent" ref="1049"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -2811,7 +3015,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2195</int>
+			<int key="maxID">2228</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

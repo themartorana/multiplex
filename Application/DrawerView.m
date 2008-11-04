@@ -17,6 +17,7 @@
     [root setLayoutManager:[CAConstraintLayoutManager layoutManager]];
 
     CALayer* backgroundLayer = [CALayer layer];
+    backgroundLayer.delegate = self;
     backgroundLayer.contents = (id)[ApplicationResources textureForDrawerBackground];
     backgroundLayer.constraints = [NSArray arrayWithObjects:
         [CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX],
@@ -28,6 +29,7 @@
     [root addSublayer:backgroundLayer];
     
     CALayer* patternLayer = [CALayer layer];
+    patternLayer.delegate = self;
     patternLayer.backgroundColor = [MultiplexColorFactory drawerBackgroundPattern];
     patternLayer.constraints = [NSArray arrayWithObjects:
         [CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX],
@@ -40,6 +42,7 @@
 
     CALayer* topEdgeLayer = [CALayer layer];
     CGImageRef textureForDrawerTopEdge = [ApplicationResources textureForDrawerTopEdge];
+    topEdgeLayer.delegate = self;
     topEdgeLayer.contents = (id)textureForDrawerTopEdge;
     topEdgeLayer.frame = CGRectMake(0, 0, CGImageGetWidth(textureForDrawerTopEdge), CGImageGetHeight(textureForDrawerTopEdge));
     topEdgeLayer.constraints = [NSArray arrayWithObjects:
@@ -50,6 +53,14 @@
     ];
     [root addSublayer:topEdgeLayer];
     
+}
+
+- (id<CAAction>) actionForLayer:(CALayer*)layer forKey:(NSString*)key
+{
+    /*  Effectively disable all animations on layers for which we are the
+     *  delegate.
+     */
+    return [CAAnimation animation];
 }
 
 - (void) setContentView:(NSView*)_contentView

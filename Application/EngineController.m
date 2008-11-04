@@ -687,8 +687,8 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                 Movie* movie = disc.movie;
                 if (!disc.movie) {
                     movie = [[[Movie alloc] initWithEntity:movieEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
-                    disc.movie = movie;
                     movie.title = title;
+                    disc.movie = movie;
                 }
                 
                 Media* media = [self _findMediaByEngine:engine tag:tag];
@@ -772,8 +772,8 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                 Movie* movie = disc.movie;
                 if (!disc.movie) {
                     movie = [[[Movie alloc] initWithEntity:movieEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
-                    disc.movie = movie;
                     movie.title =  [[pathToFile lastPathComponent] stringByDeletingPathExtension];
+                    disc.movie = movie;
                 }
                 
                 /*  Fire off a query to get additional info, if necessary.

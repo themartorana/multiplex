@@ -223,6 +223,21 @@
 - (void) applicationDidFinishLaunching:(NSNotification*)notification
 {
     [self.window makeKeyAndOrderFront:nil];
+    if (!parameters) {
+        CIFilter* blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
+        [blurFilter setDefaults];
+        [blurFilter setValue:[NSNumber numberWithDouble:3.0] forKey:@"inputRadius"];
+        [[[self window] contentView] layer].filters = [NSArray arrayWithObject:blurFilter];
+        
+        /*  There was an expiration date in the parameters, and it's 
+         *  passed.  Let them know that they should pay up...  in a 
+         *  nice way.
+         */
+        NSAlert* alert = [NSAlert alertWithMessageText:NSLocalizedString(@"This beta of Multiplex has expired.", @"") defaultButton:nil alternateButton:NSLocalizedString(@"No, I'll yell at Dave or Jason", "") otherButton:nil informativeTextWithFormat:NSLocalizedString(@"If you haven't already received a new version to replace this one, go yell at Dave (and/or Jason)... Would you like to check for an update?", @"")];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+        NSLog(@"%@", self.window);
+        [alert beginSheetModalForWindow:[self window] modalDelegate:self didEndSelector:@selector(_licensingAlertDidEnd:returnCode:contextInfo:) contextInfo:nil];
+    }
 }
 
 - (void) applicationWillTerminate:(NSNotification*)notification
@@ -383,14 +398,14 @@
         }
         SUUpdater* updater = [SUUpdater sharedUpdater];
         [updater setDelegate:self];
-        if (!parameters) {
-            [updater checkForUpdates:self];
-            CIFilter* blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
-            [blurFilter setDefaults];
-            [blurFilter setValue:[NSNumber numberWithDouble:3.0] forKey:@"inputRadius"];
-            [[[self window] contentView] layer].filters = [NSArray arrayWithObject:blurFilter];
-        }
     }    
+}
+
+- (void) _licensingAlertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+    if (NSAlertDefaultReturn == returnCode) {
+        [[SUUpdater sharedUpdater] checkForUpdates:self];
+    }
 }
 
 - (IBAction) toggleFullScreen:(id)sender

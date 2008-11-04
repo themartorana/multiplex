@@ -14,13 +14,10 @@
 
 - (void) awakeFromNib
 {
-    CALayer* selfLayer = [self layer];
-    
     progressLayer = [IndeterminateProgressIndicatorLayer layer];
-    progressLayer.frame = CGRectMake(0, 0, selfLayer.frame.size.width, selfLayer.frame.size.height);
-
+    progressLayer.frame = NSRectToCGRect(self.bounds);
     [self setWantsLayer:YES];
-    [selfLayer addSublayer:progressLayer];
+    [[self layer] addSublayer:progressLayer];
 }
 
 @end

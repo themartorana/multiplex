@@ -10,6 +10,7 @@
 #import "MovieLookupController.h"
 #import "UserVoiceFeedbackPanel.h"
 #import "NSDescriptionValueTransformer.h"
+#import "IsExactlyOneValueTransformer.h"
 #import "ApplicationResources.h"
 
 #import "StadiumLayoutManager.h"
@@ -26,10 +27,6 @@
 
 #import <Security/Security.h>
 
-@interface ApplicationController (Private)
-- (void) openInfoView:(NSNotification*)notification;
-@end
-
 @implementation ApplicationController
 @synthesize parameters;
 @synthesize appManagedObjectContext;
@@ -41,6 +38,7 @@
         /*  Register our value transformers.
          */
         [NSDescriptionValueTransformer registerYourself];
+        [IsExactlyOneValueTransformer registerYourself];
 
         /*  Setup our user defaults.
          */
@@ -198,7 +196,6 @@
     // Listen for play requests
     NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(playDiscRequest:) name:@"MultiplexPlayDisc" object:nil];
-    [notificationCenter addObserver:self selector:@selector(openInfoView:) name:@"MultiplexShowMovieDialog" object:nil];
     [notificationCenter addObserver:self selector:@selector(closeInfoView:) name:@"MultiplexCloseMovieDialog" object:nil];
     [notificationCenter addObserver:self selector:@selector(playSelectedMovie:) name:@"MultiplexPlayButtonClicked" object:nil];
     [notificationCenter addObserver:self selector:@selector(toggleFullScreen:) name:@"MultiplexToggleFullScreen" object:nil];
@@ -261,15 +258,9 @@
 
 - (void) playSelectedMovie:(NSNotification*)notification
 {
-    Movie* movie = [notification object];
-    NSAssert(movie && [movie isKindOfClass:[Movie class]], @"wtf?");
-    
-    if (movie && [movie.allDiscs count] == 1) {
-        Disc* d = (Disc*)[[movie.allDiscs allObjects] objectAtIndex:0];
+    if (selectedMovie && [selectedMovie.allDiscs count] == 1) {
+        Disc* d = [[selectedMovie.allDiscs allObjects] objectAtIndex:0];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayDisc" object:d];
-    } else if (movie && [movie.allDiscs count] > 1) {
-        [self openInfoView:nil];
-        [movieDetailController showDiscsTab];
     }
 }
 
@@ -293,12 +284,6 @@
         movieLookupController = [[MovieLookupController alloc] initWithApplicationController:self drawerView:drawerView];
     }
     [movieLookupController startWithMovie:selectedMovie];
-}
-
-- (void) openInfoView:(NSNotification*)notification
-{
-    [drawerView openDrawer];
-    [[self window] makeFirstResponder:drawerView];
 }
 
 - (void) closeInfoView:(NSNotification*)notification
@@ -344,30 +329,25 @@
     return pairs;
 }
 
-- (void) _changeDrawerView:(BOOL)isOpen
-{
-    if (!drawerView.isOpen) {
-        [drawerView setContentView:nil];
-    } else if ([selectedMovie.gtin length] > 0 || selectedMovie.metadataAcceptedDate != nil) {
-        [self showMovieDetailForMovie:selectedMovie];
-    } else if (selectedMovie) {
-        [self showMovieLookupForMovie:selectedMovie];
-    } else {
-        [drawerView setContentView:noMovieSelectedView];
-    }
-}
-
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
     if (object == drawerView) {
         if ([@"isOpen" isEqualToString:keyPath]) {
-            BOOL isOpen = [(NSNumber*)[object valueForKeyPath:keyPath] boolValue];
-            [self _changeDrawerView:isOpen];
+            BOOL isOpen = [[object valueForKeyPath:keyPath] boolValue];
             if (isOpen) {
                 [mainView setFloorLayerLayoutManagerClass:[LinearLayoutManager class]];
-            }
-            else {
+                if ([selectedMovie.gtin length] > 0 || selectedMovie.metadataAcceptedDate != nil) {
+                    [self showMovieDetailForMovie:selectedMovie];
+                } else if (selectedMovie) {
+                    [self showMovieLookupForMovie:selectedMovie];
+                } else {
+                    [drawerView setContentView:noMovieSelectedView];
+                }
+                [[self window] makeFirstResponder:drawerView];
+            } else {
                 [mainView setFloorLayerLayoutManagerClass:[StadiumLayoutManager class]];
+                [drawerView setContentView:nil];
+                [[self window] makeFirstResponder:searchField];
             }
         }
     } else if (object == movies) {
@@ -376,9 +356,11 @@
             if (_selectedMovie == NSNoSelectionMarker) {
                 _selectedMovie = nil;
             }
-            if (_selectedMovie != selectedMovie) {
+            if (selectedMovie != _selectedMovie) {
                 [self setSelectedMovie:_selectedMovie];
-                [self _changeDrawerView:drawerView.isOpen];
+                if (selectedMovie) {
+                    [drawerView openDrawer];
+                }
             }
         }
     } else if ([keyPath isEqual:@"parameters"]) {

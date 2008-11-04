@@ -9,6 +9,9 @@
 #ifdef DEBUG
     NSLog(@"Registering Value Transformer: %@ (%@)", name, instance);
 #endif
+    if ([name hasSuffix:@"ValueTransformer"]) {
+        name = [name substringToIndex:[name length] - 16];
+    }
     [NSValueTransformer setValueTransformer:instance forName:name];
 }
 

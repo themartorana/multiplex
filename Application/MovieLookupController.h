@@ -1,10 +1,8 @@
 #import <Cocoa/Cocoa.h>
 
 @class Activity;
-@class AmazonQuery;
 @class ApplicationController;
 @class DiscIdentQuery;
-@class ImageQuery;
 @class WebView;
 @class DrawerView;
 @class Movie;
@@ -18,33 +16,28 @@
     NSManagedObjectContext* managedObjectContext;
     NSEntityDescription* boxArtEntity;
     
-    ///////////////////////////////////
-    /// 
-    /// LOOKUP STUFF
-    /// 
-    ///////////////////////////////////
-    
     IBOutlet NSView* searchForMovieView;
     IBOutlet NSView* searchingView;
     IBOutlet NSView* searchResultsView;
     
+    int amazonQueryType;
     NSArray* amazonQueryResults;
-    int resultIndex;
+    NSNumber* resultIndex;
     
-    IBOutlet NSTextField* upcTextField;
+    IBOutlet NSTextField* eanTextField;
     IBOutlet NSTextField* titleTextField;
-    IBOutlet NSTextField* searchResultsRecordCount;
     IBOutlet NSTextField* searchResultsMovieTitle;
     IBOutlet BoxArtImageView* searchResultsBoxArt;
     IBOutlet NSSegmentedControl* backAndForwardButtons;
     
     IBOutlet WebView* searchResultsDescriptionWebView; 
-    
-    AmazonQuery* amazonQuery;
-    ImageQuery* imageQuery;
 }
 
 @property (retain) Movie* movie;
+@property (retain) NSArray* amazonQueryResults;
+@property (retain) NSNumber* resultIndex;
+@property (readonly) NSString* resultViewLineOneText;
+@property (readonly) NSString* resultViewLineTwoText;
 
 - (id) initWithApplicationController:(ApplicationController*)_applicationController drawerView:(DrawerView*)_drawerView;
 

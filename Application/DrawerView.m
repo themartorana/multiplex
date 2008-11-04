@@ -68,11 +68,9 @@
         // Add, replace, or remove the content view
         if (contentView && _contentView) {
             [[self animator] replaceSubview:contentView with:_contentView];
-        }
-        else if (contentView && !_contentView) {
+        } else if (contentView && !_contentView) {
             [[contentView animator] removeFromSuperview];
-        }
-        else {
+        } else {
             [self addSubview:_contentView];
         }
 
@@ -98,8 +96,7 @@
                 [button setFrameCenterRotation:45.0];
                 [upperView setFrame:newUpperViewFrame];
                 [[self animator] setFrame:NSOffsetRect(newFrame, 0, viewFrame.size.height)];
-            }
-            else {
+            } else {
                 NSRect newFrame = NSMakeRect(0, 0, superViewFrame.size.width, viewFrame.size.height + minHeight);
                 NSRect newUpperViewFrame = NSMakeRect(0, newFrame.size.height, superViewFrame.size.width, superViewFrame.size.height - newFrame.size.height);
                 
@@ -114,8 +111,7 @@
                 [upperView setFrame:newUpperViewFrame];
                 [[self animator] setFrame:NSOffsetRect(newFrame, 0, -offset)];
             }
-        }
-        else {
+        } else {
             NSRect newFrame = NSMakeRect(0, 0, superViewFrame.size.width, minHeight);
             NSRect newUpperViewFrame = NSMakeRect(0, minHeight, superViewFrame.size.width, superViewFrame.size.height - minHeight);
             

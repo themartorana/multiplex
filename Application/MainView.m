@@ -117,7 +117,7 @@
 - (void) restartHoverTimer
 {
     [self _cancelHoverTimer];
-    if (hoveredMovie) {
+    if (hoveredMovie && [layoutManager allowHoverInfo]) {
         hoverTimer = [[NSTimer scheduledTimerWithTimeInterval:0.75 target:self selector:@selector(_hoverTimerTicked:) userInfo:nil repeats:NO] retain];
     }
 }

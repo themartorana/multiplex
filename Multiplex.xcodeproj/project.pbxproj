@@ -99,6 +99,9 @@
 		F917CCA80EBA53CF00B21587 /* Query.m in Sources */ = {isa = PBXBuildFile; fileRef = F917CCA70EBA53CF00B21587 /* Query.m */; };
 		F92B63000EBFAF6100609F16 /* MovieDetail.xib in Resources */ = {isa = PBXBuildFile; fileRef = F92B62FF0EBFAF6100609F16 /* MovieDetail.xib */; };
 		F92B63B20EBFB6B000609F16 /* MovieLookup.xib in Resources */ = {isa = PBXBuildFile; fileRef = F92B63B10EBFB6B000609F16 /* MovieLookup.xib */; };
+		F92B67160EBFF00900609F16 /* IsExactlyOneValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = F92B67150EBFF00900609F16 /* IsExactlyOneValueTransformer.m */; };
+		F92B67B60EBFF90900609F16 /* arrow-right.png in Resources */ = {isa = PBXBuildFile; fileRef = F92B67B40EBFF90900609F16 /* arrow-right.png */; };
+		F92B67B70EBFF90900609F16 /* arrow-left.png in Resources */ = {isa = PBXBuildFile; fileRef = F92B67B50EBFF90900609F16 /* arrow-left.png */; };
 		F96430360EB63DCA00D49FA0 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F96430090EB63D6100D49FA0 /* Sparkle.framework */; };
 		F96430410EB63DD100D49FA0 /* Sparkle.framework in Copy Files to Frameworks */ = {isa = PBXBuildFile; fileRef = F96430090EB63D6100D49FA0 /* Sparkle.framework */; };
 		F96430F70EB6433E00D49FA0 /* Licensing.m in Sources */ = {isa = PBXBuildFile; fileRef = F96430A30EB640F700D49FA0 /* Licensing.m */; };
@@ -515,6 +518,10 @@
 		F917CCBF0EBA551B00B21587 /* Query+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Query+Private.h"; sourceTree = "<group>"; };
 		F92B62FF0EBFAF6100609F16 /* MovieDetail.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MovieDetail.xib; sourceTree = "<group>"; };
 		F92B63B10EBFB6B000609F16 /* MovieLookup.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MovieLookup.xib; sourceTree = "<group>"; };
+		F92B67140EBFF00900609F16 /* IsExactlyOneValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IsExactlyOneValueTransformer.h; sourceTree = "<group>"; };
+		F92B67150EBFF00900609F16 /* IsExactlyOneValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IsExactlyOneValueTransformer.m; sourceTree = "<group>"; };
+		F92B67B40EBFF90900609F16 /* arrow-right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-right.png"; sourceTree = "<group>"; };
+		F92B67B50EBFF90900609F16 /* arrow-left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-left.png"; sourceTree = "<group>"; };
 		F94A05FD0E7B9B5800C8A8B7 /* DiscIdentKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DiscIdentKit.xcodeproj; path = Frameworks/DiscIdentKit/DiscIdentKit.xcodeproj; sourceTree = "<group>"; };
 		F94EA2BF0E4C9DBF00438E14 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F94EA2CF0E4C9ECA00438E14 /* Engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Engine.h; sourceTree = "<group>"; };
@@ -891,6 +898,8 @@
 				550D086F0E9AFDF4008F0275 /* NSDescriptionValueTransformer.m */,
 				5545BC020EB5171C0005A380 /* NSNumberToStringValueTransformer.h */,
 				5545BC030EB5171C0005A380 /* NSNumberToStringValueTransformer.m */,
+				F92B67140EBFF00900609F16 /* IsExactlyOneValueTransformer.h */,
+				F92B67150EBFF00900609F16 /* IsExactlyOneValueTransformer.m */,
 			);
 			name = ValueTransformers;
 			sourceTree = "<group>";
@@ -934,6 +943,8 @@
 		F96430AE0EB6412300D49FA0 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				F92B67B40EBFF90900609F16 /* arrow-right.png */,
+				F92B67B50EBFF90900609F16 /* arrow-left.png */,
 				55A091700EBF9693008A27F2 /* bracket-additional-info.png */,
 				55A091710EBF9693008A27F2 /* bracket-movie-info.png */,
 				F9D4F9CE0EB67E2200B89FF4 /* window-resize-thumb.gif */,
@@ -1066,12 +1077,12 @@
 				2A37F4ABFDCFA73011CA2CEA /* Classes */,
 				551554980EA456B3006F2674 /* Controls */,
 				557B69710E4CD0660009919E /* Controllers */,
-				55D957DA0E94246800E35FF4 /* ValueTransformers */,
 				F967B0D50E7E22B300C12B92 /* Layers */,
 				55654E750EAD955A00265A45 /* Layout Managers */,
 				5535DE020E508D3D00A45761 /* Model */,
 				F9D4FBFD0EB7B2B000B89FF4 /* Queries */,
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
+				55D957DA0E94246800E35FF4 /* ValueTransformers */,
 				F967AFF30E7E13D400C12B92 /* Views */,
 			);
 			path = Application;
@@ -1524,6 +1535,8 @@
 				55A091730EBF9693008A27F2 /* bracket-movie-info.png in Resources */,
 				F92B63000EBFAF6100609F16 /* MovieDetail.xib in Resources */,
 				F92B63B20EBFB6B000609F16 /* MovieLookup.xib in Resources */,
+				F92B67B60EBFF90900609F16 /* arrow-right.png in Resources */,
+				F92B67B70EBFF90900609F16 /* arrow-left.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1649,6 +1662,7 @@
 				552D5D280EBCDBD400A292F4 /* IndeterminateProgressIndicatorView.m in Sources */,
 				5573686E0EBF6ACE0054C36D /* TextView.m in Sources */,
 				F9FC49FB0EBF49C8007F2769 /* MovieLookupController.m in Sources */,
+				F92B67160EBFF00900609F16 /* IsExactlyOneValueTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

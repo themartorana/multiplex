@@ -77,6 +77,15 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
     [super dealloc];
 }
 
+- (void) setBoxArtImage:(id)_boxArtImage
+{
+    if (boxArtImage != _boxArtImage) {
+        [boxArtImage release];
+        boxArtImage = [_boxArtImage retain];
+        [boxImageLayer setNeedsDisplay];
+    }
+}
+
 - (void) drawLayer:(CALayer*)layer inContext:(CGContextRef)c
 {
     if (layer == boxImageLayer) {
@@ -123,9 +132,6 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
     } else if ([keyPath isEqualToString:@"boxArt.imageData"]) {
         CGImageRef newBoxArtImage = [(Movie*)object boxArt].image;
         [self setBoxArtImage:(id)newBoxArtImage];
-        if (newBoxArtImage != nil) {
-            [boxImageLayer setNeedsDisplay];
-        }
     }
 }
 

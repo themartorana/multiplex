@@ -873,7 +873,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
         [managedObjectContext save:nil];
     }
     
-    if (YES || [uuid isEqualToString:localMachineUUID]) {
+    if (NO || [uuid isEqualToString:localMachineUUID]) {
         [self connectEngine:engine];
     }
 }

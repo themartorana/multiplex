@@ -151,7 +151,7 @@
             NSColor* color2 = [NSColor colorWithDeviceRed:71.0/255.0 green:71.0/255.0 blue:71.0/255.0 alpha:1.0];
             
             NSGradient* gradient = [[NSGradient alloc] initWithColorsAndLocations:color1, (CGFloat)0.0, color2, (CGFloat)0.5, color1, (CGFloat)1.0, nil];
-            [gradient drawInRect:NSMakeRect(0, 0, W, H) angle:145.0];
+            [gradient drawInRect:NSMakeRect(0, 0, W, H) angle:0.0];
             [gradient release];
         }
         [NSGraphicsContext restoreGraphicsState];

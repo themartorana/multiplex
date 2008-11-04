@@ -7,7 +7,6 @@
 @class MovieDetailDiscsView;
 @class BoxArtImageView;
 @class LayerBackedButtonView;
-@class TextView;
 
 @interface MovieDetailController : NSObject {
     ApplicationController* applicationController;
@@ -19,7 +18,6 @@
     IBOutlet BoxArtImageView* coverArtImageView;
     IBOutlet NSTabView* infoTabView;
     IBOutlet NSTabViewItem* discsTabViewItem;
-    IBOutlet TextView* discTitleView;
     IBOutlet LayerBackedButtonView* playButtonView;
     /**/
     Movie* movie;

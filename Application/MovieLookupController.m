@@ -90,58 +90,66 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             [drawerView setContentView:searchResultsView];
         }
         
+        BoxArt* boxArt = nil;
+        NSDictionary* resultAtIndex = nil;
         int index = [resultIndex intValue] - 1;
         if (index < [amazonQueryResults count] && index >= 0) {
-            BoxArt* boxArt = nil;
-            NSDictionary* resultAtIndex = [amazonQueryResults objectAtIndex:index];
-            if (resultAtIndex) {
-                NSString* urlAsString = [resultAtIndex objectForKey:@"_coverImageURL"];
-                if ([urlAsString length]) {
-                    NSFetchRequest* fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
-                    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"url == %@", urlAsString];
-                    fetchRequest.entity = boxArtEntity;
-                    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:nil];
-                    if ([results count]) {
-                        boxArt = [results objectAtIndex:0];
-                    } else {
-                        boxArt = [[BoxArt alloc] initWithEntity:boxArtEntity insertIntoManagedObjectContext:managedObjectContext];
-                        boxArt.state = @"Loading";
-                        boxArt.url = urlAsString;
-                        [ImageQuery imageQueryWithURL:[NSURL URLWithString:urlAsString] delegate:self userInfo:[Activity activityWithName:@"Loading Box Art" userInfo:boxArt.objectID] startImmediately:YES];
-                    }
-                }
-
-                movie.title = [resultAtIndex objectForKey:@"title"];
-                movie.aspectRatio = [resultAtIndex objectForKey:@"aspectRatio"];
-                movie.genre = [resultAtIndex objectForKey:@"genre"];
-                movie.metadataAcceptedDate = [NSDate date];
-                movie.releaseDate = [resultAtIndex objectForKey:@"releaseDate"] ? [NSDate dateFromShortDateString:[resultAtIndex objectForKey:@"releaseDate"]] : nil;
-                movie.rating = [resultAtIndex objectForKey:@"audienceRating"];
-                movie.regionCode = [resultAtIndex objectForKey:@"regionCode"];
-                movie.review = [resultAtIndex objectForKey:@"review"];
-                movie.runningTime = [resultAtIndex objectForKey:@"runningTime"];
-                movie.studio = [resultAtIndex objectForKey:@"studio"];
-                movie.synopsis = [resultAtIndex objectForKey:@"synopsis"];
-                movie.theatricalReleaseDate = [resultAtIndex objectForKey:@"theatricalReleaseDate"] ? [NSDate dateFromShortDateString:[resultAtIndex objectForKey:@"theatricalReleaseDate"]] : nil;
-                movie.productionYear = movie.theatricalReleaseDate ? [NSNumber numberWithInt:[[movie.theatricalReleaseDate descriptionWithCalendarFormat:@"%Y" timeZone:nil locale:nil] intValue]] : nil;
-                
-                if (AmazonQueryTypeEAN == amazonQueryType) {
-                    NSMutableString* gtin = [NSMutableString stringWithString:[eanTextField stringValue]];
-                    while ([gtin length] < 14) {
-                        [gtin insertString:@"0" atIndex:0];
-                    }
-                    movie.gtin = gtin;
-                }
-                
-                [[searchResultsDescriptionWebView mainFrame] loadHTMLString:movie.synopsis baseURL:[NSURL URLWithString:@""]];
-            }
-            movie.boxArt = boxArt;
+            resultAtIndex = [amazonQueryResults objectAtIndex:index];
         }
+        
+        if (resultAtIndex) {
+            NSString* urlAsString = [resultAtIndex objectForKey:@"_coverImageURL"];
+            if ([urlAsString length]) {
+                NSFetchRequest* fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+                fetchRequest.predicate = [NSPredicate predicateWithFormat:@"url == %@", urlAsString];
+                fetchRequest.entity = boxArtEntity;
+                NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:nil];
+                if ([results count]) {
+                    boxArt = [results objectAtIndex:0];
+                } else {
+                    boxArt = [[BoxArt alloc] initWithEntity:boxArtEntity insertIntoManagedObjectContext:managedObjectContext];
+                    boxArt.url = urlAsString;
+                    boxArt.state = @"Loading";
+                    [ImageQuery imageQueryWithURL:[NSURL URLWithString:urlAsString] delegate:self userInfo:[Activity activityWithName:@"Loading Box Art" userInfo:boxArt.objectID] startImmediately:YES];
+                }
+            }
+
+            movie.title = [resultAtIndex objectForKey:@"title"];
+            movie.aspectRatio = [resultAtIndex objectForKey:@"aspectRatio"];
+            movie.genre = [resultAtIndex objectForKey:@"genre"];
+            movie.metadataAcceptedDate = [NSDate date];
+            movie.releaseDate = [resultAtIndex objectForKey:@"releaseDate"] ? [NSDate dateFromShortDateString:[resultAtIndex objectForKey:@"releaseDate"]] : nil;
+            movie.rating = [resultAtIndex objectForKey:@"audienceRating"];
+            movie.regionCode = [resultAtIndex objectForKey:@"regionCode"];
+            movie.review = [resultAtIndex objectForKey:@"review"];
+            movie.runningTime = [resultAtIndex objectForKey:@"runningTime"];
+            movie.studio = [resultAtIndex objectForKey:@"studio"];
+            movie.synopsis = [resultAtIndex objectForKey:@"synopsis"];
+            movie.theatricalReleaseDate = [resultAtIndex objectForKey:@"theatricalReleaseDate"] ? [NSDate dateFromShortDateString:[resultAtIndex objectForKey:@"theatricalReleaseDate"]] : nil;
+            movie.productionYear = movie.theatricalReleaseDate ? [NSNumber numberWithInt:[[movie.theatricalReleaseDate descriptionWithCalendarFormat:@"%Y" timeZone:nil locale:nil] intValue]] : nil;
+            
+            if (AmazonQueryTypeEAN == amazonQueryType) {
+                NSMutableString* gtin = [NSMutableString stringWithString:[eanTextField stringValue]];
+                while ([gtin length] < 14) {
+                    [gtin insertString:@"0" atIndex:0];
+                }
+                movie.gtin = gtin;
+            }
+            
+            [[searchResultsDescriptionWebView mainFrame] loadHTMLString:movie.synopsis baseURL:[NSURL URLWithString:@""]];
+        }
+
+        movie.boxArt = boxArt;
     }
 }
 
 - (void) startWithMovie:(Movie*)_movie
 {
+    if (movie) {
+        [managedObjectContext rollback];
+        [managedObjectContext refreshObject:movie mergeChanges:YES];
+    }
+    
     [self setResultIndex:nil];
     [self setAmazonQueryResults:nil];
     [self setMovie:_movie];
@@ -171,21 +179,30 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     }
     [titleTextField setStringValue:title];
 
-    [drawerView setContentView:searchForMovieView];
+    [drawerView setContentView:searchByUPCorEANView];
 }
 
-- (IBAction) cancel:(id)sender
+- (IBAction) skipToTitleEntry:(id)sender
+{
+    [drawerView setContentView:searchByTitleView];
+}
+
+
+- (IBAction) skipToManualEntry:(id)sender
 {
     [[movie managedObjectContext] rollback];
     [managedObjectContext refreshObject:movie mergeChanges:NO];
     [applicationController showMovieDetailAndSelectHomeTabForMovie:movie];
 }
 
-- (IBAction) lookUpUPC:(id)sender
+- (IBAction) lookUpByUPCorEAN:(id)sender
 {
     NSMutableString* ean = [NSMutableString stringWithString:[eanTextField stringValue]];
     while ([ean length] < 13) {
         [ean insertString:@"0" atIndex:0];
+    }
+    if ([ean length] > 13) {
+        // TODO: Handle Me Gracefully.
     }
     [self setAmazonQueryResults:nil];
     [self setResultIndex:nil];
@@ -193,7 +210,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     [drawerView setContentView:searchingView];
 }
 
-- (IBAction) lookUpTitle:(id)sender
+- (IBAction) lookUpByTitle:(id)sender
 {
     [self setAmazonQueryResults:nil];
     [self setResultIndex:nil];
@@ -234,7 +251,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 {
     [[movie managedObjectContext] rollback];
     [managedObjectContext refreshObject:movie mergeChanges:NO];
-    [drawerView setContentView:searchForMovieView];
+    [drawerView setContentView:searchByUPCorEANView];
 }
 
 - (void) showNoResultsSheet
@@ -258,7 +275,11 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     Activity* activity = userInfo;
     @try {
         NSLog(@"AMAZON QUERY ERROR: %@", error);
-        [drawerView setContentView:searchForMovieView];
+        if (query.queryType == AmazonQueryTypeEAN) {
+            [drawerView setContentView:searchByUPCorEANView];
+        } else if (query.queryType == AmazonQueryTypeTitle) {
+            [drawerView setContentView:searchByTitleView];
+        }
         [self showNoResultsSheet];
     } @finally {
         [activity terminate];

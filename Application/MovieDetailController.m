@@ -8,7 +8,6 @@
 #import "DrawerView.h"
 #import "BoxArt.h"
 #import "LayerBackedButtonView.h"
-#import "TextView.h"
 
 #import <WebKit/WebKit.h>
 
@@ -51,7 +50,6 @@
     [playButtonView setNotificationNameToPost:@"MultiplexPlayButtonClicked"];
     
     [coverArtImageView bind:@"image" toObject:self withKeyPath:@"movie.boxArt.image" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
-    [discTitleView bind:@"text" toObject:self withKeyPath:@"movie.title" options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSAllowsNullArgumentBindingOption]];
 }
 
 - (void) webViewDidEndEditing:(NSNotification*)notification

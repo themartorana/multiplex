@@ -16,7 +16,8 @@
     NSManagedObjectContext* managedObjectContext;
     NSEntityDescription* boxArtEntity;
     
-    IBOutlet NSView* searchForMovieView;
+    IBOutlet NSView* searchByUPCorEANView;
+    IBOutlet NSView* searchByTitleView;
     IBOutlet NSView* searchingView;
     IBOutlet NSView* searchResultsView;
     
@@ -43,10 +44,11 @@
 
 - (void) startWithMovie:(Movie*)movie;
 
-- (IBAction) cancel:(id)sender;
+- (IBAction) skipToTitleEntry:(id)sender;
+- (IBAction) skipToManualEntry:(id)sender;
 
-- (IBAction) lookUpUPC:(id)sender;
-- (IBAction) lookUpTitle:(id)sender;
+- (IBAction) lookUpByUPCorEAN:(id)sender;
+- (IBAction) lookUpByTitle:(id)sender;
 - (IBAction) selectResult:(id)sender;
 - (IBAction) showNextResult:(id)sender;
 - (IBAction) showPreviousResult:(id)sender;

@@ -109,7 +109,7 @@
 		F966E49C0EAF9215001D0B3B /* DragDropTargetView.m in Sources */ = {isa = PBXBuildFile; fileRef = F966E49B0EAF9215001D0B3B /* DragDropTargetView.m */; };
 		F966E4BC0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.h in Headers */ = {isa = PBXBuildFile; fileRef = F966E4BA0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F966E4BD0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.m in Sources */ = {isa = PBXBuildFile; fileRef = F966E4BB0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.m */; };
-		F966E5270EAF9A53001D0B3B /* CoverArtImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F966E5260EAF9A53001D0B3B /* CoverArtImageView.m */; };
+		F966E5270EAF9A53001D0B3B /* BoxArtImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F966E5260EAF9A53001D0B3B /* BoxArtImageView.m */; };
 		F966E6890EAFB38B001D0B3B /* drag-drop-no-image.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F966E6880EAFB38B001D0B3B /* drag-drop-no-image.pdf */; };
 		F967AFF60E7E13ED00C12B92 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = F967AFF50E7E13ED00C12B92 /* MainView.m */; };
 		F967B02D0E7E16DE00C12B92 /* ApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = F967B02C0E7E16DE00C12B92 /* ApplicationController.m */; };
@@ -531,8 +531,8 @@
 		F966E49B0EAF9215001D0B3B /* DragDropTargetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragDropTargetView.m; sourceTree = "<group>"; };
 		F966E4BA0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+IndyHallLabs.h"; sourceTree = "<group>"; };
 		F966E4BB0EAF9230001D0B3B /* NSBezierPath+IndyHallLabs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+IndyHallLabs.m"; sourceTree = "<group>"; };
-		F966E5250EAF9A53001D0B3B /* CoverArtImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverArtImageView.h; sourceTree = "<group>"; };
-		F966E5260EAF9A53001D0B3B /* CoverArtImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoverArtImageView.m; sourceTree = "<group>"; };
+		F966E5250EAF9A53001D0B3B /* BoxArtImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoxArtImageView.h; sourceTree = "<group>"; };
+		F966E5260EAF9A53001D0B3B /* BoxArtImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoxArtImageView.m; sourceTree = "<group>"; };
 		F966E6880EAFB38B001D0B3B /* drag-drop-no-image.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "drag-drop-no-image.pdf"; sourceTree = "<group>"; };
 		F967AFF40E7E13ED00C12B92 /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
 		F967AFF50E7E13ED00C12B92 /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
@@ -768,8 +768,6 @@
 				556BD78F0E94470600EC698A /* Activity.m */,
 				F9CE85D20EA7E2D400602750 /* ApplicationResources.h */,
 				F9CE85D30EA7E2D400602750 /* ApplicationResources.m */,
-				5535D98D0E4E3F5400A45761 /* EngineController.h */,
-				5535D98E0E4E3F5400A45761 /* EngineController.m */,
 				551558420EA53C1D006F2674 /* MultiplexColorFactory.h */,
 				551558430EA53C1D006F2674 /* MultiplexColorFactory.m */,
 			);
@@ -871,17 +869,19 @@
 			name = Classes;
 			sourceTree = "<group>";
 		};
-		557B69710E4CD0660009919E /* UI Controllers */ = {
+		557B69710E4CD0660009919E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				F967B02B0E7E16DE00C12B92 /* ApplicationController.h */,
 				F967B02C0E7E16DE00C12B92 /* ApplicationController.m */,
+				5535D98D0E4E3F5400A45761 /* EngineController.h */,
+				5535D98E0E4E3F5400A45761 /* EngineController.m */,
 				550D082A0E9AE14E008F0275 /* MovieDetailController.h */,
 				550D082B0E9AE14E008F0275 /* MovieDetailController.m */,
 				F9FC49F90EBF49C8007F2769 /* MovieLookupController.h */,
 				F9FC49FA0EBF49C8007F2769 /* MovieLookupController.m */,
 			);
-			name = "UI Controllers";
+			name = Controllers;
 			sourceTree = "<group>";
 		};
 		55D957DA0E94246800E35FF4 /* ValueTransformers */ = {
@@ -995,8 +995,8 @@
 		F967AFF30E7E13D400C12B92 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				F966E5250EAF9A53001D0B3B /* CoverArtImageView.h */,
-				F966E5260EAF9A53001D0B3B /* CoverArtImageView.m */,
+				F966E5250EAF9A53001D0B3B /* BoxArtImageView.h */,
+				F966E5260EAF9A53001D0B3B /* BoxArtImageView.m */,
 				F966E49A0EAF9215001D0B3B /* DragDropTargetView.h */,
 				F966E49B0EAF9215001D0B3B /* DragDropTargetView.m */,
 				F914C9CE0EAD657900877991 /* DrawerView.h */,
@@ -1063,16 +1063,16 @@
 			isa = PBXGroup;
 			children = (
 				2A37F4B0FDCFA73011CA2CEA /* main.m */,
-				55654E750EAD955A00265A45 /* Layout Managers */,
+				2A37F4ABFDCFA73011CA2CEA /* Classes */,
 				551554980EA456B3006F2674 /* Controls */,
+				557B69710E4CD0660009919E /* Controllers */,
 				55D957DA0E94246800E35FF4 /* ValueTransformers */,
 				F967B0D50E7E22B300C12B92 /* Layers */,
-				F967AFF30E7E13D400C12B92 /* Views */,
+				55654E750EAD955A00265A45 /* Layout Managers */,
 				5535DE020E508D3D00A45761 /* Model */,
-				557B69710E4CD0660009919E /* UI Controllers */,
 				F9D4FBFD0EB7B2B000B89FF4 /* Queries */,
-				2A37F4ABFDCFA73011CA2CEA /* Classes */,
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
+				F967AFF30E7E13D400C12B92 /* Views */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -1635,7 +1635,7 @@
 				55743F9E0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.m in Sources */,
 				F914C9D00EAD657900877991 /* DrawerView.m in Sources */,
 				F966E49C0EAF9215001D0B3B /* DragDropTargetView.m in Sources */,
-				F966E5270EAF9A53001D0B3B /* CoverArtImageView.m in Sources */,
+				F966E5270EAF9A53001D0B3B /* BoxArtImageView.m in Sources */,
 				F9B8D6900EB0BFCD008589F3 /* BoxArt.m in Sources */,
 				F9B8E1970EB25628008589F3 /* LinearLayoutManager.m in Sources */,
 				55C9F6260EB26A15001B9BCD /* HalfTransparentView.m in Sources */,

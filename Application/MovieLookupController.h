@@ -8,7 +8,7 @@
 @class WebView;
 @class DrawerView;
 @class Movie;
-@class CoverArtImageView;
+@class BoxArtImageView;
 @class MovieDetailController;
 
 @interface MovieLookupController : NSObject {
@@ -35,7 +35,7 @@
     IBOutlet NSTextField* titleTextField;
     IBOutlet NSTextField* searchResultsRecordCount;
     IBOutlet NSTextField* searchResultsMovieTitle;
-    IBOutlet CoverArtImageView* searchResultsBoxArt;
+    IBOutlet BoxArtImageView* searchResultsBoxArt;
     IBOutlet NSSegmentedControl* backAndForwardButtons;
     
     IBOutlet WebView* searchResultsDescriptionWebView; 

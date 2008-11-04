@@ -1,7 +1,7 @@
-#import "CoverArtImageView.h"
+#import "BoxArtImageView.h"
 #import <Quartz/Quartz.h>
 
-@implementation CoverArtImageView
+@implementation BoxArtImageView
 @synthesize image;
 
 - (void) viewWillMoveToSuperview:(NSView*)newSuperview

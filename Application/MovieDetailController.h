@@ -5,7 +5,7 @@
 @class ApplicationController;
 @class DrawerView;
 @class MovieDetailDiscsView;
-@class CoverArtImageView;
+@class BoxArtImageView;
 @class LayerBackedButtonView;
 @class TextView;
 
@@ -16,7 +16,7 @@
     IBOutlet NSView* infoPaneView;
     IBOutlet WebView* descriptionWebView;
     IBOutlet MovieDetailDiscsView* discsView;
-    IBOutlet CoverArtImageView* coverArtImageView;
+    IBOutlet BoxArtImageView* coverArtImageView;
     IBOutlet NSTabView* infoTabView;
     IBOutlet NSTabViewItem* discsTabViewItem;
     IBOutlet TextView* discTitleView;

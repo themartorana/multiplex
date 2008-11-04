@@ -4,7 +4,7 @@
 #import "Movie.h"
 #import "Activity.h"
 #import "ApplicationResources.h"
-#import "CoverArtImageView.h"
+#import "BoxArtImageView.h"
 #import "BoxArt.h"
 
 #import "AmazonQuery.h"

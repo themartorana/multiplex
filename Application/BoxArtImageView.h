@@ -1,6 +1,6 @@
 #import <Cocoa/Cocoa.h>
 
-@interface CoverArtImageView : NSView {
+@interface BoxArtImageView : NSView {
     id image;
 }
 

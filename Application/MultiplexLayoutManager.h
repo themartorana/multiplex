@@ -13,9 +13,6 @@
 
 - (void) setListOfLayersInOrder:(NSArray*)listOfLayersInOrder;
 
-- (BOOL) changesSelectionOnSingleClick;
-- (BOOL) allowHoverInfo;
-
 // Make this concrete
 - (void) layoutSublayersOfLayer:(CALayer*)layer;
 

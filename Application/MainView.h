@@ -6,6 +6,9 @@
 
 @class DrawerView;
 
+extern NSString* const kMultiplexDrawerIsOpenLayoutManagerClass;
+extern NSString* const kMultiplexDrawerIsClosedLayoutManagerClass;
+
 @interface MainView : NSView {
     NSMutableDictionary* layersByID;
     NSArray* listOfMoviesInOrder;

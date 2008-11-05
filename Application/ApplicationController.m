@@ -350,7 +350,14 @@
         if ([@"isOpen" isEqualToString:keyPath]) {
             BOOL isOpen = [[object valueForKeyPath:keyPath] boolValue];
             if (isOpen) {
-                [mainView setFloorLayerLayoutManagerClass:[LinearLayoutManager class]];
+                
+                Class c = NSClassFromString([[NSUserDefaults standardUserDefaults] objectForKey:kMultiplexDrawerIsOpenLayoutManagerClass]);
+                if (!c)
+                {
+                    c = [LinearLayoutManager class];
+                }
+                [mainView setFloorLayerLayoutManagerClass:c];
+                
                 if ([selectedMovie.gtin length] > 0 || selectedMovie.metadataAcceptedDate != nil) {
                     [self showMovieDetailForMovie:selectedMovie];
                 } else if (selectedMovie) {
@@ -360,7 +367,13 @@
                 }
                 [[self window] makeFirstResponder:drawerView];
             } else {
-                [mainView setFloorLayerLayoutManagerClass:[StadiumLayoutManager class]];
+                Class c = NSClassFromString([[NSUserDefaults standardUserDefaults] objectForKey:kMultiplexDrawerIsClosedLayoutManagerClass]);
+                if (!c)
+                {
+                    c = [StadiumLayoutManager class];
+                }
+                [mainView setFloorLayerLayoutManagerClass:c];
+                
                 [drawerView setContentView:nil];
                 [[self window] makeFirstResponder:searchField];
             }

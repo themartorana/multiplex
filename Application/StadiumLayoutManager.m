@@ -50,16 +50,6 @@
     [titleLayer removeFromSuperlayer];
 }
 
-- (BOOL) changesSelectionOnSingleClick
-{
-    return NO;
-}
-
-- (BOOL) allowHoverInfo
-{
-    return YES;
-}
-
 - (void) setListOfLayersInOrder:(NSArray*)_listOfLayersInOrder
 {
     layoutTriggeredDueToHover = NO;

@@ -11,6 +11,9 @@
 #import <Toolkit/Toolkit.h>
 #import <QuartzCore/QuartzCore.h>
 
+NSString* const kMultiplexDrawerIsOpenLayoutManagerClass = @"MultiplexDrawerIsOpenLayoutManagerClass";
+NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIsClosedLayoutManagerClass";
+
 @interface MainView (LayerStuff)
 - (MovieLayer*) _newLayerForMovie:(Movie*)movie;
 @end
@@ -52,7 +55,12 @@
     ];
     [rootLayer insertSublayer:floorLayer atIndex:0];
     
-    [self setFloorLayerLayoutManagerClass:[StadiumLayoutManager class]];
+    Class c = NSClassFromString([[NSUserDefaults standardUserDefaults] objectForKey:kMultiplexDrawerIsClosedLayoutManagerClass]);
+    if (!c) {
+        c = [StadiumLayoutManager class];        
+    }
+    [self setFloorLayerLayoutManagerClass:c];
+    
     layersByID = [[NSMutableDictionary alloc] init];
     
     hoverPlayLayer = [HoverPlayLayer layer];
@@ -74,7 +82,27 @@
 
 - (void) setFloorLayerLayoutManagerClass:(Class)class
 {
+    // Figure out what state we're in and which key to use
+    NSString* userDefaultsKey = kMultiplexDrawerIsClosedLayoutManagerClass;;
+    if ([drawerView isOpen]) {
+        userDefaultsKey = kMultiplexDrawerIsOpenLayoutManagerClass;
+    }
+    
+    // If nil is passed, try using the one in the user defaults
+    if (!class) {
+        // Try to get the class
+        class = [[NSUserDefaults standardUserDefaults] objectForKey:userDefaultsKey];
+        
+        if (!class) {
+            return;
+        }
+    }
+    
+    // Save the class
     floorLayerLayoutManagerClass = class;
+    
+    [[NSUserDefaults standardUserDefaults] setObject:NSStringFromClass(floorLayerLayoutManagerClass) forKey:userDefaultsKey];
+    
     if (layoutManager) {
         [layoutManager clearManagingLayerOfExtras];
     }
@@ -118,7 +146,7 @@
 - (void) restartHoverTimer
 {
     [self _cancelHoverTimer];
-    if (hoveredMovie && [layoutManager allowHoverInfo]) {
+    if (hoveredMovie && ![drawerView isOpen]) {
         hoverTimer = [[NSTimer scheduledTimerWithTimeInterval:0.75 target:self selector:@selector(_hoverTimerTicked:) userInfo:nil repeats:NO] retain];
     }
 }
@@ -162,8 +190,8 @@
     if (![[listOfMoviesInOrder objectAtIndex:[listOfMoviesInOrder count] - 1] containsObject:movieLayer.movie]) {
         movieLayer = nil;
     }
-    if (movieLayer && ([layoutManager changesSelectionOnSingleClick] && [theEvent clickCount] == 1) ||
-        (![layoutManager changesSelectionOnSingleClick] && [theEvent clickCount] == 2)) {
+    if (movieLayer && ([drawerView isOpen] && [theEvent clickCount] == 1) ||
+        (![drawerView isOpen] && [theEvent clickCount] == 2)) {
         
         [content setSelectedObjects:[NSArray arrayWithObject:[movieLayer movie]]];
         hoverPlayLayer.hidden = YES;

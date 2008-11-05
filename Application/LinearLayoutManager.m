@@ -98,17 +98,6 @@
     [CATransaction commit];
 }
 
-- (BOOL) changesSelectionOnSingleClick
-{
-    return YES;
-}
-
-- (BOOL) allowHoverInfo
-{
-    return NO;
-}
-
-
 static const CGFloat WS = 75.0;
 static const CGFloat W = 280.0;
 static const CGFloat H = 400.0;

@@ -6,6 +6,7 @@
 #import "StadiumLayoutManager.h"
 #import "LayerBackedButtonView.h"
 #import "ApplicationResources.h"
+#import "DrawerView.h"
 
 #import <Toolkit/Toolkit.h>
 #import <QuartzCore/QuartzCore.h>

@@ -4,6 +4,8 @@
 #import "HoverPlayLayer.h"
 #import "MultiplexLayoutManager.h"
 
+@class DrawerView;
+
 @interface MainView : NSView {
     NSMutableDictionary* layersByID;
     NSArray* listOfMoviesInOrder;
@@ -22,6 +24,8 @@
     
     Class <MultiplexLayoutManager> floorLayerLayoutManagerClass;
     id<MultiplexLayoutManager> layoutManager;
+    
+    IBOutlet DrawerView* drawerView;
 }
 
 @property (retain) id content;

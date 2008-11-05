@@ -2,6 +2,7 @@ body
 {
     margin: 0;
     padding: 0;
+    margin-right: 5px;
     color: white;
  
     background-image: url(desc_bg.png);
@@ -10,4 +11,23 @@ body
     font-family: "Lucida Grande";
     font-size: 13px;
     line-height: 22px;
+}
+
+div#multiplex_results_count
+{
+    float: left;
+    background-color: black;
+    /*line-height: normal;*/
+    -webkit-border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+div#multiplex_results_title
+{
+    clear: both;
+    display: block;
+    font-size: 26px;
+    line-height: normal;
+    padding: 10px 0 10px 0;
 }

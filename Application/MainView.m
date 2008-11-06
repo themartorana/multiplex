@@ -162,6 +162,12 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     [self restartHoverTimer];
 }
 
+- (void) setFrame:(NSRect)frame
+{
+    // SUPER HACK! Helps with full-screen
+    [super setFrame:frame];
+    [[self layer] setFrame:NSRectToCGRect(frame)];
+}
 
 - (void) setFrameSize:(NSSize)frameSize
 {

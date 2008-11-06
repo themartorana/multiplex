@@ -72,7 +72,8 @@
 {
     [self setMovie:_movie];
     [drawerView setContentView:infoPaneView];
-    [[descriptionWebView mainFrame] loadHTMLString:movie ? movie.synopsis : @"" baseURL:[NSURL URLWithString:@""]];
+    NSString* noSynopsis = @"No description found.  Replace this text to add one.";
+    [[descriptionWebView mainFrame] loadHTMLString:movie && movie.synopsis ? movie.synopsis : noSynopsis baseURL:[NSURL URLWithString:@""]];
     
     if (!drawerView.isOpen) {
         [drawerView toggle:self];

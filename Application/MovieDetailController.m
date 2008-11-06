@@ -73,6 +73,10 @@
     [self setMovie:_movie];
     [drawerView setContentView:infoPaneView];
     [[descriptionWebView mainFrame] loadHTMLString:movie ? movie.synopsis : @"" baseURL:[NSURL URLWithString:@""]];
+    
+    if (!drawerView.isOpen) {
+        [drawerView toggle:self];
+    }
 }
 
 - (void) showHomeTab

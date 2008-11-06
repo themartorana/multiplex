@@ -199,6 +199,7 @@
     [notificationCenter addObserver:self selector:@selector(closeInfoView:) name:@"MultiplexCloseMovieDialog" object:nil];
     [notificationCenter addObserver:self selector:@selector(playSelectedMovie:) name:@"MultiplexPlayButtonClicked" object:nil];
     [notificationCenter addObserver:self selector:@selector(toggleFullScreen:) name:@"MultiplexToggleFullScreen" object:nil];
+    [notificationCenter addObserver:self selector:@selector(openInfoView:) name:@"MultiplexShowMovieDialog" object:nil];
     
     engineController = [[EngineController alloc] initWithManagedObjectContext:engineManagedObjectContext];
     
@@ -273,9 +274,14 @@
 
 - (void) playSelectedMovie:(NSNotification*)notification
 {
-    if (selectedMovie && [selectedMovie.allDiscs count] == 1) {
-        Disc* d = [[selectedMovie.allDiscs allObjects] objectAtIndex:0];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayDisc" object:d];
+    if (selectedMovie) {
+        if ([selectedMovie.allDiscs count] == 1) {
+            Disc* d = [[selectedMovie.allDiscs allObjects] objectAtIndex:0];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayDisc" object:d];
+        }
+        else if ([selectedMovie.allDiscs count] > 1) {
+            [self showMovieDetailAndSelectDiscsTabMovie:selectedMovie];
+        }
     }
 }
 
@@ -293,6 +299,12 @@
     [movieDetailController showHomeTab];
 }
 
+- (void) showMovieDetailAndSelectDiscsTabMovie:(Movie*)movie
+{
+    [self showMovieDetailForMovie:movie];
+    [movieDetailController showDiscsTab];
+}
+
 - (void) showMovieLookupForMovie:(Movie*)movie
 {
     if (!movieLookupController) {
@@ -305,6 +317,14 @@
 {
     [drawerView closeDrawer];
     [[self window] makeFirstResponder:searchField];
+}
+
+- (void) openInfoView:(NSNotification*)notification
+{
+    if (!drawerView.isOpen) {
+        [drawerView openDrawer];
+        [movieDetailController showHomeTab];
+    }
 }
 
 - (IBAction) checkForUpdates:(id)sender
@@ -388,6 +408,7 @@
                 [self setSelectedMovie:_selectedMovie];
                 if (selectedMovie) {
                     [drawerView openDrawer];
+                    [movieDetailController showHomeTab];
                 }
             }
         }

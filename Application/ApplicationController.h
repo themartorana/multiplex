@@ -51,6 +51,7 @@
 - (IBAction) switchToLinearLayoutManager:(id)sender;
 
 - (void) showMovieDetailAndSelectHomeTabForMovie:(Movie*)movie;
+- (void) showMovieDetailAndSelectDiscsTabMovie:(Movie*)movie;
 - (void) showMovieLookupForMovie:(Movie*)movie;
 
 @end

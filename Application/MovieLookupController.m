@@ -136,7 +136,12 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                 movie.gtin = gtin;
             }
             
-            [[searchResultsDescriptionWebView mainFrame] loadHTMLString:movie.synopsis baseURL:[NSURL URLWithString:@""]];
+            NSMutableString* addOnString = [NSMutableString string];
+            [addOnString appendFormat:@"<div id=\"multiplex_results_count\">Result %d of %d</div>", [_resultIndex intValue], [amazonQueryResults count]];
+            [addOnString appendFormat:@"<div id=\"multiplex_results_title\">%@</div>", movie.title];
+            [addOnString appendString:movie.synopsis];
+            
+            [[searchResultsDescriptionWebView mainFrame] loadHTMLString:addOnString baseURL:[NSURL URLWithString:@""]];
         }
 
         movie.boxArt = boxArt;

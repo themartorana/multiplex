@@ -194,19 +194,20 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     
     selectedMovieLayer = movieLayer;
     
-    if (movieLayer && ([drawerView isOpen] && [theEvent clickCount] == 1) ||
+    if (playButtonLayer) {
+        if ([playButtonLayer isKindOfClass:[ButtonLayer class]]) {
+            [content setSelectedObjects:[NSArray arrayWithObject:hoveredMovie]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayButtonClicked" object:nil];
+        }        
+    }
+    else if (movieLayer && ([drawerView isOpen] && [theEvent clickCount] == 1) ||
         (![drawerView isOpen] && [theEvent clickCount] == 2)) {
         
         [content setSelectedObjects:[NSArray arrayWithObject:[movieLayer movie]]];
         hoverPlayLayer.hidden = YES;
         [self _cancelHoverTimer];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexShowMovieDialog" object:nil];
-    } else if (playButtonLayer) {
-        if ([playButtonLayer isKindOfClass:[ButtonLayer class]]) {
-            [content setSelectedObjects:[NSArray arrayWithObject:hoveredMovie]];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayButtonClicked" object:nil];
-        }        
-    }
+    } 
 }
 
 - (void) mouseMoved:(NSEvent*)theEvent

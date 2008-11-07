@@ -321,10 +321,8 @@
 
 - (void) openInfoView:(NSNotification*)notification
 {
-    if (!drawerView.isOpen) {
-        [drawerView openDrawer];
-        [movieDetailController showHomeTab];
-    }
+    [drawerView openDrawer];
+    [movieDetailController showHomeTab];
 }
 
 - (IBAction) checkForUpdates:(id)sender
@@ -406,10 +404,6 @@
             }
             if (selectedMovie != _selectedMovie) {
                 [self setSelectedMovie:_selectedMovie];
-                if (selectedMovie) {
-                    [drawerView openDrawer];
-                    [movieDetailController showHomeTab];
-                }
             }
         }
     } else if ([keyPath isEqual:@"parameters"]) {

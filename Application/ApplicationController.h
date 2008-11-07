@@ -36,6 +36,8 @@
     NSManagedObjectContext* engineManagedObjectContext;
     /**/
     Movie* selectedMovie;
+    
+    NSView* viewInFullScreen;
 }
 
 @property (retain) Movie* selectedMovie;

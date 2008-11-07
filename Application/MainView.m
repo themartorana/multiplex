@@ -107,12 +107,6 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
         [layoutManager clearManagingLayerOfExtras];
     }
     layoutManager = [[class alloc] initWithManagingLayer:floorLayer];
-    if (content && [[content arrangedObjects] count] > 0) {
-        id a = [content valueForKeyPath:@"selection.self"];
-        if ([a isKindOfClass:[Movie class]]) {
-            [layoutManager setSelectedMovie:(Movie*)a];
-        }
-    }
     [floorLayer setNeedsLayout];
 }
 
@@ -140,6 +134,7 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
 {
     NSAssert(layer == floorLayer, @"wtf?");
     [layoutManager setListOfLayersInOrder:[self _listOfLayersInOrder]];
+    [layoutManager setSelectedMovieLayer:selectedMovieLayer];
     [layoutManager layoutSublayersOfLayer:floorLayer];
 }
 
@@ -196,6 +191,9 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     if (![[listOfMoviesInOrder objectAtIndex:[listOfMoviesInOrder count] - 1] containsObject:movieLayer.movie]) {
         movieLayer = nil;
     }
+    
+    selectedMovieLayer = movieLayer;
+    
     if (movieLayer && ([drawerView isOpen] && [theEvent clickCount] == 1) ||
         (![drawerView isOpen] && [theEvent clickCount] == 2)) {
         
@@ -244,6 +242,46 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     [self setHoveredMovie:nil];
 }
 
+#if 0
+- (void) keyDown:(NSEvent*)event
+{
+    switch ([event keyCode]) {
+        case 123:
+            if (selectedMovieLayer.leftLayer) {
+                selectedMovieLayer = selectedMovieLayer.leftLayer;
+            }
+            break;
+            
+        case 124:
+            if (selectedMovieLayer.rightLayer) {
+                selectedMovieLayer = selectedMovieLayer.rightLayer;
+            }
+            break;
+            
+        case 125:
+            if (selectedMovieLayer.upLayer) {
+                selectedMovieLayer = selectedMovieLayer.upLayer;
+            }
+            break;
+        
+        case 126:
+            if (selectedMovieLayer.downLayer) {
+                selectedMovieLayer = selectedMovieLayer.downLayer;
+            }
+            break;
+            
+        default:
+            break;
+    }
+    
+    if (selectedMovieLayer && [selectedMovieLayer movie]) {
+        [content setSelectedObjects:[NSArray arrayWithObject:[selectedMovieLayer movie]]];
+    }
+
+    [floorLayer setNeedsLayout];
+}
+#endif
+
 - (BOOL) acceptsFirstResponder
 {
     return YES;
@@ -269,12 +307,12 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
     if ([@"selection" isEqualToString:keyPath]) {
-        id selection = [change objectForKey:NSKeyValueChangeNewKey];
+        /*id selection = [change objectForKey:NSKeyValueChangeNewKey];
         if (selection == NSNoSelectionMarker || selection == (id)kCFNull) {
             [layoutManager setSelectedMovie:nil];
         } else {
             [layoutManager setSelectedMovie:selection];
-        }
+        }*/
     } else if ([@"content.@count" isEqualToString:keyPath]) {
         [listOfMoviesInOrder autorelease];
         listOfMoviesInOrder = [[NSArray alloc] initWithObjects:[[content arrangedObjects] copy], nil];
@@ -372,6 +410,11 @@ static const CGFloat H = 400.0;
     MovieLayer* layer = [MovieLayer layerWithMovie:movie];
     layer.frame = CGRectMake(0.0, 0.0, W, H);
     layer.position = CGPointZero;
+    
+    if (!selectedMovieLayer) {
+        selectedMovieLayer = layer;
+    }
+    
     return layer;
 }
 

@@ -48,6 +48,7 @@
 		5531A7450EB3EC24009562A2 /* full-screen-icon-down.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5531A7440EB3EC24009562A2 /* full-screen-icon-down.gif */; };
 		553477810EA3AD5100436A8C /* multiplex-mark01a.icns in Resources */ = {isa = PBXBuildFile; fileRef = 553477800EA3AD5100436A8C /* multiplex-mark01a.icns */; };
 		5535D98F0E4E3F5400A45761 /* EngineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5535D98E0E4E3F5400A45761 /* EngineController.m */; };
+		553AC77B0EC3B3D600A98A70 /* MovieDetailTokenFieldValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 553AC77A0EC3B3D600A98A70 /* MovieDetailTokenFieldValueTransformer.m */; };
 		554282C70EB3D69B00FF7E44 /* full-screen-icon.gif in Resources */ = {isa = PBXBuildFile; fileRef = 554282C60EB3D69B00FF7E44 /* full-screen-icon.gif */; };
 		5545BC040EB5171C0005A380 /* NSNumberToStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5545BC030EB5171C0005A380 /* NSNumberToStringValueTransformer.m */; };
 		5551FB7C0EB65A310022147A /* drive.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 5551FB7B0EB65A310022147A /* drive.pdf */; };
@@ -448,6 +449,8 @@
 		553477800EA3AD5100436A8C /* multiplex-mark01a.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "multiplex-mark01a.icns"; sourceTree = "<group>"; };
 		5535D98D0E4E3F5400A45761 /* EngineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngineController.h; sourceTree = "<group>"; };
 		5535D98E0E4E3F5400A45761 /* EngineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngineController.m; sourceTree = "<group>"; };
+		553AC7790EC3B3D600A98A70 /* MovieDetailTokenFieldValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieDetailTokenFieldValueTransformer.h; sourceTree = "<group>"; };
+		553AC77A0EC3B3D600A98A70 /* MovieDetailTokenFieldValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieDetailTokenFieldValueTransformer.m; sourceTree = "<group>"; };
 		554282C60EB3D69B00FF7E44 /* full-screen-icon.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "full-screen-icon.gif"; sourceTree = "<group>"; };
 		5545BC020EB5171C0005A380 /* NSNumberToStringValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSNumberToStringValueTransformer.h; sourceTree = "<group>"; };
 		5545BC030EB5171C0005A380 /* NSNumberToStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSNumberToStringValueTransformer.m; sourceTree = "<group>"; };
@@ -899,6 +902,8 @@
 				5545BC030EB5171C0005A380 /* NSNumberToStringValueTransformer.m */,
 				F92B67140EBFF00900609F16 /* IsExactlyOneValueTransformer.h */,
 				F92B67150EBFF00900609F16 /* IsExactlyOneValueTransformer.m */,
+				553AC7790EC3B3D600A98A70 /* MovieDetailTokenFieldValueTransformer.h */,
+				553AC77A0EC3B3D600A98A70 /* MovieDetailTokenFieldValueTransformer.m */,
 			);
 			name = ValueTransformers;
 			sourceTree = "<group>";
@@ -1661,6 +1666,7 @@
 				552D5D280EBCDBD400A292F4 /* IndeterminateProgressIndicatorView.m in Sources */,
 				F9FC49FB0EBF49C8007F2769 /* MovieLookupController.m in Sources */,
 				F92B67160EBFF00900609F16 /* IsExactlyOneValueTransformer.m in Sources */,
+				553AC77B0EC3B3D600A98A70 /* MovieDetailTokenFieldValueTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

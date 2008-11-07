@@ -61,7 +61,7 @@
     listOfLayersInOrder = [_listOfLayersInOrder copy];
 }
 
-- (void) setSelectedMovie:(Movie*)movie
+- (void) setSelectedMovieLayer:(MovieLayer*)movieLayer
 {
     /* IGNORED */
 }

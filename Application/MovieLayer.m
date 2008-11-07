@@ -14,9 +14,14 @@ static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRec
 static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title); 
 
 @implementation MovieLayer
+
 @synthesize movie;
 @synthesize boxArtImage;
 
+@dynamic upLayer;
+@dynamic downLayer;
+@dynamic leftLayer;
+@dynamic rightLayer;
 
 + (id) layerWithMovie:(Movie*)movie
 {
@@ -133,6 +138,14 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
         CGImageRef newBoxArtImage = [(Movie*)object boxArt].image;
         [self setBoxArtImage:(id)newBoxArtImage];
     }
+}
+
+- (void) clearMoveData
+{
+    self.upLayer = nil;
+    self.downLayer = nil;
+    self.leftLayer = nil;
+    self.rightLayer = nil;
 }
 
 @end

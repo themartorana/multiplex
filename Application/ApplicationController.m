@@ -53,7 +53,7 @@
 - (id) init 
 {
     if (self == [super init]) {
-
+        
         NSError* error = nil;
 
         NSFileManager* fileManager = [NSFileManager defaultManager];
@@ -449,11 +449,13 @@
     if ([[mainWindow contentView] isInFullScreenMode]) {
         [[mainWindow contentView] exitFullScreenModeWithOptions:nil];
         [windowResizeThumb setHidden:NO];
+        viewInFullScreen = nil;
     }
     else {
         [[mainWindow contentView] enterFullScreenMode:[NSScreen mainScreen] 
                                           withOptions:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:NSFullScreenModeAllScreens]
         ];
+        viewInFullScreen = [mainWindow contentView];
         [windowResizeThumb setHidden:YES];
     }
 }
@@ -471,6 +473,14 @@
 - (IBAction) switchToLinearLayoutManager:(id)sender
 {
     [mainView setFloorLayerLayoutManagerClass:[LinearLayoutManager class]];
+}
+
+- (void) windowDidResignMain:(NSNotification*)notification
+{
+    NSLog(@"resigned");
+    if (viewInFullScreen && [viewInFullScreen isInFullScreenMode]) {
+        [self toggleFullScreen:viewInFullScreen];
+    }
 }
 
 @end

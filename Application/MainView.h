@@ -23,6 +23,8 @@ extern NSString* const kMultiplexDrawerIsClosedLayoutManagerClass;
     Movie* hoveredMovie;
     NSTimer* hoverTimer;
     
+    MovieLayer* selectedMovieLayer;
+    
     BOOL needsLayout;
     
     Class <MultiplexLayoutManager> floorLayerLayoutManagerClass;

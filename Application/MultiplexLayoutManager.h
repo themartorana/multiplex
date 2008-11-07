@@ -9,7 +9,7 @@
 - (void) clearManagingLayerOfExtras;
 
 - (void) setHoveredMovieLayer:(MovieLayer*)layer;
-- (void) setSelectedMovie:(Movie*)movie;
+- (void) setSelectedMovieLayer:(MovieLayer*)movieLayer;
 
 - (void) setListOfLayersInOrder:(NSArray*)listOfLayersInOrder;
 

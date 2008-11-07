@@ -10,9 +10,11 @@
     CALayer* selectedHighlightLayer; // NR
     CALayer* floorLayer;
     
+    MovieLayer* selectedLayer;
+    
     NSArray* listOfLayersInOrder;
     
-    Movie* selectedMovie;
+    MovieLayer* selectedMovieLayer;
     
     BOOL dontLayoutBecauseOfHighlight;
     BOOL scrollToSelectedMovie;

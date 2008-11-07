@@ -58,23 +58,21 @@
     listOfLayersInOrder = [_listOfLayersInOrder copy];
 }
 
-- (void) setSelectedMovie:(Movie*)movie
+- (void) setSelectedMovieLayer:(MovieLayer*)movieLayer
 {
-    if (selectedMovie) {
-        [selectedMovie release];
-        selectedMovie = nil;
+    if (selectedMovieLayer) {
+        [selectedMovieLayer release];
+        selectedMovieLayer = nil;
     }
     
-    selectedMovie = [movie retain];
+    selectedMovieLayer = [movieLayer retain];
     
-    if (selectedMovie) {
+    if (selectedMovieLayer) {
         dontLayoutBecauseOfHighlight = NO;
         scrollToSelectedMovie = YES;        
-        [floorLayer setNeedsLayout];
     } else {
         scrollToSelectedMovie = NO;
         selectedHighlightLayer.hidden = YES;
-        [floorLayer setNeedsLayout];
     }
 }
 
@@ -136,6 +134,10 @@ static const CGFloat HS = 75.0;
     CATransform3D b = CATransform3DIdentity;
     b = CATransform3DTranslate(b, layoutLayer.bounds.size.width / 2.0, layoutLayer.bounds.size.height / 2.0, 0.0);
     
+    if (![listOfLayersInOrder count]) {
+        return;
+    }
+    
     NSArray* layersInOrder = [listOfLayersInOrder objectAtIndex:[listOfLayersInOrder count] - 1];
     CGSize const size = layoutLayer.bounds.size;
     CGFloat columns = [layersInOrder count];
@@ -143,11 +145,17 @@ static const CGFloat HS = 75.0;
     CGFloat width = (WS + ((W + WS) * columns));
     BOOL lastWasEmpty = lastWasEmpty = !columns;
     
-    CALayer* selectedLayer = nil;
     CGFloat scrollToPointX = 0.0;
     
     int x = 0;
+    MovieLayer* previousLayer = nil;
     for (MovieLayer* layer in layersInOrder) {
+        
+        [layer clearMoveData];
+        previousLayer.rightLayer = layer;
+        layer.leftLayer = previousLayer;
+        previousLayer = layer;
+        
         CGFloat chord = WS + (W / 2.0) + ((W + WS) * x);
         
         CATransform3D t = b;
@@ -157,8 +165,7 @@ static const CGFloat HS = 75.0;
         
         x++;
         
-        if (((MovieLayer*)layer).movie == selectedMovie) {
-            selectedLayer = layer;
+        if ((MovieLayer*)layer == selectedMovieLayer) {
             scrollToPointX = chord - (width / 2.0);
         }
     }
@@ -167,13 +174,13 @@ static const CGFloat HS = 75.0;
         /*  Add in our scale and perspective...  then throw a little rotational 
          *  "stank" on it.  ;)
          */
-        if (selectedLayer) {
+        if (selectedMovieLayer) {
             selectedHighlightLayer.hidden = NO;
-            selectedHighlightLayer.anchorPoint = selectedLayer.anchorPoint;
-            selectedHighlightLayer.bounds = CGRectInset(selectedLayer.bounds, -20, -20);
-            selectedHighlightLayer.position = selectedLayer.position;
-            selectedHighlightLayer.zPosition = selectedLayer.zPosition - 1;
-            selectedHighlightLayer.transform = selectedLayer.transform;
+            selectedHighlightLayer.anchorPoint = selectedMovieLayer.anchorPoint;
+            selectedHighlightLayer.bounds = CGRectInset(selectedMovieLayer.bounds, -20, -20);
+            selectedHighlightLayer.position = selectedMovieLayer.position;
+            selectedHighlightLayer.zPosition = selectedMovieLayer.zPosition - 1;
+            selectedHighlightLayer.transform = selectedMovieLayer.transform;
         } else {
             selectedHighlightLayer.hidden = YES;
         }
@@ -185,7 +192,7 @@ static const CGFloat HS = 75.0;
         //p.m34 = 1.0 / -MAX(width, 2000);
         //p = CATransform3DRotate(p, 0.075, 1.0, 0.0, 0.0);
         
-        if (scrollToSelectedMovie && selectedLayer && [selectedLayer isKindOfClass:[CALayer class]]) {
+        if (scrollToSelectedMovie && selectedMovieLayer && [selectedMovieLayer isKindOfClass:[CALayer class]]) {
             p = CATransform3DTranslate(p, -scrollToPointX, 0.0, 0.0);
         }
         

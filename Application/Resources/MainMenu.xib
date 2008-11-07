@@ -8,6 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="1150"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -582,7 +583,7 @@
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{1000, 700}</string>
 				<object class="NSView" key="NSWindowView" id="384445475">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">274</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1112,6 +1113,7 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{1000, 700}</string>
+					<reference key="NSSuperview"/>
 					<bool key="NSViewIsLayerTreeHost">YES</bool>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1600, 1178}}</string>
@@ -3215,6 +3217,14 @@
 					</object>
 					<int key="connectionID">2194</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fullScreenButton</string>
+						<reference key="source" ref="623785332"/>
+						<reference key="destination" ref="805436789"/>
+					</object>
+					<int key="connectionID">2195</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -5115,7 +5125,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2194</int>
+			<int key="maxID">2195</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -5149,6 +5159,7 @@
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>drawerView</string>
+							<string>fullScreenButton</string>
 							<string>licensingAndVersionInfo</string>
 							<string>mainView</string>
 							<string>movies</string>
@@ -5163,6 +5174,7 @@
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>DrawerView</string>
+							<string>NSButton</string>
 							<string>NSTextField</string>
 							<string>MainView</string>
 							<string>NSArrayController</string>

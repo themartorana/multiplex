@@ -450,6 +450,8 @@
         [[mainWindow contentView] exitFullScreenModeWithOptions:nil];
         [windowResizeThumb setHidden:NO];
         viewInFullScreen = nil;
+        
+        [fullScreenButton setImage:[NSImage imageNamed:@"expand-screen"]];
     }
     else {
         [[mainWindow contentView] enterFullScreenMode:[NSScreen mainScreen] 
@@ -457,6 +459,8 @@
         ];
         viewInFullScreen = [mainWindow contentView];
         [windowResizeThumb setHidden:YES];
+        
+        [fullScreenButton setImage:[NSImage imageNamed:@"collapse-screen"]];
     }
 }
 

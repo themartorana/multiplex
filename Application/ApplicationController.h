@@ -38,6 +38,8 @@
     Movie* selectedMovie;
     
     NSView* viewInFullScreen;
+    
+    IBOutlet NSButton* fullScreenButton;
 }
 
 @property (retain) Movie* selectedMovie;

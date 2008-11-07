@@ -87,8 +87,8 @@
     contentView = [_contentView retain];
     
     if (contentView) {
-        CGFloat xPos = (superViewFrame.size.width - [contentView frame].size.width) / 2.0;
-        CGFloat yPos = (frame.size.height - minHeight - [contentView frame].size.height);
+        CGFloat xPos = ceilf((superViewFrame.size.width - [contentView frame].size.width) / 2.0);
+        CGFloat yPos = ceilf((frame.size.height - minHeight - [contentView frame].size.height));
         NSRect contentViewRect = NSMakeRect(xPos, yPos, [contentView frame].size.width, [contentView frame].size.height);
         [contentView setFrame:contentViewRect];
     }

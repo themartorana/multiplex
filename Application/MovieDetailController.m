@@ -59,13 +59,11 @@
 
 - (void) setMovie:(Movie*)_movie
 {
-    if (movie != _movie) {
-        [self willChangeValueForKey:@"movie"];
-        [movie release];
-        movie = [_movie retain];
-        [discsView setMovie:movie];
-        [self didChangeValueForKey:@"movie"];
-    }
+    [self willChangeValueForKey:@"movie"];
+    [movie release];
+    movie = [_movie retain];
+    [discsView setMovie:movie];
+    [self didChangeValueForKey:@"movie"];
 }
 
 - (IBAction) startWithMovie:(Movie*)_movie
@@ -78,6 +76,11 @@
     if (!drawerView.isOpen) {
         [drawerView toggle:self];
     }
+}
+
+- (IBAction) refreshMovieInfoFromInternet:(id)sender
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexRefreshMovieInfoFromInternet" object:movie];
 }
 
 - (void) showHomeTab

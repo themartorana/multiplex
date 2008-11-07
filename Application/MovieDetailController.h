@@ -32,6 +32,7 @@
 @property BOOL valuesAreEditable;
 
 - (IBAction) startWithMovie:(Movie*)movie;
+- (IBAction) refreshMovieInfoFromInternet:(id)sender;
 
 - (void) showHomeTab;
 - (void) showDiscsTab;

@@ -51,7 +51,7 @@
 							<object class="NSTabViewItem" id="966988208">
 								<string key="NSIdentifier">1</string>
 								<object class="NSView" key="NSView" id="259575740">
-									<nil key="NSNextResponder"/>
+									<reference key="NSNextResponder" ref="124333960"/>
 									<int key="NSvFlags">256</int>
 									<object class="NSMutableArray" key="NSSubviews">
 										<bool key="EncodedWithXMLCoder">YES</bool>
@@ -254,6 +254,7 @@
 										</object>
 									</object>
 									<string key="NSFrame">{{10, 33}, {754, 388}}</string>
+									<reference key="NSSuperview" ref="124333960"/>
 								</object>
 								<string key="NSLabel">Basic Info</string>
 								<reference key="NSColor" ref="288047085"/>
@@ -273,7 +274,7 @@
 							<object class="NSTabViewItem" id="723910753">
 								<string key="NSIdentifier">2</string>
 								<object class="NSView" key="NSView" id="220476942">
-									<reference key="NSNextResponder" ref="124333960"/>
+									<nil key="NSNextResponder"/>
 									<int key="NSvFlags">274</int>
 									<object class="NSMutableArray" key="NSSubviews">
 										<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1056,9 +1057,28 @@
 												</object>
 											</object>
 										</object>
+										<object class="NSButton" id="803113454">
+											<reference key="NSNextResponder" ref="220476942"/>
+											<int key="NSvFlags">268</int>
+											<string key="NSFrame">{{170, 12}, {245, 19}}</string>
+											<reference key="NSSuperview" ref="220476942"/>
+											<bool key="NSEnabled">YES</bool>
+											<object class="NSButtonCell" key="NSCell" id="404133293">
+												<int key="NSCellFlags">-2080244224</int>
+												<int key="NSCellFlags2">134217728</int>
+												<string key="NSContents">Refresh information from the internet</string>
+												<reference key="NSSupport" ref="157460991"/>
+												<reference key="NSControlView" ref="803113454"/>
+												<int key="NSButtonFlags">-2038152961</int>
+												<int key="NSButtonFlags2">164</int>
+												<string key="NSAlternateContents"/>
+												<string key="NSKeyEquivalent"/>
+												<int key="NSPeriodicDelay">400</int>
+												<int key="NSPeriodicInterval">75</int>
+											</object>
+										</object>
 									</object>
 									<string key="NSFrame">{{10, 33}, {754, 388}}</string>
-									<reference key="NSSuperview" ref="124333960"/>
 								</object>
 								<string key="NSLabel">Detailed Info</string>
 								<reference key="NSColor" ref="288047085"/>
@@ -1509,14 +1529,14 @@
 								<reference key="NSTabView" ref="124333960"/>
 							</object>
 						</object>
-						<reference key="NSSelectedTabViewItem" ref="723910753"/>
+						<reference key="NSSelectedTabViewItem" ref="966988208"/>
 						<reference key="NSFont" ref="707745533"/>
 						<int key="NSTvFlags">0</int>
 						<bool key="NSAllowTruncatedLabels">YES</bool>
 						<bool key="NSDrawsBackground">YES</bool>
 						<object class="NSMutableArray" key="NSSubviews">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="220476942"/>
+							<reference ref="259575740"/>
 						</object>
 					</object>
 					<object class="NSTextField" id="406402006">
@@ -1869,6 +1889,14 @@
 					</object>
 					<int key="connectionID">2271</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">refreshMovieInfoFromInternet:</string>
+						<reference key="source" ref="1021"/>
+						<reference key="destination" ref="803113454"/>
+					</object>
+					<int key="connectionID">2274</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -2081,6 +2109,7 @@
 							<reference ref="708189704"/>
 							<reference ref="826976253"/>
 							<reference ref="126534718"/>
+							<reference ref="803113454"/>
 						</object>
 						<reference key="parent" ref="723910753"/>
 					</object>
@@ -2819,6 +2848,20 @@
 						<reference key="object" ref="326208261"/>
 						<reference key="parent" ref="124135085"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2272</int>
+						<reference key="object" ref="803113454"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="404133293"/>
+						</object>
+						<reference key="parent" ref="220476942"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2273</int>
+						<reference key="object" ref="404133293"/>
+						<reference key="parent" ref="803113454"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -2958,6 +3001,8 @@
 					<string>2257.IBPluginDependency</string>
 					<string>2258.IBPluginDependency</string>
 					<string>2259.IBPluginDependency</string>
+					<string>2272.IBPluginDependency</string>
+					<string>2273.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3101,6 +3146,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -3123,7 +3170,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2271</int>
+			<int key="maxID">2274</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3188,8 +3235,17 @@
 					<string key="className">MovieDetailController</string>
 					<string key="superclassName">NSObject</string>
 					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">startWithMovie:</string>
-						<string key="NS.object.0">Movie</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSMutableArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>refreshMovieInfoFromInternet:</string>
+							<string>startWithMovie:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>Movie</string>
+						</object>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<bool key="EncodedWithXMLCoder">YES</bool>

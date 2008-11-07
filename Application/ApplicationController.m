@@ -201,6 +201,8 @@
     [notificationCenter addObserver:self selector:@selector(toggleFullScreen:) name:@"MultiplexToggleFullScreen" object:nil];
     [notificationCenter addObserver:self selector:@selector(openInfoView:) name:@"MultiplexShowMovieDialog" object:nil];
     
+    [notificationCenter addObserver:self selector:@selector(refreshInfoFromInternet:) name:@"MultiplexRefreshMovieInfoFromInternet" object:nil];
+    
     engineController = [[EngineController alloc] initWithManagedObjectContext:engineManagedObjectContext];
     
     // Put uservoice button forward
@@ -282,6 +284,15 @@
         else if ([selectedMovie.allDiscs count] > 1) {
             [self showMovieDetailAndSelectDiscsTabMovie:selectedMovie];
         }
+    }
+}
+
+- (void) refreshInfoFromInternet:(NSNotification*)notification
+{
+    Movie* m = (Movie*)[notification object];
+    
+    if (m) {
+        [self showMovieLookupForMovie:m];
     }
 }
 

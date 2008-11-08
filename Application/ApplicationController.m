@@ -16,6 +16,8 @@
 #import "StadiumLayoutManager.h"
 #import "LinearLayoutManager.h"
 
+#import "DrawerViewControllerProtocol.h"
+
 #import <QuartzCore/QuartzCore.h>
 #import <Sparkle/Sparkle.h>
 #import <Toolkit/Toolkit.h>
@@ -31,6 +33,7 @@
 @synthesize parameters;
 @synthesize appManagedObjectContext;
 @synthesize selectedMovie;
+@synthesize currentDrawerViewController;
 
 + (void) initialize
 {
@@ -296,12 +299,25 @@
     }
 }
 
+- (void) setCurrentDrawerViewController:(DrawerViewControllerProtocol*)protocolObject
+{
+    if (currentDrawerViewController) {
+        [currentDrawerViewController relinquishControl];
+        [currentDrawerViewController release];
+        currentDrawerViewController = nil;
+    }
+    
+    currentDrawerViewController = [protocolObject retain];
+    [currentDrawerViewController takeControl];
+}
+
 - (void) showMovieDetailForMovie:(Movie*)movie
 {
     if (!movieDetailController) {
         movieDetailController = [[MovieDetailController alloc] initWithApplicationController:self drawerView:drawerView];
     }
     [movieDetailController startWithMovie:selectedMovie];
+    [self setCurrentDrawerViewController:(DrawerViewControllerProtocol*)movieDetailController];
 }
 
 - (void) showMovieDetailAndSelectHomeTabForMovie:(Movie*)movie
@@ -322,6 +338,7 @@
         movieLookupController = [[MovieLookupController alloc] initWithApplicationController:self drawerView:drawerView];
     }
     [movieLookupController startWithMovie:selectedMovie];
+    [self setCurrentDrawerViewController:(DrawerViewControllerProtocol*)movieLookupController];
 }
 
 - (void) closeInfoView:(NSNotification*)notification

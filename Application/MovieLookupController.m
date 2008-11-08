@@ -13,11 +13,13 @@
 #import <DiscIdentKit/DiscIdentKit.h>
 #import <WebKit/WebKit.h>
 #import <Toolkit/Toolkit.h>
+#import <JSONKit/JSONKit.h>
 
 static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 @interface MovieLookupController (Private)
 - (void) showResultAtIndex:(int)index;
+- (void) clearNotificationListener;
 @end
 
 
@@ -48,6 +50,60 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     }
     return self;
 }
+
+- (void) takeControl
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self 
+                                             selector:@selector(objectContextNeedsSave:) 
+                                                 name:NSManagedObjectContextObjectsDidChangeNotification 
+                                               object:applicationController.appManagedObjectContext
+    ];
+}
+
+- (void) relinquishControl
+{
+    if (isDirty) {
+        NSString* dirtyInfo = @"You have not selected a result as your movie.";
+        NSMutableString* dirtyExplain = [NSMutableString stringWithString:@"You are trying to navigate away from the results screen, but you have "];
+        [dirtyExplain appendString:@"not confirmed a search result as your movie.\n\n"];
+        [dirtyExplain appendString:@"To select the result that's currently displayed, click \"The current result is my movie\".\n\n"];
+        [dirtyExplain appendString:@"To continue without selecting a result, click \"It's ok, I'll search again later\"\n\n"];
+        [dirtyExplain appendString:@"To cancel and go back to the results screen, click \"Cancel\""];
+
+        
+        NSAlert* alert = [NSAlert alertWithMessageText:dirtyInfo
+                                         defaultButton:@"The current result is my movie"
+                                       alternateButton:@"It's ok, I'll search again later"
+                                           otherButton:nil
+                             informativeTextWithFormat:dirtyExplain];
+        
+        int buttonClicked = [alert runModal];
+        
+        switch (buttonClicked) {
+            case NSAlertDefaultReturn:
+                [self selectResult:self];
+                break;
+            
+            case NSAlertAlternateReturn:
+                [[movie managedObjectContext] rollback];
+                [applicationController.appManagedObjectContext refreshObject:movie mergeChanges:NO];
+                break;
+        }
+    }    
+
+    isDirty = NO;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self 
+                                                    name:NSManagedObjectContextObjectsDidChangeNotification 
+                                                  object:applicationController.appManagedObjectContext
+     ];    
+}
+
+- (void) objectContextNeedsSave:(NSNotification*)notification
+{
+    isDirty = YES;
+}
+
 
 - (void) awakeFromNib
 {
@@ -81,6 +137,9 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 - (void) setResultIndex:(NSNumber*)_resultIndex
 {
     if (resultIndex != _resultIndex) {
+        
+        isDirty = YES;
+        
         [self willChangeValueForKey:@"resultIndex"];
         [resultIndex release];
         resultIndex = [_resultIndex retain];
@@ -116,7 +175,18 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
             movie.title = [resultAtIndex objectForKey:@"title"];
             movie.aspectRatio = [resultAtIndex objectForKey:@"aspectRatio"];
+            
             movie.genre = [resultAtIndex objectForKey:@"genre"];
+            if (movie.genre) {
+                NSArray* arr = [movie.genre componentsSeparatedByString:@","];
+                for (NSString* str in arr) {
+                    str = [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                }
+                
+                movie.genre = [NSString stringWithObjectAsJSON:arr];
+            }
+            
+            
             movie.metadataAcceptedDate = [NSDate date];
             movie.releaseDate = [resultAtIndex objectForKey:@"releaseDate"] ? [NSDate dateFromShortDateString:[resultAtIndex objectForKey:@"releaseDate"]] : nil;
             movie.rating = [resultAtIndex objectForKey:@"audienceRating"];
@@ -227,10 +297,13 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 {
     NSError* error = nil;
     [[movie managedObjectContext] save:&error];
+    isDirty = NO;
+
     if (error) {
         NSLog(@"%@", [error userInfo]);
         NSAssert(FALSE, @"ERROR SAVING DATA!");
     }
+    
     [applicationController showMovieDetailAndSelectHomeTabForMovie:movie];
 }
 

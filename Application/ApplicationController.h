@@ -7,6 +7,7 @@
 @class MovieLookupController;
 @class UserVoiceFeedbackPanel;
 @class Movie;
+@class DrawerViewControllerProtocol;
 
 @interface ApplicationController : NSWindowController {
     NSDictionary* parameters;
@@ -40,11 +41,14 @@
     NSView* viewInFullScreen;
     
     IBOutlet NSButton* fullScreenButton;
+    
+    DrawerViewControllerProtocol* currentDrawerViewController;
 }
 
 @property (retain) Movie* selectedMovie;
 @property (readonly) NSManagedObjectContext* appManagedObjectContext;
 @property (retain) NSDictionary* parameters;
+@property (retain) DrawerViewControllerProtocol* currentDrawerViewController;
 
 - (IBAction) checkForUpdates:(id)sender;
 - (IBAction) showUserVoiceFeedbackSheet:(id)sender;

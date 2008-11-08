@@ -14,6 +14,7 @@
 @interface NSScrollView (NSScrollViewWebKitPrivate)
 - (void) setAllowsHorizontalScrolling:(BOOL)allow;
 - (void) setHorizontalScrollingModeLocked:(BOOL)locked;
+- (void) _saveObjectContext;
 @end
 
 @implementation MovieDetailController
@@ -50,6 +51,39 @@
     [playButtonView setNotificationNameToPost:@"MultiplexPlayButtonClicked"];
     
     [coverArtImageView bind:@"image" toObject:self withKeyPath:@"movie.boxArt.image" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
+}
+
+- (void) takeControl
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self 
+                                             selector:@selector(objectContextNeedsSave:) 
+                                                 name:NSManagedObjectContextObjectsDidChangeNotification 
+                                               object:applicationController.appManagedObjectContext
+     ];
+}
+
+- (void) relinquishControl
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self 
+                                                    name:NSManagedObjectContextObjectsDidChangeNotification 
+                                                  object:applicationController.appManagedObjectContext
+     ];    
+}
+
+- (void) objectContextNeedsSave:(NSNotification*)notification
+{
+    [[NSRunLoop currentRunLoop] performSelector:@selector(_saveObjectContext) target:self argument:nil order:0 modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
+}
+
+- (void) _saveObjectContext
+{
+    NSError* error = nil;
+    [[movie managedObjectContext] save:&error];
+    
+    if (error) {
+        NSLog(@"%@", [error userInfo]);
+        NSAssert(FALSE, @"ERROR SAVING DATA!");
+    }
 }
 
 - (void) webViewDidEndEditing:(NSNotification*)notification

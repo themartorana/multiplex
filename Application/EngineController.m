@@ -11,6 +11,7 @@
 #import "JSONQuery.h"
 
 #import <Toolkit/Toolkit.h>
+#import <JSONKit/JSONKit.h>
 
 #import <unistd.h>
 #import <netinet/ip.h>
@@ -484,9 +485,12 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                 if ([title length]) {
                     movie.title = title;
                 }
-                NSString* genre = [movieInfo objectForKey:@"genre"];
-                if ([genre length]) {
-                    movie.genre = genre;
+                id genre = [movieInfo objectForKey:@"genre"];
+                if ([genre isKindOfClass:[NSString class]]) {
+                    genre = [genre componentsSeparatedByString:@","];
+                }
+                if ([genre isKindOfClass:[NSArray class]] && [(NSArray*)genre count]) {
+                    movie.genre = [NSString stringWithObjectAsJSON:genre];
                 }
                 NSString* studio = [movieInfo objectForKey:@"studio"];
                 if ([studio length]) {

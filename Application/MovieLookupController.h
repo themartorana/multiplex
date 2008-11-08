@@ -1,5 +1,7 @@
 #import <Cocoa/Cocoa.h>
 
+#import "DrawerViewControllerProtocol.h"
+
 @class Activity;
 @class ApplicationController;
 @class DiscIdentQuery;
@@ -9,7 +11,7 @@
 @class BoxArtImageView;
 @class MovieDetailController;
 
-@interface MovieLookupController : NSObject {
+@interface MovieLookupController : NSObject <DrawerViewControllerProtocol> {
     ApplicationController* applicationController;
     DrawerView* drawerView;
     Movie* movie;
@@ -32,6 +34,8 @@
     IBOutlet NSSegmentedControl* backAndForwardButtons;
     
     IBOutlet WebView* searchResultsDescriptionWebView; 
+    
+    BOOL isDirty;
 }
 
 @property (retain) Movie* movie;

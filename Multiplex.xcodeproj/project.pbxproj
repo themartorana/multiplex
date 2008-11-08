@@ -509,6 +509,7 @@
 		55D9581A0E942EB300E35FF4 /* button-play-down.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "button-play-down.pdf"; sourceTree = "<group>"; };
 		55F815350E94082A005EF5DE /* button-play.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "button-play.pdf"; sourceTree = "<group>"; };
 		55FC9CA00EB8382000CE3F05 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
+		55FFFE1B0EC4EF6500EE769E /* DrawerViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawerViewControllerProtocol.h; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* Multiplex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Multiplex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F914C9C70EAD653300877991 /* plus-36x36.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus-36x36.png"; sourceTree = "<group>"; };
@@ -889,6 +890,7 @@
 				550D082B0E9AE14E008F0275 /* MovieDetailController.m */,
 				F9FC49F90EBF49C8007F2769 /* MovieLookupController.h */,
 				F9FC49FA0EBF49C8007F2769 /* MovieLookupController.m */,
+				55FFFE1B0EC4EF6500EE769E /* DrawerViewControllerProtocol.h */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";

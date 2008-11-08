@@ -1,6 +1,8 @@
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
 
+#import "DrawerViewControllerProtocol.h"
+
 @class Movie;
 @class ApplicationController;
 @class DrawerView;
@@ -8,7 +10,7 @@
 @class BoxArtImageView;
 @class LayerBackedButtonView;
 
-@interface MovieDetailController : NSObject {
+@interface MovieDetailController : NSObject <DrawerViewControllerProtocol> {
     ApplicationController* applicationController;
     DrawerView* drawerView;
     /**/

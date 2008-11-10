@@ -20,6 +20,8 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 @interface MovieLookupController (Private)
 - (void) showResultAtIndex:(int)index;
 - (void) clearNotificationListener;
+- (void) removeManagedObjectContextObserver;
+- (void) saveManagedObjectContext;
 @end
 
 
@@ -53,27 +55,24 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (void) takeControl
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self 
-                                             selector:@selector(objectContextNeedsSave:) 
-                                                 name:NSManagedObjectContextObjectsDidChangeNotification 
-                                               object:applicationController.appManagedObjectContext
-    ];
+    // Make sure everything is clean when we start using this controller
+    [self saveManagedObjectContext];
 }
 
-- (void) relinquishControl
+- (BOOL) relinquishControl
 {
-    if (isDirty) {
+    if ([[movie managedObjectContext] hasChanges]) {
+        
         NSString* dirtyInfo = @"You have not selected a result as your movie.";
         NSMutableString* dirtyExplain = [NSMutableString stringWithString:@"You are trying to navigate away from the results screen, but you have "];
         [dirtyExplain appendString:@"not confirmed a search result as your movie.\n\n"];
-        [dirtyExplain appendString:@"To select the result that's currently displayed, click \"The current result is my movie\".\n\n"];
-        [dirtyExplain appendString:@"To continue without selecting a result, click \"It's ok, I'll search again later\"\n\n"];
-        [dirtyExplain appendString:@"To cancel and go back to the results screen, click \"Cancel\""];
+        [dirtyExplain appendString:@"- To discard the search results and continue, click \"Ok\"\n"];
+        [dirtyExplain appendString:@"- To go back to the results screen, click \"Cancel\""];
 
         
         NSAlert* alert = [NSAlert alertWithMessageText:dirtyInfo
-                                         defaultButton:@"The current result is my movie"
-                                       alternateButton:@"It's ok, I'll search again later"
+                                         defaultButton:@"Ok"
+                                       alternateButton:@"Cancel"
                                            otherButton:nil
                              informativeTextWithFormat:dirtyExplain];
         
@@ -81,29 +80,20 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         
         switch (buttonClicked) {
             case NSAlertDefaultReturn:
-                [self selectResult:self];
+                [self backToSearch:nil];
+                return YES;
                 break;
             
             case NSAlertAlternateReturn:
-                [[movie managedObjectContext] rollback];
-                [applicationController.appManagedObjectContext refreshObject:movie mergeChanges:NO];
+            default:
+                return NO;
                 break;
         }
-    }    
-
-    isDirty = NO;
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self 
-                                                    name:NSManagedObjectContextObjectsDidChangeNotification 
-                                                  object:applicationController.appManagedObjectContext
-     ];    
+    }
+    else {
+        return YES;
+    }
 }
-
-- (void) objectContextNeedsSave:(NSNotification*)notification
-{
-    isDirty = YES;
-}
-
 
 - (void) awakeFromNib
 {
@@ -137,8 +127,6 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 - (void) setResultIndex:(NSNumber*)_resultIndex
 {
     if (resultIndex != _resultIndex) {
-        
-        isDirty = YES;
         
         [self willChangeValueForKey:@"resultIndex"];
         [resultIndex release];
@@ -209,7 +197,9 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             NSMutableString* addOnString = [NSMutableString string];
             [addOnString appendFormat:@"<div id=\"multiplex_results_count\">Result %d of %d</div>", [_resultIndex intValue], [amazonQueryResults count]];
             [addOnString appendFormat:@"<div id=\"multiplex_results_title\">%@</div>", movie.title];
-            [addOnString appendString:movie.synopsis];
+            if (movie.synopsis) {
+                [addOnString appendString:movie.synopsis];
+            }
             
             [[searchResultsDescriptionWebView mainFrame] loadHTMLString:addOnString baseURL:[NSURL URLWithString:@""]];
         }
@@ -295,15 +285,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (IBAction) selectResult:(id)sender
 {
-    NSError* error = nil;
-    [[movie managedObjectContext] save:&error];
-    isDirty = NO;
-
-    if (error) {
-        NSLog(@"%@", [error userInfo]);
-        NSAssert(FALSE, @"ERROR SAVING DATA!");
-    }
-    
+    [self saveManagedObjectContext];
     [applicationController showMovieDetailAndSelectHomeTabForMovie:movie];
 }
 
@@ -328,8 +310,22 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 - (IBAction) backToSearch:(id)sender
 {
     [[movie managedObjectContext] rollback];
-    [managedObjectContext refreshObject:movie mergeChanges:NO];
+    //[managedObjectContext refreshObject:movie mergeChanges:NO];
+    [self saveManagedObjectContext];
+    NSLog(@"Still needs save: %@", [movie isUpdated] ? @"YES" : @"NO");
     [drawerView setContentView:searchByUPCorEANView];
+    
+}
+
+- (void) saveManagedObjectContext
+{
+    NSError* error = nil;
+    [[movie managedObjectContext] save:&error];
+    
+    if (error) {
+        NSLog(@"%@", [error userInfo]);
+        NSAssert(FALSE, @"ERROR SAVING DATA!");
+    }
 }
 
 - (void) showNoResultsSheet

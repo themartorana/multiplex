@@ -1,4 +1,5 @@
 #import "MainView.h"
+#import "ApplicationController.h"
 #import "Movie.h"
 #import "MovieLayer.h"
 #import "ButtonLayer.h"
@@ -170,6 +171,13 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     [self _restartMouseTracking];
 }
 
+- (void) resetCurrentlySelectedMovieLayer
+{
+    if (selectedMovieLayer) {
+        [selectedMovieLayer setNeedsDisplay];
+    }
+}
+
 - (void) mouseDown:(NSEvent*)theEvent
 {
     if (!hoverPlayLayer.hidden) {
@@ -187,26 +195,37 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
     CALayer* playButtonLayer = [hoverPlayLayer hitTest:p];
 
+    if (playButtonLayer) {
+        if ([playButtonLayer isKindOfClass:[ButtonLayer class]]) {
+            [content setSelectedObjects:[NSArray arrayWithObject:hoveredMovie]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayButtonClicked" object:nil];
+        }  
+        
+        return;
+    }
+
+    // This was the else for double-click with drawer open.  Leaving in
+    // since the move to single-click is experimental at this time.
+    //else if (movieLayer && ([drawerView isOpen] && [theEvent clickCount] == 1) ||
+    //    (![drawerView isOpen] && [theEvent clickCount] == 2)) {
+    
     MovieLayer* movieLayer = [self _movieLayerForPoint:p];
     if (![[listOfMoviesInOrder objectAtIndex:[listOfMoviesInOrder count] - 1] containsObject:movieLayer.movie]) {
         movieLayer = nil;
     }
     
-    selectedMovieLayer = movieLayer;
-    
-    if (playButtonLayer) {
-        if ([playButtonLayer isKindOfClass:[ButtonLayer class]]) {
-            [content setSelectedObjects:[NSArray arrayWithObject:hoveredMovie]];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayButtonClicked" object:nil];
-        }        
-    }
-    else if (movieLayer && ([drawerView isOpen] && [theEvent clickCount] == 1) ||
-        (![drawerView isOpen] && [theEvent clickCount] == 2)) {
+    else if (movieLayer) {
         
-        [content setSelectedObjects:[NSArray arrayWithObject:[movieLayer movie]]];
-        hoverPlayLayer.hidden = YES;
-        [self _cancelHoverTimer];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexShowMovieDialog" object:nil];
+        // Ask the application controller if we're allowed to do this
+        if ([applicationController canSwitchSelectedMovie])
+        {
+            selectedMovieLayer = movieLayer;
+            
+            [content setSelectedObjects:[NSArray arrayWithObject:[movieLayer movie]]];
+            hoverPlayLayer.hidden = YES;
+            [self _cancelHoverTimer];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexShowMovieDialog" object:nil];
+        }        
     } 
 }
 

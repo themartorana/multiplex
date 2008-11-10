@@ -34,8 +34,6 @@
     IBOutlet NSSegmentedControl* backAndForwardButtons;
     
     IBOutlet WebView* searchResultsDescriptionWebView; 
-    
-    BOOL isDirty;
 }
 
 @property (retain) Movie* movie;

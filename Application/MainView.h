@@ -5,11 +5,15 @@
 #import "MultiplexLayoutManager.h"
 
 @class DrawerView;
+@class ApplicationController;
 
 extern NSString* const kMultiplexDrawerIsOpenLayoutManagerClass;
 extern NSString* const kMultiplexDrawerIsClosedLayoutManagerClass;
 
 @interface MainView : NSView {
+    IBOutlet ApplicationController* applicationController;
+    IBOutlet DrawerView* drawerView;
+    
     NSMutableDictionary* layersByID;
     NSArray* listOfMoviesInOrder;
     
@@ -29,12 +33,12 @@ extern NSString* const kMultiplexDrawerIsClosedLayoutManagerClass;
     
     Class <MultiplexLayoutManager> floorLayerLayoutManagerClass;
     id<MultiplexLayoutManager> layoutManager;
-    
-    IBOutlet DrawerView* drawerView;
 }
 
 @property (retain) id content;
 @property (retain) Movie* hoveredMovie;
 @property Class <MultiplexLayoutManager> floorLayerLayoutManagerClass;
+
+- (void) resetCurrentlySelectedMovieLayer;
 
 @end

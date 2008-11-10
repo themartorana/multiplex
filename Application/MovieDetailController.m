@@ -62,12 +62,14 @@
      ];
 }
 
-- (void) relinquishControl
+- (BOOL) relinquishControl
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self 
                                                     name:NSManagedObjectContextObjectsDidChangeNotification 
                                                   object:applicationController.appManagedObjectContext
-     ];    
+     ];
+    
+    return YES;
 }
 
 - (void) objectContextNeedsSave:(NSNotification*)notification

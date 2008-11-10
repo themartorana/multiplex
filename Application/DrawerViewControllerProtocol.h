@@ -3,6 +3,6 @@
 @protocol DrawerViewControllerProtocol <NSObject>
 
 - (void) takeControl;
-- (void) relinquishControl;
+- (BOOL) relinquishControl;
 
 @end

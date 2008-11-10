@@ -299,14 +299,27 @@
     }
 }
 
-- (void) setCurrentDrawerViewController:(DrawerViewControllerProtocol*)protocolObject
+- (BOOL) canSwitchSelectedMovie
 {
     if (currentDrawerViewController) {
-        [currentDrawerViewController relinquishControl];
-        [currentDrawerViewController release];
-        currentDrawerViewController = nil;
+        if ([currentDrawerViewController relinquishControl]) {
+            [currentDrawerViewController release];
+            currentDrawerViewController = nil;
+            
+            [mainView resetCurrentlySelectedMovieLayer];
+            
+            return YES;
+        }
+        else {
+            return NO;
+        }
     }
-    
+
+    return YES;
+}
+
+- (void) setCurrentDrawerViewController:(DrawerViewControllerProtocol*)protocolObject
+{
     currentDrawerViewController = [protocolObject retain];
     [currentDrawerViewController takeControl];
 }

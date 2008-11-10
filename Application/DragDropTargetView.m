@@ -4,12 +4,18 @@
 @implementation DragDropTargetView
 @synthesize delegate;
 
-- (id) initWithFrame:(NSRect)frame 
+- (void) setDelegate:(id)_delegate
 {
-    if (self = [super initWithFrame:frame]) {
-        [self registerForDraggedTypes:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]];
+    if (delegate != _delegate) {
+        if (delegate) {
+            [self unregisterDraggedTypes];
+        }
+        [delegate release];
+        delegate = [_delegate retain];
+        if (delegate && [delegate respondsToSelector:@selector(registeredDragTypesForDragDropTargetView:)]) {
+            [self registerForDraggedTypes:[delegate registeredDragTypesForDragDropTargetView:self]];
+        }
     }
-    return self;
 }
 
 - (void) drawRect:(NSRect)rect
@@ -58,9 +64,8 @@
 - (NSDragOperation) draggingEntered:(id <NSDraggingInfo>)sender 
 {
     NSPasteboard *pb = [sender draggingPasteboard];
-    NSArray *filenames = [pb propertyListForType:NSFilenamesPboardType];
     BOOL allowDrag = NO;
-    if ([filenames count] && [delegate respondsToSelector:@selector(dragDropTargetView:allowDragForPasteboard:)]) {
+    if ([delegate respondsToSelector:@selector(dragDropTargetView:allowDragForPasteboard:)]) {
         allowDrag = [delegate dragDropTargetView:self allowDragForPasteboard:pb];
     }
     if (allowDrag) {
@@ -81,9 +86,8 @@
 	[self _endHighlightAnimation];
 
     NSPasteboard *pb = [sender draggingPasteboard];
-    NSArray *filenames = [pb propertyListForType:NSFilenamesPboardType];
     BOOL acceptDragOperation = NO;
-    if ([filenames count] && [delegate respondsToSelector:@selector(dragDropTargetView:acceptDragForPasteboard:)]) {
+    if ([delegate respondsToSelector:@selector(dragDropTargetView:acceptDragForPasteboard:)]) {
         acceptDragOperation = [delegate dragDropTargetView:self acceptDragForPasteboard:pb];
     }
     return acceptDragOperation;

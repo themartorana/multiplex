@@ -129,41 +129,68 @@
     [infoTabView selectTabViewItem:discsTabViewItem];
 }
 
+- (NSArray*) registeredDragTypesForDragDropTargetView:(DragDropTargetView*)sender
+{
+    return [NSArray arrayWithObjects:NSURLPboardType, NSFilenamesPboardType, NSStringPboardType, nil];
+}
+
 - (BOOL) dragDropTargetView:(DragDropTargetView*)sender allowDragForPasteboard:(NSPasteboard*)pasteBoard
 {
-    NSArray* fileNames = [pasteBoard propertyListForType:NSFilenamesPboardType];
-    if ([fileNames count] > 1) {
+    NSString* type = [pasteBoard availableTypeFromArray:[NSArray arrayWithObjects:NSURLPboardType, NSFilenamesPboardType, NSStringPboardType, nil]];
+    if ([NSFilenamesPboardType isEqualToString:type]) {
+        NSString* fileName = [[pasteBoard propertyListForType:NSFilenamesPboardType] objectAtIndex:0];
+        NSError* error = nil;
+        NSString* fileType = [[NSWorkspace sharedWorkspace] typeOfFile:fileName error:&error];
+        if (error || !fileType) {
+            return NO;
+        }
+        static NSArray* typeIdentifiers = nil;
+        if (!typeIdentifiers) {
+            typeIdentifiers = (NSArray*)CGImageSourceCopyTypeIdentifiers();
+        }
+        return [typeIdentifiers containsObject:fileType];
+    } else if ([NSURLPboardType isEqualToString:type]) {
+        return YES;
+    } else if ([NSStringPboardType isEqualToString:type]) {
+        NSString* urlAsString = [[pasteBoard propertyListForType:NSURLPboardType] objectAtIndex:0];
+        NSURL* url = [NSURL URLWithString:urlAsString];
+        return url != nil;
+    } else {
         return NO;
     }
-    NSError* error = nil;
-    NSString* fileType = [[NSWorkspace sharedWorkspace] typeOfFile:[fileNames objectAtIndex:0] error:&error];
-    if (error || !fileType) {
-        return NO;
-    }
-    static NSArray* typeIdentifiers = nil;
-    if (!typeIdentifiers) {
-        typeIdentifiers = (NSArray*)CGImageSourceCopyTypeIdentifiers();
-    }
-    return [typeIdentifiers containsObject:fileType];
 }
 
 - (BOOL) dragDropTargetView:(DragDropTargetView*)sender acceptDragForPasteboard:(NSPasteboard*)pasteBoard
 {
-    NSString* fileName = [[pasteBoard propertyListForType:NSFilenamesPboardType] objectAtIndex:0];
-    CGImageRef image = nil;
-    CGImageSourceRef imageSource = CGImageSourceCreateWithURL((CFURLRef)[NSURL fileURLWithPath:fileName], nil);
-    if (imageSource) {
-        image = CGImageSourceCreateImageAtIndex(imageSource, 0, nil);
-        CFRelease(imageSource);
+    NSURL* url = nil;
+    NSString* item = nil;
+    if (nil != (item = [[pasteBoard propertyListForType:NSFilenamesPboardType] objectAtIndex:0])) {
+        url = [NSURL fileURLWithPath:item];
+    } else if (nil != (item = [[pasteBoard propertyListForType:NSURLPboardType] objectAtIndex:0])) {
+        url = [NSURL URLWithString:item];
     }
-    if (image) {
-        NSManagedObjectContext* managedObjectContext = [movie managedObjectContext];
-        NSEntityDescription* boxArtEntity = [NSEntityDescription entityForName:@"BoxArt" inManagedObjectContext:managedObjectContext];
-        BoxArt* boxArt = [[BoxArt alloc] initWithEntity:boxArtEntity insertIntoManagedObjectContext:managedObjectContext];
-        boxArt.image = image;
-        movie.boxArt = boxArt;
-        CGImageRelease(image);
-        return YES;
+
+
+    if (url) {
+        CGImageRef image = nil;
+        CGImageSourceRef imageSource = CGImageSourceCreateWithURL((CFURLRef)url, nil);
+        if (imageSource) {
+            image = CGImageSourceCreateImageAtIndex(imageSource, 0, nil);
+            CFRelease(imageSource);
+        }
+        if (image) {
+            NSManagedObjectContext* managedObjectContext = [movie managedObjectContext];
+            NSEntityDescription* boxArtEntity = [NSEntityDescription entityForName:@"BoxArt" inManagedObjectContext:managedObjectContext];
+            BoxArt* boxArt = [[BoxArt alloc] initWithEntity:boxArtEntity insertIntoManagedObjectContext:managedObjectContext];
+            boxArt.image = image;
+            boxArt.url = [url absoluteString];
+            boxArt.state = @"Loaded";
+            movie.boxArt = boxArt;
+            CGImageRelease(image);
+            return YES;
+        } else {
+            return NO;
+        }
     } else {
         return NO;
     }

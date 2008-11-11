@@ -251,7 +251,7 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
             newPosition.x -= 20.0;
         } else {
             [hoverPlayLayer putLayersIntoAlternatePosition];
-            newPosition.x -= 20.0 + hoverPlayLayer.bounds.size.width;
+            newPosition.x -= hoverPlayLayer.bounds.size.width - 20.0;
         }
         [hoverPlayLayer setPosition:newPosition];
     }

@@ -492,8 +492,7 @@
     }
     else {
         [[mainWindow contentView] enterFullScreenMode:[NSScreen mainScreen] 
-                                          withOptions:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:NSFullScreenModeAllScreens]
-        ];
+                                          withOptions:nil]; //[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:NSFullScreenModeAllScreens]];
         viewInFullScreen = [mainWindow contentView];
         [windowResizeThumb setHidden:YES];
         

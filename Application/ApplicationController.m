@@ -320,8 +320,10 @@
 
 - (void) setCurrentDrawerViewController:(DrawerViewControllerProtocol*)protocolObject
 {
-    currentDrawerViewController = [protocolObject retain];
-    [currentDrawerViewController takeControl];
+    if ([self canSwitchSelectedMovie]) {
+        currentDrawerViewController = [protocolObject retain];
+        [currentDrawerViewController takeControl];        
+    }
 }
 
 - (void) showMovieDetailForMovie:(Movie*)movie

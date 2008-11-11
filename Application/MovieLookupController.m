@@ -55,8 +55,6 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (void) takeControl
 {
-    // Make sure everything is clean when we start using this controller
-    [self saveManagedObjectContext];
 }
 
 - (BOOL) relinquishControl
@@ -64,10 +62,9 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     if ([[movie managedObjectContext] hasChanges]) {
         
         NSString* dirtyInfo = @"You have not selected a result as your movie.";
-        NSMutableString* dirtyExplain = [NSMutableString stringWithString:@"You are trying to navigate away from the results screen, but you have "];
-        [dirtyExplain appendString:@"not confirmed a search result as your movie.\n\n"];
-        [dirtyExplain appendString:@"- To discard the search results and continue, click \"Ok\"\n"];
-        [dirtyExplain appendString:@"- To go back to the results screen, click \"Cancel\""];
+        NSMutableString* dirtyExplain = [NSMutableString string];
+        [dirtyExplain appendString:@"To discard the search results and continue, click \"Ok\"\n\n"];
+        [dirtyExplain appendString:@"To go back to the results screen, click \"Cancel\""];
 
         
         NSAlert* alert = [NSAlert alertWithMessageText:dirtyInfo
@@ -114,9 +111,12 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (void) setMovie:(Movie*)_movie
 {
+    NSLog(@"is dirty: %d", [[_movie managedObjectContext] hasChanges]);
+    
     if (movie != _movie) {
         [self willChangeValueForKey:@"movie"];
         [movie release];
+        movie = nil;
         movie = [_movie retain];
         managedObjectContext = [movie managedObjectContext];
         boxArtEntity = [NSEntityDescription entityForName:@"BoxArt" inManagedObjectContext:managedObjectContext];
@@ -204,21 +204,18 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             [[searchResultsDescriptionWebView mainFrame] loadHTMLString:addOnString baseURL:[NSURL URLWithString:@""]];
         }
 
-        movie.boxArt = boxArt;
+        if (boxArt != movie.boxArt) {
+            movie.boxArt = boxArt;
+        }
     }
 }
 
 - (void) startWithMovie:(Movie*)_movie
 {
-    if (movie) {
-        [managedObjectContext rollback];
-        [managedObjectContext refreshObject:movie mergeChanges:YES];
-    }
-    
+    [self setMovie:_movie];
     [self setResultIndex:nil];
     [self setAmazonQueryResults:nil];
-    [self setMovie:_movie];
-    
+     
     NSString* gtin = movie.gtin;
     if (gtin) {
         if ([gtin length] == 14 && [gtin characterAtIndex:0] == '0') {
@@ -255,8 +252,8 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (IBAction) skipToManualEntry:(id)sender
 {
-    [[movie managedObjectContext] rollback];
-    [managedObjectContext refreshObject:movie mergeChanges:NO];
+    //[[movie managedObjectContext] rollback];
+    //[managedObjectContext refreshObject:movie mergeChanges:NO];
     [applicationController showMovieDetailAndSelectHomeTabForMovie:movie];
 }
 
@@ -310,9 +307,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 - (IBAction) backToSearch:(id)sender
 {
     [[movie managedObjectContext] rollback];
-    //[managedObjectContext refreshObject:movie mergeChanges:NO];
     [self saveManagedObjectContext];
-    NSLog(@"Still needs save: %@", [movie isUpdated] ? @"YES" : @"NO");
     [drawerView setContentView:searchByUPCorEANView];
     
 }
@@ -324,7 +319,6 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     
     if (error) {
         NSLog(@"%@", [error userInfo]);
-        NSAssert(FALSE, @"ERROR SAVING DATA!");
     }
 }
 
@@ -398,7 +392,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         CGImageRef image = CGImageSourceCreateImageAtIndex(imageSource, 0, (CFDictionaryRef)[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], kCGImageSourceCreateThumbnailFromImageAlways, nil]);
         boxArt.state = @"Loaded";
         boxArt.image = image;
-        CGImageRelease(image);
+        //CGImageRelease(image);
     } @finally {
         [activity terminate];
     }

@@ -90,6 +90,24 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
     [fetchRequest release];
 }
 
+- (void) removeDanglingDiscs
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:discEntity];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"movie == NULL"]];
+    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    
+    NSLog(@"Cleared out %d discs", [results count]);
+    
+    if ([results count]) {
+        for (Disc* disc in results) {
+            [managedObjectContext deleteObject:disc];
+        }
+        [managedObjectContext save:nil];
+    }
+    [fetchRequest release];
+}
+
 - (id) initWithManagedObjectContext:(NSManagedObjectContext*)_managedObjectContext 
 {
     if (self = [super init]) {
@@ -108,6 +126,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
 
         [self removeOldEnginesAndAssociatedDiscsAndMedia];
         [self removeFailedBoxArt];
+        [self removeDanglingDiscs];
         
         /*  Grab (or generate) our local machine's Engine UUID.
          */
@@ -554,6 +573,12 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                         }
                     }
                 }
+            }
+            
+            NSError* error = nil;
+            [managedObjectContext save:&error];
+            if (error) {
+                NSLog(@"%@", error);
             }
         } @catch (id exception) {
             [managedObjectContext rollback];

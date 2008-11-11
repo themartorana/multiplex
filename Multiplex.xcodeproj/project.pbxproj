@@ -43,6 +43,7 @@
 		551555040EA45D84006F2674 /* SoftEditTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 551555030EA45D84006F2674 /* SoftEditTextField.m */; };
 		551555610EA46220006F2674 /* HoverPlayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 551555600EA46220006F2674 /* HoverPlayLayer.m */; };
 		551558440EA53C1D006F2674 /* MultiplexColorFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 551558430EA53C1D006F2674 /* MultiplexColorFactory.m */; };
+		5516EBA90EC9DCC900F3C7D2 /* UPS-code-example.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 5516EBA80EC9DCC900F3C7D2 /* UPS-code-example.pdf */; };
 		552D5D280EBCDBD400A292F4 /* IndeterminateProgressIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 552D5D270EBCDBD400A292F4 /* IndeterminateProgressIndicatorView.m */; };
 		553198C10EB6162A0031D118 /* expand-screen.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 553198C00EB6162A0031D118 /* expand-screen.pdf */; };
 		5531A7450EB3EC24009562A2 /* full-screen-icon-down.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5531A7440EB3EC24009562A2 /* full-screen-icon-down.gif */; };
@@ -442,6 +443,7 @@
 		551555600EA46220006F2674 /* HoverPlayLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HoverPlayLayer.m; sourceTree = "<group>"; };
 		551558420EA53C1D006F2674 /* MultiplexColorFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiplexColorFactory.h; sourceTree = "<group>"; };
 		551558430EA53C1D006F2674 /* MultiplexColorFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiplexColorFactory.m; sourceTree = "<group>"; };
+		5516EBA80EC9DCC900F3C7D2 /* UPS-code-example.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "UPS-code-example.pdf"; sourceTree = "<group>"; };
 		552D5D260EBCDBD400A292F4 /* IndeterminateProgressIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndeterminateProgressIndicatorView.h; sourceTree = "<group>"; };
 		552D5D270EBCDBD400A292F4 /* IndeterminateProgressIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndeterminateProgressIndicatorView.m; sourceTree = "<group>"; };
 		553198C00EB6162A0031D118 /* expand-screen.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "expand-screen.pdf"; sourceTree = "<group>"; };
@@ -965,6 +967,7 @@
 		F96430AF0EB6412900D49FA0 /* PDFs */ = {
 			isa = PBXGroup;
 			children = (
+				5516EBA80EC9DCC900F3C7D2 /* UPS-code-example.pdf */,
 				556B15620EC0A8AC001B5E74 /* row-view.pdf */,
 				5551FB7B0EB65A310022147A /* drive.pdf */,
 				553198C00EB6162A0031D118 /* expand-screen.pdf */,
@@ -1543,6 +1546,7 @@
 				F92B67B70EBFF90900609F16 /* arrow-left.png in Resources */,
 				556B15630EC0A8AC001B5E74 /* row-view.pdf in Resources */,
 				F900241E0EC87E26000BAE93 /* license.plist in Resources */,
+				5516EBA90EC9DCC900F3C7D2 /* UPS-code-example.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

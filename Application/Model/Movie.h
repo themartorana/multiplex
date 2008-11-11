@@ -22,6 +22,7 @@
 @property (retain) NSString* studio;
 @property (retain) NSString* synopsis;
 @property (retain) NSString* title;
+@property (retain) NSString* format;
 
 @property (readonly) NSMutableSet* allDiscs;
 

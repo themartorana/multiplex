@@ -1,11 +1,11 @@
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/QuartzCore.h>
 
-#import "MultiplexLayoutManager.h"
+#import "MultiplexLayoutManagerProtocol.h"
 
 @class Movie;
 
-@interface LinearLayoutManager : NSObject <MultiplexLayoutManager> {
+@interface LinearLayoutManager : NSObject <MultiplexLayoutManagerProtocol> {
     CALayer* hoverHighlightLayer; // NR
     CALayer* selectedHighlightLayer; // NR
     CALayer* floorLayer;
@@ -18,6 +18,7 @@
     
     BOOL dontLayoutBecauseOfHighlight;
     BOOL scrollToSelectedMovie;
+    BOOL shouldShowHiglightLayer;
 }
 
 @property (copy) NSArray* listOfLayersInOrder;

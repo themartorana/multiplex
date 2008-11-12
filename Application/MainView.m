@@ -68,6 +68,8 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     hoverPlayLayer.hidden = YES;
     [rootLayer addSublayer:hoverPlayLayer];
     [hoverPlayLayer bind:@"hoveredMovie" toObject:self withKeyPath:@"hoveredMovie" options:nil];
+    
+    [drawerView addObserver:self forKeyPath:@"isOpen" options:NSKeyValueObservingOptionNew context:nil];
 
     [self _restartMouseTracking];
 }
@@ -136,6 +138,7 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     NSAssert(layer == floorLayer, @"wtf?");
     [layoutManager setListOfLayersInOrder:[self _listOfLayersInOrder]];
     [layoutManager setSelectedMovieLayer:selectedMovieLayer];
+    [layoutManager setShouldShowSelectedMovieHighlight:[drawerView isOpen]];
     [layoutManager layoutSublayersOfLayer:floorLayer];
 }
 
@@ -353,6 +356,8 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
         listOfMoviesInOrder = newListOfMoviesInOrder;
         [self setHoveredMovie:nil];
         [floorLayer setNeedsLayout];
+    } else if ([@"isOpen" isEqualToString:keyPath]) {
+        [layoutManager setShouldShowSelectedMovieHighlight:[drawerView isOpen]];
     }
 }
 

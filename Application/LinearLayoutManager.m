@@ -10,7 +10,7 @@
 @implementation LinearLayoutManager
 @synthesize listOfLayersInOrder;
 
-- (id<MultiplexLayoutManager>) initWithManagingLayer:(CALayer*)_floorLayer
+- (id<MultiplexLayoutManagerProtocol>) initWithManagingLayer:(CALayer*)_floorLayer
 {
     if (self == [super init]) {
         floorLayer = [_floorLayer retain];
@@ -56,6 +56,11 @@
         listOfLayersInOrder = nil;
     }
     listOfLayersInOrder = [_listOfLayersInOrder copy];
+}
+
+- (void) setShouldShowSelectedMovieHighlight:(BOOL)show
+{
+    shouldShowHiglightLayer = show;
 }
 
 - (void) setSelectedMovieLayer:(MovieLayer*)movieLayer
@@ -174,7 +179,7 @@ static const CGFloat HS = 75.0;
         /*  Add in our scale and perspective...  then throw a little rotational 
          *  "stank" on it.  ;)
          */
-        if (selectedMovieLayer) {
+        if (selectedMovieLayer && shouldShowHiglightLayer) {
             selectedHighlightLayer.hidden = NO;
             selectedHighlightLayer.anchorPoint = selectedMovieLayer.anchorPoint;
             selectedHighlightLayer.bounds = CGRectInset(selectedMovieLayer.bounds, -20, -20);

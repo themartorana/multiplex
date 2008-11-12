@@ -468,7 +468,7 @@
 		55570B980EB5A0970051D576 /* collapse-screen.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "collapse-screen.pdf"; sourceTree = "<group>"; };
 		55654E790EAD97D400265A45 /* StadiumLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StadiumLayoutManager.h; sourceTree = "<group>"; };
 		55654E7A0EAD97D400265A45 /* StadiumLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StadiumLayoutManager.m; sourceTree = "<group>"; };
-		55654E7C0EAD981000265A45 /* MultiplexLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiplexLayoutManager.h; sourceTree = "<group>"; };
+		55654E7C0EAD981000265A45 /* MultiplexLayoutManagerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiplexLayoutManagerProtocol.h; sourceTree = "<group>"; };
 		556B15620EC0A8AC001B5E74 /* row-view.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "row-view.pdf"; sourceTree = "<group>"; };
 		556BD78A0E9444ED00EC698A /* WorkingStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WorkingStatusView.h; sourceTree = "<group>"; };
 		556BD78B0E9444ED00EC698A /* WorkingStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WorkingStatusView.m; sourceTree = "<group>"; };
@@ -849,7 +849,7 @@
 		55654E750EAD955A00265A45 /* Layout Managers */ = {
 			isa = PBXGroup;
 			children = (
-				55654E7C0EAD981000265A45 /* MultiplexLayoutManager.h */,
+				55654E7C0EAD981000265A45 /* MultiplexLayoutManagerProtocol.h */,
 				F9B8E1950EB25628008589F3 /* LinearLayoutManager.h */,
 				F9B8E1960EB25628008589F3 /* LinearLayoutManager.m */,
 				55654E790EAD97D400265A45 /* StadiumLayoutManager.h */,

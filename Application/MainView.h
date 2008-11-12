@@ -2,7 +2,7 @@
 #import "Movie.h"
 #import "MovieLayer.h"
 #import "HoverPlayLayer.h"
-#import "MultiplexLayoutManager.h"
+#import "MultiplexLayoutManagerProtocol.h"
 
 @class DrawerView;
 @class ApplicationController;
@@ -31,13 +31,13 @@ extern NSString* const kMultiplexDrawerIsClosedLayoutManagerClass;
     
     BOOL needsLayout;
     
-    Class <MultiplexLayoutManager> floorLayerLayoutManagerClass;
-    id<MultiplexLayoutManager> layoutManager;
+    Class <MultiplexLayoutManagerProtocol> floorLayerLayoutManagerClass;
+    id<MultiplexLayoutManagerProtocol> layoutManager;
 }
 
 @property (retain) id content;
 @property (retain) Movie* hoveredMovie;
-@property Class <MultiplexLayoutManager> floorLayerLayoutManagerClass;
+@property Class <MultiplexLayoutManagerProtocol> floorLayerLayoutManagerClass;
 
 - (void) resetCurrentlySelectedMovieLayer;
 

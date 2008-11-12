@@ -3,9 +3,9 @@
 @class Movie;
 @class MovieLayer;
 
-@protocol MultiplexLayoutManager <NSObject>
+@protocol MultiplexLayoutManagerProtocol <NSObject>
 
-- (id<MultiplexLayoutManager>) initWithManagingLayer:(CALayer*)layer;
+- (id<MultiplexLayoutManagerProtocol>) initWithManagingLayer:(CALayer*)layer;
 - (void) clearManagingLayerOfExtras;
 
 - (void) setHoveredMovieLayer:(MovieLayer*)layer;
@@ -15,5 +15,7 @@
 
 // Make this concrete
 - (void) layoutSublayersOfLayer:(CALayer*)layer;
+
+- (void) setShouldShowSelectedMovieHighlight:(BOOL)show;
 
 @end

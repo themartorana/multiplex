@@ -16,7 +16,7 @@
 @implementation StadiumLayoutManager
 @synthesize listOfLayersInOrder;
 
-- (id<MultiplexLayoutManager>) initWithManagingLayer:(CALayer*)_floorLayer
+- (id<MultiplexLayoutManagerProtocol>) initWithManagingLayer:(CALayer*)_floorLayer
 {
     if (self == [super init]) {
         _floorLayer.masksToBounds = NO;
@@ -38,6 +38,13 @@
         titleLayer.frame = CGRectMake(0, 0, 2000, 110);
         titleLayer.truncationMode = kCATruncationEnd;
         [_floorLayer addSublayer:titleLayer];
+        
+        selectedHighlightLayer = [CALayer layer];
+        selectedHighlightLayer.borderColor = [MultiplexColorFactory multiplexYellowOrangeAsCGColor];
+        selectedHighlightLayer.borderWidth = 10.0;
+        selectedHighlightLayer.cornerRadius = 10.0;
+        selectedHighlightLayer.hidden = YES;
+        [floorLayer addSublayer:selectedHighlightLayer];
     }
     
     return self;
@@ -47,6 +54,7 @@
 {
     [radialGradientLayer removeFromSuperlayer];
     [hoverHighlightLayer removeFromSuperlayer];
+    [selectedHighlightLayer removeFromSuperlayer];
     [titleLayer removeFromSuperlayer];
 }
 
@@ -61,9 +69,19 @@
     listOfLayersInOrder = [_listOfLayersInOrder copy];
 }
 
+- (void) setShouldShowSelectedMovieHighlight:(BOOL)show
+{
+    shouldShowHiglightLayer = show;
+}
+
 - (void) setSelectedMovieLayer:(MovieLayer*)movieLayer
 {
-    /* IGNORED */
+    if (selectedMovieLayer) {
+        [selectedMovieLayer release];
+        selectedMovieLayer = nil;
+    }
+    
+    selectedMovieLayer = [movieLayer retain];
 }
 
 
@@ -261,6 +279,19 @@ static const CGFloat HS = 75.0;
     
     if (!lastWasEmpty) {
         CGFloat const rotationalStank = 0.05;
+        
+        /*  Position, scale and rotate our selected highlight layer.
+         */
+        if (selectedMovieLayer && shouldShowHiglightLayer) {
+            selectedHighlightLayer.hidden = NO;
+            selectedHighlightLayer.anchorPoint = selectedMovieLayer.anchorPoint;
+            selectedHighlightLayer.bounds = CGRectInset(selectedMovieLayer.bounds, -20, -20);
+            selectedHighlightLayer.position = selectedMovieLayer.position;
+            selectedHighlightLayer.zPosition = selectedMovieLayer.zPosition - 1;
+            selectedHighlightLayer.transform = selectedMovieLayer.transform;
+        } else {
+            selectedHighlightLayer.hidden = YES;
+        }
         
         /*  Position, scale and rotate our gradient.
          */

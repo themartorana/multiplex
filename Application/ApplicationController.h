@@ -62,6 +62,6 @@
 - (void) showMovieDetailAndSelectDiscsTabMovie:(Movie*)movie;
 - (void) showMovieLookupForMovie:(Movie*)movie;
 
-- (BOOL) canSwitchSelectedMovie;
+- (BOOL) canSwitchDrawerControllers;
 
 @end

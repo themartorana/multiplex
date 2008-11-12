@@ -199,7 +199,7 @@
     // Listen for play requests
     NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(playDiscRequest:) name:@"MultiplexPlayDisc" object:nil];
-    [notificationCenter addObserver:self selector:@selector(closeInfoView:) name:@"MultiplexCloseMovieDialog" object:nil];
+    [notificationCenter addObserver:self selector:@selector(closeDrawerView:) name:@"MultiplexCloseDrawerView" object:nil];
     [notificationCenter addObserver:self selector:@selector(playSelectedMovie:) name:@"MultiplexPlayButtonClicked" object:nil];
     [notificationCenter addObserver:self selector:@selector(toggleFullScreen:) name:@"MultiplexToggleFullScreen" object:nil];
     [notificationCenter addObserver:self selector:@selector(openInfoView:) name:@"MultiplexShowMovieDialog" object:nil];
@@ -299,7 +299,7 @@
     }
 }
 
-- (BOOL) canSwitchSelectedMovie
+- (BOOL) canSwitchDrawerControllers
 {
     if (currentDrawerViewController) {
         if ([currentDrawerViewController relinquishControl]) {
@@ -320,7 +320,7 @@
 
 - (void) setCurrentDrawerViewController:(DrawerViewControllerProtocol*)protocolObject
 {
-    if ([self canSwitchSelectedMovie]) {
+    if ([self canSwitchDrawerControllers]) {
         currentDrawerViewController = [protocolObject retain];
         [currentDrawerViewController takeControl];        
     }
@@ -356,10 +356,12 @@
     [self setCurrentDrawerViewController:(DrawerViewControllerProtocol*)movieLookupController];
 }
 
-- (void) closeInfoView:(NSNotification*)notification
+- (void) closeDrawerView:(NSNotification*)notification
 {
-    [drawerView closeDrawer];
-    [[self window] makeFirstResponder:searchField];
+    if ([self canSwitchDrawerControllers]) {
+        [drawerView closeDrawer];
+        [[self window] makeFirstResponder:searchField];        
+    }
 }
 
 - (void) openInfoView:(NSNotification*)notification

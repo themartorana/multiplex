@@ -220,7 +220,7 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     else if (movieLayer) {
         
         // Ask the application controller if we're allowed to do this
-        if ([applicationController canSwitchSelectedMovie])
+        if ([applicationController canSwitchDrawerControllers])
         {
             selectedMovieLayer = movieLayer;
             

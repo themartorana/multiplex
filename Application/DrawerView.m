@@ -145,7 +145,9 @@
 - (IBAction) toggle:(id)sender
 {
     if (isOpen) {
-        [self closeDrawer];
+        //[self closeDrawer];
+        // Allow the app controller to take this over
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexCloseDrawerView" object:nil];
     } else {
         [self openDrawer];
     }

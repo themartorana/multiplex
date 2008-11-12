@@ -580,13 +580,13 @@ cnQgYW5kIG1ldGFkYXRhLi4uA</string>
 									<object class="NSButton" id="417921457">
 										<reference key="NSNextResponder" ref="1037334344"/>
 										<int key="NSvFlags">268</int>
-										<string key="NSFrame">{{398, 293}, {161, 32}}</string>
+										<string key="NSFrame">{{381, 293}, {178, 32}}</string>
 										<reference key="NSSuperview" ref="1037334344"/>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSButtonCell" key="NSCell" id="65273699">
 											<int key="NSCellFlags">-2080244224</int>
 											<int key="NSCellFlags2">134217728</int>
-											<string key="NSContents">Use this movie info</string>
+											<string key="NSContents">Yes, this is my movie!</string>
 											<object class="NSFont" key="NSSupport" id="927872977">
 												<string key="NSName">LucidaGrande</string>
 												<double key="NSSize">1.300000e+01</double>
@@ -704,18 +704,18 @@ cnQgYW5kIG1ldGFkYXRhLi4uA</string>
 							<int key="NSPeriodicInterval">75</int>
 						</object>
 					</object>
-					<object class="NSButton" id="539653307">
+					<object class="NSButton" id="790613830">
 						<reference key="NSNextResponder" ref="29815340"/>
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{296, 12}, {163, 32}}</string>
 						<reference key="NSSuperview" ref="29815340"/>
 						<bool key="NSEnabled">YES</bool>
-						<object class="NSButtonCell" key="NSCell" id="221632701">
+						<object class="NSButtonCell" key="NSCell" id="615633709">
 							<int key="NSCellFlags">-2080244224</int>
 							<int key="NSCellFlags2">134217728</int>
 							<string key="NSContents">Enter info manually</string>
 							<reference key="NSSupport" ref="927872977"/>
-							<reference key="NSControlView" ref="539653307"/>
+							<reference key="NSControlView" ref="790613830"/>
 							<int key="NSButtonFlags">-2038284033</int>
 							<int key="NSButtonFlags2">129</int>
 							<string key="NSAlternateContents"/>
@@ -1030,7 +1030,7 @@ cnQgYW5kIG1ldGFkYXRhLi4uA</string>
 							<reference ref="134524951"/>
 							<reference ref="955536634"/>
 							<reference ref="767257624"/>
-							<reference ref="539653307"/>
+							<reference ref="790613830"/>
 						</object>
 						<reference key="parent" ref="1049"/>
 						<string key="objectName">Search Results</string>
@@ -1384,17 +1384,17 @@ cnQgYW5kIG1ldGFkYXRhLi4uA</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">2335</int>
-						<reference key="object" ref="539653307"/>
+						<reference key="object" ref="790613830"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="221632701"/>
+							<reference ref="615633709"/>
 						</object>
 						<reference key="parent" ref="29815340"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">2336</int>
-						<reference key="object" ref="221632701"/>
-						<reference key="parent" ref="539653307"/>
+						<reference key="object" ref="615633709"/>
+						<reference key="parent" ref="790613830"/>
 					</object>
 				</object>
 			</object>
@@ -1492,7 +1492,7 @@ cnQgYW5kIG1ldGFkYXRhLi4uA</string>
 					<string>com.apple.InterfaceBuilderKit</string>
 					<string>{{127, 623}, {627, 500}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{150, 79}, {636, 500}}</string>
+					<string>{{180, 178}, {636, 500}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

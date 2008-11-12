@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.03">
+<archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.02">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
 		<string key="IBDocument.SystemVersion">9F33</string>
-		<string key="IBDocument.InterfaceBuilderVersion">676</string>
+		<string key="IBDocument.InterfaceBuilderVersion">672</string>
 		<string key="IBDocument.AppKitVersion">949.34</string>
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="2268"/>
 			<integer value="1685"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -15,15 +16,6 @@
 			<string>com.apple.WebKitIBPlugin</string>
 			<string>com.apple.InterfaceBuilderKit</string>
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-		</object>
-		<object class="NSMutableDictionary" key="IBDocument.Metadata">
-			<bool key="EncodedWithXMLCoder">YES</bool>
-			<object class="NSArray" key="dict.sortedKeys">
-				<bool key="EncodedWithXMLCoder">YES</bool>
-			</object>
-			<object class="NSMutableArray" key="dict.values">
-				<bool key="EncodedWithXMLCoder">YES</bool>
-			</object>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.RootObjects" id="1048">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -56,7 +48,7 @@
 								<string>NeXT TIFF v4.0 pasteboard type</string>
 							</object>
 						</object>
-						<string key="NSFrame">{{113, 0}, {400, 229}}</string>
+						<string key="NSFrame">{{113, 10}, {400, 229}}</string>
 						<reference key="NSSuperview" ref="631342612"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSImageCell" key="NSCell" id="894743738">
@@ -82,7 +74,7 @@
 						<object class="NSShadow" key="NSViewShadow">
 							<double key="NSShadowVert">-2.000000e+00</double>
 							<double key="NSShadowBlurRadius">2.000000e+00</double>
-							<object class="NSColor" key="NSShadowColor" id="167043507">
+							<object class="NSColor" key="NSShadowColor" id="470198345">
 								<int key="NSColorSpace">3</int>
 								<bytes key="NSWhite">MAA</bytes>
 							</object>
@@ -91,7 +83,7 @@
 						<object class="NSTextFieldCell" key="NSCell" id="273615930">
 							<int key="NSCellFlags">68288064</int>
 							<int key="NSCellFlags2">138413056</int>
-							<string key="NSContents">Find by UPC/EAN</string>
+							<string key="NSContents">Find Movie by UPC/EAN</string>
 							<object class="NSFont" key="NSSupport" id="396680728">
 								<string key="NSName">LucidaGrande</string>
 								<double key="NSSize">3.600000e+01</double>
@@ -118,37 +110,37 @@
 					<object class="NSTextField" id="100115137">
 						<reference key="NSNextResponder" ref="631342612"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{14, 307}, {599, 87}}</string>
+						<string key="NSFrame">{{70, 350}, {486, 44}}</string>
 						<reference key="NSSuperview" ref="631342612"/>
 						<bool key="NSViewIsLayerTreeHost">YES</bool>
 						<object class="NSShadow" key="NSViewShadow">
 							<double key="NSShadowVert">-2.000000e+00</double>
 							<double key="NSShadowBlurRadius">2.000000e+00</double>
-							<reference key="NSShadowColor" ref="167043507"/>
+							<reference key="NSShadowColor" ref="470198345"/>
 						</object>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="927052730">
 							<int key="NSCellFlags">67239424</int>
 							<int key="NSCellFlags2">138412032</int>
-							<string type="base64-UTF8" key="NSContents">RW50ZXIgdGhpcyBtb3ZpZSdzIFVQQyAob3IgRUFOKSBjb2RlIGFuZCBNdWx0aXBsZXggd2lsbCBkb3du
-bG9hZCBjb3ZlciBhcnQgYW5kIG1ldGEtZGF0YS4uLg</string>
-							<object class="NSFont" key="NSSupport" id="996837093">
+							<string type="base64-UTF8" key="NSContents">SnVzdCBlbnRlciB0aGlzIG1vdmllJ3MgVVBDIChvciBFQU4pIGNvZGUgYW5kIE11bHRpcGxleCB3aWxs
+IGRvd25sb2FkIGNvdmVyIGFydCBhbmQgbWV0YWRhdGEuLi4</string>
+							<object class="NSFont" key="NSSupport" id="763589698">
 								<string key="NSName">LucidaGrande</string>
-								<double key="NSSize">2.400000e+01</double>
+								<double key="NSSize">1.800000e+01</double>
 								<int key="NSfFlags">16</int>
 							</object>
 							<reference key="NSControlView" ref="100115137"/>
 							<reference key="NSBackgroundColor" ref="288047085"/>
-							<object class="NSColor" key="NSTextColor" id="32872929">
-								<int key="NSColorSpace">1</int>
-								<bytes key="NSRGB">MSAxIDEAA</bytes>
+							<object class="NSColor" key="NSTextColor">
+								<int key="NSColorSpace">3</int>
+								<bytes key="NSWhite">MC44MDAwMDAwMQA</bytes>
 							</object>
 						</object>
 					</object>
 					<object class="NSTextField" id="685923339">
 						<reference key="NSNextResponder" ref="631342612"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{113, 294}, {400, 22}}</string>
+						<string key="NSFrame">{{100, 304}, {325, 22}}</string>
 						<reference key="NSSuperview" ref="631342612"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="855564351">
@@ -175,14 +167,14 @@ bG9hZCBjb3ZlciBhcnQgYW5kIG1ldGEtZGF0YS4uLg</string>
 								<int key="NSColorSpace">6</int>
 								<string key="NSCatalogName">System</string>
 								<string key="NSColorName">textColor</string>
-								<reference key="NSColor" ref="167043507"/>
+								<reference key="NSColor" ref="470198345"/>
 							</object>
 						</object>
 					</object>
 					<object class="NSButton" id="219108231">
 						<reference key="NSNextResponder" ref="631342612"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{366, 246}, {96, 32}}</string>
+						<string key="NSFrame">{{435, 298}, {94, 32}}</string>
 						<reference key="NSSuperview" ref="631342612"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="821785349">
@@ -192,7 +184,7 @@ bG9hZCBjb3ZlciBhcnQgYW5kIG1ldGEtZGF0YS4uLg</string>
 							<reference key="NSSupport" ref="707745533"/>
 							<reference key="NSControlView" ref="219108231"/>
 							<int key="NSButtonFlags">-2038284033</int>
-							<int key="NSButtonFlags2">129</int>
+							<int key="NSButtonFlags2">130</int>
 							<string key="NSAlternateContents"/>
 							<string key="NSKeyEquivalent"/>
 							<int key="NSPeriodicDelay">200</int>
@@ -202,7 +194,7 @@ bG9hZCBjb3ZlciBhcnQgYW5kIG1ldGEtZGF0YS4uLg</string>
 					<object class="NSButton" id="656473188">
 						<reference key="NSNextResponder" ref="631342612"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{165, 246}, {201, 32}}</string>
+						<string key="NSFrame">{{213, 256}, {201, 32}}</string>
 						<reference key="NSSuperview" ref="631342612"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="955506562">
@@ -226,7 +218,7 @@ bG9hZCBjb3ZlciBhcnQgYW5kIG1ldGEtZGF0YS4uLg</string>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomView" id="434514844">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">269</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -239,13 +231,13 @@ bG9hZCBjb3ZlciBhcnQgYW5kIG1ldGEtZGF0YS4uLg</string>
 						<object class="NSShadow" key="NSViewShadow">
 							<double key="NSShadowVert">-2.000000e+00</double>
 							<double key="NSShadowBlurRadius">2.000000e+00</double>
-							<reference key="NSShadowColor" ref="167043507"/>
+							<reference key="NSShadowColor" ref="470198345"/>
 						</object>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="84104928">
 							<int key="NSCellFlags">68288064</int>
 							<int key="NSCellFlags2">138413056</int>
-							<string key="NSContents">Find by Title</string>
+							<string key="NSContents">Find Movie by Title</string>
 							<reference key="NSSupport" ref="396680728"/>
 							<reference key="NSControlView" ref="65672708"/>
 							<reference key="NSBackgroundColor" ref="288047085"/>
@@ -255,30 +247,33 @@ bG9hZCBjb3ZlciBhcnQgYW5kIG1ldGEtZGF0YS4uLg</string>
 					<object class="NSTextField" id="74274615">
 						<reference key="NSNextResponder" ref="434514844"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{33, 330}, {561, 64}}</string>
+						<string key="NSFrame">{{110, 350}, {406, 44}}</string>
 						<reference key="NSSuperview" ref="434514844"/>
 						<bool key="NSViewIsLayerTreeHost">YES</bool>
 						<object class="NSShadow" key="NSViewShadow">
 							<double key="NSShadowVert">-2.000000e+00</double>
 							<double key="NSShadowBlurRadius">2.000000e+00</double>
-							<reference key="NSShadowColor" ref="167043507"/>
+							<reference key="NSShadowColor" ref="470198345"/>
 						</object>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="385678737">
 							<int key="NSCellFlags">67239424</int>
 							<int key="NSCellFlags2">138412032</int>
 							<string type="base64-UTF8" key="NSContents">RW50ZXIgdGhpcyBtb3ZpZSdzIHRpdGxlIGFuZCBNdWx0aXBsZXggd2lsbCBkb3dubG9hZCBjb3ZlciBh
-cnQgYW5kIG1ldGEtZGF0YS4uLg</string>
-							<reference key="NSSupport" ref="996837093"/>
+cnQgYW5kIG1ldGFkYXRhLi4uA</string>
+							<reference key="NSSupport" ref="763589698"/>
 							<reference key="NSControlView" ref="74274615"/>
 							<reference key="NSBackgroundColor" ref="288047085"/>
-							<reference key="NSTextColor" ref="32872929"/>
+							<object class="NSColor" key="NSTextColor">
+								<int key="NSColorSpace">3</int>
+								<bytes key="NSWhite">MC44MDAwMDAwMQA</bytes>
+							</object>
 						</object>
 					</object>
 					<object class="NSTextField" id="268053464">
 						<reference key="NSNextResponder" ref="434514844"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{113, 294}, {401, 22}}</string>
+						<string key="NSFrame">{{100, 304}, {325, 22}}</string>
 						<reference key="NSSuperview" ref="434514844"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="625783362">
@@ -295,7 +290,7 @@ cnQgYW5kIG1ldGEtZGF0YS4uLg</string>
 					<object class="NSButton" id="163207769">
 						<reference key="NSNextResponder" ref="434514844"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{395, 246}, {96, 32}}</string>
+						<string key="NSFrame">{{435, 298}, {94, 32}}</string>
 						<reference key="NSSuperview" ref="434514844"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="963203810">
@@ -304,8 +299,9 @@ cnQgYW5kIG1ldGEtZGF0YS4uLg</string>
 							<string key="NSContents">Search</string>
 							<reference key="NSSupport" ref="707745533"/>
 							<reference key="NSControlView" ref="163207769"/>
-							<int key="NSButtonFlags">-2038284033</int>
-							<int key="NSButtonFlags2">129</int>
+							<int key="NSButtonFlags">-2034876161</int>
+							<int key="NSButtonFlags2">130</int>
+							<reference key="NSAlternateImage" ref="707745533"/>
 							<string key="NSAlternateContents"/>
 							<string key="NSKeyEquivalent"/>
 							<int key="NSPeriodicDelay">200</int>
@@ -315,7 +311,7 @@ cnQgYW5kIG1ldGEtZGF0YS4uLg</string>
 					<object class="NSButton" id="938987333">
 						<reference key="NSNextResponder" ref="434514844"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{135, 246}, {260, 32}}</string>
+						<string key="NSFrame">{{183, 256}, {260, 32}}</string>
 						<reference key="NSSuperview" ref="434514844"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="611378373">
@@ -334,6 +330,7 @@ cnQgYW5kIG1ldGEtZGF0YS4uLg</string>
 					</object>
 				</object>
 				<string key="NSFrameSize">{627, 500}</string>
+				<reference key="NSSuperview"/>
 				<bool key="NSViewIsLayerTreeHost">YES</bool>
 				<string key="NSClassName">NSView</string>
 			</object>
@@ -351,7 +348,7 @@ cnQgYW5kIG1ldGEtZGF0YS4uLg</string>
 						<object class="NSShadow" key="NSViewShadow">
 							<double key="NSShadowVert">-2.000000e+00</double>
 							<double key="NSShadowBlurRadius">2.000000e+00</double>
-							<reference key="NSShadowColor" ref="167043507"/>
+							<reference key="NSShadowColor" ref="470198345"/>
 						</object>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="7648169">
@@ -373,17 +370,24 @@ cnQgYW5kIG1ldGEtZGF0YS4uLg</string>
 						<object class="NSShadow" key="NSViewShadow">
 							<double key="NSShadowVert">-2.000000e+00</double>
 							<double key="NSShadowBlurRadius">2.000000e+00</double>
-							<reference key="NSShadowColor" ref="167043507"/>
+							<reference key="NSShadowColor" ref="470198345"/>
 						</object>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="564377328">
 							<int key="NSCellFlags">68288064</int>
 							<int key="NSCellFlags2">138413056</int>
 							<string key="NSContents">Please wait...</string>
-							<reference key="NSSupport" ref="996837093"/>
+							<object class="NSFont" key="NSSupport" id="996837093">
+								<string key="NSName">LucidaGrande</string>
+								<double key="NSSize">2.400000e+01</double>
+								<int key="NSfFlags">16</int>
+							</object>
 							<reference key="NSControlView" ref="956946086"/>
 							<reference key="NSBackgroundColor" ref="288047085"/>
-							<reference key="NSTextColor" ref="32872929"/>
+							<object class="NSColor" key="NSTextColor">
+								<int key="NSColorSpace">1</int>
+								<bytes key="NSRGB">MSAxIDEAA</bytes>
+							</object>
 						</object>
 					</object>
 					<object class="NSCustomView" id="598561137">
@@ -411,7 +415,7 @@ cnQgYW5kIG1ldGEtZGF0YS4uLg</string>
 						<object class="NSShadow" key="NSViewShadow">
 							<double key="NSShadowVert">-2.000000e+00</double>
 							<double key="NSShadowBlurRadius">2.000000e+00</double>
-							<reference key="NSShadowColor" ref="167043507"/>
+							<reference key="NSShadowColor" ref="470198345"/>
 						</object>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="420658758">
@@ -432,7 +436,7 @@ cnQgYW5kIG1ldGEtZGF0YS4uLg</string>
 						<object class="NSShadow" key="NSViewShadow">
 							<double key="NSShadowVert">-1.000000e+00</double>
 							<double key="NSShadowBlurRadius">2.000000e+00</double>
-							<reference key="NSShadowColor" ref="167043507"/>
+							<reference key="NSShadowColor" ref="470198345"/>
 						</object>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="237832075">
@@ -929,11 +933,11 @@ cnQgYW5kIG1ldGEtZGF0YS4uLg</string>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="999156613"/>
+							<reference ref="100115137"/>
+							<reference ref="765249247"/>
 							<reference ref="685923339"/>
 							<reference ref="219108231"/>
 							<reference ref="656473188"/>
-							<reference ref="100115137"/>
-							<reference ref="765249247"/>
 						</object>
 						<reference key="parent" ref="1049"/>
 						<string key="objectName">Find By UPC</string>
@@ -1341,6 +1345,7 @@ cnQgYW5kIG1ldGEtZGF0YS4uLg</string>
 					<string>2296.IBViewIntegration.shadowOffsetHeight</string>
 					<string>2297.IBPluginDependency</string>
 					<string>2297.IBViewIntegration.shadowBlurRadius</string>
+					<string>2297.IBViewIntegration.shadowColor</string>
 					<string>2297.IBViewIntegration.shadowOffsetHeight</string>
 					<string>2298.IBPluginDependency</string>
 					<string>2299.IBPluginDependency</string>
@@ -1358,67 +1363,68 @@ cnQgYW5kIG1ldGEtZGF0YS4uLg</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilderKit</string>
 					<string>com.apple.InterfaceBuilderKit</string>
-					<string>{{470, 282}, {627, 500}}</string>
+					<string>{{98, 623}, {627, 500}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{607, 390}, {636, 500}}</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<real value="2.000000e+00"/>
-					<real value="-2.000000e+00"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<real value="2.000000e+00"/>
-					<reference ref="167043507"/>
-					<real value="-1.000000e+00"/>
-					<real value="0.000000e+00"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.WebKitIBPlugin</string>
-					<real value="2.000000e+00"/>
-					<reference ref="167043507"/>
-					<real value="-2.000000e+00"/>
-					<real value="0.000000e+00"/>
-					<string>{{1152, 306}, {627, 500}}</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<real value="2.000000e+00"/>
-					<real value="-2.000000e+00"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<real value="2.000000e+00"/>
-					<real value="-2.000000e+00"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{744, 250}, {627, 500}}</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<real value="2.000000e+00" id="396669737"/>
-					<real value="-2.000000e+00" id="507018436"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<reference ref="396669737"/>
-					<reference ref="507018436"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<real value="2.000000e+00" id="241178686"/>
 					<real value="-2.000000e+00" id="868731873"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="241178686"/>
+					<reference ref="470198345"/>
+					<real value="-1.000000e+00"/>
+					<real value="0.000000e+00" id="816115083"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.WebKitIBPlugin</string>
+					<reference ref="241178686"/>
+					<reference ref="470198345"/>
+					<reference ref="868731873"/>
+					<reference ref="816115083"/>
+					<string>{{1152, 306}, {627, 500}}</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<reference ref="241178686"/>
+					<reference ref="868731873"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<reference ref="241178686"/>
+					<reference ref="868731873"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>{{111, 84}, {627, 500}}</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<reference ref="241178686"/>
+					<reference ref="868731873"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<reference ref="241178686"/>
+					<reference ref="868731873"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<reference ref="241178686"/>
+					<reference ref="868731873"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<reference ref="241178686"/>
+					<reference ref="470198345"/>
 					<reference ref="868731873"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

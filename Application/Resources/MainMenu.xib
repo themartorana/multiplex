@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1150"/>
+			<integer value="1166"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -790,8 +790,8 @@
 								</object>
 								<object class="NSButton" id="109877589">
 									<reference key="NSNextResponder" ref="243160278"/>
-									<int key="NSvFlags">265</int>
-									<string key="NSFrame">{{791, 15}, {35, 20}}</string>
+									<int key="NSvFlags">-2147483383</int>
+									<string key="NSFrame">{{841, 15}, {35, 20}}</string>
 									<reference key="NSSuperview" ref="243160278"/>
 									<bool key="NSEnabled">YES</bool>
 									<object class="NSButtonCell" key="NSCell" id="605574320">
@@ -815,7 +815,7 @@
 								<object class="NSButton" id="799927829">
 									<reference key="NSNextResponder" ref="243160278"/>
 									<int key="NSvFlags">265</int>
-									<string key="NSFrame">{{831, 15}, {35, 20}}</string>
+									<string key="NSFrame">{{796, 15}, {35, 20}}</string>
 									<reference key="NSSuperview" ref="243160278"/>
 									<bool key="NSEnabled">YES</bool>
 									<object class="NSButtonCell" key="NSCell" id="602364855">
@@ -838,7 +838,7 @@
 								</object>
 								<object class="NSButton" id="188001020">
 									<reference key="NSNextResponder" ref="243160278"/>
-									<int key="NSvFlags">268</int>
+									<int key="NSvFlags">-2147483380</int>
 									<string key="NSFrame">{{80, 15}, {35, 20}}</string>
 									<reference key="NSSuperview" ref="243160278"/>
 									<bool key="NSEnabled">YES</bool>
@@ -4017,10 +4017,10 @@
 							<reference ref="381313983"/>
 							<reference ref="440268035"/>
 							<reference ref="238130393"/>
-							<reference ref="109877589"/>
-							<reference ref="799927829"/>
 							<reference ref="805436789"/>
 							<reference ref="188001020"/>
+							<reference ref="799927829"/>
+							<reference ref="109877589"/>
 						</object>
 						<reference key="parent" ref="384445475"/>
 					</object>

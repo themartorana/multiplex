@@ -112,8 +112,8 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
             smokeLayer = [CALayer layer];
             smokeLayer.zPosition = 1;
             smokeLayer.backgroundColor = [MultiplexColorFactory blackOneQuarterTransparent];
-            smokeLayer.borderColor = [MultiplexColorFactory multiplexOrange];
-            smokeLayer.borderWidth = 10;
+            //smokeLayer.borderColor = [MultiplexColorFactory multiplexOrange];
+            //smokeLayer.borderWidth = 10;
             smokeLayer.constraints = [NSArray arrayWithObjects:
                 [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
                 [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],

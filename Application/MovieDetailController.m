@@ -51,6 +51,9 @@
     [playButtonView setNotificationNameToPost:@"MultiplexPlayButtonClicked"];
     
     [coverArtImageView bind:@"image" toObject:self withKeyPath:@"movie.boxArt.image" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
+    
+    [backgroundBox setCornerRadius:5.0];
+    [backgroundBox setFillColor:[NSColor colorWithCalibratedWhite:1.0 alpha:0.1]];
 }
 
 - (void) takeControl
@@ -70,6 +73,11 @@
      ];
     
     return YES;
+}
+
+- (IBAction) selectTab:(id)sender
+{
+    [infoTabView selectTabViewItemAtIndex:[sender selectedSegment]];
 }
 
 - (void) objectContextNeedsSave:(NSNotification*)notification
@@ -121,12 +129,16 @@
 
 - (void) showHomeTab
 {
-    [infoTabView selectTabViewItem:[[infoTabView tabViewItems] objectAtIndex:0]];
+    int index = [[infoTabView tabViewItems] indexOfObject:overviewTabViewItem];
+    [tabSelector setSelectedSegment:index];
+    [infoTabView selectTabViewItemAtIndex:index];
 }
 
 - (void) showDiscsTab
 {
-    [infoTabView selectTabViewItem:discsTabViewItem];
+    int index = [[infoTabView tabViewItems] indexOfObject:discsTabViewItem];
+    [tabSelector setSelectedSegment:index];
+    [infoTabView selectTabViewItemAtIndex:index];
 }
 
 - (NSArray*) registeredDragTypesForDragDropTargetView:(DragDropTargetView*)sender

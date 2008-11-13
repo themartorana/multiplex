@@ -14,11 +14,14 @@
     ApplicationController* applicationController;
     DrawerView* drawerView;
     /**/
+    IBOutlet NSBox* backgroundBox;
     IBOutlet NSView* infoPaneView;
     IBOutlet WebView* descriptionWebView;
     IBOutlet MovieDetailDiscsView* discsView;
     IBOutlet BoxArtImageView* coverArtImageView;
+    IBOutlet NSSegmentedControl* tabSelector;
     IBOutlet NSTabView* infoTabView;
+    IBOutlet NSTabViewItem* overviewTabViewItem;
     IBOutlet NSTabViewItem* discsTabViewItem;
     IBOutlet LayerBackedButtonView* playButtonView;
     /**/
@@ -35,6 +38,7 @@
 
 - (IBAction) startWithMovie:(Movie*)movie;
 - (IBAction) refreshMovieInfoFromInternet:(id)sender;
+- (IBAction) selectTab:(id)sender;
 
 - (void) showHomeTab;
 - (void) showDiscsTab;

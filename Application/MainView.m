@@ -436,9 +436,9 @@ static const CGFloat H = 400.0;
     layer.frame = CGRectMake(0.0, 0.0, W, H);
     layer.position = CGPointZero;
     
-    if (!selectedMovieLayer) {
-        selectedMovieLayer = layer;
-    }
+    //if (!selectedMovieLayer) {
+    //    selectedMovieLayer = layer;
+    //}
     
     return layer;
 }

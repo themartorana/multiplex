@@ -204,7 +204,8 @@
     [notificationCenter addObserver:self selector:@selector(toggleFullScreen:) name:@"MultiplexToggleFullScreen" object:nil];
     [notificationCenter addObserver:self selector:@selector(openInfoView:) name:@"MultiplexShowMovieDialog" object:nil];
     
-    [notificationCenter addObserver:self selector:@selector(refreshInfoFromInternet:) name:@"MultiplexRefreshMovieInfoFromInternet" object:nil];
+    [notificationCenter addObserver:self selector:@selector(refreshInfoFromInternetByUPC:) name:@"MultiplexRefreshMovieInfoFromInternetByUPC" object:nil];
+    [notificationCenter addObserver:self selector:@selector(refreshInfoFromInternetByTitle:) name:@"MultiplexRefreshMovieInfoFromInternetByTitle" object:nil];
     
     engineController = [[EngineController alloc] initWithManagedObjectContext:engineManagedObjectContext];
     
@@ -290,12 +291,21 @@
     }
 }
 
-- (void) refreshInfoFromInternet:(NSNotification*)notification
+- (void) refreshInfoFromInternetByUPC:(NSNotification*)notification
 {
     Movie* m = (Movie*)[notification object];
     
     if (m) {
-        [self showMovieLookupForMovie:m];
+        [self showMovieLookupForMovie:m byTitle:NO];
+    }
+}
+
+- (void) refreshInfoFromInternetByTitle:(NSNotification*)notification
+{
+    Movie* m = (Movie*)[notification object];
+    
+    if (m) {
+        [self showMovieLookupForMovie:m byTitle:YES];
     }
 }
 
@@ -347,13 +357,17 @@
     [movieDetailController showDiscsTab];
 }
 
-- (void) showMovieLookupForMovie:(Movie*)movie
+- (void) showMovieLookupForMovie:(Movie*)movie byTitle:(BOOL)byTitle
 {
     if (!movieLookupController) {
         movieLookupController = [[MovieLookupController alloc] initWithApplicationController:self drawerView:drawerView];
     }
     [movieLookupController startWithMovie:selectedMovie];
     [self setCurrentDrawerViewController:(DrawerViewControllerProtocol*)movieLookupController];
+    
+    if (byTitle) {
+        [movieLookupController skipToTitleEntry:nil];
+    }
 }
 
 - (void) closeDrawerView:(NSNotification*)notification
@@ -424,7 +438,7 @@
                 if ([selectedMovie.gtin length] > 0 || selectedMovie.metadataAcceptedDate != nil) {
                     [self showMovieDetailForMovie:selectedMovie];
                 } else if (selectedMovie) {
-                    [self showMovieLookupForMovie:selectedMovie];
+                    [self showMovieLookupForMovie:selectedMovie byTitle:NO];
                 } else {
                     [drawerView setContentView:noMovieSelectedView];
                 }

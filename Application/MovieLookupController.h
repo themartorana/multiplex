@@ -46,6 +46,7 @@
 
 - (void) startWithMovie:(Movie*)movie;
 
+- (IBAction) skipToUPCEntry:(id)sender;
 - (IBAction) skipToTitleEntry:(id)sender;
 - (IBAction) skipToManualEntry:(id)sender;
 

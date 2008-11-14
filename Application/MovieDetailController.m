@@ -43,14 +43,19 @@
     [descriptionWebView setEditingDelegate:self];
     [descriptionWebView setFrameLoadDelegate:self];
     [descriptionWebView setEditable:YES];
-    [descriptionWebView setDrawsBackground:NO];
-
-    [descriptionWebView setPreferences:[ApplicationResources movieDescriptionWebPreferences]];
+    [descriptionWebView setDrawsBackground:YES];
+    //[descriptionWebView setPreferences:[ApplicationResources movieDescriptionWebPreferences]];
+    
+    [overviewWebView setFrameLoadDelegate:self];
+    [overviewWebView setEditable:NO];
+    [overviewWebView setDrawsBackground:NO];
+    [overviewWebView setPreferences:[ApplicationResources movieDescriptionWebPreferences]];
     
     [playButtonView setButtonLayerButtonWithUpState:[ApplicationResources playButton] andDownState:[ApplicationResources playButtonDown]];
     [playButtonView setNotificationNameToPost:@"MultiplexPlayButtonClicked"];
     
     [coverArtImageView bind:@"image" toObject:self withKeyPath:@"movie.boxArt.image" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
+    [coverArtImageEditView bind:@"image" toObject:self withKeyPath:@"movie.boxArt.image" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
     
     [backgroundBox setCornerRadius:5.0];
     [backgroundBox setFillColor:[NSColor colorWithCalibratedWhite:1.0 alpha:0.1]];
@@ -98,7 +103,9 @@
 
 - (void) webViewDidEndEditing:(NSNotification*)notification
 {
+    NSString* noSynopsis = @"No description found. Click on the \"Description\" tab to enter one.";
     movie.synopsis = [(id)[[[[[descriptionWebView mainFrame] DOMDocument] documentElement] getElementsByTagName:@"body"] item:0] innerHTML];
+    [[overviewWebView mainFrame] loadHTMLString:movie && movie.synopsis ? movie.synopsis : noSynopsis baseURL:[NSURL URLWithString:@""]];
 }
 
 - (void) setMovie:(Movie*)_movie
@@ -114,17 +121,46 @@
 {
     [self setMovie:_movie];
     [drawerView setContentView:infoPaneView];
-    NSString* noSynopsis = @"No description found.  Replace this text to add one.";
-    [[descriptionWebView mainFrame] loadHTMLString:movie && movie.synopsis ? movie.synopsis : noSynopsis baseURL:[NSURL URLWithString:@""]];
+    NSString* noSynopsis = @"No description found. Click on the \"Description\" tab to enter one.";
+    NSString* noSynopsisEdit = @"No description found. Replace this text to add one.";
+    [[descriptionWebView mainFrame] loadHTMLString:movie && movie.synopsis ? movie.synopsis : noSynopsisEdit baseURL:[NSURL URLWithString:@""]];
+    [[overviewWebView mainFrame] loadHTMLString:movie && movie.synopsis ? movie.synopsis : noSynopsis baseURL:[NSURL URLWithString:@""]];
     
     if (!drawerView.isOpen) {
         [drawerView toggle:self];
     }
 }
 
-- (IBAction) refreshMovieInfoFromInternet:(id)sender
+- (IBAction) refreshMovieInfoFromInternetByUPC:(id)sender
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexRefreshMovieInfoFromInternet" object:movie];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexRefreshMovieInfoFromInternetByUPC" object:movie];
+}
+
+- (IBAction) refreshMovieInfoFromInternetByTitle:(id)sender
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexRefreshMovieInfoFromInternetByTitle" object:movie];
+}
+
+- (IBAction) deleteCoverArtForMovie:(id)sender
+{
+    BoxArt* b = [movie boxArt];
+    if (b) {
+        NSManagedObjectContext* c = [b managedObjectContext];
+        
+        [c deleteObject:b];
+        
+        NSError* error = nil;
+        [c save:&error];
+        
+        if (error) {
+            NSLog(@"%@", error);
+        }
+    }
+}
+
+- (IBAction) deleteMetadataForMovie:(id)sender
+{
+    
 }
 
 - (void) showHomeTab

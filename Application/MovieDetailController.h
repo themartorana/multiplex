@@ -16,9 +16,15 @@
     /**/
     IBOutlet NSBox* backgroundBox;
     IBOutlet NSView* infoPaneView;
+    
+    IBOutlet WebView* overviewWebView;
     IBOutlet WebView* descriptionWebView;
+    
     IBOutlet MovieDetailDiscsView* discsView;
+    
     IBOutlet BoxArtImageView* coverArtImageView;
+    IBOutlet BoxArtImageView* coverArtImageEditView;
+    
     IBOutlet NSSegmentedControl* tabSelector;
     IBOutlet NSTabView* infoTabView;
     IBOutlet NSTabViewItem* overviewTabViewItem;
@@ -37,8 +43,12 @@
 @property BOOL valuesAreEditable;
 
 - (IBAction) startWithMovie:(Movie*)movie;
-- (IBAction) refreshMovieInfoFromInternet:(id)sender;
 - (IBAction) selectTab:(id)sender;
+
+- (IBAction) refreshMovieInfoFromInternetByUPC:(id)sender;
+- (IBAction) refreshMovieInfoFromInternetByTitle:(id)sender;
+- (IBAction) deleteCoverArtForMovie:(id)sender;
+- (IBAction) deleteMetadataForMovie:(id)sender;
 
 - (void) showHomeTab;
 - (void) showDiscsTab;

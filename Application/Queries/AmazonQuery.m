@@ -138,6 +138,8 @@
                 " aspect_ratio='{ string($p/ItemAttributes/AspectRatio) }'" \
                 " audience_rating='{ string($p/ItemAttributes/AudienceRating) }'" \
                 " actors='{ string-join(for $n in $p/ItemAttributes/Actor return string($n), '|') }'"\
+                " directors='{ string-join(for $n in $p/ItemAttributes/Director return string($n), '|') }'" \
+                " creators='{ string-join(for $n in $p/ItemAttributes/Creator return concat(string($n),'=',string($n/@Role)), '|') }'" \
                 " review='{ string($p/EditorialReviews/EditorialReview[Source=\"Amazon.com\"][1]/Content) }'" \
                 " release_date='{ string($p/ItemAttributes/ReleaseDate) }'" \
                 " studio='{ string($p/ItemAttributes/Publisher) }'" \
@@ -185,6 +187,26 @@
                     NSArray* actors = [[[item attributeForName:@"actors"] stringValue] componentsSeparatedByString:@"|"];
                     if ([actors count]) {
                         [responseDict setObject:actors forKey:@"actors"];
+                    }
+                    
+                    NSArray* directors = [[[item attributeForName:@"directors"] stringValue] componentsSeparatedByString:@"|"];
+                    if ([directors count]) {
+                        [responseDict setObject:directors forKey:@"directors"];
+                    }
+                    
+                    NSArray* creators = [[[item attributeForName:@"creators"] stringValue] componentsSeparatedByString:@"|"];
+                    if ([creators count]) {
+                        NSMutableArray* creatorsWithRoles = [NSMutableArray array];
+                        for (NSString* creatorString in creators) {
+                            NSArray* tmpArr = [creatorString componentsSeparatedByString:@"="];
+                            if (tmpArr) {
+                                [creatorsWithRoles addObject:tmpArr];
+                            }
+                        }
+                        
+                        if ([creatorsWithRoles count]) {
+                            [responseDict setObject:[NSArray arrayWithArray:creatorsWithRoles] forKey:@"creators"];
+                        }
                     }
                     
                     NSString* synopsis = [[item attributeForName:@"synopsis"] stringValue];

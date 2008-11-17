@@ -92,6 +92,7 @@
 		55D390770E82DE72007413C5 /* Progress.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55D390760E82DE72007413C5 /* Progress.pdf */; };
 		55D9581B0E942EB300E35FF4 /* button-play-down.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55D9581A0E942EB300E35FF4 /* button-play-down.pdf */; };
 		55F815360E94082A005EF5DE /* button-play.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55F815350E94082A005EF5DE /* button-play.pdf */; };
+		55F83CFD0ECE7DDD00C68896 /* Participant.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F83CFC0ECE7DDD00C68896 /* Participant.m */; };
 		55FC9CA10EB8382000CE3F05 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55FC9CA00EB8382000CE3F05 /* Security.framework */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -510,6 +511,8 @@
 		55D390760E82DE72007413C5 /* Progress.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Progress.pdf; sourceTree = "<group>"; };
 		55D9581A0E942EB300E35FF4 /* button-play-down.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "button-play-down.pdf"; sourceTree = "<group>"; };
 		55F815350E94082A005EF5DE /* button-play.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "button-play.pdf"; sourceTree = "<group>"; };
+		55F83CFB0ECE7DDD00C68896 /* Participant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Participant.h; sourceTree = "<group>"; };
+		55F83CFC0ECE7DDD00C68896 /* Participant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Participant.m; sourceTree = "<group>"; };
 		55FC9CA00EB8382000CE3F05 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
 		55FFFE1B0EC4EF6500EE769E /* DrawerViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawerViewControllerProtocol.h; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -832,6 +835,8 @@
 			isa = PBXGroup;
 			children = (
 				5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */,
+				55F83CFB0ECE7DDD00C68896 /* Participant.h */,
+				55F83CFC0ECE7DDD00C68896 /* Participant.m */,
 				F9B8D68E0EB0BFCD008589F3 /* BoxArt.h */,
 				F9B8D68F0EB0BFCD008589F3 /* BoxArt.m */,
 				F9CA172C0E7C72930049CD3E /* Disc.h */,
@@ -1673,6 +1678,7 @@
 				F9FC49FB0EBF49C8007F2769 /* MovieLookupController.m in Sources */,
 				F92B67160EBFF00900609F16 /* IsExactlyOneValueTransformer.m in Sources */,
 				553AC77B0EC3B3D600A98A70 /* MovieDetailTokenFieldValueTransformer.m in Sources */,
+				55F83CFD0ECE7DDD00C68896 /* Participant.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -5,6 +5,7 @@
 #import "Disc.h"
 #import "BoxArt.h"
 #import "Engine.h"
+#import "Participant.h"
 #import "Activity.h"
 #import "Query.h"
 #import "ImageQuery.h"
@@ -29,6 +30,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
 - (Engine*) _findEngineByNetServiceName:(NSString*)netServiceName;
 - (void) _deleteMovieIfNoMediaRemainForAnyDisc:(Movie*)movie;
 - (NSString*) _getMovieRating:(NSDictionary*)movieInfo;
+- (Participant*)_findParticipantByName:(NSString*)name andMovie:(Movie*)movie;
 @end
 
 @interface EngineController (ImageQueryDelegate)
@@ -123,7 +125,8 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
         discEntity = [[NSEntityDescription entityForName:@"Disc" inManagedObjectContext:managedObjectContext] retain];
         movieEntity = [[NSEntityDescription entityForName:@"Movie" inManagedObjectContext:managedObjectContext] retain];
         boxArtEntity = [[NSEntityDescription entityForName:@"BoxArt" inManagedObjectContext:managedObjectContext] retain];
-
+        participantEntity = [[NSEntityDescription entityForName:@"Participant" inManagedObjectContext:managedObjectContext] retain];
+        
         [self removeOldEnginesAndAssociatedDiscsAndMedia];
         [self removeFailedBoxArt];
         [self removeDanglingDiscs];
@@ -176,6 +179,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
     [mediaEntity release];
     [discEntity release];
     [movieEntity release];
+    [participantEntity release];
     /**/
     [super dealloc];
 }
@@ -435,6 +439,20 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
     return @"N/A";
 }
 
+- (Participant*) _findParticipantByName:(NSString*)name andMovie:(Movie*)movie
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:mediaEntity];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"name == %@ && movie == %@", name, movie]]; 
+    NSError* error = nil;
+    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    [fetchRequest release];
+    if (!error && [results count]) {
+        return [results objectAtIndex:0];
+    }
+    return nil;
+}
+
 @end
 
 #pragma mark -
@@ -540,6 +558,23 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                     movie.releaseDate = [dateFormatter dateFromString:releaseDateAsString];
                 }
                 movie.rating = [self _getMovieRating:movieInfo];
+                
+                
+                /* Add in any actors, creators, etc., that we have */
+                NSArray* participants = [movieInfo objectForKey:@"participants"];
+                if (participants) {
+                    for (NSDictionary* participant in participants) {
+                        Participant* p = [self _findParticipantByName:[participant objectForKey:@"name"] andMovie:movie];
+                        if (!p) {
+                            Participant* p = [[Participant alloc] initWithEntity:participantEntity insertIntoManagedObjectContext:managedObjectContext];
+                            p.name = [participant objectForKey:@"name"];
+                            p.type = [participant objectForKey:@"type"];
+                            p.position = [participant objectForKey:@"position"];
+                            p.movie = movie;
+                        }
+                    }
+                }
+                
 
                 /*  If there is a "discs" dictionary present, enumerate it's keys,
                  *  creating disc objects and associating them with the movie that

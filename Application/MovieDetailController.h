@@ -42,6 +42,9 @@
 @property (readonly) NSColor* labelColor;
 @property BOOL valuesAreEditable;
 
+@property (readonly) NSPredicate* actorsFilter;
+@property (readonly) NSPredicate* crewFilter;
+
 - (IBAction) startWithMovie:(Movie*)movie;
 - (IBAction) selectTab:(id)sender;
 

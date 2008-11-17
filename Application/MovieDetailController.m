@@ -117,6 +117,20 @@
     [self didChangeValueForKey:@"movie"];
 }
 
+- (NSPredicate*) actorsFilter
+{
+    NSPredicate* actorsFilterPredicate = [NSPredicate predicateWithFormat:
+                                        @"%K == %@", @"type", @"actor"];
+    return actorsFilterPredicate;
+}
+
+- (NSPredicate*) crewFilter
+{
+    NSPredicate* crewFilterPredicate = [NSPredicate predicateWithFormat:
+                                        @"%K != %@", @"type", @"actor"];
+    return crewFilterPredicate;
+}
+
 - (IBAction) startWithMovie:(Movie*)_movie
 {
     [self setMovie:_movie];

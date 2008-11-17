@@ -18,6 +18,7 @@ extern NSString* const kLoadingBoxArtActivityName;
     NSEntityDescription* discEntity;
     NSEntityDescription* movieEntity;
     NSEntityDescription* boxArtEntity;
+    NSEntityDescription* participantEntity;
 }
 
 - (id) initWithManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;

@@ -17,6 +17,7 @@
     Movie* movie;
     NSManagedObjectContext* managedObjectContext;
     NSEntityDescription* boxArtEntity;
+    NSEntityDescription* participantEntity;
     
     IBOutlet NSView* searchByUPCorEANView;
     IBOutlet NSView* searchByTitleView;

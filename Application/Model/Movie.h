@@ -25,5 +25,6 @@
 @property (retain) NSString* format;
 
 @property (readonly) NSMutableSet* allDiscs;
+@property (readonly) NSMutableSet* allParticipants;
 
 @end

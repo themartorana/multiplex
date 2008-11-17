@@ -22,5 +22,6 @@
 @dynamic format;
 
 @dynamic allDiscs;
+@dynamic allParticipants;
 
 @end

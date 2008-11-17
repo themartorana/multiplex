@@ -2,6 +2,7 @@
 #import "ApplicationController.h"
 #import "DrawerView.h"
 #import "Movie.h"
+#import "Participant.h"
 #import "Activity.h"
 #import "ApplicationResources.h"
 #import "BoxArtImageView.h"
@@ -120,6 +121,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         movie = [_movie retain];
         managedObjectContext = [movie managedObjectContext];
         boxArtEntity = [NSEntityDescription entityForName:@"BoxArt" inManagedObjectContext:managedObjectContext];
+        participantEntity = [NSEntityDescription entityForName:@"Participant" inManagedObjectContext:managedObjectContext];
         [self didChangeValueForKey:@"movie"];
     }
 }
@@ -185,6 +187,44 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             movie.synopsis = [resultAtIndex objectForKey:@"synopsis"];
             movie.theatricalReleaseDate = [resultAtIndex objectForKey:@"theatricalReleaseDate"] ? [NSDate dateFromShortDateString:[resultAtIndex objectForKey:@"theatricalReleaseDate"]] : nil;
             movie.productionYear = movie.theatricalReleaseDate ? [NSNumber numberWithInt:[[movie.theatricalReleaseDate descriptionWithCalendarFormat:@"%Y" timeZone:nil locale:nil] intValue]] : nil;
+            
+            // Add in the actors
+            for (Participant* p in movie.allParticipants) {
+                [managedObjectContext deleteObject:p];
+            }
+            NSArray* actors = [resultAtIndex objectForKey:@"actors"];
+            if (actors) {
+                for (NSString* name in actors) {
+                    Participant* p = [[Participant alloc] initWithEntity:participantEntity insertIntoManagedObjectContext:managedObjectContext];
+                    p.name = name;
+                    p.type = @"actor";
+                    p.movie = movie;
+                }
+            }
+            NSArray* directors = [resultAtIndex objectForKey:@"directors"];
+            if (directors) {
+                for (NSString* name in directors) {
+                    Participant* p = [[Participant alloc] initWithEntity:participantEntity insertIntoManagedObjectContext:managedObjectContext];
+                    p.name = name;
+                    p.type = @"director";
+                    p.position  = @"Director";
+                    p.movie = movie;
+                }
+            }
+            NSArray* creators = [resultAtIndex objectForKey:@"creators"];
+            if (creators) {
+                for (NSArray* creator in creators) {
+                    Participant* p = [[Participant alloc] initWithEntity:participantEntity insertIntoManagedObjectContext:managedObjectContext];
+                    p.name = [creator objectAtIndex:0];
+                    p.type = @"creator";
+                    
+                    if ([creator count] > 1) {
+                        p.position = [creator objectAtIndex:1];                        
+                    }
+
+                    p.movie = movie;
+                }
+            }
             
             if (AmazonQueryTypeEAN == amazonQueryType) {
                 NSMutableString* gtin = [NSMutableString stringWithString:[eanTextField stringValue]];

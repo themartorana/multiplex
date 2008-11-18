@@ -61,7 +61,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (BOOL) relinquishControl
 {
-    if ([[movie managedObjectContext] hasChanges]) {
+    if ([managedObjectContext hasChanges]) {
         
         NSString* dirtyInfo = @"You have not selected a result as your movie.";
         NSMutableString* dirtyExplain = [NSMutableString string];
@@ -113,7 +113,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (void) setMovie:(Movie*)_movie
 {
-    NSLog(@"is dirty: %d", [[_movie managedObjectContext] hasChanges]);
+    NSLog(@"is dirty: %d, is fault: %d", [[_movie managedObjectContext] hasChanges], [_movie isFault]);
     
     if (movie != _movie) {
         [self willChangeValueForKey:@"movie"];
@@ -309,8 +309,6 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (IBAction) skipToManualEntry:(id)sender
 {
-    //[[movie managedObjectContext] rollback];
-    //[managedObjectContext refreshObject:movie mergeChanges:NO];
     [applicationController showMovieDetailAndSelectHomeTabForMovie:movie];
 }
 
@@ -364,16 +362,15 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (IBAction) backToSearch:(id)sender
 {
-    [[movie managedObjectContext] rollback];
-    [self saveManagedObjectContext];
+    [managedObjectContext rollback];
+    [managedObjectContext processPendingChanges];
     [drawerView setContentView:searchByUPCorEANView];
-    
 }
 
 - (void) saveManagedObjectContext
 {
     NSError* error = nil;
-    [[movie managedObjectContext] save:&error];
+    [managedObjectContext save:&error];
     
     if (error) {
         NSLog(@"%@", [error userInfo]);

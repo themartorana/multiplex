@@ -184,26 +184,25 @@
                         [responseDict setObject:audienceRating forKey:@"audienceRating"];
                     }
                     
-                    NSArray* actors = [[[item attributeForName:@"actors"] stringValue] componentsSeparatedByString:@"|"];
+                    NSArray* actors = [[[[item attributeForName:@"actors"] stringValue] componentsSeparatedByString:@"|"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]];
                     if ([actors count]) {
                         [responseDict setObject:actors forKey:@"actors"];
                     }
                     
-                    NSArray* directors = [[[item attributeForName:@"directors"] stringValue] componentsSeparatedByString:@"|"];
+                    NSArray* directors = [[[[item attributeForName:@"directors"] stringValue] componentsSeparatedByString:@"|"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]];
                     if ([directors count]) {
                         [responseDict setObject:directors forKey:@"directors"];
                     }
                     
-                    NSArray* creators = [[[item attributeForName:@"creators"] stringValue] componentsSeparatedByString:@"|"];
+                    NSArray* creators = [[[[item attributeForName:@"creators"] stringValue] componentsSeparatedByString:@"|"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"not SELF beginswith '='"]];
                     if ([creators count]) {
                         NSMutableArray* creatorsWithRoles = [NSMutableArray array];
                         for (NSString* creatorString in creators) {
                             NSArray* tmpArr = [creatorString componentsSeparatedByString:@"="];
-                            if (tmpArr) {
+                            if (tmpArr && [[tmpArr objectAtIndex:0] length]) {
                                 [creatorsWithRoles addObject:tmpArr];
                             }
                         }
-                        
                         if ([creatorsWithRoles count]) {
                             [responseDict setObject:[NSArray arrayWithArray:creatorsWithRoles] forKey:@"creators"];
                         }

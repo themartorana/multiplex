@@ -338,10 +338,11 @@
 
 - (void) showMovieDetailForMovie:(Movie*)movie
 {
+    [movies setSelectedObjects:[NSArray arrayWithObject:movie]];
     if (!movieDetailController) {
         movieDetailController = [[MovieDetailController alloc] initWithApplicationController:self drawerView:drawerView];
     }
-    [movieDetailController startWithMovie:selectedMovie];
+    [movieDetailController startWithMovie:movie];
     [self setCurrentDrawerViewController:(DrawerViewControllerProtocol*)movieDetailController];
 }
 
@@ -359,10 +360,11 @@
 
 - (void) showMovieLookupForMovie:(Movie*)movie byTitle:(BOOL)byTitle
 {
+    [movies setSelectedObjects:[NSArray arrayWithObject:movie]];
     if (!movieLookupController) {
         movieLookupController = [[MovieLookupController alloc] initWithApplicationController:self drawerView:drawerView];
     }
-    [movieLookupController startWithMovie:selectedMovie];
+    [movieLookupController startWithMovie:movie];
     [self setCurrentDrawerViewController:(DrawerViewControllerProtocol*)movieLookupController];
     
     if (byTitle) {

@@ -9,6 +9,7 @@
 @dynamic number;
 @dynamic side;
 @dynamic synopsis;
+@dynamic discTitle;
 @dynamic availableMediaCount;
 @dynamic localMediaCount;
 

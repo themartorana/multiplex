@@ -7,6 +7,7 @@
 #import "ApplicationResources.h"
 #import "BoxArtImageView.h"
 #import "BoxArt.h"
+#import "MovieURL.h"
 
 #import "AmazonQuery.h"
 #import "ImageQuery.h"
@@ -122,6 +123,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         managedObjectContext = [movie managedObjectContext];
         boxArtEntity = [NSEntityDescription entityForName:@"BoxArt" inManagedObjectContext:managedObjectContext];
         participantEntity = [NSEntityDescription entityForName:@"Participant" inManagedObjectContext:managedObjectContext];
+        movieURLEntity = [NSEntityDescription entityForName:@"MovieURL" inManagedObjectContext:managedObjectContext];
         [self didChangeValueForKey:@"movie"];
     }
 }
@@ -176,7 +178,6 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                 movie.genre = [NSString stringWithObjectAsJSON:arr];
             }
             
-            
             movie.metadataAcceptedDate = [NSDate date];
             movie.releaseDate = [resultAtIndex objectForKey:@"releaseDate"] ? [NSDate dateFromShortDateString:[resultAtIndex objectForKey:@"releaseDate"]] : nil;
             movie.rating = [resultAtIndex objectForKey:@"audienceRating"];
@@ -224,6 +225,18 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
                     p.movie = movie;
                 }
+            }
+            
+            // Add in the URL
+            for (MovieURL* url in movie.allMovieURLs) {
+                [managedObjectContext deleteObject:url];
+            }
+            NSString* amazonURL = [resultAtIndex objectForKey:@"_detailPageURL"];
+            if (amazonURL) {
+                MovieURL* url = [[MovieURL alloc] initWithEntity:movieURLEntity insertIntoManagedObjectContext:managedObjectContext];
+                url.url = amazonURL;
+                url.siteName = @"Amazon";
+                url.movie = movie;
             }
             
             if (AmazonQueryTypeEAN == amazonQueryType) {
@@ -326,6 +339,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (IBAction) selectResult:(id)sender
 {
+    movie.metadataAcceptedDate = [NSDate date];
     [self saveManagedObjectContext];
     [applicationController showMovieDetailAndSelectHomeTabForMovie:movie];
 }

@@ -7,6 +7,8 @@
 #import "ApplicationController.h"
 #import "DrawerView.h"
 #import "BoxArt.h"
+#import "MovieURL.h"
+#import "Disc.h"
 #import "LayerBackedButtonView.h"
 
 #import <WebKit/WebKit.h>
@@ -17,10 +19,15 @@
 - (void) _saveObjectContext;
 @end
 
+@interface MovieDetailController (Private)
+- (MovieURL*) getAmazonURL;
+@end
+
 @implementation MovieDetailController
 @synthesize movie;
 @synthesize labelColor;
 @synthesize valuesAreEditable;
+@synthesize isAvailableFromAmazon;
 
 - (id) initWithApplicationController:(ApplicationController*)_applicationController drawerView:(DrawerView*)_drawerView;
 {
@@ -93,6 +100,7 @@
 - (void) _saveObjectContext
 {
     NSError* error = nil;
+    movie.metadataAcceptedDate = [NSDate date];
     [[movie managedObjectContext] save:&error];
     
     if (error) {
@@ -115,6 +123,34 @@
     movie = [_movie retain];
     [discsView setMovie:movie];
     [self didChangeValueForKey:@"movie"];
+    
+    if ([self getAmazonURL]) {
+        [self setIsAvailableFromAmazon:YES];
+    }
+    else {
+        [self setIsAvailableFromAmazon:NO];
+    }
+}
+
+- (MovieURL*) getAmazonURL
+{
+    if (!movie) {
+        return NO;
+    }
+    
+    NSManagedObjectContext* managedObjectContext = [movie managedObjectContext];
+    NSEntityDescription* movieURLEntity = [NSEntityDescription entityForName:@"MovieURL" inManagedObjectContext:managedObjectContext];
+    
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:movieURLEntity];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"movie == %@ and siteName = %@", movie, @"Amazon"]]; 
+    NSError* error = nil;
+    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    [fetchRequest release];
+    if (!error && [results count]) {
+        return [results objectAtIndex:0];
+    }
+    return nil; 
 }
 
 - (NSPredicate*) actorsFilter
@@ -129,6 +165,11 @@
     NSPredicate* crewFilterPredicate = [NSPredicate predicateWithFormat:
                                         @"%K != %@", @"type", @"actor"];
     return crewFilterPredicate;
+}
+
+- (NSSortDescriptor*) discsSortDescriptor
+{
+    return [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"number" ascending:YES]];;
 }
 
 - (IBAction) startWithMovie:(Movie*)_movie
@@ -175,6 +216,22 @@
 - (IBAction) deleteMetadataForMovie:(id)sender
 {
     
+}
+
+- (IBAction) buyFromAmazon:(id)sender
+{
+    MovieURL* url = [self getAmazonURL];
+    NSString* urlString = url.url;
+    NSURL* nsurl = [NSURL URLWithString:urlString];
+    
+    [[NSWorkspace sharedWorkspace] openURL:nsurl];
+}
+
+- (IBAction) playDisc:(id)obj
+{
+    if ([obj isKindOfClass:[Disc class]]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayDisc" object:obj];
+    }
 }
 
 - (void) showHomeTab

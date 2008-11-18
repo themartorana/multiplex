@@ -14,6 +14,7 @@
 @property (retain) NSString* synopsis;
 @property (retain) NSNumber* availableMediaCount;
 @property (retain) NSNumber* localMediaCount;
+@property (retain) NSString* discTitle;
 
 @property (readonly) NSMutableSet* allMedia;
 

@@ -23,5 +23,6 @@
 
 @dynamic allDiscs;
 @dynamic allParticipants;
+@dynamic allMovieURLs;
 
 @end

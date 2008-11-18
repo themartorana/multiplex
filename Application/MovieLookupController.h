@@ -10,6 +10,7 @@
 @class Movie;
 @class BoxArtImageView;
 @class MovieDetailController;
+@class MovieURL;
 
 @interface MovieLookupController : NSObject <DrawerViewControllerProtocol> {
     ApplicationController* applicationController;
@@ -18,6 +19,7 @@
     NSManagedObjectContext* managedObjectContext;
     NSEntityDescription* boxArtEntity;
     NSEntityDescription* participantEntity;
+    NSEntityDescription* movieURLEntity;
     
     IBOutlet NSView* searchByUPCorEANView;
     IBOutlet NSView* searchByTitleView;

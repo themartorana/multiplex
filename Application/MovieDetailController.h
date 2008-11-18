@@ -34,6 +34,8 @@
     Movie* movie;
     NSColor* labelColor;
     BOOL valuesAreEditable;
+    
+    BOOL isAvailableFromAmazon;
 }
 
 - (id) initWithApplicationController:(ApplicationController*)_applicationController drawerView:(DrawerView*)_drawerView;
@@ -41,9 +43,13 @@
 @property (retain) Movie* movie;
 @property (readonly) NSColor* labelColor;
 @property BOOL valuesAreEditable;
+@property BOOL isAvailableFromAmazon;
 
+/* Fake properties */
 @property (readonly) NSPredicate* actorsFilter;
 @property (readonly) NSPredicate* crewFilter;
+@property (readonly) NSSortDescriptor* discsSortDescriptor;
+
 
 - (IBAction) startWithMovie:(Movie*)movie;
 - (IBAction) selectTab:(id)sender;
@@ -52,6 +58,9 @@
 - (IBAction) refreshMovieInfoFromInternetByTitle:(id)sender;
 - (IBAction) deleteCoverArtForMovie:(id)sender;
 - (IBAction) deleteMetadataForMovie:(id)sender;
+- (IBAction) buyFromAmazon:(id)sender;
+
+- (IBAction) playDisc:(id)obj;
 
 - (void) showHomeTab;
 - (void) showDiscsTab;

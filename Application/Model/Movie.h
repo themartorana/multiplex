@@ -26,5 +26,6 @@
 
 @property (readonly) NSMutableSet* allDiscs;
 @property (readonly) NSMutableSet* allParticipants;
+@property (readonly) NSMutableSet* allMovieURLs;
 
 @end

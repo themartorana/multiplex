@@ -37,14 +37,14 @@
     NSManagedObjectContext* engineManagedObjectContext;
     /**/
     Movie* selectedMovie;
-    
+    NSString* searchQuery;
     NSView* viewInFullScreen;
-    
     IBOutlet NSButton* fullScreenButton;
     
     DrawerViewControllerProtocol* currentDrawerViewController;
 }
 
+@property (retain) NSString* searchQuery;
 @property (retain) Movie* selectedMovie;
 @property (readonly) NSManagedObjectContext* appManagedObjectContext;
 @property (retain) NSDictionary* parameters;

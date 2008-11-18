@@ -30,6 +30,7 @@
 #import <Security/Security.h>
 
 @implementation ApplicationController
+@synthesize searchQuery;
 @synthesize parameters;
 @synthesize appManagedObjectContext;
 @synthesize selectedMovie;
@@ -488,6 +489,20 @@
         SUUpdater* updater = [SUUpdater sharedUpdater];
         [updater setDelegate:self];
     }    
+}
+
+- (void) setSearchQuery:(NSString*)_searchQuery
+{
+    if (_searchQuery != searchQuery) {
+        [searchQuery release];
+        searchQuery = [_searchQuery retain];
+        if (searchQuery) {
+            movies.filterPredicate = [NSPredicate predicateWithFormat:@"(title beginswith[c] %@) or (title contains[c] %@)", searchQuery, [@" " stringByAppendingString:searchQuery]];
+        } else {
+            movies.filterPredicate = nil;
+        }
+        NSLog(@"%@", movies.filterPredicate);
+    }
 }
 
 - (void) _licensingAlertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo

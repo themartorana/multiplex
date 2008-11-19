@@ -30,8 +30,6 @@
     NSArray* amazonQueryResults;
     NSNumber* resultIndex;
     
-    IBOutlet NSTextField* eanTextField;
-    IBOutlet NSTextField* titleTextField;
     IBOutlet NSTextField* searchResultsMovieTitle;
     IBOutlet BoxArtImageView* searchResultsBoxArt;
     IBOutlet NSSegmentedControl* backAndForwardButtons;
@@ -39,6 +37,9 @@
     IBOutlet NSBox* resultsBox;
     
     IBOutlet WebView* searchResultsDescriptionWebView; 
+    
+    NSString* gtinToSearch;
+    NSString* titleToSearch;
 }
 
 @property (retain) Movie* movie;
@@ -46,6 +47,10 @@
 @property (retain) NSNumber* resultIndex;
 @property (readonly) NSString* resultViewLineOneText;
 @property (readonly) NSString* resultViewLineTwoText;
+
+@property (retain) NSString* gtinToSearch;
+@property (retain) NSString* titleToSearch;
+
 
 - (id) initWithApplicationController:(ApplicationController*)_applicationController drawerView:(DrawerView*)_drawerView;
 

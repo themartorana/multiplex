@@ -31,6 +31,8 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 @synthesize movie;
 @synthesize amazonQueryResults;
 @synthesize resultIndex;
+@synthesize gtinToSearch;
+@synthesize titleToSearch;
 
 + (NSSet*) keyPathsForValuesAffectingValueForKey:(NSString*)keyPath
 {
@@ -243,7 +245,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             }
             
             if (AmazonQueryTypeEAN == amazonQueryType) {
-                NSMutableString* gtin = [NSMutableString stringWithString:[eanTextField stringValue]];
+                NSMutableString* gtin = [NSMutableString stringWithString:[self gtinToSearch]];
                 while ([gtin length] < 14) {
                     [gtin insertString:@"0" atIndex:0];
                 }
@@ -273,17 +275,15 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     [self setAmazonQueryResults:nil];
      
     NSString* gtin = movie.gtin;
-    if (gtin) {
+    if ([gtin length]) {
         if ([gtin length] == 14 && [gtin characterAtIndex:0] == '0') {
             gtin = [gtin substringFromIndex:1];
         }        
-    } else {
-        gtin = @"";
     }
-    [eanTextField setStringValue:gtin];
+    [self setGtinToSearch:gtin];
 
     NSString* title = movie.title;
-    if (title) {
+    if ([title length]) {
         int indexOfParen = [title rangeOfString:@"("].location;
         if (indexOfParen != NSNotFound) {
             title = [title substringToIndex:indexOfParen];
@@ -293,9 +293,9 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             title = [title substringToIndex:indexOfDash];
         }
     } else {
-        title = @"";
+        title = nil;
     }
-    [titleTextField setStringValue:title];
+    [self setTitleToSearch:title];
 
     [drawerView setContentView:searchByUPCorEANView];
 }
@@ -317,7 +317,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (IBAction) lookUpByUPCorEAN:(id)sender
 {
-    NSMutableString* ean = [NSMutableString stringWithString:[eanTextField stringValue]];
+    NSMutableString* ean = [NSMutableString stringWithString:[self gtinToSearch]];
     while ([ean length] < 13) {
         [ean insertString:@"0" atIndex:0];
     }
@@ -334,7 +334,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 {
     [self setAmazonQueryResults:nil];
     [self setResultIndex:nil];
-    [AmazonQuery amazonQueryWithAccessKey:kAmazonAccessKey titleKeywords:[titleTextField stringValue] delegate:self userInfo:[Activity activityWithName:@"Looking up by title" userInfo:nil] startImmediately:YES];
+    [AmazonQuery amazonQueryWithAccessKey:kAmazonAccessKey titleKeywords:[self titleToSearch] delegate:self userInfo:[Activity activityWithName:@"Looking up by title" userInfo:nil] startImmediately:YES];
     [drawerView setContentView:searchingView];
 }
 
@@ -382,7 +382,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (void) showNoResultsSheet
 {
-    NSString* upc = [eanTextField stringValue];
+    NSString* upc = [self gtinToSearch];
     NSString* message = nil;
     
     if (upc && [upc length]) {
@@ -391,7 +391,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         message = @"No results were found.";
     }
     NSAlert* alert = [NSAlert alertWithMessageText:message defaultButton:@"Ok" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Please check your information and try again.."];
-    [alert beginSheetModalForWindow:[eanTextField window] modalDelegate:nil didEndSelector:nil contextInfo:nil];    
+    [alert beginSheetModalForWindow:[searchResultsView window] modalDelegate:nil didEndSelector:nil contextInfo:nil];    
 }
 
 #pragma mark "AmazonQuery delegate methods"

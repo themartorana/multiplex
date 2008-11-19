@@ -195,9 +195,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             movie.productionYear = movie.theatricalReleaseDate ? [NSNumber numberWithInt:[[movie.theatricalReleaseDate descriptionWithCalendarFormat:@"%Y" timeZone:nil locale:nil] intValue]] : nil;
             
             // Add in the actors
-            for (Participant* p in movie.allParticipants) {
-                [managedObjectContext deleteObject:p];
-            }
+            [movie.allParticipants removeAllObjects];
             NSArray* actors = [resultAtIndex objectForKey:@"actors"];
             if (actors) {
                 for (NSString* name in actors) {
@@ -233,9 +231,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             }
             
             // Add in the URL
-            for (MovieURL* url in movie.allMovieURLs) {
-                [managedObjectContext deleteObject:url];
-            }
+            [movie.allMovieURLs removeAllObjects];
             NSString* amazonURL = [resultAtIndex objectForKey:@"_detailPageURL"];
             if (amazonURL) {
                 MovieURL* url = [[MovieURL alloc] initWithEntity:movieURLEntity insertIntoManagedObjectContext:managedObjectContext];
@@ -378,6 +374,9 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     
     if (error) {
         NSLog(@"%@", [error userInfo]);
+        for (NSError* e in [error.userInfo objectForKey:NSDetailedErrorsKey]) {
+            NSLog(@"%@: %@", e, e.userInfo);
+        }
     }
 }
 

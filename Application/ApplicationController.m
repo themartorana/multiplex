@@ -121,8 +121,11 @@
         
         engineManagedObjectContext = [[NSManagedObjectContext alloc] init];
         [engineManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
+        [engineManagedObjectContext setPropagatesDeletesAtEndOfEvent:NO];
+        
         appManagedObjectContext = [[NSManagedObjectContext alloc] init];
         [appManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
+        [appManagedObjectContext setPropagatesDeletesAtEndOfEvent:NO];
 
         NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
         [notificationCenter addObserver:self selector:@selector(engineControllerObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:engineManagedObjectContext];
@@ -133,20 +136,12 @@
 
 - (void) engineControllerObjectContextDidSave:(NSNotification*)saveNotification 
 {
-    @try {
-        [appManagedObjectContext mergeChangesFromContextDidSaveNotification:saveNotification];
-    } @catch (id exception) {
-        NSLog(@"%@", exception);
-    }
+    [appManagedObjectContext performSelectorOnMainThread:@selector(mergeChangesFromContextDidSaveNotification:) withObject:saveNotification waitUntilDone:NO];
 }
 
 - (void) appControllerObjectContextDidSave:(NSNotification*)saveNotification 
 {
-    @try {
-        [engineManagedObjectContext mergeChangesFromContextDidSaveNotification:saveNotification];
-    } @catch (id exception) {
-        NSLog(@"%@", exception);
-    }
+    [engineManagedObjectContext performSelectorOnMainThread:@selector(mergeChangesFromContextDidSaveNotification:) withObject:saveNotification waitUntilDone:NO];
 }
 
 - (void) dealloc 

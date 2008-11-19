@@ -18,6 +18,23 @@
 #import <netinet/ip.h>
 #import <netinet/ip6.h>
 
+@interface NSManagedObjectContext (Extras)
+- (void) saveAndPrintErrors;
+@end
+
+@implementation NSManagedObjectContext (Extras)
+- (void) saveAndPrintErrors
+{
+    NSError* error = nil;
+    [self save:&error];
+    if (error) {
+        NSLog(@"%@", error);
+        [self rollback];
+    }
+}
+@end
+
+
 NSString* const kLoadingBoxArtActivityName = @"LoadingCoverArtActivity";
 NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
 
@@ -72,7 +89,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
             }
             [managedObjectContext deleteObject:engine];
         }
-        [managedObjectContext save:nil];
+        [managedObjectContext saveAndPrintErrors];
     }
     [fetchRequest release];
 }
@@ -87,7 +104,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
         for (BoxArt* boxArt in results) {
             [managedObjectContext deleteObject:boxArt];
         }
-        [managedObjectContext save:nil];
+        [managedObjectContext saveAndPrintErrors];
     }
     [fetchRequest release];
 }
@@ -105,7 +122,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
         for (Disc* disc in results) {
             [managedObjectContext deleteObject:disc];
         }
-        [managedObjectContext save:nil];
+        [managedObjectContext saveAndPrintErrors];
     }
     [fetchRequest release];
 }
@@ -220,12 +237,14 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
     if (protocol) {
         return YES;
     }
-    @synchronized (managedObjectContext) {
+    
+    [managedObjectContext lock];
+    @try {
         NSNetService* netService = [netServiceByName objectForKey:engine.netServiceName];
         NSAssert(netService, @"no net service?");
         
         engine.status = @"Connecting";
-        [managedObjectContext save:nil];
+        [managedObjectContext saveAndPrintErrors];
         for (NSData* address in [netService addresses]) {
             const struct sockaddr* a = [address bytes];
             int fd = socket(a->sa_family, SOCK_STREAM, 0);
@@ -253,17 +272,23 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
         } else {
             engine.status = @"Not Connected";
         }
-        [managedObjectContext save:nil];
+        [managedObjectContext saveAndPrintErrors];
+    } @catch (id exception) {
+        [managedObjectContext rollback];
+    } @finally {
+        [managedObjectContext unlock];
     }
+
     return protocol != nil;
 }
 
 - (void) disconnectEngine:(Engine*)engine
 {
     NSAssert(engine, @"no engine?");
-    @synchronized (managedObjectContext) {
+    [managedObjectContext lock];
+    @try {
         engine.status = @"Disconnecting";
-        [managedObjectContext save:nil];
+        [managedObjectContext saveAndPrintErrors];
         
         MessageProtocol* protocol = [protocolsByUUID objectForKey:engine.uuid];
         if (protocol) {
@@ -278,7 +303,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
         }
         
         engine.status = @"Not Connected";
-        [managedObjectContext save:nil];
+        [managedObjectContext saveAndPrintErrors];
 
         BOOL isLocalMachine = [localMachineUUID isEqualToString:engine.uuid];
         for (Media* media in [engine allMedia]) {
@@ -304,9 +329,11 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                 }
             }
         }
-        NSError* error = nil;
-        [managedObjectContext save:&error];
-        NSLog(@"%@ -- %@", error, error.userInfo);
+        [managedObjectContext saveAndPrintErrors];
+    } @catch (id exception) {
+        [managedObjectContext rollback];
+    } @finally {
+        [managedObjectContext unlock];
     }
 }
 
@@ -469,157 +496,157 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
 - (void) JSONQuery:(JSONQuery*)query didReceiveObject:(id)object userInfo:(id)userInfo
 {
     Activity* activity = userInfo;
-    @synchronized (managedObjectContext) {
-        @try {
-            NSDictionary* info = object;
-            NSDictionary* movieInfo = [info objectForKey:@"movie"];
+    [managedObjectContext lock];
+    @try {
+        NSDictionary* info = object;
+        NSDictionary* movieInfo = [info objectForKey:@"movie"];
+        
+        /*  Find the disc that's represented by our fingerprint.
+         */
+        Media* media = (Media*)[managedObjectContext objectWithID:activity.userInfo]; 
+        if (media) {
+            Disc* disc = media.disc;
+            Movie* movie = disc.movie;
             
-            /*  Find the disc that's represented by our fingerprint.
+            /*  If there is a "discs" dictionary present, enumerate it's keys,
+             *  creating disc objects and associating them with the movie that
+             *  we're attaching ourselves to.
              */
-            Media* media = (Media*)[managedObjectContext objectWithID:activity.userInfo]; 
-            if (media) {
-                Disc* disc = media.disc;
-                
-                /*  Figure out which movie to attach this disc to.  We may have 
-                 *  created a temporary movie that could need to be deleted if 
-                 *  another already exists with a particular GTIN.
-                 */
-                NSString* gtin = [movieInfo objectForKey:@"gtin"];
-                Movie* movie = gtin ? [self _findMovieByGTIN:gtin] : nil;
-                if (movie) {
-                    Movie* oldMovie = disc.movie;
-                    if ([movie isNotEqualTo:oldMovie]) {
-                        disc.movie = movie;
-                        if (oldMovie) {
-                            [self _deleteMovieIfNoMediaRemainForAnyDisc:oldMovie];
-                        }
+            NSDictionary* discInfo = [movieInfo objectForKey:@"discs"];
+            for (NSString* discInfoFingerprint in discInfo) {
+                NSDictionary* otherDiscInfo = [discInfo objectForKey:discInfoFingerprint];
+                Disc* disc = [self _findDiscByFingerprint:discInfoFingerprint];
+                if (!disc) {
+                    disc = [[[Disc alloc] initWithEntity:discEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
+                    disc.fingerprint = discInfoFingerprint;
+                }
+                NSString* tag = [otherDiscInfo objectForKey:@"tag"];
+                if (tag && [tag length] == 2) {
+                    int number = [tag characterAtIndex:0] - '0';
+                    if (number >= 1 && number <= 9) {
+                        disc.number = [NSNumber numberWithInt:number];
                     }
-                } else {
+                    disc.side = [tag substringFromIndex:1];
+                }
+                NSString* synopsis = [otherDiscInfo objectForKey:@"description"];
+                if ([synopsis length]) {
+                    disc.synopsis = synopsis;
+                }
+                Movie* movieForDisc = disc.movie;
+                if (!movie) {
+                    movie = movieForDisc;
+                } else if (movie != movieForDisc) {
+                    disc.movie = movie;
+                    if (movieForDisc) {
+                        [self _deleteMovieIfNoMediaRemainForAnyDisc:movieForDisc];
+                    }
+                }
+            }
+            
+            /*  Figure out which movie to attach this disc to.  We may have 
+             *  created a temporary movie that could need to be deleted if 
+             *  another already exists with a particular GTIN.
+             */
+            NSString* gtin = [movieInfo objectForKey:@"gtin"];
+            if (!movie) {
+                movie = gtin ? [self _findMovieByGTIN:gtin] : nil;
+                if (!movie) {
                     movie = disc.movie;
                     if (!movie) {
                         movie = [[[Movie alloc] initWithEntity:movieEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
                     }
-                    if (gtin) {
-                        movie.gtin = gtin;
-                    }
                 }
-                
-                /*  Set any movie-related properties.
-                 */
-                NSString* aspectRatio = [movieInfo objectForKey:@"aspectRatio"];
-                if ([aspectRatio length]) {
-                    movie.aspectRatio = aspectRatio;
-                }
-                NSString* review = [movieInfo objectForKey:@"review"];
-                if ([review length]) {
-                    movie.review = review;
-                }
-                NSString* synopsis = [movieInfo objectForKey:@"synopsis"];
-                if ([synopsis length]) {
-                    movie.synopsis = synopsis;
-                }
-                NSString* title = [movieInfo objectForKey:@"title"];
-                if ([title length]) {
-                    movie.title = title;
-                }
-                id genre = [movieInfo objectForKey:@"genre"];
-                if ([genre isKindOfClass:[NSString class]]) {
-                    genre = [genre componentsSeparatedByString:@","];
-                }
-                if ([genre isKindOfClass:[NSArray class]] && [(NSArray*)genre count]) {
-                    movie.genre = [NSString stringWithObjectAsJSON:genre];
-                }
-                NSString* studio = [movieInfo objectForKey:@"studio"];
-                if ([studio length]) {
-                    movie.studio = studio;
-                }
-                NSNumber* productionYear = [movieInfo objectForKey:@"productionYear"];
-                if (productionYear) {
-                    movie.productionYear = productionYear;
-                }
-                NSNumber* runningTime = [movieInfo objectForKey:@"runningTime"];
-                if (runningTime) {
-                    movie.runningTime = runningTime;
-                }
-                NSNumber* regionCode = [movieInfo objectForKey:@"regionCode"];
-                if (regionCode) {
-                    movie.regionCode = regionCode;
-                }
-                NSNumber* starRating = [movieInfo objectForKey:@"starRating"];
-                if (starRating) {
-                    movie.starRating = starRating;
-                }
-                NSString* theatricalReleaseDateAsString = [movieInfo objectForKey:@"theatricalReleaseDate"];
-                if ([theatricalReleaseDateAsString length]) {
-                    movie.theatricalReleaseDate = [dateFormatter dateFromString:theatricalReleaseDateAsString];
-                }
-                NSString* releaseDateAsString = [movieInfo objectForKey:@"releaseDate"];
-                if ([releaseDateAsString length]) {
-                    movie.releaseDate = [dateFormatter dateFromString:releaseDateAsString];
-                }
-                movie.rating = [self _getMovieRating:movieInfo];
-                
-                
-                /* Add in any actors, creators, etc., that we have */
-                NSArray* participants = [movieInfo objectForKey:@"participants"];
-                if (participants) {
-                    for (NSDictionary* participant in participants) {
-                        Participant* p = [self _findParticipantByName:[participant objectForKey:@"name"] andMovie:movie];
-                        if (!p) {
-                            Participant* p = [[Participant alloc] initWithEntity:participantEntity insertIntoManagedObjectContext:managedObjectContext];
-                            p.name = [participant objectForKey:@"name"];
-                            p.type = [participant objectForKey:@"type"];
-                            p.position = [participant objectForKey:@"position"];
-                            p.movie = movie;
-                        }
-                    }
-                }
-                
+            }
+            if ([gtin isNotEqualTo:movie.gtin]) {
+                movie.gtin = gtin;
+            }
 
-                /*  If there is a "discs" dictionary present, enumerate it's keys,
-                 *  creating disc objects and associating them with the movie that
-                 *  we're attaching ourselves to.
-                 */
-                NSDictionary* discInfo = [movieInfo objectForKey:@"discs"];
-                for (NSString* discInfoFingerprint in discInfo) {
-                    NSDictionary* otherDiscInfo = [discInfo objectForKey:discInfoFingerprint];
-                    Disc* disc = [self _findDiscByFingerprint:discInfoFingerprint];
-                    if (!disc) {
-                        disc = [[[Disc alloc] initWithEntity:discEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
-                        disc.fingerprint = discInfoFingerprint;
-                    }
-                    NSString* tag = [otherDiscInfo objectForKey:@"tag"];
-                    if (tag && [tag length] == 2) {
-                        int number = [tag characterAtIndex:0] - '0';
-                        if (number >= 1 && number <= 9) {
-                            disc.number = [NSNumber numberWithInt:number];
-                        }
-                        disc.side = [tag substringFromIndex:1];
-                    }
-                    NSString* synopsis = [otherDiscInfo objectForKey:@"description"];
-                    if ([synopsis length]) {
-                        disc.synopsis = synopsis;
-                    }
-                    Movie* movieForDisc = disc.movie;
-                    if (movie != movieForDisc) {
-                        disc.movie = movie;
-                        if (movieForDisc) {
-                            [self _deleteMovieIfNoMediaRemainForAnyDisc:movieForDisc];
-                        }
-                    }
+            Movie* oldMovie = disc.movie;
+            if ([movie isNotEqualTo:oldMovie]) {
+                disc.movie = movie;
+                if (oldMovie) {
+                    [self _deleteMovieIfNoMediaRemainForAnyDisc:oldMovie];
                 }
             }
             
-            NSError* error = nil;
-            [managedObjectContext save:&error];
-            if (error) {
-                NSLog(@"%@", error);
+            /*  Set any movie-related properties.
+             */
+            NSString* aspectRatio = [movieInfo objectForKey:@"aspectRatio"];
+            if ([aspectRatio length]) {
+                movie.aspectRatio = aspectRatio;
             }
-        } @catch (id exception) {
-            [managedObjectContext rollback];
-        } @finally {
-            [activity terminate];
+            NSString* review = [movieInfo objectForKey:@"review"];
+            if ([review length]) {
+                movie.review = review;
+            }
+            NSString* synopsis = [movieInfo objectForKey:@"synopsis"];
+            if ([synopsis length]) {
+                movie.synopsis = synopsis;
+            }
+            NSString* title = [movieInfo objectForKey:@"title"];
+            if ([title length]) {
+                movie.title = title;
+            }
+            id genre = [movieInfo objectForKey:@"genre"];
+            if ([genre isKindOfClass:[NSString class]]) {
+                genre = [genre componentsSeparatedByString:@","];
+            }
+            if ([genre isKindOfClass:[NSArray class]] && [(NSArray*)genre count]) {
+                movie.genre = [NSString stringWithObjectAsJSON:genre];
+            }
+            NSString* studio = [movieInfo objectForKey:@"studio"];
+            if ([studio length]) {
+                movie.studio = studio;
+            }
+            NSNumber* productionYear = [movieInfo objectForKey:@"productionYear"];
+            if (productionYear) {
+                movie.productionYear = productionYear;
+            }
+            NSNumber* runningTime = [movieInfo objectForKey:@"runningTime"];
+            if (runningTime) {
+                movie.runningTime = runningTime;
+            }
+            NSNumber* regionCode = [movieInfo objectForKey:@"regionCode"];
+            if (regionCode) {
+                movie.regionCode = regionCode;
+            }
+            NSNumber* starRating = [movieInfo objectForKey:@"starRating"];
+            if (starRating) {
+                movie.starRating = starRating;
+            }
+            NSString* theatricalReleaseDateAsString = [movieInfo objectForKey:@"theatricalReleaseDate"];
+            if ([theatricalReleaseDateAsString length]) {
+                movie.theatricalReleaseDate = [dateFormatter dateFromString:theatricalReleaseDateAsString];
+            }
+            NSString* releaseDateAsString = [movieInfo objectForKey:@"releaseDate"];
+            if ([releaseDateAsString length]) {
+                movie.releaseDate = [dateFormatter dateFromString:releaseDateAsString];
+            }
+            movie.rating = [self _getMovieRating:movieInfo];
+            
+            
+            /* Add in any actors, creators, etc., that we have */
+            NSArray* participants = [movieInfo objectForKey:@"participants"];
+            if (participants) {
+                for (NSDictionary* participant in participants) {
+                    Participant* p = [self _findParticipantByName:[participant objectForKey:@"name"] andMovie:movie];
+                    if (!p) {
+                        Participant* p = [[Participant alloc] initWithEntity:participantEntity insertIntoManagedObjectContext:managedObjectContext];
+                        p.name = [participant objectForKey:@"name"];
+                        p.type = [participant objectForKey:@"type"];
+                        p.position = [participant objectForKey:@"position"];
+                        p.movie = movie;
+                    }
+                }
+            }
+
+            [managedObjectContext saveAndPrintErrors];
         }
+    } @catch (id exception) {
+        [managedObjectContext rollback];
+    } @finally {
+        [activity terminate];
+        [managedObjectContext unlock];
     }
 }
 
@@ -630,54 +657,51 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
 
 - (void) imageQuery:(ImageQuery*)query didFailWithError:(NSError*)error userInfo:(id)userInfo
 {
-    @synchronized (managedObjectContext) {
-        Activity* activity = userInfo;
-        @try {
-            BoxArt* boxArt = (BoxArt*)[managedObjectContext objectRegisteredForID:activity.userInfo];
-            if (boxArt) {
-                NSString* state = error ? [error description] : @"Error";
-                boxArt.state = state;
+    Activity* activity = userInfo;
 
-                if ([boxArt validateForUpdate:nil]) {
-                    [managedObjectContext save:nil];
-                }
-            }
-        } @catch (id exception) {
-            [managedObjectContext rollback];
-        } @finally {
-            [activity terminate];
+    [managedObjectContext lock];
+    @try {
+        BoxArt* boxArt = (BoxArt*)[managedObjectContext objectRegisteredForID:activity.userInfo];
+        if (boxArt) {
+            NSString* state = error ? [error description] : @"Error";
+            boxArt.state = state;
+            [managedObjectContext saveAndPrintErrors];
         }
+    } @catch (id exception) {
+        [managedObjectContext rollback];
+    } @finally {
+        [activity terminate];
+        [managedObjectContext unlock];
     }
 }
 
 - (void) imageQuery:(ImageQuery*)query didReceiveData:(NSData*)data ofType:(NSString*)mimeType userInfo:(id)userInfo
 {
-    @synchronized (managedObjectContext) {
-        Activity* activity = userInfo;
-        @try {
-            BoxArt* boxArt = (BoxArt*)[managedObjectContext objectRegisteredForID:activity.userInfo];
-            if (boxArt) {
-                NSString* type = [(id)UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (CFStringRef)mimeType, CFSTR("public.image")) autorelease];
-                boxArt.type = type;
-                boxArt.state = @"Loaded";
-                boxArt.imageData = data;
-                
-                for (Disc* disc in [boxArt allDiscs]) {
-                    if (!disc.movie.boxArt) {
-                        disc.movie.boxArt = boxArt;
-                    }
-                }
-                
-                if ([boxArt validateForUpdate:nil]) {
-                    [managedObjectContext save:nil];
+    Activity* activity = userInfo;
+
+    [managedObjectContext lock];
+    @try {
+        BoxArt* boxArt = (BoxArt*)[managedObjectContext objectRegisteredForID:activity.userInfo];
+        if (boxArt) {
+            NSString* type = [(id)UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (CFStringRef)mimeType, CFSTR("public.image")) autorelease];
+            boxArt.type = type;
+            boxArt.state = @"Loaded";
+            boxArt.imageData = data;
+            
+            for (Disc* disc in [boxArt allDiscs]) {
+                if (!disc.movie.boxArt) {
+                    disc.movie.boxArt = boxArt;
                 }
             }
-        } @catch (id exception) {
-            NSLog(@"%@", exception);
-            [managedObjectContext rollback];
-        } @finally {
-            [activity terminate];
+            
+            [managedObjectContext saveAndPrintErrors];
         }
+    } @catch (id exception) {
+        NSLog(@"%@", exception);
+        [managedObjectContext rollback];
+    } @finally {
+        [activity terminate];
+        [managedObjectContext unlock];
     }
 }
 
@@ -709,19 +733,26 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
 
 - (void) protocolDidClose:(MessageProtocol*)protocol
 {
-    @synchronized (managedObjectContext) {
+    [managedObjectContext lock];
+    @try {
         NSManagedObjectID* objectID = protocol.userInfo;
         Engine* engine = (Engine*)[managedObjectContext objectWithID:objectID];
         if (engine) {
             [protocolsByUUID removeObjectForKey:engine.uuid];
             [self disconnectEngine:engine];
         }
+    } @catch (id exception) {
+        NSLog(@"%@", exception);
+        [managedObjectContext rollback];
+    } @finally {
+        [managedObjectContext unlock];
     }
 }
 
 - (void) protocol:(MessageProtocol*)protocol didReceiveMessage:(NSDictionary*)message 
 {
-    @synchronized (managedObjectContext) {
+    [managedObjectContext lock];
+    @try {
         NSManagedObjectID* objectID = protocol.userInfo;
         Engine* engine = (Engine*)[managedObjectContext objectWithID:objectID];
         if (!engine) {
@@ -836,7 +867,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                 Movie* movie = disc.movie;
                 if (!disc.movie) {
                     movie = [[[Movie alloc] initWithEntity:movieEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
-                    movie.title =  [[pathToFile lastPathComponent] stringByDeletingPathExtension];
+                    movie.title = [[pathToFile lastPathComponent] stringByDeletingPathExtension];
                     disc.movie = movie;
                 }
                 
@@ -899,11 +930,12 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
         
         /*  Persist out our changes.
          */
-        NSError* error = nil;
-        [managedObjectContext save:&error];
-        if (error) {
-            NSLog(@"%s -- %@ (%@)", __PRETTY_FUNCTION__, error, error.userInfo);
-        }
+        [managedObjectContext saveAndPrintErrors];
+    } @catch (id exception) {
+        NSLog(@"%@", exception);
+        [managedObjectContext rollback];
+    } @finally {
+        [managedObjectContext unlock];
     }
 }
 
@@ -927,14 +959,20 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
     NSAssert(uuid, @"no uuid?");
     
     Engine* engine = nil;
-    @synchronized (managedObjectContext) {
+    [managedObjectContext lock];
+    @try {
         engine = [self _findEngineByNetServiceName:[netService name]];
         NSAssert(engine, @"no engine?");
         engine.name = name;
         engine.uuid = uuid;
         engine.status = @"Resolved";
         engine.netServiceName = [netService name];
-        [managedObjectContext save:nil];
+        [managedObjectContext saveAndPrintErrors];
+    } @catch (id exception) {
+        NSLog(@"%@", exception);
+        [managedObjectContext rollback];
+    } @finally {
+        [managedObjectContext unlock];
     }
     
     if (NO || [uuid isEqualToString:localMachineUUID]) {
@@ -953,7 +991,8 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
     [netServiceByName setObject:netService forKey:[netService name]];
 
     Engine* engine = nil;
-    @synchronized (managedObjectContext) {
+    [managedObjectContext lock];
+    @try {
         engine = [self _findEngineByNetServiceName:[netService name]];
         if (!engine) {
             engine = [[Engine alloc] initWithEntity:engineEntity insertIntoManagedObjectContext:managedObjectContext];
@@ -962,7 +1001,12 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
         engine.name = [netService name];
         engine.netServiceName = [netService name];
         engine.status = @"Resolving";
-        [managedObjectContext save:nil];
+        [managedObjectContext saveAndPrintErrors];
+    } @catch (id exception) {
+        NSLog(@"%@", exception);
+        [managedObjectContext rollback];
+    } @finally {
+        [managedObjectContext unlock];
     }
     
     [netService setDelegate:self];
@@ -976,14 +1020,18 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
     [netService removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     [netServiceByName removeObjectForKey:[netService name]];
 
-    @synchronized (managedObjectContext) {
+    [managedObjectContext lock];
+    @try {
         Engine* engine = [self _findEngineByNetServiceName:[netService name]];
         if (engine) {
             [managedObjectContext deleteObject:engine];
-            NSError* error = nil;
-            [managedObjectContext save:&error];
-            NSLog(@"%@ -- %@", error, error.userInfo);
         }
+        [managedObjectContext saveAndPrintErrors];
+    } @catch (id exception) {
+        NSLog(@"%@", exception);
+        [managedObjectContext rollback];
+    } @finally {
+        [managedObjectContext unlock];
     }
 }
 

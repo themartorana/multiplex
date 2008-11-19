@@ -100,7 +100,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 {
     [searchResultsDescriptionWebView setDrawsBackground:NO];
     [searchResultsDescriptionWebView setPreferences:[ApplicationResources movieDescriptionWebPreferences]];
-    [searchResultsBoxArt bind:@"image" toObject:self withKeyPath:@"movie.boxArt.image" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
+    [searchResultsBoxArt bind:@"image" toObject:self withKeyPath:@"movie.boxArt.image" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"search-result-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
     
     [resultsBox setCornerRadius:5.0];
     [resultsBox setFillColor:[NSColor colorWithCalibratedWhite:1.0 alpha:0.1]];

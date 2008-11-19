@@ -9,6 +9,7 @@
 #import "BoxArt.h"
 #import "MovieURL.h"
 #import "Disc.h"
+#import "Participant.h"
 #import "LayerBackedButtonView.h"
 
 #import <WebKit/WebKit.h>
@@ -111,9 +112,8 @@
 
 - (void) webViewDidEndEditing:(NSNotification*)notification
 {
-    NSString* noSynopsis = @"No description found. Click on the \"Description\" tab to enter one.";
     movie.synopsis = [(id)[[[[[descriptionWebView mainFrame] DOMDocument] documentElement] getElementsByTagName:@"body"] item:0] innerHTML];
-    [[overviewWebView mainFrame] loadHTMLString:movie && movie.synopsis ? movie.synopsis : noSynopsis baseURL:[NSURL URLWithString:@""]];
+    [[overviewWebView mainFrame] loadHTMLString:[self generateDescriptionHtmlString] baseURL:[NSURL URLWithString:@""]];
 }
 
 - (void) setMovie:(Movie*)_movie
@@ -323,22 +323,74 @@
 - (NSString*) generateDescriptionHtmlString
 {
     NSString* noSynopsis = @"No description found. Click on the \"Description\" tab to enter one.";
-    return movie && movie.synopsis ? movie.synopsis : noSynopsis;
     
-    if (movie) {
+    if (!movie) {
+        return noSynopsis;
+    }
+    else {
         NSMutableString* htmlString = [NSMutableString string];
 
         // Set up the synopsis
+        [htmlString appendString:@"<div id=\"description_synopsis_info\">"];
         [htmlString appendFormat:@"<div id=\"description_synopsis_header\">%@</div>", @"Synopsis"];
-        if (movie.synopsis) {
-            [htmlString appendFormat:@"<div id=\"description_synopsis\">%@</div>", movie.synopsis ? movie.synopsis : @"No description found. Click on the \"Description\" tab to enter one."];
-        }
+        [htmlString appendFormat:@"<div id=\"description_synopsis\">%@</div>", movie.synopsis ? movie.synopsis : noSynopsis];
+        [htmlString appendString:@"</div>"];
+        
+        [htmlString appendString:@"<div id=\"description_secondary_info\">"];
         
         // Running time
-        [htmlString appendFormat:@"<div id=\"description_run_time_header\">%@</div>", @"Running Time"];
-        [htmlString appendFormat:@"<div id=\"description_run_time\">%@ %@</div>", [movie.runningTime stringValue], @"minutes"];
+        if (movie.runningTime) {
+            [htmlString appendFormat:@"<div id=\"description_run_time_header\">%@</div>", @"Running Time"];
+            [htmlString appendFormat:@"<div id=\"description_run_time\">%@ %@</div>", [movie.runningTime stringValue], @"minutes"];
+        }
         
-        // 
+        // Production year
+        if (movie.productionYear) {
+            [htmlString appendFormat:@"<div id=\"description_production_year_header\">%@</div>", @"Produced in"];
+            [htmlString appendFormat:@"<div id=\"description_production_year\">%@</div>", [movie.productionYear stringValue]];
+        }
+        
+        // Participants
+        if ([movie.allParticipants count]) {
+            NSSortDescriptor* sort = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+            
+            NSArray* participantsInOrder = [[movie.allParticipants allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sort]];
+
+            // Director
+            NSMutableString* directors = [NSMutableString string];
+            for (Participant* p in participantsInOrder) {                
+                if (p.type && [[p.type lowercaseString] isEqualToString:@"director"]) {
+                    if ([directors length]) {
+                        [directors appendString:@"<br />"];
+                    }
+                    [directors appendString:p.name];
+                }
+            }
+            if ([directors length]) {
+                [htmlString appendFormat:@"<div id=\"description_directors_header\">%@</div>", [directors rangeOfString:@"<br />"].location != NSNotFound ? @"Directors" : @"Director"];
+                [htmlString appendFormat:@"<div id=\"description_directors\">%@</div>", directors];
+            }
+            
+        
+            // Actors
+            NSMutableString* actors = [NSMutableString string];
+            for (Participant* p in participantsInOrder) {                
+                if (p.type && [[p.type lowercaseString] isEqualToString:@"actor"]) {
+                    if ([actors length]) {
+                        [actors appendString:@"<br />"];
+                    }
+                    [actors appendFormat:p.name];
+                }
+            }            
+            if ([actors length]) {
+                [htmlString appendFormat:@"<div id=\"description_actors_header\">%@</div>", @"Cast"];
+                [htmlString appendFormat:@"<div id=\"description_actors\">%@</div>", actors];
+            }
+        }
+        
+        [htmlString appendString:@"</div>"];
+        
+        return htmlString;
     }
 }
 

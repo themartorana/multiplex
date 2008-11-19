@@ -36,6 +36,8 @@
     IBOutlet BoxArtImageView* searchResultsBoxArt;
     IBOutlet NSSegmentedControl* backAndForwardButtons;
     
+    IBOutlet NSBox* resultsBox;
+    
     IBOutlet WebView* searchResultsDescriptionWebView; 
 }
 

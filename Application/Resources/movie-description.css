@@ -31,3 +31,33 @@ div#multiplex_results_title
     line-height: normal;
     padding: 10px 0 10px 0;
 }
+
+
+div#description_synopsis_header
+{
+    font-weight: bold;
+    font-size: 18px;
+}
+
+div#description_synopsis_info,
+div#description_secondary_info
+{
+}
+
+div#description_run_time_header,
+div#description_production_year_header,
+div#description_directors_header,
+div#description_actors_header
+{
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+div#description_synopsis,
+div#description_run_time,
+div#description_production_year,
+div#description_directors,
+div#description_actors
+{
+}

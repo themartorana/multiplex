@@ -176,10 +176,10 @@
 {
     [self setMovie:_movie];
     [drawerView setContentView:infoPaneView];
-    NSString* noSynopsis = @"No description found. Click on the \"Description\" tab to enter one.";
-    NSString* noSynopsisEdit = @"No description found. Replace this text to add one.";
-    [[descriptionWebView mainFrame] loadHTMLString:movie && movie.synopsis ? movie.synopsis : noSynopsisEdit baseURL:[NSURL URLWithString:@""]];
-    [[overviewWebView mainFrame] loadHTMLString:movie && movie.synopsis ? movie.synopsis : noSynopsis baseURL:[NSURL URLWithString:@""]];
+
+    NSString* noSynopsis = @"No description found. Replace this text to add one.";
+    [[descriptionWebView mainFrame] loadHTMLString:movie && movie.synopsis ? movie.synopsis : noSynopsis baseURL:[NSURL URLWithString:@""]];
+    [[overviewWebView mainFrame] loadHTMLString:movie ? [self generateDescriptionHtmlString] : @"" baseURL:[NSURL URLWithString:@""]];
     
     if (!drawerView.isOpen) {
         [drawerView toggle:self];
@@ -317,6 +317,28 @@
         }
     } else {
         return NO;
+    }
+}
+
+- (NSString*) generateDescriptionHtmlString
+{
+    NSString* noSynopsis = @"No description found. Click on the \"Description\" tab to enter one.";
+    return movie && movie.synopsis ? movie.synopsis : noSynopsis;
+    
+    if (movie) {
+        NSMutableString* htmlString = [NSMutableString string];
+
+        // Set up the synopsis
+        [htmlString appendFormat:@"<div id=\"description_synopsis_header\">%@</div>", @"Synopsis"];
+        if (movie.synopsis) {
+            [htmlString appendFormat:@"<div id=\"description_synopsis\">%@</div>", movie.synopsis ? movie.synopsis : @"No description found. Click on the \"Description\" tab to enter one."];
+        }
+        
+        // Running time
+        [htmlString appendFormat:@"<div id=\"description_run_time_header\">%@</div>", @"Running Time"];
+        [htmlString appendFormat:@"<div id=\"description_run_time\">%@ %@</div>", [movie.runningTime stringValue], @"minutes"];
+        
+        // 
     }
 }
 

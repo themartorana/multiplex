@@ -50,7 +50,6 @@
 @property (readonly) NSPredicate* crewFilter;
 @property (readonly) NSSortDescriptor* discsSortDescriptor;
 
-
 - (IBAction) startWithMovie:(Movie*)movie;
 - (IBAction) selectTab:(id)sender;
 
@@ -62,6 +61,8 @@
 
 - (IBAction) playSelectedMovie:(id)sender;
 - (IBAction) playDisc:(id)obj;
+
+- (NSString*) generateDescriptionHtmlString;
 
 - (void) showHomeTab;
 - (void) showDiscsTab;

@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1464"/>
+			<integer value="1472"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -131,13 +131,13 @@
 															<bool key="UseBackForwardList">NO</bool>
 															<bool key="AllowsUndo">YES</bool>
 														</object>
-														<object class="NSButton" id="642939066">
+														<object class="NSButton" id="1003616286">
 															<reference key="NSNextResponder" ref="259575740"/>
 															<int key="NSvFlags">268</int>
-															<string key="NSFrame">{{37, 32}, {232.859, 25}}</string>
+															<string key="NSFrame">{{37, 32}, {233, 25}}</string>
 															<reference key="NSSuperview" ref="259575740"/>
 															<bool key="NSEnabled">YES</bool>
-															<object class="NSButtonCell" key="NSCell" id="508748598">
+															<object class="NSButtonCell" key="NSCell" id="422223685">
 																<int key="NSCellFlags">-2080244224</int>
 																<int key="NSCellFlags2">134217728</int>
 																<string type="base64-UTF8" key="NSContents">UGxheSAg4pa6A</string>
@@ -146,7 +146,7 @@
 																	<double key="NSSize">1.300000e+01</double>
 																	<int key="NSfFlags">1044</int>
 																</object>
-																<reference key="NSControlView" ref="642939066"/>
+																<reference key="NSControlView" ref="1003616286"/>
 																<int key="NSButtonFlags">-2038152961</int>
 																<int key="NSButtonFlags2">163</int>
 																<string key="NSAlternateContents"/>
@@ -1979,7 +1979,6 @@
 								</object>
 								<bool key="NSNoAutoenable">YES</bool>
 							</object>
-							<int key="NSSelectedIndex">6</int>
 							<bool key="NSPullDown">YES</bool>
 							<int key="NSPreferredEdge">1</int>
 							<bool key="NSUsesItemFromMenu">YES</bool>
@@ -2920,25 +2919,9 @@
 					<object class="IBActionConnection" key="connection">
 						<string key="label">playSelectedMovie:</string>
 						<reference key="source" ref="1021"/>
-						<reference key="destination" ref="642939066"/>
+						<reference key="destination" ref="1003616286"/>
 					</object>
-					<int key="connectionID">2551</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: movie.availableDiscCount</string>
-						<reference key="source" ref="642939066"/>
-						<reference key="destination" ref="1021"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="642939066"/>
-							<reference key="NSDestination" ref="1021"/>
-							<string key="NSLabel">enabled: movie.availableDiscCount</string>
-							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">movie.availableDiscCount</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">2554</int>
+					<int key="connectionID">2557</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -3778,7 +3761,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="653671581"/>
 							<reference ref="855180368"/>
-							<reference ref="642939066"/>
+							<reference ref="1003616286"/>
 						</object>
 						<reference key="parent" ref="966988208"/>
 					</object>
@@ -4091,18 +4074,18 @@
 						<reference key="parent" ref="1172"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">2549</int>
-						<reference key="object" ref="642939066"/>
+						<int key="objectID">2555</int>
+						<reference key="object" ref="1003616286"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="508748598"/>
+							<reference ref="422223685"/>
 						</object>
 						<reference key="parent" ref="259575740"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">2550</int>
-						<reference key="object" ref="508748598"/>
-						<reference key="parent" ref="642939066"/>
+						<int key="objectID">2556</int>
+						<reference key="object" ref="422223685"/>
+						<reference key="parent" ref="1003616286"/>
 					</object>
 				</object>
 			</object>
@@ -4270,8 +4253,8 @@
 					<string>2540.IBPluginDependency</string>
 					<string>2541.IBPluginDependency</string>
 					<string>2542.IBPluginDependency</string>
-					<string>2549.IBPluginDependency</string>
-					<string>2550.IBPluginDependency</string>
+					<string>2555.IBPluginDependency</string>
+					<string>2556.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -4466,7 +4449,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2554</int>
+			<int key="maxID">2557</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

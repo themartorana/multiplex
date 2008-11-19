@@ -60,6 +60,7 @@
 - (IBAction) deleteMetadataForMovie:(id)sender;
 - (IBAction) buyFromAmazon:(id)sender;
 
+- (IBAction) playSelectedMovie:(id)sender;
 - (IBAction) playDisc:(id)obj;
 
 - (void) showHomeTab;

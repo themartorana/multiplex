@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="2535"/>
+			<integer value="1472"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -61,7 +61,7 @@
 											<object class="NSTabViewItem" id="966988208">
 												<string key="NSIdentifier">1</string>
 												<object class="NSView" key="NSView" id="259575740">
-													<nil key="NSNextResponder"/>
+													<reference key="NSNextResponder" ref="124333960"/>
 													<int key="NSvFlags">256</int>
 													<object class="NSMutableArray" key="NSSubviews">
 														<bool key="EncodedWithXMLCoder">YES</bool>
@@ -73,12 +73,12 @@
 																<object class="NSCustomView" id="26031902">
 																	<reference key="NSNextResponder" ref="855180368"/>
 																	<int key="NSvFlags">268</int>
-																	<string key="NSFrame">{{10, 10}, {245, 358}}</string>
+																	<string key="NSFrame">{{9, 7}, {233, 331}}</string>
 																	<reference key="NSSuperview" ref="855180368"/>
 																	<string key="NSClassName">BoxArtImageView</string>
 																</object>
 															</object>
-															<string key="NSFrame">{{24, 30}, {265, 378}}</string>
+															<string key="NSFrame">{{28, 59}, {252, 346}}</string>
 															<reference key="NSSuperview" ref="259575740"/>
 															<string key="NSClassName">DragDropTargetView</string>
 														</object>
@@ -104,7 +104,7 @@
 																	<string>public.url-name</string>
 																</object>
 															</object>
-															<string key="NSFrame">{{297, 40}, {460, 357}}</string>
+															<string key="NSFrame">{{297, 33}, {460, 365}}</string>
 															<reference key="NSSuperview" ref="259575740"/>
 															<reference key="NSNextKeyView"/>
 															<bool key="NSViewIsLayerTreeHost">YES</bool>
@@ -131,8 +131,33 @@
 															<bool key="UseBackForwardList">NO</bool>
 															<bool key="AllowsUndo">YES</bool>
 														</object>
+														<object class="NSButton" id="642939066">
+															<reference key="NSNextResponder" ref="259575740"/>
+															<int key="NSvFlags">268</int>
+															<string key="NSFrame">{{37, 32}, {232.859, 25}}</string>
+															<reference key="NSSuperview" ref="259575740"/>
+															<bool key="NSEnabled">YES</bool>
+															<object class="NSButtonCell" key="NSCell" id="508748598">
+																<int key="NSCellFlags">-2080244224</int>
+																<int key="NSCellFlags2">134217728</int>
+																<string type="base64-UTF8" key="NSContents">UGxheSAg4pa6A</string>
+																<object class="NSFont" key="NSSupport" id="707745533">
+																	<string key="NSName">LucidaGrande</string>
+																	<double key="NSSize">1.300000e+01</double>
+																	<int key="NSfFlags">1044</int>
+																</object>
+																<reference key="NSControlView" ref="642939066"/>
+																<int key="NSButtonFlags">-2038152961</int>
+																<int key="NSButtonFlags2">163</int>
+																<string key="NSAlternateContents"/>
+																<string key="NSKeyEquivalent"/>
+																<int key="NSPeriodicDelay">400</int>
+																<int key="NSPeriodicInterval">75</int>
+															</object>
+														</object>
 													</object>
 													<string key="NSFrameSize">{774, 411}</string>
+													<reference key="NSSuperview" ref="124333960"/>
 												</object>
 												<string key="NSLabel">Overview</string>
 												<object class="NSColor" key="NSColor" id="288047085">
@@ -226,11 +251,7 @@
 																<int key="NSCellFlags">68288064</int>
 																<int key="NSCellFlags2">71304192</int>
 																<string key="NSContents">Genre</string>
-																<object class="NSFont" key="NSSupport" id="707745533">
-																	<string key="NSName">LucidaGrande</string>
-																	<double key="NSSize">1.300000e+01</double>
-																	<int key="NSfFlags">1044</int>
-																</object>
+																<reference key="NSSupport" ref="707745533"/>
 																<reference key="NSControlView" ref="61683550"/>
 																<reference key="NSBackgroundColor" ref="288047085"/>
 																<object class="NSColor" key="NSTextColor" id="387929333">
@@ -1287,7 +1308,7 @@
 											<object class="NSTabViewItem" id="213289251">
 												<string key="NSIdentifier">Item 3</string>
 												<object class="NSView" key="NSView" id="474898351">
-													<reference key="NSNextResponder" ref="124333960"/>
+													<nil key="NSNextResponder"/>
 													<int key="NSvFlags">256</int>
 													<object class="NSMutableArray" key="NSSubviews">
 														<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1711,20 +1732,19 @@
 														</object>
 													</object>
 													<string key="NSFrameSize">{774, 411}</string>
-													<reference key="NSSuperview" ref="124333960"/>
 												</object>
 												<string type="base64-UTF8" key="NSLabel">Q2FzdCAmIENyZXc</string>
 												<reference key="NSColor" ref="288047085"/>
 												<reference key="NSTabView" ref="124333960"/>
 											</object>
 										</object>
-										<reference key="NSSelectedTabViewItem" ref="213289251"/>
+										<reference key="NSSelectedTabViewItem" ref="966988208"/>
 										<reference key="NSFont" ref="707745533"/>
 										<int key="NSTvFlags">6</int>
 										<bool key="NSAllowTruncatedLabels">YES</bool>
 										<object class="NSMutableArray" key="NSSubviews">
 											<bool key="EncodedWithXMLCoder">YES</bool>
-											<reference ref="474898351"/>
+											<reference ref="259575740"/>
 										</object>
 									</object>
 								</object>
@@ -2891,6 +2911,30 @@
 					</object>
 					<int key="connectionID">2548</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">playSelectedMovie:</string>
+						<reference key="source" ref="1021"/>
+						<reference key="destination" ref="642939066"/>
+					</object>
+					<int key="connectionID">2551</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: movie.availableDiscCount</string>
+						<reference key="source" ref="642939066"/>
+						<reference key="destination" ref="1021"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="642939066"/>
+							<reference key="NSDestination" ref="1021"/>
+							<string key="NSLabel">enabled: movie.availableDiscCount</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">movie.availableDiscCount</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2554</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -3729,6 +3773,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="653671581"/>
 							<reference ref="855180368"/>
+							<reference ref="642939066"/>
 						</object>
 						<reference key="parent" ref="966988208"/>
 					</object>
@@ -4040,6 +4085,20 @@
 						<reference key="object" ref="797787592"/>
 						<reference key="parent" ref="1172"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2549</int>
+						<reference key="object" ref="642939066"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="508748598"/>
+						</object>
+						<reference key="parent" ref="259575740"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2550</int>
+						<reference key="object" ref="508748598"/>
+						<reference key="parent" ref="642939066"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -4206,13 +4265,15 @@
 					<string>2540.IBPluginDependency</string>
 					<string>2541.IBPluginDependency</string>
 					<string>2542.IBPluginDependency</string>
+					<string>2549.IBPluginDependency</string>
+					<string>2550.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilderKit</string>
 					<string>com.apple.InterfaceBuilderKit</string>
-					<string>{{191, 128}, {800, 500}}</string>
+					<string>{{110, 117}, {800, 500}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSMutableDictionary">
 						<string key="NS.key.0">InitialTabViewItem</string>
@@ -4376,6 +4437,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -4398,7 +4461,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2548</int>
+			<int key="maxID">2554</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4462,6 +4525,7 @@
 							<string>deleteCoverArtForMovie:</string>
 							<string>deleteMetadataForMovie:</string>
 							<string>playDisc:</string>
+							<string>playSelectedMovie:</string>
 							<string>refreshMovieInfoFromInternetByTitle:</string>
 							<string>refreshMovieInfoFromInternetByUPC:</string>
 							<string>selectTab:</string>
@@ -4469,6 +4533,7 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>

@@ -227,6 +227,11 @@
     [[NSWorkspace sharedWorkspace] openURL:nsurl];
 }
 
+- (IBAction) playSelectedMovie:(id)sender
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayButtonClicked" object:nil];
+}
+
 - (IBAction) playDisc:(id)obj
 {
     if ([obj isKindOfClass:[Disc class]]) {

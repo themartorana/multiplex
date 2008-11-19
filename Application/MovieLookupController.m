@@ -312,6 +312,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (IBAction) skipToManualEntry:(id)sender
 {
+    [managedObjectContext rollback];
     [applicationController showMovieDetailAndSelectHomeTabForMovie:movie];
 }
 

@@ -72,7 +72,7 @@
 - (void) takeControl
 {
     [[NSNotificationCenter defaultCenter] addObserver:self 
-                                             selector:@selector(objectContextNeedsSave:) 
+                                             selector:@selector(_objectContextDidChange:) 
                                                  name:NSManagedObjectContextObjectsDidChangeNotification 
                                                object:applicationController.appManagedObjectContext
      ];
@@ -93,9 +93,25 @@
     [infoTabView selectTabViewItemAtIndex:[sender selectedSegment]];
 }
 
-- (void) objectContextNeedsSave:(NSNotification*)notification
+- (void) _objectContextDidChange:(NSNotification*)notification
 {
-    [[NSRunLoop currentRunLoop] performSelector:@selector(_saveObjectContext) target:self argument:nil order:0 modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
+    NSSet* updated = [notification.userInfo objectForKey:@"updated"];
+    NSManagedObjectContext* managedObjectContext = notification.object;
+    
+    if ([managedObjectContext hasChanges]) {
+        if (updated && [updated containsObject:movie]) {
+            NSDictionary* changedValues = movie.changedValues;
+            int count = [changedValues count];
+            NSDate* metadataAcceptedDate = [changedValues objectForKey:@"metadataAcceptedDate"];
+
+            /*  If just the metadataAcceptedDate changed, then don't bother 
+             *  doing a save.
+             */
+            if ((count > 1) || (count == 1 && metadataAcceptedDate == nil)) {
+                [self performSelectorOnMainThread:@selector(_saveObjectContext) withObject:nil waitUntilDone:NO];
+            }
+        }
+    }
 }
 
 - (void) _saveObjectContext
@@ -106,7 +122,6 @@
     
     if (error) {
         NSLog(@"%@", [error userInfo]);
-        NSAssert(FALSE, @"ERROR SAVING DATA!");
     }
 }
 

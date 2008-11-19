@@ -125,11 +125,13 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         [movie release];
         movie = nil;
         movie = [_movie retain];
+        [self didChangeValueForKey:@"movie"];
+
+        movie.metadataAcceptedDate = nil;
         managedObjectContext = [movie managedObjectContext];
         boxArtEntity = [NSEntityDescription entityForName:@"BoxArt" inManagedObjectContext:managedObjectContext];
         participantEntity = [NSEntityDescription entityForName:@"Participant" inManagedObjectContext:managedObjectContext];
         movieURLEntity = [NSEntityDescription entityForName:@"MovieURL" inManagedObjectContext:managedObjectContext];
-        [self didChangeValueForKey:@"movie"];
     }
 }
 
@@ -183,7 +185,6 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
                 movie.genre = [NSString stringWithObjectAsJSON:arr];
             }
             
-            movie.metadataAcceptedDate = [NSDate date];
             movie.releaseDate = [resultAtIndex objectForKey:@"releaseDate"] ? [NSDate dateFromShortDateString:[resultAtIndex objectForKey:@"releaseDate"]] : nil;
             movie.rating = [resultAtIndex objectForKey:@"audienceRating"];
             movie.regionCode = [resultAtIndex objectForKey:@"regionCode"];

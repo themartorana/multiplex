@@ -63,8 +63,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (BOOL) relinquishControl
 {
-    if ([managedObjectContext hasChanges]) {
-        
+    if ([movie.changedValues count]) {        
         NSString* dirtyInfo = @"You have not selected a result as your movie.";
         NSMutableString* dirtyExplain = [NSMutableString string];
         [dirtyExplain appendString:@"To discard the search results and continue, click \"Ok\"\n\n"];

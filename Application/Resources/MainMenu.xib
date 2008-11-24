@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1166"/>
+			<integer value="1151"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -951,7 +951,7 @@
 													<object class="NSTextFieldCell" key="NSCell" id="1008732101">
 														<int key="NSCellFlags">67239424</int>
 														<int key="NSCellFlags2">272891904</int>
-														<string key="NSContents">Currently there are no DVDs in your library.  You can add items to your library by inserting a DVD or ripping DVDs to your computer.</string>
+														<string key="NSContents">Currently there are no DVDs in your library.  You can add items to your library by inserting a DVD or copying DVDs to your computer.</string>
 														<object class="NSFont" key="NSSupport" id="1065286202">
 															<string key="NSName">LucidaGrande</string>
 															<double key="NSSize">1.300000e+01</double>
@@ -1061,7 +1061,7 @@
 													<reference key="NSSuperview" ref="553784519"/>
 													<bool key="NSEnabled">YES</bool>
 													<object class="NSButtonCell" key="NSCell" id="731640815">
-														<int key="NSCellFlags">67239424</int>
+														<int key="NSCellFlags">604110336</int>
 														<int key="NSCellFlags2">134479872</int>
 														<string key="NSContents">View Sample Data</string>
 														<object class="NSFont" key="NSSupport">
@@ -4897,7 +4897,7 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{422, 256}, {661, 500}}</string>
+					<string>{{170, 256}, {661, 500}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

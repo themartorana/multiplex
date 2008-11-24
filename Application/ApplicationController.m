@@ -220,7 +220,8 @@
 
 - (void) bindNoMoviesDisplay
 {
-    [movies addObserver:self forKeyPath:@"content.@count" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew context:nil];
+    //[movies addObserver:self forKeyPath:@"content.@count" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew context:nil];
+    [noDiscsView bind:@"hidden" toObject:movies withKeyPath:@"content.@count" options:nil];
 }
 
 - (void) applicationDidFinishLaunching:(NSNotification*)notification

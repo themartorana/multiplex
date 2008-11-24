@@ -127,6 +127,14 @@
     if (hoveredMovie) {
         titleLayer.string = hoveredMovie.title;
         additionalInfoLayer.string = [self getAdditionalMovieInfoString];
+        
+        playButtonLayer.upState = [ApplicationResources playButton];
+        playButtonLayer.downState = [ApplicationResources playButtonDown];
+    }
+    
+    if (!hoveredMovie || 0 == [hoveredMovie.availableDiscCount intValue]) {
+        playButtonLayer.upState = [ApplicationResources playButtonInactive];
+        playButtonLayer.downState = [ApplicationResources playButtonInactive];
     }
 }
 

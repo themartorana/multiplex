@@ -35,6 +35,7 @@
 @synthesize appManagedObjectContext;
 @synthesize selectedMovie;
 @synthesize currentDrawerViewController;
+@synthesize selectedSegment;
 
 + (void) initialize
 {
@@ -162,7 +163,7 @@
         if ((fontsURL = [NSURL fileURLWithPath:fontsFolder])) {
             FSRef fsRef;
             FSSpec fsSpec;
-            (void)CFURLGetFSRef((CFURLRef)fontsURL, &fsRef);
+            CFURLGetFSRef((CFURLRef)fontsURL, &fsRef);
             if (FSGetCatalogInfo(&fsRef, kFSCatInfoNone, NULL, NULL, &fsSpec, 
                                  NULL) == noErr) {
                 FMActivateFonts(&fsSpec, NULL, NULL, kFMLocalActivationContext);
@@ -446,14 +447,15 @@
     if (object == drawerView) {
         if ([@"isOpen" isEqualToString:keyPath]) {
             BOOL isOpen = [[object valueForKeyPath:keyPath] boolValue];
+            Class cLayoutManager;
             if (isOpen) {
                 
-                Class c = NSClassFromString([[NSUserDefaults standardUserDefaults] objectForKey:kMultiplexDrawerIsOpenLayoutManagerClass]);
-                if (!c)
+                cLayoutManager = NSClassFromString([[NSUserDefaults standardUserDefaults] objectForKey:kMultiplexDrawerIsOpenLayoutManagerClass]);
+                if (!cLayoutManager)
                 {
-                    c = [LinearLayoutManager class];
+                    cLayoutManager = [LinearLayoutManager class];
                 }
-                [mainView setFloorLayerLayoutManagerClass:c];
+                [mainView setFloorLayerLayoutManagerClass:cLayoutManager];
                 
                 if ([selectedMovie.gtin length] > 0 || selectedMovie.metadataAcceptedDate != nil) {
                     [self showMovieDetailForMovie:selectedMovie];
@@ -464,15 +466,22 @@
                 }
                 [[self window] makeFirstResponder:drawerView];
             } else {
-                Class c = NSClassFromString([[NSUserDefaults standardUserDefaults] objectForKey:kMultiplexDrawerIsClosedLayoutManagerClass]);
-                if (!c)
+                cLayoutManager = NSClassFromString([[NSUserDefaults standardUserDefaults] objectForKey:kMultiplexDrawerIsClosedLayoutManagerClass]);
+                if (!cLayoutManager)
                 {
-                    c = [StadiumLayoutManager class];
+                    cLayoutManager = [StadiumLayoutManager class];
                 }
-                [mainView setFloorLayerLayoutManagerClass:c];
+                [mainView setFloorLayerLayoutManagerClass:cLayoutManager];
                 
                 [drawerView setContentView:nil];
                 [[self window] makeFirstResponder:searchField];
+            }
+            
+            if (cLayoutManager == [StadiumLayoutManager class]) {
+                [self setSelectedSegment:0];
+            }
+            else if (cLayoutManager == [LinearLayoutManager class]) {
+                [self setSelectedSegment:1];
             }
         }
     } else if (object == movies) {
@@ -538,7 +547,7 @@
         [windowResizeThumb setHidden:NO];
         viewInFullScreen = nil;
         
-        [fullScreenButton setImage:[NSImage imageNamed:@"expand-screen"]];
+        //[fullScreenButton setImage:[NSImage imageNamed:]];
     }
     else {
         [[mainWindow contentView] enterFullScreenMode:[NSScreen mainScreen] 
@@ -546,7 +555,7 @@
         viewInFullScreen = [mainWindow contentView];
         [windowResizeThumb setHidden:YES];
         
-        [fullScreenButton setImage:[NSImage imageNamed:@"collapse-screen"]];
+        //[fullScreenButton sh setImage:[NSImage imageNamed:@"collapse-screen"]];
     }
 }
 
@@ -570,6 +579,22 @@
     NSLog(@"resigned");
     if (viewInFullScreen && [viewInFullScreen isInFullScreenMode]) {
         [self toggleFullScreen:viewInFullScreen];
+    }
+}
+
+- (void) setSelectedSegment:(int)sel
+{
+    selectedSegment = sel;
+    
+    if (sel == 0) {
+        if (mainView.floorLayerLayoutManagerClass != [StadiumLayoutManager class]) {
+            [self switchToStadiumLayoutManager:nil];
+        }
+    }
+    else if (sel == 1) {
+        if (mainView.floorLayerLayoutManagerClass != [LinearLayoutManager class]) {
+            [self switchToLinearLayoutManager:nil];
+        }
     }
 }
 

@@ -102,7 +102,7 @@
 
             [self setFrame:newFrame];
 
-            [button setFrameCenterRotation:45.0];
+            //[button setFrameCenterRotation:45.0];
             [upperView setFrame:newUpperViewFrame];
             [[self animator] setFrame:NSOffsetRect(newFrame, 0, viewFrame.size.height)];
         } else {
@@ -116,7 +116,7 @@
                 [self setFrame:newFrame];
             }
             
-            [button setFrameCenterRotation:45.0];
+            //[button setFrameCenterRotation:45.0];
             [upperView setFrame:newUpperViewFrame];
             [[self animator] setFrame:NSOffsetRect(newFrame, 0, -offset)];
         }

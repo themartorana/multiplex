@@ -42,6 +42,8 @@
     IBOutlet NSButton* fullScreenButton;
     
     DrawerViewControllerProtocol* currentDrawerViewController;
+    
+    int selectedSegment;
 }
 
 @property (retain) NSString* searchQuery;
@@ -49,6 +51,7 @@
 @property (readonly) NSManagedObjectContext* appManagedObjectContext;
 @property (retain) NSDictionary* parameters;
 @property (retain) DrawerViewControllerProtocol* currentDrawerViewController;
+@property int selectedSegment;
 
 - (IBAction) checkForUpdates:(id)sender;
 - (IBAction) showUserVoiceFeedbackSheet:(id)sender;

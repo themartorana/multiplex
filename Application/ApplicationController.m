@@ -154,6 +154,23 @@
     [super dealloc];
 }
 
+- (void) loadLocalFonts
+{
+    NSString *fontsFolder;    
+    if ((fontsFolder = [[NSBundle mainBundle] resourcePath])) {
+        NSURL *fontsURL;
+        if ((fontsURL = [NSURL fileURLWithPath:fontsFolder])) {
+            FSRef fsRef;
+            FSSpec fsSpec;
+            (void)CFURLGetFSRef((CFURLRef)fontsURL, &fsRef);
+            if (FSGetCatalogInfo(&fsRef, kFSCatInfoNone, NULL, NULL, &fsSpec, 
+                                 NULL) == noErr) {
+                FMActivateFonts(&fsSpec, NULL, NULL, kFMLocalActivationContext);
+            }
+        }
+    }
+}
+
 - (void) awakeFromNib
 {
     NSView* contentView = self.window.contentView;
@@ -212,6 +229,10 @@
     // No discs view
     [noDiscsView setWantsLayer:YES];
     [[noDiscsView layer] setDelegate:self]; 
+    
+    [self loadLocalFonts];
+    NSFont* uniFont = [NSFont fontWithName:@"uni 05_53" size:8.0];
+    [licensingAndVersionInfo setFont:uniFont];
     
     // Delayed binding
     // TODO: Rethink this

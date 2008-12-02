@@ -67,6 +67,9 @@
     
     [backgroundBox setCornerRadius:5.0];
     [backgroundBox setFillColor:[NSColor colorWithCalibratedWhite:1.0 alpha:0.1]];
+    
+    [editImageBox setCornerRadius:5.0];
+    [editImageBox setFillColor:[NSColor colorWithCalibratedWhite:0.6 alpha:0.5]];
 }
 
 - (void) takeControl

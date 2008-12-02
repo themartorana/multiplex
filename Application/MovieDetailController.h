@@ -15,6 +15,7 @@
     DrawerView* drawerView;
     /**/
     IBOutlet NSBox* backgroundBox;
+    IBOutlet NSBox* editImageBox;
     IBOutlet NSView* infoPaneView;
     
     IBOutlet WebView* overviewWebView;

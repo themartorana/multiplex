@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.03">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">9F33</string>
-		<string key="IBDocument.InterfaceBuilderVersion">676</string>
-		<string key="IBDocument.AppKitVersion">949.34</string>
-		<string key="IBDocument.HIToolboxVersion">352.00</string>
+		<string key="IBDocument.SystemVersion">9G55</string>
+		<string key="IBDocument.InterfaceBuilderVersion">677</string>
+		<string key="IBDocument.AppKitVersion">949.43</string>
+		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1472"/>
+			<integer value="1495"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -61,7 +61,7 @@
 											<object class="NSTabViewItem" id="966988208">
 												<string key="NSIdentifier">1</string>
 												<object class="NSView" key="NSView" id="259575740">
-													<reference key="NSNextResponder" ref="124333960"/>
+													<nil key="NSNextResponder"/>
 													<int key="NSvFlags">256</int>
 													<object class="NSMutableArray" key="NSSubviews">
 														<bool key="EncodedWithXMLCoder">YES</bool>
@@ -157,7 +157,6 @@
 														</object>
 													</object>
 													<string key="NSFrameSize">{874, 411}</string>
-													<reference key="NSSuperview" ref="124333960"/>
 												</object>
 												<string key="NSLabel">Overview</string>
 												<object class="NSColor" key="NSColor" id="288047085">
@@ -337,7 +336,7 @@
 											<object class="NSTabViewItem" id="723910753">
 												<string key="NSIdentifier">2</string>
 												<object class="NSView" key="NSView" id="220476942">
-													<nil key="NSNextResponder"/>
+													<reference key="NSNextResponder" ref="124333960"/>
 													<int key="NSvFlags">274</int>
 													<object class="NSMutableArray" key="NSSubviews">
 														<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1164,20 +1163,21 @@
 														<object class="NSStepper" id="56163032">
 															<reference key="NSNextResponder" ref="220476942"/>
 															<int key="NSvFlags">268</int>
-															<string key="NSFrame">{{291, 58}, {19, 27}}</string>
+															<string key="NSFrame">{{287, 58}, {19, 27}}</string>
 															<reference key="NSSuperview" ref="220476942"/>
 															<bool key="NSEnabled">YES</bool>
 															<object class="NSStepperCell" key="NSCell" id="356384706">
 																<int key="NSCellFlags">917024</int>
 																<int key="NSCellFlags2">0</int>
 																<reference key="NSControlView" ref="56163032"/>
-																<double key="NSMaxValue">1.000000e+02</double>
+																<double key="NSMaxValue">1.000000e+05</double>
 																<double key="NSIncrement">1.000000e+00</double>
 																<bool key="NSAutorepeat">YES</bool>
 															</object>
 														</object>
 													</object>
 													<string key="NSFrameSize">{874, 411}</string>
+													<reference key="NSSuperview" ref="124333960"/>
 												</object>
 												<string key="NSLabel">Details</string>
 												<reference key="NSColor" ref="288047085"/>
@@ -1837,13 +1837,13 @@
 												<reference key="NSTabView" ref="124333960"/>
 											</object>
 										</object>
-										<reference key="NSSelectedTabViewItem" ref="966988208"/>
+										<reference key="NSSelectedTabViewItem" ref="723910753"/>
 										<reference key="NSFont" ref="707745533"/>
 										<int key="NSTvFlags">6</int>
 										<bool key="NSAllowTruncatedLabels">YES</bool>
 										<object class="NSMutableArray" key="NSSubviews">
 											<bool key="EncodedWithXMLCoder">YES</bool>
-											<reference ref="259575740"/>
+											<reference ref="220476942"/>
 										</object>
 									</object>
 								</object>
@@ -2380,22 +2380,6 @@
 						</object>
 					</object>
 					<int key="connectionID">2260</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: movie.runningTime</string>
-						<reference key="source" ref="474745463"/>
-						<reference key="destination" ref="1021"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="474745463"/>
-							<reference key="NSDestination" ref="1021"/>
-							<string key="NSLabel">value: movie.runningTime</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">movie.runningTime</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">2267</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -3045,6 +3029,46 @@
 						</object>
 					</object>
 					<int key="connectionID">2603</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: movie.runningTime</string>
+						<reference key="source" ref="56163032"/>
+						<reference key="destination" ref="1021"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="56163032"/>
+							<reference key="NSDestination" ref="1021"/>
+							<string key="NSLabel">value: movie.runningTime</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">movie.runningTime</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSValidatesImmediately</string>
+								<boolean value="YES" key="NS.object.0"/>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2607</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">displayPatternValue1: movie.runningTime</string>
+						<reference key="source" ref="474745463"/>
+						<reference key="destination" ref="1021"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="474745463"/>
+							<reference key="NSDestination" ref="1021"/>
+							<string key="NSLabel">displayPatternValue1: movie.runningTime</string>
+							<string key="NSBinding">displayPatternValue1</string>
+							<string key="NSKeyPath">movie.runningTime</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSDisplayPattern</string>
+								<string key="NS.object.0">%{value1}@ min</string>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2611</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -4459,7 +4483,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilderKit</string>
 					<string>com.apple.InterfaceBuilderKit</string>
-					<string>{{74, 88}, {900, 500}}</string>
+					<string>{{40, 88}, {900, 500}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSMutableDictionary">
 						<string key="NS.key.0">InitialTabViewItem</string>
@@ -4656,7 +4680,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2603</int>
+			<int key="maxID">2611</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

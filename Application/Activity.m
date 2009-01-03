@@ -56,4 +56,9 @@ NSString* const ActivityPercentCompleteUpdatedNotification = @"ActivityPercentCo
     }
 }
 
+- (NSString*) description
+{
+    return [NSString stringWithFormat:@"<Activity: %@, is complete:%@>", self.name, (self.isComplete ? @"True" : @"False")];
+}
+
 @end

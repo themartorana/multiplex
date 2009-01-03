@@ -94,6 +94,7 @@
 		55D390750E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D390740E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m */; };
 		55D390770E82DE72007413C5 /* Progress.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55D390760E82DE72007413C5 /* Progress.pdf */; };
 		55D9581B0E942EB300E35FF4 /* button-play-down.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55D9581A0E942EB300E35FF4 /* button-play-down.pdf */; };
+		55DCCB840F10153A00B3DF41 /* star-dots.png in Resources */ = {isa = PBXBuildFile; fileRef = 55DCCB830F10153A00B3DF41 /* star-dots.png */; };
 		55E5B5180ED26AA40054DEC7 /* MovieURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E5B5170ED26AA40054DEC7 /* MovieURL.m */; };
 		55E5B56E0ED2719E0054DEC7 /* Episode.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E5B56D0ED2719E0054DEC7 /* Episode.m */; };
 		55F815360E94082A005EF5DE /* button-play.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55F815350E94082A005EF5DE /* button-play.pdf */; };
@@ -518,6 +519,7 @@
 		55D390740E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndeterminateProgressIndicatorLayer.m; sourceTree = "<group>"; };
 		55D390760E82DE72007413C5 /* Progress.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Progress.pdf; sourceTree = "<group>"; };
 		55D9581A0E942EB300E35FF4 /* button-play-down.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "button-play-down.pdf"; sourceTree = "<group>"; };
+		55DCCB830F10153A00B3DF41 /* star-dots.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "star-dots.png"; sourceTree = "<group>"; };
 		55E5B5160ED26AA40054DEC7 /* MovieURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieURL.h; sourceTree = "<group>"; };
 		55E5B5170ED26AA40054DEC7 /* MovieURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieURL.m; sourceTree = "<group>"; };
 		55E5B56C0ED2719E0054DEC7 /* Episode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Episode.h; sourceTree = "<group>"; };
@@ -981,6 +983,7 @@
 		F96430AE0EB6412300D49FA0 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				55DCCB830F10153A00B3DF41 /* star-dots.png */,
 				552A6F6B0EE4C827005B9873 /* bottom-bar-tile.png */,
 				5521C68B0ECCB9CC00005057 /* UPC-code-example.png */,
 				F92B67B40EBFF90900609F16 /* arrow-right.png */,
@@ -1582,6 +1585,7 @@
 				552A6F3E0EE4C592005B9873 /* uni05_53.ttf in Resources */,
 				552A6F6C0EE4C827005B9873 /* bottom-bar-tile.png in Resources */,
 				F9A91F600F0B163D005CAF9F /* license.plist in Resources */,
+				55DCCB840F10153A00B3DF41 /* star-dots.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

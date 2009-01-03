@@ -104,7 +104,6 @@
 		F914C9C80EAD653300877991 /* plus-36x36.png in Resources */ = {isa = PBXBuildFile; fileRef = F914C9C70EAD653300877991 /* plus-36x36.png */; };
 		F914C9D00EAD657900877991 /* DrawerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F914C9CF0EAD657900877991 /* DrawerView.m */; };
 		F914CB100EAD7C8700877991 /* drawer-background-pattern-96x96.gif in Resources */ = {isa = PBXBuildFile; fileRef = F914CB0F0EAD7C8700877991 /* drawer-background-pattern-96x96.gif */; };
-		F91632140EE49B7C003D900E /* license.plist in Resources */ = {isa = PBXBuildFile; fileRef = F91632130EE49B7C003D900E /* license.plist */; };
 		F917CCA80EBA53CF00B21587 /* Query.m in Sources */ = {isa = PBXBuildFile; fileRef = F917CCA70EBA53CF00B21587 /* Query.m */; };
 		F92B63000EBFAF6100609F16 /* MovieDetail.xib in Resources */ = {isa = PBXBuildFile; fileRef = F92B62FF0EBFAF6100609F16 /* MovieDetail.xib */; };
 		F92B63B20EBFB6B000609F16 /* MovieLookup.xib in Resources */ = {isa = PBXBuildFile; fileRef = F92B63B10EBFB6B000609F16 /* MovieLookup.xib */; };
@@ -143,6 +142,7 @@
 		F9A1D66E0E8353C900AB691D /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A1D66D0E8353C900AB691D /* CoreServices.framework */; };
 		F9A1D6740E8353E100AB691D /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9D313EC0E7DD8A100D99DCA /* AppKit.framework */; };
 		F9A1D8D10E83699200AB691D /* Engine in Copy Files to Resources */ = {isa = PBXBuildFile; fileRef = F9A1D6220E8350C100AB691D /* Engine */; };
+		F9A91F600F0B163D005CAF9F /* license.plist in Resources */ = {isa = PBXBuildFile; fileRef = F9A91F5F0F0B163D005CAF9F /* license.plist */; };
 		F9B380DC0EAD029700FCAB1E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B380DB0EAD029700FCAB1E /* SystemConfiguration.framework */; };
 		F9B8D6900EB0BFCD008589F3 /* BoxArt.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B8D68F0EB0BFCD008589F3 /* BoxArt.m */; };
 		F9B8DB370EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B8DB350EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -533,7 +533,6 @@
 		F914C9CE0EAD657900877991 /* DrawerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawerView.h; sourceTree = "<group>"; };
 		F914C9CF0EAD657900877991 /* DrawerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawerView.m; sourceTree = "<group>"; };
 		F914CB0F0EAD7C8700877991 /* drawer-background-pattern-96x96.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "drawer-background-pattern-96x96.gif"; sourceTree = "<group>"; };
-		F91632130EE49B7C003D900E /* license.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = license.plist; sourceTree = "<group>"; };
 		F917CCA60EBA53CF00B21587 /* Query.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Query.h; sourceTree = "<group>"; };
 		F917CCA70EBA53CF00B21587 /* Query.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Query.m; sourceTree = "<group>"; };
 		F917CCBF0EBA551B00B21587 /* Query+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Query+Private.h"; sourceTree = "<group>"; };
@@ -578,6 +577,7 @@
 		F9A1D5170E8342C700AB691D /* HTTPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPServer.m; sourceTree = "<group>"; };
 		F9A1D6220E8350C100AB691D /* Engine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Engine; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9A1D66D0E8353C900AB691D /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
+		F9A91F5F0F0B163D005CAF9F /* license.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = license.plist; sourceTree = "<group>"; };
 		F9AFE3E40B65CC6D0035DA65 /* ScratchPad */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ScratchPad; sourceTree = "<group>"; };
 		F9B380DB0EAD029700FCAB1E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
 		F9B8D68E0EB0BFCD008589F3 /* BoxArt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoxArt.h; sourceTree = "<group>"; };
@@ -804,6 +804,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F9A91F5F0F0B163D005CAF9F /* license.plist */,
 				552A6F180EE4C2AD005B9873 /* Fonts */,
 				F96430B00EB6415600D49FA0 /* CSS */,
 				F96430AF0EB6412900D49FA0 /* PDFs */,
@@ -814,7 +815,6 @@
 				F92B62FF0EBFAF6100609F16 /* MovieDetail.xib */,
 				F92B63B10EBFB6B000609F16 /* MovieLookup.xib */,
 				553477800EA3AD5100436A8C /* multiplex-mark01a.icns */,
-				F91632130EE49B7C003D900E /* license.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1579,9 +1579,9 @@
 				556B15630EC0A8AC001B5E74 /* row-view.pdf in Resources */,
 				5521C68C0ECCB9CC00005057 /* UPC-code-example.png in Resources */,
 				55581D760ED48F03004762BF /* search-result-no-image.pdf in Resources */,
-				F91632140EE49B7C003D900E /* license.plist in Resources */,
 				552A6F3E0EE4C592005B9873 /* uni05_53.ttf in Resources */,
 				552A6F6C0EE4C827005B9873 /* bottom-bar-tile.png in Resources */,
+				F9A91F600F0B163D005CAF9F /* license.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

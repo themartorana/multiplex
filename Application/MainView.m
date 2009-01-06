@@ -152,6 +152,15 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
 
 - (void) setHoveredMovie:(Movie*)_hoveredMovie
 {
+    if (_hoveredMovie) {
+        if ([NSCursor currentCursor] != [NSCursor pointingHandCursor]) {
+            [[NSCursor pointingHandCursor] push];    
+        }
+    }
+    else {
+        [NSCursor pop];
+    }
+    
     if (_hoveredMovie != hoveredMovie) {
         [hoveredMovie release];
         hoveredMovie = [_hoveredMovie retain];

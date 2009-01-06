@@ -31,6 +31,12 @@
     IBOutlet NSTabViewItem* overviewTabViewItem;
     IBOutlet NSTabViewItem* discsTabViewItem;
     IBOutlet LayerBackedButtonView* playButtonView;
+    
+    IBOutlet NSArrayController* actorsArrayController;
+    IBOutlet NSArrayController* crewArrayController;
+    
+    IBOutlet NSTableView* actorsTableView;
+    IBOutlet NSTableView* crewTableView;
     /**/
     Movie* movie;
     NSColor* labelColor;
@@ -62,6 +68,9 @@
 
 - (IBAction) playSelectedMovie:(id)sender;
 - (IBAction) playDisc:(id)obj;
+
+- (IBAction) addActor:(id)sender;
+- (IBAction) addCrewMember:(id)sender;
 
 - (NSString*) generateDescriptionHtmlString;
 

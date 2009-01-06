@@ -22,6 +22,7 @@
 
 @interface MovieDetailController (Private)
 - (MovieURL*) getAmazonURL;
+- (void) addParticipant:(BOOL)isActor;
 @end
 
 @implementation MovieDetailController
@@ -70,6 +71,11 @@
     
     [editImageBox setCornerRadius:5.0];
     [editImageBox setFillColor:[NSColor colorWithCalibratedWhite:0.6 alpha:0.5]];
+    
+    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+    [actorsArrayController setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    [crewArrayController setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    [sortDescriptor release];
 }
 
 - (void) takeControl
@@ -100,20 +106,30 @@
 {
     NSSet* updated = [notification.userInfo objectForKey:@"updated"];
     NSManagedObjectContext* managedObjectContext = notification.object;
+    BOOL performSave = NO;
     
     if ([managedObjectContext hasChanges]) {
-        if (updated && [updated containsObject:movie]) {
-            NSDictionary* changedValues = movie.changedValues;
-            int count = [changedValues count];
-            NSDate* metadataAcceptedDate = [changedValues objectForKey:@"metadataAcceptedDate"];
-
-            /*  If just the metadataAcceptedDate changed, then don't bother 
-             *  doing a save.
-             */
-            if ((count > 1) || (count == 1 && metadataAcceptedDate == nil)) {
-                [self performSelectorOnMainThread:@selector(_saveObjectContext) withObject:nil waitUntilDone:NO];
+        if (updated) {
+            if ([updated containsObject:movie] && [[updated allObjects] count] == 1) {
+                NSDictionary* changedValues = movie.changedValues;
+                int count = [changedValues count];
+                NSDate* metadataAcceptedDate = [changedValues objectForKey:@"metadataAcceptedDate"];
+                
+                /*  If just the metadataAcceptedDate changed, then don't bother 
+                 *  doing a save.
+                 */
+                if ((count > 1) || (count == 1 && metadataAcceptedDate == nil)) {
+                    performSave = YES;
+                }
             }
+            else {
+                performSave = YES;
+            }            
         }
+    }
+    
+    if (performSave) {
+        [self performSelectorOnMainThread:@selector(_saveObjectContext) withObject:nil waitUntilDone:NO];
     }
 }
 
@@ -255,6 +271,47 @@
     if ([obj isKindOfClass:[Disc class]]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayDisc" object:obj];
     }
+}
+
+- (IBAction) addActor:(id)sender
+{
+    [self addParticipant:YES];
+}
+
+- (IBAction) addCrewMember:(id)sender
+{
+    [self addParticipant:NO];
+}
+
+- (void) addParticipant:(BOOL)isActor
+{
+    NSEntityDescription* participantEntity = [NSEntityDescription entityForName:@"Participant" inManagedObjectContext:[applicationController appManagedObjectContext]];
+    Participant* p = [[Participant alloc] initWithEntity:participantEntity insertIntoManagedObjectContext:[applicationController appManagedObjectContext]];
+    
+    p.movie = movie;
+    p.name = @"Name";
+
+    NSArrayController* ac = nil;
+    NSTableView* tv = nil;
+    
+    if (isActor) {
+        p.position = @"Role";
+        p.type = @"actor";
+        
+        ac = actorsArrayController;
+        tv = actorsTableView;
+    }
+    else {
+        p.position = @"Position";
+        p.type = @"crew";
+        
+        ac = crewArrayController;
+        tv = crewTableView;
+    }
+    
+    int pos = [[ac arrangedObjects] indexOfObject:p];
+    [tv selectRowIndexes:[NSIndexSet indexSetWithIndex:pos] byExtendingSelection:NO];
+    [tv editColumn:0 row:pos withEvent:nil select:YES];    
 }
 
 - (void) showHomeTab

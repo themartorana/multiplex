@@ -8,6 +8,7 @@
 #import "LayerBackedButtonView.h"
 #import "ApplicationResources.h"
 #import "DrawerView.h"
+#import "HoverInfoView.h"
 
 #import <Toolkit/Toolkit.h>
 #import <QuartzCore/QuartzCore.h>
@@ -23,7 +24,6 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context;
 - (void) _cancelHoverTimer;
 - (NSArray*) _listOfLayersInOrder;
-- (MovieLayer*) _movieLayerForPoint:(CGPoint)p;
 - (void) _hoverTimerTicked:(NSTimer*)timer;
 - (void) _restartMouseTracking;
 @end
@@ -64,13 +64,12 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     
     layersByID = [[NSMutableDictionary alloc] init];
     
-    hoverPlayLayer = [HoverPlayLayer layer];
-    hoverPlayLayer.hidden = YES;
-    [rootLayer addSublayer:hoverPlayLayer];
-    [hoverPlayLayer bind:@"hoveredMovie" toObject:self withKeyPath:@"hoveredMovie" options:nil];
+    [hoverInfoView bind:@"movie" toObject:self withKeyPath:@"hoveredMovie" options:nil];
     
     [drawerView addObserver:self forKeyPath:@"isOpen" options:NSKeyValueObservingOptionNew context:nil];
-
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playCatchUpToSelectedMovie:) name:@"MultiplexShowMovieDialog" object:nil];
+    
     [self _restartMouseTracking];
 }
 
@@ -79,7 +78,6 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     [self _cancelHoverTimer];
     [layersByID release];
     [listOfMoviesInOrder release];
-    [hoverPlayLayer release];
     [super dealloc];
 }
 
@@ -164,7 +162,7 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     if (_hoveredMovie != hoveredMovie) {
         [hoveredMovie release];
         hoveredMovie = [_hoveredMovie retain];
-        hoverPlayLayer.hidden = YES;
+        [hoverInfoView setHidden:YES];
         [layoutManager setHoveredMovieLayer:[layersByID objectForKey:_hoveredMovie.objectID]];
     }
     [self restartHoverTimer];
@@ -183,6 +181,18 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     [self _restartMouseTracking];
 }
 
+- (MovieLayer*) movieLayerForPoint:(CGPoint)p
+{
+    CALayer* layer = [floorLayer hitTest:p];
+    while (layer) {
+        if ([layer isKindOfClass:[MovieLayer class]]) {
+            return (MovieLayer*)layer;
+        }
+        layer = layer.superlayer;
+    }
+    return nil;
+}
+
 - (void) resetCurrentlySelectedMovieLayer
 {
     if (selectedMovieLayer) {
@@ -190,22 +200,37 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     }
 }
 
-- (void) mouseDown:(NSEvent*)theEvent
+- (void) playCatchUpToSelectedMovie:(NSNotification*)notification
 {
-    if (!hoverPlayLayer.hidden) {
-        CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
-        CALayer *layer = [hoverPlayLayer hitTest:p];
-        if (layer && [layer isKindOfClass:[ButtonLayer class]]) {
-            hoverPlayLayer.isMouseDown = YES;
+    // It's possible that someone else has determined a movie to be 
+    // selected and openend in the info view.  If that's 
+    // correct, we need to play a little catch up.
+    id obj = [notification object];
+    if (obj && [obj isKindOfClass:[NSManagedObject class]]) {
+        NSEntityDescription* movieEntity = [NSEntityDescription entityForName:@"Movie" inManagedObjectContext:[applicationController appManagedObjectContext]];
+        if ([[(NSManagedObject*)obj entity] isKindOfEntity:movieEntity]) {
+            selectedMovieLayer = [layersByID objectForKey:((Movie*)obj).objectID];
         }
     }
 }
 
+// Not necessary since the change to a NSView
+/*- (void) mouseDown:(NSEvent*)theEvent
+{
+    if (![hoverInfoView isHidden]) {
+        CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
+        CALayer *layer = [hoverInfoView hitTest:p];
+        if (layer && [layer isKindOfClass:[ButtonLayer class]]) {
+            hoverInfoView.isMouseDown = YES;
+        }
+    }
+}*/
+
 - (void) mouseUp:(NSEvent*)theEvent
 {
-    hoverPlayLayer.isMouseDown = NO;
     CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
-    CALayer* playButtonLayer = [hoverPlayLayer hitTest:p];
+    /*hoverInfoView.isMouseDown = NO;
+    CALayer* playButtonLayer = [hoverInfoView hitTest:p];
 
     if (playButtonLayer) {
         if ([playButtonLayer isKindOfClass:[ButtonLayer class]]) {
@@ -214,14 +239,14 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
         }  
         
         return;
-    }
+    }*/
 
     // This was the else for double-click with drawer open.  Leaving in
     // since the move to single-click is experimental at this time.
     //else if (movieLayer && ([drawerView isOpen] && [theEvent clickCount] == 1) ||
     //    (![drawerView isOpen] && [theEvent clickCount] == 2)) {
     
-    MovieLayer* movieLayer = [self _movieLayerForPoint:p];
+    MovieLayer* movieLayer = [self movieLayerForPoint:p];
     if (![[listOfMoviesInOrder objectAtIndex:[listOfMoviesInOrder count] - 1] containsObject:movieLayer.movie]) {
         movieLayer = nil;
     }
@@ -234,7 +259,7 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
             selectedMovieLayer = movieLayer;
             
             [content setSelectedObjects:[NSArray arrayWithObject:[movieLayer movie]]];
-            hoverPlayLayer.hidden = YES;
+            [hoverInfoView setHidden:YES];
             [self _cancelHoverTimer];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexShowMovieDialog" object:nil];
         }        
@@ -244,28 +269,24 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
 - (void) mouseMoved:(NSEvent*)theEvent
 {
     CGPoint position = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
-    MovieLayer* movieLayer = [self _movieLayerForPoint:position];
+    MovieLayer* movieLayer = [self movieLayerForPoint:position];
     Movie* movie = movieLayer.movie;
+    
     if (movie && ![[content arrangedObjects] containsObject:movie]) {
         movie = nil;
     }
     
-    if (movie != hoveredMovie && ![hoverPlayLayer hitTest:position]) {
+    if (movie != hoveredMovie && ![hoverInfoView hitTest:NSPointFromCGPoint(position)]) {
         [self setHoveredMovie:movie];
-    } else {
         [self restartHoverTimer];
     }
     
-    if (hoverPlayLayer.hidden) {
-        CGPoint newPosition = CGPointMake(position.x, position.y - hoverPlayLayer.bounds.size.height + 10.0);
-        if (position.x + hoverPlayLayer.bounds.size.width < [self frame].size.width) {
-            [hoverPlayLayer putLayersIntoDefaultPosition];
-            newPosition.x -= 20.0;
+    if ([hoverInfoView isHidden]) {
+        if (position.x + [hoverInfoView bounds].size.width < [self frame].size.width) {
+            [hoverInfoView setInFlipPosition:NO];
         } else {
-            [hoverPlayLayer putLayersIntoAlternatePosition];
-            newPosition.x -= hoverPlayLayer.bounds.size.width - 20.0;
+            [hoverInfoView setInFlipPosition:YES];
         }
-        [hoverPlayLayer setPosition:newPosition];
     }
 }
 
@@ -338,14 +359,7 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
 
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
-    if ([@"selection" isEqualToString:keyPath]) {
-        /*id selection = [change objectForKey:NSKeyValueChangeNewKey];
-        if (selection == NSNoSelectionMarker || selection == (id)kCFNull) {
-            [layoutManager setSelectedMovie:nil];
-        } else {
-            [layoutManager setSelectedMovie:selection];
-        }*/
-    } else if ([@"content.@count" isEqualToString:keyPath]) {
+    if ([@"content.@count" isEqualToString:keyPath]) {
         [listOfMoviesInOrder autorelease];
         listOfMoviesInOrder = [[NSArray alloc] initWithObjects:[[content arrangedObjects] copy], nil];
         [self setHoveredMovie:nil];
@@ -397,18 +411,6 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     return listOfLayersInOrder;
 }
 
-- (MovieLayer*) _movieLayerForPoint:(CGPoint)p
-{
-    CALayer* layer = [floorLayer hitTest:p];
-    while (layer) {
-        if ([layer isKindOfClass:[MovieLayer class]]) {
-            return (MovieLayer*)layer;
-        }
-        layer = layer.superlayer;
-    }
-    return nil;
-}
-
 - (void) _cancelHoverTimer 
 {
     if (hoverTimer) @synchronized (hoverTimer) {
@@ -426,7 +428,8 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
         
         [CATransaction begin];
         [CATransaction setValue:[NSNumber numberWithFloat:0.25] forKey:kCATransactionAnimationDuration];
-        hoverPlayLayer.hidden = NO;
+        if ([hoverInfoView isHidden])
+            [hoverInfoView setHidden:NO];
         [CATransaction commit];
     }
 }

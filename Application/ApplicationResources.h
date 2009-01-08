@@ -24,5 +24,6 @@
 
 + (WebPreferences*) movieDescriptionWebPreferences;
 + (WebPreferences*) userVoiceWebPreferences;
++ (WebPreferences*) hoverViewWebPreferences;
 
 @end

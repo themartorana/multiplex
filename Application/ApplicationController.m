@@ -214,7 +214,7 @@
     NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(playDiscRequest:) name:@"MultiplexPlayDisc" object:nil];
     [notificationCenter addObserver:self selector:@selector(closeDrawerView:) name:@"MultiplexCloseDrawerView" object:nil];
-    [notificationCenter addObserver:self selector:@selector(playSelectedMovie:) name:@"MultiplexPlayButtonClicked" object:nil];
+    [notificationCenter addObserver:self selector:@selector(playSelectedMovie:) name:@"MultiplexPlayMovie" object:nil];
     [notificationCenter addObserver:self selector:@selector(toggleFullScreen:) name:@"MultiplexToggleFullScreen" object:nil];
     [notificationCenter addObserver:self selector:@selector(openInfoView:) name:@"MultiplexShowMovieDialog" object:nil];
     
@@ -299,6 +299,8 @@
 
 - (void) playSelectedMovie:(NSNotification*)notification
 {
+    [self setSelectedMovieFromNotificationIfNecessary:notification];
+    
     if (selectedMovie) {
         if ([selectedMovie.allDiscs count] == 1) {
             Disc* d = [[selectedMovie.allDiscs allObjects] objectAtIndex:0];
@@ -401,6 +403,8 @@
 
 - (void) openInfoView:(NSNotification*)notification
 {
+    [self setSelectedMovieFromNotificationIfNecessary:notification];
+    
     [drawerView openDrawer];
     [movieDetailController showHomeTab];
 }
@@ -419,6 +423,19 @@
         modalDelegate:self 
        didEndSelector:@selector(userVoicePanelDidEnd:returnCode:contextInfo:) 
           contextInfo:nil];
+}
+
+- (void) setSelectedMovieFromNotificationIfNecessary:(NSNotification*)n
+{
+    id obj = [n object];
+    if (obj && [obj isKindOfClass:[NSManagedObject class]]) {
+        NSEntityDescription* movieEntity = [NSEntityDescription entityForName:@"Movie" inManagedObjectContext:appManagedObjectContext];
+    
+        if ([[(NSManagedObject*)obj entity] isKindOfEntity:movieEntity]) {
+            // Select the movie if it's a movie
+            [movies setSelectedObjects:[NSArray arrayWithObject:obj]];
+        }
+    }
 }
 
 - (void) userVoicePanelDidEnd:(NSPanel*)panel returnCode:(int)returnCode contextInfo:(void*)contextInfo

@@ -228,4 +228,15 @@
     return prefs;
 }
 
++ (WebPreferences*) hoverViewWebPreferences
+{
+    WebPreferences* prefs = [[WebPreferences alloc] init];
+    [prefs setJavaEnabled:NO];
+    [prefs setJavaScriptEnabled:YES];
+    [prefs setPlugInsEnabled:NO];
+    [prefs setUserStyleSheetEnabled:YES];
+    [prefs setUserStyleSheetLocation:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"hoverview" ofType:@"css"]]];
+    return prefs;
+}
+
 @end

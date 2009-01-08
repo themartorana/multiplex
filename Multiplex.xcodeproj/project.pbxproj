@@ -95,6 +95,9 @@
 		55D390770E82DE72007413C5 /* Progress.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55D390760E82DE72007413C5 /* Progress.pdf */; };
 		55D9581B0E942EB300E35FF4 /* button-play-down.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55D9581A0E942EB300E35FF4 /* button-play-down.pdf */; };
 		55DCCB840F10153A00B3DF41 /* star-dots.png in Resources */ = {isa = PBXBuildFile; fileRef = 55DCCB830F10153A00B3DF41 /* star-dots.png */; };
+		55DCCE820F1530FA00B3DF41 /* HoverInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55DCCE810F1530FA00B3DF41 /* HoverInfoView.m */; };
+		55DCCE840F15314700B3DF41 /* hoverview.css in Resources */ = {isa = PBXBuildFile; fileRef = 55DCCE830F15314700B3DF41 /* hoverview.css */; };
+		55DCCE860F15319400B3DF41 /* hoverview.html in Resources */ = {isa = PBXBuildFile; fileRef = 55DCCE850F15319400B3DF41 /* hoverview.html */; };
 		55E5B5180ED26AA40054DEC7 /* MovieURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E5B5170ED26AA40054DEC7 /* MovieURL.m */; };
 		55E5B56E0ED2719E0054DEC7 /* Episode.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E5B56D0ED2719E0054DEC7 /* Episode.m */; };
 		55F815360E94082A005EF5DE /* button-play.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55F815350E94082A005EF5DE /* button-play.pdf */; };
@@ -520,6 +523,10 @@
 		55D390760E82DE72007413C5 /* Progress.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Progress.pdf; sourceTree = "<group>"; };
 		55D9581A0E942EB300E35FF4 /* button-play-down.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "button-play-down.pdf"; sourceTree = "<group>"; };
 		55DCCB830F10153A00B3DF41 /* star-dots.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "star-dots.png"; sourceTree = "<group>"; };
+		55DCCE800F1530FA00B3DF41 /* HoverInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HoverInfoView.h; sourceTree = "<group>"; };
+		55DCCE810F1530FA00B3DF41 /* HoverInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HoverInfoView.m; sourceTree = "<group>"; };
+		55DCCE830F15314700B3DF41 /* hoverview.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = hoverview.css; sourceTree = "<group>"; };
+		55DCCE850F15319400B3DF41 /* hoverview.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = hoverview.html; sourceTree = "<group>"; };
 		55E5B5160ED26AA40054DEC7 /* MovieURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieURL.h; sourceTree = "<group>"; };
 		55E5B5170ED26AA40054DEC7 /* MovieURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieURL.m; sourceTree = "<group>"; };
 		55E5B56C0ED2719E0054DEC7 /* Episode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Episode.h; sourceTree = "<group>"; };
@@ -817,6 +824,7 @@
 				F92B62FF0EBFAF6100609F16 /* MovieDetail.xib */,
 				F92B63B10EBFB6B000609F16 /* MovieLookup.xib */,
 				553477800EA3AD5100436A8C /* multiplex-mark01a.icns */,
+				55DCCE850F15319400B3DF41 /* hoverview.html */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1035,6 +1043,7 @@
 			children = (
 				5574409C0EABDD54002E0B80 /* uservoice-feedback.css */,
 				55B81A480EA049D500775EAE /* movie-description.css */,
+				55DCCE830F15314700B3DF41 /* hoverview.css */,
 			);
 			name = CSS;
 			sourceTree = "<group>";
@@ -1071,6 +1080,8 @@
 				5551FB9D0EB65F3C0022147A /* NoDiscsView.m */,
 				556BD78A0E9444ED00EC698A /* WorkingStatusView.h */,
 				556BD78B0E9444ED00EC698A /* WorkingStatusView.m */,
+				55DCCE800F1530FA00B3DF41 /* HoverInfoView.h */,
+				55DCCE810F1530FA00B3DF41 /* HoverInfoView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1586,6 +1597,8 @@
 				552A6F6C0EE4C827005B9873 /* bottom-bar-tile.png in Resources */,
 				F9A91F600F0B163D005CAF9F /* license.plist in Resources */,
 				55DCCB840F10153A00B3DF41 /* star-dots.png in Resources */,
+				55DCCE840F15314700B3DF41 /* hoverview.css in Resources */,
+				55DCCE860F15319400B3DF41 /* hoverview.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1715,6 +1728,7 @@
 				55F83CFD0ECE7DDD00C68896 /* Participant.m in Sources */,
 				55E5B5180ED26AA40054DEC7 /* MovieURL.m in Sources */,
 				55E5B56E0ED2719E0054DEC7 /* Episode.m in Sources */,
+				55DCCE820F1530FA00B3DF41 /* HoverInfoView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

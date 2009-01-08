@@ -65,6 +65,8 @@
 - (void) showMovieDetailAndSelectDiscsTabMovie:(Movie*)movie;
 - (void) showMovieLookupForMovie:(Movie*)movie byTitle:(BOOL)byTitle;
 
+- (void) setSelectedMovieFromNotificationIfNecessary:(NSNotification*)n;
+
 - (BOOL) canSwitchDrawerControllers;
 
 @end

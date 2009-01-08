@@ -61,7 +61,7 @@
     [overviewWebView setPreferences:[ApplicationResources movieDescriptionWebPreferences]];
     
     [playButtonView setButtonLayerButtonWithUpState:[ApplicationResources playButton] andDownState:[ApplicationResources playButtonDown]];
-    [playButtonView setNotificationNameToPost:@"MultiplexPlayButtonClicked"];
+    [playButtonView setNotificationNameToPost:@"MultiplexPlayMovie"];
     
     [coverArtImageView bind:@"image" toObject:self withKeyPath:@"movie.boxArt.image" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
     [coverArtImageEditView bind:@"image" toObject:self withKeyPath:@"movie.boxArt.image" options:[NSDictionary dictionaryWithObjectsAndKeys:(id)[ApplicationResources CGImageFromResource:@"drag-drop-no-image" ofType:@"pdf"], NSNullPlaceholderBindingOption, nil]];
@@ -263,7 +263,7 @@
 
 - (IBAction) playSelectedMovie:(id)sender
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayButtonClicked" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayMovie" object:nil];
 }
 
 - (IBAction) playDisc:(id)obj

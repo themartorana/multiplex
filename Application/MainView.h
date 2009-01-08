@@ -1,11 +1,11 @@
 #import <Cocoa/Cocoa.h>
 #import "Movie.h"
 #import "MovieLayer.h"
-#import "HoverPlayLayer.h"
 #import "MultiplexLayoutManagerProtocol.h"
 
 @class DrawerView;
 @class ApplicationController;
+@class HoverInfoView;
 
 extern NSString* const kMultiplexDrawerIsOpenLayoutManagerClass;
 extern NSString* const kMultiplexDrawerIsClosedLayoutManagerClass;
@@ -13,12 +13,12 @@ extern NSString* const kMultiplexDrawerIsClosedLayoutManagerClass;
 @interface MainView : NSView {
     IBOutlet ApplicationController* applicationController;
     IBOutlet DrawerView* drawerView;
+    IBOutlet HoverInfoView* hoverInfoView;
     
     NSMutableDictionary* layersByID;
     NSArray* listOfMoviesInOrder;
     
     CALayer* floorLayer; // NR
-    HoverPlayLayer* hoverPlayLayer;
 
     NSTrackingArea* mouseTrackingArea;
     
@@ -38,6 +38,8 @@ extern NSString* const kMultiplexDrawerIsClosedLayoutManagerClass;
 @property (retain) id content;
 @property (retain) Movie* hoveredMovie;
 @property Class <MultiplexLayoutManagerProtocol> floorLayerLayoutManagerClass;
+
+- (MovieLayer*) movieLayerForPoint:(CGPoint)p;
 
 - (void) resetCurrentlySelectedMovieLayer;
 

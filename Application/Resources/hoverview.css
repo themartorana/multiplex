@@ -1,0 +1,29 @@
+#tooltip {
+    width: 180px;
+    margin: 0 auto;
+    border: 2px solid #F66A26;
+    padding: 10px 10px 10px 30px;
+    background: #DE6022;
+    color: white;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+#tooltip a {
+    color: white;
+}
+#tooltip th {
+    padding-right: 5px;
+    text-align: right;
+    vertical-align: top;
+}
+#tooltip td {
+    text-align: left;
+    vertical-align: top;
+}
+#tooltip #title {
+    margin: 0 0 .5em;
+    border-bottom: 2px solid #F66A26;
+    padding-bottom: .5em;
+    font-size: 1.25em;
+    font-weight: bold;
+}

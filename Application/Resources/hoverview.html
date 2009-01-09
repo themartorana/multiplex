@@ -7,27 +7,32 @@
         <title></title>
     </head>
     <body id="hoverview" onload="">
-        <div id="tooltip">
-            <h3 id="title"><!--[TITLE]--></h3>
-            <table>
-                <tr id="time">
-                    <th>Time:</th> <td><!--[TIME]--></td>
-                </tr>
-                <tr id="rating">
-                    <th>Rating:</th> <td><!--[RATING]--></td>
-                </tr>
-                <tr id="more">
-                    <th>More:</th> 
-                    <td>
-                        <a href="multiplex://OPEN_MOVIE">Open Movie Info</a><br />
-                        <!--[PLAY_MOVIE]
-                        <a href="multiplex://PLAY_MOVIE">Play Movie</a>
-                        [PLAY_MOVIE]-->
-                    </td>
-                    
-                </tr>
-            </table>
-        </div>        
+		<div id="tooltip">
+			<div id="tooltip-top"></div>
+			<div id="tooltip-title-top"></div>
+			<h3 id="title"><!--[TITLE]--></h3>
+			<div id="tooltip-title-bottom"></div>
+			<div id="info">
+				<table>
+					<tr id="time">
+						<th>Time:</th> <td><!--[TIME]--></td>
+					</tr>
+					<tr id="rating">
+						<th>Rating:</th> <td><!--[RATING]--></td>
+					</tr>
+					<tr id="open">
+						<th>&nbsp;</th> <td><a href="multiplex://OPEN_MOVIE">Open Movie Info</a></td>
+					</tr>
+					<!--[PLAY_MOVIE]
+					<tr id="play">
+						<th>&nbsp;</th> <td><a href="multiplex://PLAY_MOVIE">Play Movie</a></td>
+					</tr>
+					[PLAY_MOVIE]-->
+				</table>
+				<div id="pointer"></div>
+			</div>
+			<div id="tooltip-bottom"></div>
+		</div>
     </body>
 </html>
 

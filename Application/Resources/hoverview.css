@@ -1,29 +1,66 @@
 #tooltip {
-    width: 180px;
-    margin: 0 auto;
-    border: 2px solid #F66A26;
-    padding: 10px 10px 10px 30px;
-    background: #DE6022;
-    color: white;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
+	width: 200px;
+	margin: 0;
+	padding: 0;
+	background-image: url(tooltip-top.png);
+	background-repeat: no-repeat;
+	background-position: left top;
+	color: #000;
 }
 #tooltip a {
-    color: white;
+	color: #000;
+}
+#tooltip #tip-top {
+	height: 10px;
+	background: url(tooltip-top.png) no-repeat left top;
+}
+#tooltip #tooltip-title-top {
+	height: 8px;
+	border-top: 2px solid #BBB;
+	background: url(tooltip-title-top.png) repeat-x left top;
+}
+#tooltip h3#title {
+	margin: 0;
+	padding: 0 10px;
+	background-color: #F66A26;
+	color: #FFF;
+	font-size: 1.25em;
+	font-weight: bold;
+}
+#tooltip #tooltip-title-bottom {
+	height: 8px;
+	border-bottom: 2px solid #BBB;
+	background: url(tooltip-title-bottom.png) repeat-x left bottom;
+}
+#tooltip #info {
+	position: relative;
+	padding: 5px 10px;
+	background: #FFF url(tooltip-middle.png) no-repeat left top;
 }
 #tooltip th {
-    padding-right: 5px;
-    text-align: right;
-    vertical-align: top;
+	padding-right: 5px;
+	color: #999;
+	text-align: right;
+	vertical-align: top;
 }
 #tooltip td {
-    text-align: left;
-    vertical-align: top;
+	color: #777;
+	text-align: left;
+	vertical-align: top;
 }
-#tooltip #title {
-    margin: 0 0 .5em;
-    border-bottom: 2px solid #F66A26;
-    padding-bottom: .5em;
-    font-size: 1.25em;
-    font-weight: bold;
+#tooltip td a {
+	color: #777;
+}
+#tooltip #pointer {
+	position: absolute;
+	left: -19px;
+	top: 0px;
+	width: 19px;
+	height: 38px;
+	overflow: hidden;
+	background: url(tooltip-pointer.png) no-repeat left top;
+}
+#tooltip #tip-bottom {
+	height: 10px;
+	background: url(tooltip-bottom.png) no-repeat left bottom;
 }

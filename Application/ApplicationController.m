@@ -402,6 +402,7 @@
 {
     [self setSelectedMovieFromNotificationIfNecessary:notification];
     
+    [infoViewButton setState:NSOnState];
     [drawerView openDrawer];
     [movieDetailController showHomeTab];
 }

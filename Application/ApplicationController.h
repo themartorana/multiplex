@@ -41,6 +41,7 @@
     NSString* searchQuery;
     NSView* viewInFullScreen;
     IBOutlet NSButton* fullScreenButton;
+    IBOutlet NSButton* infoViewButton;
     
     DrawerViewControllerProtocol* currentDrawerViewController;
     

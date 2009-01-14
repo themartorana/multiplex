@@ -503,7 +503,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
         
         /*  Find the disc that's represented by our fingerprint.
          */
-        Media* media = (Media*)[managedObjectContext objectWithID:activity.userInfo]; 
+        Media* media = activity.userInfo; 
         if (media) {
             Disc* disc = media.disc;
             Movie* movie = disc.movie;
@@ -658,10 +658,9 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
 - (void) imageQuery:(ImageQuery*)query didFailWithError:(NSError*)error userInfo:(id)userInfo
 {
     Activity* activity = userInfo;
-
     [managedObjectContext lock];
     @try {
-        BoxArt* boxArt = (BoxArt*)[managedObjectContext objectRegisteredForID:activity.userInfo];
+        BoxArt* boxArt = activity.userInfo;
         if (boxArt) {
             NSString* state = error ? [error description] : @"Error";
             boxArt.state = state;
@@ -678,10 +677,9 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
 - (void) imageQuery:(ImageQuery*)query didReceiveData:(NSData*)data ofType:(NSString*)mimeType userInfo:(id)userInfo
 {
     Activity* activity = userInfo;
-
     [managedObjectContext lock];
     @try {
-        BoxArt* boxArt = (BoxArt*)[managedObjectContext objectRegisteredForID:activity.userInfo];
+        BoxArt* boxArt = activity.userInfo;
         if (boxArt) {
             NSString* type = [(id)UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (CFStringRef)mimeType, CFSTR("public.image")) autorelease];
             boxArt.type = type;
@@ -751,6 +749,8 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
 
 - (void) protocol:(MessageProtocol*)protocol didReceiveMessage:(NSDictionary*)message 
 {
+    NSMutableArray* queriesToStart = [NSMutableArray array];
+    
     [managedObjectContext lock];
     @try {
         NSManagedObjectID* objectID = protocol.userInfo;
@@ -799,17 +799,12 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                 if (isLocalMachine) {
                     media.pathToFile = pathToFile;
                 }
-
-                /*  Make sure that we get permanent IDs for the things we just 
-                 *  made.
-                 */
-                [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObjects:media, disc, movie, nil] error:nil];
                 
                 /*  Fire off a query to get additional info, if necessary.
                  */
                 NSString* infoURL = [info objectForKey:@"infoURL"];
                 if (infoURL && !movie.metadataAcceptedDate) {
-                    [JSONQuery JSONQueryWithURL:[NSURL URLWithString:infoURL] delegate:self userInfo:[Activity activityWithName:kLoadingDiscInfo userInfo:media.objectID] startImmediately:YES];
+                    [queriesToStart addObject:[JSONQuery JSONQueryWithURL:[NSURL URLWithString:infoURL] delegate:self userInfo:[Activity activityWithName:kLoadingDiscInfo userInfo:media] startImmediately:NO]];
                 }
                 
                 /*  Fire off a query to get box art, if necessary.
@@ -822,7 +817,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                         boxArt.url = frontCoverURL;
                         boxArt.state = @"Loading";
                         [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObjects:boxArt, nil] error:nil];
-                        [ImageQuery imageQueryWithURL:[NSURL URLWithString:frontCoverURL] delegate:self userInfo:[Activity activityWithName:kLoadingBoxArtActivityName userInfo:boxArt.objectID] startImmediately:YES];
+                        [queriesToStart addObject:[ImageQuery imageQueryWithURL:[NSURL URLWithString:frontCoverURL] delegate:self userInfo:[Activity activityWithName:kLoadingBoxArtActivityName userInfo:boxArt] startImmediately:NO]];
                     }
                     disc.boxArt = boxArt;
                 }
@@ -875,7 +870,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                  */
                 NSString* infoURL = [info objectForKey:@"infoURL"];
                 if (infoURL && !movie.metadataAcceptedDate) {
-                    [JSONQuery JSONQueryWithURL:[NSURL URLWithString:infoURL] delegate:self userInfo:[Activity activityWithName:kLoadingDiscInfo userInfo:media.objectID] startImmediately:YES];
+                    [queriesToStart addObject:[JSONQuery JSONQueryWithURL:[NSURL URLWithString:infoURL] delegate:self userInfo:[Activity activityWithName:kLoadingDiscInfo userInfo:media] startImmediately:NO]];
                 }
                 
                 /*  Fire off a query to get box art, if necessary.
@@ -888,7 +883,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                         boxArt.url = frontCoverURL;
                         boxArt.state = @"Loading";
                         [managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObjects:boxArt, nil] error:nil];
-                        [ImageQuery imageQueryWithURL:[NSURL URLWithString:frontCoverURL] delegate:self userInfo:[Activity activityWithName:kLoadingBoxArtActivityName userInfo:boxArt.objectID] startImmediately:YES];
+                        [queriesToStart addObject:[ImageQuery imageQueryWithURL:[NSURL URLWithString:frontCoverURL] delegate:self userInfo:[Activity activityWithName:kLoadingBoxArtActivityName userInfo:boxArt] startImmediately:NO]];
                     }
                     disc.boxArt = boxArt;
                 }
@@ -931,6 +926,10 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
         /*  Persist out our changes.
          */
         [managedObjectContext saveAndPrintErrors];
+
+        for (Query* query in queriesToStart) {
+            [query start];
+        }
     } @catch (id exception) {
         NSLog(@"%@", exception);
         [managedObjectContext rollback];

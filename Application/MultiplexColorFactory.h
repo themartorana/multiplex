@@ -22,6 +22,7 @@
 
 + (CGColorRef) whiteOneQuarterTransparent;
 + (CGColorRef) whiteHalfTransparent;
++ (CGColorRef) whiteThreeQuartersTransparent;
 + (CGColorRef) blackOneQuarterTransparent;
 + (CGColorRef) blackHalfTransparent;
 + (CGColorRef) blackThreeQuartersTransparent;

@@ -1,8 +1,8 @@
 #tooltip {
 	width: 200px;
 	margin: 0;
-    margin-left: 20px;
-	padding: 0;
+    margin-left: 10px;
+    padding: 0;
 	background-image: url(multiplexresource://tooltip-top.png);
 	background-repeat: no-repeat;
 	background-position: left top;
@@ -54,14 +54,23 @@
 #tooltip td a {
 	color: #777;
 }
-#tooltip #pointer {
+#tooltip #pointer-left {
 	position: absolute;
 	left: -19px;
 	top: 0px;
 	width: 19px;
 	height: 38px;
 	overflow: hidden;
-	background: url(multiplexresource://tooltip-pointer.png) no-repeat left top;
+	background: url(multiplexresource://tooltip-pointer-left.png) no-repeat left top;
+}
+#tooltip #pointer-right {
+	position: absolute;
+	right: -19px;
+	top: 0px;
+	width: 19px;
+	height: 38px;
+	overflow: hidden;
+	background: url(multiplexresource://tooltip-pointer-right.png) no-repeat right top;
 }
 #tooltip #tip-bottom {
 	height: 10px;

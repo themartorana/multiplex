@@ -3,6 +3,7 @@
 #import "Movie.h"
 #import "ApplicationResources.h"
 #import "MainView.h"
+#import "MultiplexColorFactory.h"
 
 NSString* const URL_PREFIX = @"multiplex://";
 
@@ -19,6 +20,9 @@ NSString* const URL_PREFIX = @"multiplex://";
     
     [webView setFrameLoadDelegate:self];
     [webView setPolicyDelegate:self];
+
+    //[self setWantsLayer:YES];
+    //[[self layer] setBackgroundColor:[MultiplexColorFactory whiteOneQuarterTransparent]];
     
     inFlipPosition = NO;
 }
@@ -54,8 +58,19 @@ NSString* const URL_PREFIX = @"multiplex://";
 - (void) webView:(WebView*)sender didFinishLoadForFrame:(WebFrame *)frame
 {
     if (frame == [webView mainFrame]) {
-        int height = [[[frame frameView] documentView] frame].size.height;
-        [self setBounds:NSMakeRect(0, 0, [self frame].size.width, height)];
+        
+        int height = [[[frame DOMDocument] getElementById:@"tooltip"] offsetHeight];
+        
+        int yOffset = 52.0;
+        if ([movie.availableDiscCount intValue] > 0) {
+            // In this case, we're adding the extra "Play" link line
+            yOffset += 17.0;
+        }
+        
+        [self setFrame:NSMakeRect([self frame].origin.x, 
+                                  [self frame].origin.y - yOffset, 
+                                  [self frame].size.width, 
+                                  height + 20.0)];
     }
     
     [super setHidden:NO];
@@ -68,7 +83,7 @@ NSString* const URL_PREFIX = @"multiplex://";
         NSPoint positionOfMouse = [[self superview] convertPoint:mousePoint fromView:nil];
                 
         int newx = positionOfMouse.x;
-        int newy = positionOfMouse.y - [self bounds].size.height + 60;
+        int newy = positionOfMouse.y;
         
         if (inFlipPosition) {
             newx -= [self bounds].size.width;
@@ -83,6 +98,13 @@ NSString* const URL_PREFIX = @"multiplex://";
         NSString* htmlString = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"hoverview" ofType:@"html"]];
         
         // Replace
+        if (!inFlipPosition) {
+            htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<!--[POINTER-ID]-->" withString:@"pointer-left"];
+        }
+        else {
+            htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<!--[POINTER-ID]-->" withString:@"pointer-right"];
+        }
+        
         if (movie.title) {
             htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<!--[TITLE]-->" withString:movie.title];
         }
@@ -92,7 +114,6 @@ NSString* const URL_PREFIX = @"multiplex://";
         if (movie.rating) {
             htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<!--[RATING]-->" withString:movie.rating];
         }
-        NSLog(@"Available disc count: %i", movie.availableDiscCount);
         if ([movie.availableDiscCount intValue] > 0) {
             htmlString = [[htmlString stringByReplacingOccurrencesOfString:@"<!--[PLAY_MOVIE]" withString:@""] 
                           stringByReplacingOccurrencesOfString:@"[PLAY_MOVIE]-->"

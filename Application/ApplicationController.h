@@ -19,6 +19,7 @@
     IBOutlet DrawerView* drawerView;
     IBOutlet NSSearchField* searchField;
     /**/
+    IBOutlet NSView* startUpSpinnerView;
     IBOutlet NSView* noDiscsView;
     IBOutlet NSView* noMovieSelectedView;
     IBOutlet NSView* searchForMovieView;

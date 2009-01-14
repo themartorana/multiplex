@@ -346,6 +346,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         if (adds) {  
             [protocol sendMessage:[NSDictionary dictionaryWithObjectsAndKeys:adds, @"add", nil]];
         }
+        [protocol sendMessage:[NSDictionary dictionaryWithObjectsAndKeys:(id)kCFBooleanTrue, @"finished", nil]];
         [protocols addObject:protocol];
     } @catch (id exception) {
         [protocol close];
@@ -596,6 +597,15 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             [message setObject:deletes forKey:@"delete"];
             [self sendMessage:message];
         }
+    }
+}
+
+- (void) mediaFileSource:(id<MediaFileSource>)mediaSource didFinishQuery:(BOOL)didFinish
+{
+    if (didFinish) {
+        NSMutableDictionary* message = [NSMutableDictionary dictionary];
+        [message setObject:[NSNumber numberWithBool:YES] forKey:@"finished"];
+        [self sendMessage:message];
     }
 }
 

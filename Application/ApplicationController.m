@@ -133,7 +133,7 @@
         NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
         [notificationCenter addObserver:self selector:@selector(engineControllerObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:engineManagedObjectContext];
         [notificationCenter addObserver:self selector:@selector(appControllerObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:appManagedObjectContext];
-        
+                
         // Register our URL handler
         [NSURLProtocol registerClass:[MultiplexResourceURLProtocol class]];
     }
@@ -223,6 +223,8 @@
     [notificationCenter addObserver:self selector:@selector(toggleFullScreen:) name:@"MultiplexToggleFullScreen" object:nil];
     [notificationCenter addObserver:self selector:@selector(openInfoView:) name:@"MultiplexShowMovieDialog" object:nil];
     
+    [notificationCenter addObserver:self selector:@selector(engineDidFinishInitialScan:) name:@"MultiplexEngineDidFinishInitialScan" object:nil];
+    
     [notificationCenter addObserver:self selector:@selector(refreshInfoFromInternetByUPC:) name:@"MultiplexRefreshMovieInfoFromInternetByUPC" object:nil];
     [notificationCenter addObserver:self selector:@selector(refreshInfoFromInternetByTitle:) name:@"MultiplexRefreshMovieInfoFromInternetByTitle" object:nil];
     
@@ -239,16 +241,6 @@
     [self loadLocalFonts];
     NSFont* uniFont = [NSFont fontWithName:@"uni 05_53" size:8.0];
     [licensingAndVersionInfo setFont:uniFont];
-    
-    // Delayed binding
-    // TODO: Rethink this
-    [self performSelector:@selector(bindNoMoviesDisplay) withObject:nil afterDelay:7.0];
-}
-
-- (void) bindNoMoviesDisplay
-{
-    //[movies addObserver:self forKeyPath:@"content.@count" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew context:nil];
-    [noDiscsView bind:@"hidden" toObject:movies withKeyPath:@"content.@count" options:nil];
 }
 
 - (void) applicationDidFinishLaunching:(NSNotification*)notification
@@ -412,6 +404,27 @@
     
     [drawerView openDrawer];
     [movieDetailController showHomeTab];
+}
+
+- (void) engineDidFinishInitialScan:(NSNotification*)notification
+{
+    // Turn off the spinner
+    [[startUpSpinnerView animator] setHidden:YES];
+    [[startUpSpinnerView animator] removeFromSuperview];
+    
+    // Turn on the "no discs" if necessary
+    if ([[movies content] count] == 0) {
+        [self performSelector:@selector(bindNoDiscsView) withObject:nil afterDelay:1.0];
+    }
+}
+
+- (void) bindNoDiscsView
+{
+    if ([[movies content] count] == 0)
+    {
+        //[[noDiscsView animator] setHidden:NO];
+        [[noDiscsView animator] bind:@"hidden" toObject:movies withKeyPath:@"content.@count" options:nil];        
+    }
 }
 
 - (IBAction) checkForUpdates:(id)sender

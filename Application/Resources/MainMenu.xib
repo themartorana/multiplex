@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1151"/>
+			<integer value="1152"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -592,6 +592,13 @@
 							<int key="NSvFlags">274</int>
 							<object class="NSMutableArray" key="NSSubviews">
 								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="NSCustomView" id="133985787">
+									<reference key="NSNextResponder" ref="572135655"/>
+									<int key="NSvFlags">301</int>
+									<string key="NSFrame">{{425, 251}, {150, 150}}</string>
+									<reference key="NSSuperview" ref="572135655"/>
+									<string key="NSClassName">StartupSpinnerView</string>
+								</object>
 								<object class="NSCustomView" id="223232862">
 									<reference key="NSNextResponder" ref="572135655"/>
 									<int key="NSvFlags">-2147483380</int>
@@ -3274,6 +3281,14 @@
 					</object>
 					<int key="connectionID">2215</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">startUpSpinnerView</string>
+						<reference key="source" ref="623785332"/>
+						<reference key="destination" ref="133985787"/>
+					</object>
+					<int key="connectionID">2217</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -4045,6 +4060,7 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="223232862"/>
+							<reference ref="133985787"/>
 						</object>
 						<reference key="parent" ref="384445475"/>
 					</object>
@@ -4592,6 +4608,11 @@
 						<reference key="object" ref="1072526875"/>
 						<reference key="parent" ref="223232862"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2216</int>
+						<reference key="object" ref="133985787"/>
+						<reference key="parent" ref="572135655"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -4799,6 +4820,7 @@
 					<string>2212.IBEditorWindowLastContentRect</string>
 					<string>2212.IBPluginDependency</string>
 					<string>2213.IBPluginDependency</string>
+					<string>2216.IBPluginDependency</string>
 					<string>23.IBPluginDependency</string>
 					<string>23.ImportedFromIB2</string>
 					<string>236.IBPluginDependency</string>
@@ -5081,6 +5103,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.WebKitIBPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
@@ -5179,7 +5202,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2215</int>
+			<int key="maxID">2217</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -5221,6 +5244,7 @@
 							<string>noMovieSelectedView</string>
 							<string>searchField</string>
 							<string>searchForMovieView</string>
+							<string>startUpSpinnerView</string>
 							<string>userVoiceButton</string>
 							<string>userVoiceFeedbackPanel</string>
 							<string>windowResizeThumb</string>
@@ -5235,6 +5259,7 @@
 							<string>NSView</string>
 							<string>NSView</string>
 							<string>NSSearchField</string>
+							<string>NSView</string>
 							<string>NSView</string>
 							<string>NSButton</string>
 							<string>UserVoiceFeedbackPanel</string>
@@ -5383,6 +5408,14 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Application/NoDiscsView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">StartupSpinnerView</string>
+					<string key="superclassName">NSView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Application/StartupSpinnerView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

@@ -892,7 +892,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
         
         /*  Delete
          */
-        NSDictionary* delete = [message objectForKey:@"delete"];
+        NSArray* delete = [message objectForKey:@"delete"];
         if (delete && [delete isKindOfClass:[NSArray class]]) {
             for (NSString* tag in delete) {
                 Media* media = [self _findMediaByEngine:engine tag:tag];
@@ -921,6 +921,14 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                     }
                 }
             }
+        }
+        
+        NSDictionary* finished = [message objectForKey:@"finished"];
+        if (finished && [finished isKindOfClass:[NSNumber class]]) {
+            if ([(NSNumber*)finished boolValue]) {
+                // Send a done message
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexEngineDidFinishInitialScan" object:nil];
+            } 
         }
         
         /*  Persist out our changes.

@@ -62,7 +62,7 @@ static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, DVDMediaSou
      *  properly registered.
      */
     [notificationCenter addObserver:self selector:@selector(_queryDidUpdate:) name:(id)kMDQueryProgressNotification object:nil]; 
-    [notificationCenter addObserver:self selector:@selector(_queryDidUpdate:) name:(id)kMDQueryDidFinishNotification object:nil]; 
+    [notificationCenter addObserver:self selector:@selector(_queryDidFinish:) name:(id)kMDQueryDidFinishNotification object:nil]; 
     [notificationCenter addObserver:self selector:@selector(_queryDidUpdate:) name:(id)kMDQueryDidUpdateNotification object:nil]; 
 
     /*  Tell Spotlight how to create & track Item objects for us.  It will 
@@ -271,6 +271,19 @@ static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, DVDMediaSou
     }
 }
 
+- (void) _fireDidFinishQuery
+{
+    if ([NSThread currentThread] == [NSThread mainThread]) {
+        @try {
+            [delegate mediaFileSource:self didFinishQuery:YES];
+        } @catch (id exception) {
+            NSLog(@"%s: %@", __PRETTY_FUNCTION__, [exception callStackReturnAddresses]);
+        }
+    } else {
+        [self performSelectorOnMainThread:@selector(_fireDidFinishQuery) withObject:nil waitUntilDone:NO];
+    }
+}
+
 - (void) _queryDidUpdate:(NSNotification*)notification
 {
     NSDictionary* info = [notification userInfo];
@@ -301,6 +314,13 @@ static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, DVDMediaSou
             [self _fireDidAddMedia:addedDiscs];
         }
     }
+}
+
+- (void) _queryDidFinish:(NSNotification*)notification
+{
+    // Send it to did update
+    [self _queryDidUpdate:notification];
+    [self _fireDidFinishQuery];
 }
 
 @end

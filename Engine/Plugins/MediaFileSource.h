@@ -23,6 +23,7 @@
 - (void) mediaFileSource:(id<MediaFileSource>)mediaSource didAddMedia:(NSArray*)media;
 - (void) mediaFileSource:(id<MediaFileSource>)mediaSource didUpdateMedia:(NSArray*)media;
 - (void) mediaFileSource:(id<MediaFileSource>)mediaSource didRemoveMedia:(NSArray*)media;
+- (void) mediaFileSource:(id<MediaFileSource>)mediaSource didFinishQuery:(BOOL)didFinish;
 
 @end
 

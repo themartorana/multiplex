@@ -512,7 +512,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
              *  creating disc objects and associating them with the movie that
              *  we're attaching ourselves to.
              */
-            /*NSDictionary* discInfo = [movieInfo objectForKey:@"discs"];
+            NSDictionary* discInfo = [movieInfo objectForKey:@"discs"];
             for (NSString* discInfoFingerprint in discInfo) {
                 NSDictionary* otherDiscInfo = [discInfo objectForKey:discInfoFingerprint];
                 Disc* disc = [self _findDiscByFingerprint:discInfoFingerprint];
@@ -541,7 +541,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                         [self _deleteMovieIfNoMediaRemainForAnyDisc:movieForDisc];
                     }
                 }
-            }*/
+            }
             
             /*  Figure out which movie to attach this disc to.  We may have 
              *  created a temporary movie that could need to be deleted if 

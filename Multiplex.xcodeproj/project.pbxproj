@@ -44,6 +44,7 @@
 		551555610EA46220006F2674 /* HoverPlayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 551555600EA46220006F2674 /* HoverPlayLayer.m */; };
 		551558440EA53C1D006F2674 /* MultiplexColorFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 551558430EA53C1D006F2674 /* MultiplexColorFactory.m */; };
 		5521C68C0ECCB9CC00005057 /* UPC-code-example.png in Resources */ = {isa = PBXBuildFile; fileRef = 5521C68B0ECCB9CC00005057 /* UPC-code-example.png */; };
+		55230CD50F1D7C4500A23E54 /* MultiplexResourceURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 55230CD40F1D7C4500A23E54 /* MultiplexResourceURLProtocol.m */; };
 		552A6F3E0EE4C592005B9873 /* uni05_53.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 552A6F3D0EE4C592005B9873 /* uni05_53.ttf */; };
 		552A6F6C0EE4C827005B9873 /* bottom-bar-tile.png in Resources */ = {isa = PBXBuildFile; fileRef = 552A6F6B0EE4C827005B9873 /* bottom-bar-tile.png */; };
 		552D5D280EBCDBD400A292F4 /* IndeterminateProgressIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 552D5D270EBCDBD400A292F4 /* IndeterminateProgressIndicatorView.m */; };
@@ -461,6 +462,8 @@
 		551558420EA53C1D006F2674 /* MultiplexColorFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiplexColorFactory.h; sourceTree = "<group>"; };
 		551558430EA53C1D006F2674 /* MultiplexColorFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiplexColorFactory.m; sourceTree = "<group>"; };
 		5521C68B0ECCB9CC00005057 /* UPC-code-example.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UPC-code-example.png"; sourceTree = "<group>"; };
+		55230CD30F1D7C4500A23E54 /* MultiplexResourceURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiplexResourceURLProtocol.h; sourceTree = "<group>"; };
+		55230CD40F1D7C4500A23E54 /* MultiplexResourceURLProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiplexResourceURLProtocol.m; sourceTree = "<group>"; };
 		552A6F3D0EE4C592005B9873 /* uni05_53.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = uni05_53.ttf; sourceTree = "<group>"; };
 		552A6F6B0EE4C827005B9873 /* bottom-bar-tile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bottom-bar-tile.png"; sourceTree = "<group>"; };
 		552D5D260EBCDBD400A292F4 /* IndeterminateProgressIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndeterminateProgressIndicatorView.h; sourceTree = "<group>"; };
@@ -820,6 +823,8 @@
 				F9CE85D30EA7E2D400602750 /* ApplicationResources.m */,
 				551558420EA53C1D006F2674 /* MultiplexColorFactory.h */,
 				551558430EA53C1D006F2674 /* MultiplexColorFactory.m */,
+				55230CD30F1D7C4500A23E54 /* MultiplexResourceURLProtocol.h */,
+				55230CD40F1D7C4500A23E54 /* MultiplexResourceURLProtocol.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -1757,6 +1762,7 @@
 				55E5B5180ED26AA40054DEC7 /* MovieURL.m in Sources */,
 				55E5B56E0ED2719E0054DEC7 /* Episode.m in Sources */,
 				55DCCE820F1530FA00B3DF41 /* HoverInfoView.m in Sources */,
+				55230CD50F1D7C4500A23E54 /* MultiplexResourceURLProtocol.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

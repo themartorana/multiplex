@@ -1,8 +1,9 @@
 #tooltip {
 	width: 200px;
 	margin: 0;
+    margin-left: 20px;
 	padding: 0;
-	background-image: url(tooltip-top.png);
+	background-image: url(multiplexresource://tooltip-top.png);
 	background-repeat: no-repeat;
 	background-position: left top;
 	color: #000;
@@ -12,12 +13,12 @@
 }
 #tooltip #tip-top {
 	height: 10px;
-	background: url(tooltip-top.png) no-repeat left top;
+	background: url(multiplexresource://tooltip-top.png) no-repeat left top;
 }
 #tooltip #tooltip-title-top {
 	height: 8px;
 	border-top: 2px solid #BBB;
-	background: url(tooltip-title-top.png) repeat-x left top;
+	background: url(multiplexresource://tooltip-title-top.png) repeat-x left top;
 }
 #tooltip h3#title {
 	margin: 0;
@@ -30,12 +31,12 @@
 #tooltip #tooltip-title-bottom {
 	height: 8px;
 	border-bottom: 2px solid #BBB;
-	background: url(tooltip-title-bottom.png) repeat-x left bottom;
+	background: url(multiplexresource://tooltip-title-bottom.png) repeat-x left bottom;
 }
 #tooltip #info {
 	position: relative;
 	padding: 5px 10px;
-	background: #FFF url(tooltip-middle.png) no-repeat left top;
+	background: #FFF url(multiplexresource://tooltip-middle.png) no-repeat left top;
 }
 #tooltip th {
 	padding-right: 5px;
@@ -58,9 +59,9 @@
 	width: 19px;
 	height: 38px;
 	overflow: hidden;
-	background: url(tooltip-pointer.png) no-repeat left top;
+	background: url(multiplexresource://tooltip-pointer.png) no-repeat left top;
 }
 #tooltip #tip-bottom {
 	height: 10px;
-	background: url(tooltip-bottom.png) no-repeat left bottom;
+	background: url(multiplexresource://tooltip-bottom.png) no-repeat left bottom;
 }

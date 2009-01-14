@@ -68,7 +68,7 @@ NSString* const URL_PREFIX = @"multiplex://";
         NSPoint positionOfMouse = [[self superview] convertPoint:mousePoint fromView:nil];
                 
         int newx = positionOfMouse.x;
-        int newy = positionOfMouse.y - [self bounds].size.height;
+        int newy = positionOfMouse.y - [self bounds].size.height + 60;
         
         if (inFlipPosition) {
             newx -= [self bounds].size.width;

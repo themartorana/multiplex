@@ -18,6 +18,8 @@
 
 #import "DrawerViewControllerProtocol.h"
 
+#import "MultiplexResourceURLProtocol.h"
+
 #import <QuartzCore/QuartzCore.h>
 #import <Sparkle/Sparkle.h>
 #import <Toolkit/Toolkit.h>
@@ -131,6 +133,9 @@
         NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
         [notificationCenter addObserver:self selector:@selector(engineControllerObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:engineManagedObjectContext];
         [notificationCenter addObserver:self selector:@selector(appControllerObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:appManagedObjectContext];
+        
+        // Register our URL handler
+        [NSURLProtocol registerClass:[MultiplexResourceURLProtocol class]];
     }
     return self;
 }

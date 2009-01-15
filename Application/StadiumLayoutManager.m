@@ -176,8 +176,6 @@ static const CGFloat HS = 75.0;
         return;
     }
     
-    DEBUG_TRACE();
-    
     [CATransaction begin];
     [CATransaction setValue:[NSNumber numberWithDouble:([[NSApp currentEvent] modifierFlags] & NSShiftKeyMask) ? 3.0 : 0.3] forKey:kCATransactionAnimationDuration];
     

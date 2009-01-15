@@ -28,7 +28,7 @@
     NSError* error = nil;
     [self save:&error];
     if (error) {
-        NSLog(@"%@", error);
+        NSLog(@"%@ -- %@", error, error.userInfo);
         [self rollback];
     }
 }
@@ -84,9 +84,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
     NSArray* enginesToDelete = [managedObjectContext executeFetchRequest:fetchRequest error:nil];
     if ([enginesToDelete count]) {
         for (Engine* engine in enginesToDelete) {
-            for (Media* media in [engine allMedia]) {
-                [managedObjectContext deleteObject:media];
-            }
+            [engine.allMedia removeAllObjects];
             [managedObjectContext deleteObject:engine];
         }
         [managedObjectContext saveAndPrintErrors];
@@ -102,6 +100,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
     NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:nil];
     if ([results count]) {
         for (BoxArt* boxArt in results) {
+            [boxArt.allDiscs removeAllObjects];
             [managedObjectContext deleteObject:boxArt];
         }
         [managedObjectContext saveAndPrintErrors];
@@ -135,46 +134,52 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
         managedObjectContext = [_managedObjectContext retain];
         dateFormatter = [[NSDateFormatter alloc] initWithDateFormat:@"%Y-%m-%d" allowNaturalLanguage:NO];
 
-        /*  Grab references to some commonly used entity descriptions.
-         */
-        engineEntity = [[NSEntityDescription entityForName:@"Engine" inManagedObjectContext:managedObjectContext] retain];
-        mediaEntity = [[NSEntityDescription entityForName:@"Media" inManagedObjectContext:managedObjectContext] retain];
-        discEntity = [[NSEntityDescription entityForName:@"Disc" inManagedObjectContext:managedObjectContext] retain];
-        movieEntity = [[NSEntityDescription entityForName:@"Movie" inManagedObjectContext:managedObjectContext] retain];
-        boxArtEntity = [[NSEntityDescription entityForName:@"BoxArt" inManagedObjectContext:managedObjectContext] retain];
-        participantEntity = [[NSEntityDescription entityForName:@"Participant" inManagedObjectContext:managedObjectContext] retain];
-        
-        [self removeOldEnginesAndAssociatedDiscsAndMedia];
-        [self removeFailedBoxArt];
-        [self removeDanglingDiscs];
-        
-        /*  Grab (or generate) our local machine's Engine UUID.
-         */
-        static CFStringRef const kEngineMachineIdKey = CFSTR("machine-id");
-        static CFStringRef const kEngineAppDomain = CFSTR("com.multiplexapp.Engine");
-        localMachineUUID = (NSString*)CFPreferencesCopyValue(kEngineMachineIdKey, kEngineAppDomain, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
-        if (!localMachineUUID) {
-            localMachineUUID = [[NSString stringWithUUID] retain];
-            CFPreferencesSetValue(kEngineMachineIdKey, (CFStringRef)localMachineUUID, kEngineAppDomain, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
-            CFPreferencesSynchronize(kEngineAppDomain, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
-        }
-        
-        /*  Fire up the Bonjour service browser.
-         */
-        browser = [[NSNetServiceBrowser alloc] init];
-        [browser setDelegate:self];
-        [browser searchForServicesOfType:@"_com_multiplexapp_Engine._tcp." inDomain:@""]; 
-        
-        /*  Use launchctl to start the local engine (if one's not started 
-         *  already.)
-         */
-        NSString* pathToEngine = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Engine"];
-        NSTask* launchctl = [NSTask launchedTaskWithLaunchPath:@"/bin/launchctl" arguments:[NSArray arrayWithObjects:@"submit", @"-l", @"com.multiplexapp.Engine", pathToEngine, nil]];
-        [launchctl waitUntilExit];
-        if (0 == [launchctl terminationStatus]) {
-            NSLog(@"Started local engine.");
-        } else {
-            NSLog(@"Local engine may already be running.");
+        [managedObjectContext lock];
+        @try {
+            /*  Grab references to some commonly used entity descriptions.
+             */
+            engineEntity = [[NSEntityDescription entityForName:@"Engine" inManagedObjectContext:managedObjectContext] retain];
+            mediaEntity = [[NSEntityDescription entityForName:@"Media" inManagedObjectContext:managedObjectContext] retain];
+            discEntity = [[NSEntityDescription entityForName:@"Disc" inManagedObjectContext:managedObjectContext] retain];
+            movieEntity = [[NSEntityDescription entityForName:@"Movie" inManagedObjectContext:managedObjectContext] retain];
+            boxArtEntity = [[NSEntityDescription entityForName:@"BoxArt" inManagedObjectContext:managedObjectContext] retain];
+            participantEntity = [[NSEntityDescription entityForName:@"Participant" inManagedObjectContext:managedObjectContext] retain];
+            
+            [self removeOldEnginesAndAssociatedDiscsAndMedia];
+            [self removeFailedBoxArt];
+            [self removeDanglingDiscs];
+            [managedObjectContext saveAndPrintErrors];
+            
+            /*  Grab (or generate) our local machine's Engine UUID.
+             */
+            static CFStringRef const kEngineMachineIdKey = CFSTR("machine-id");
+            static CFStringRef const kEngineAppDomain = CFSTR("com.multiplexapp.Engine");
+            localMachineUUID = (NSString*)CFPreferencesCopyValue(kEngineMachineIdKey, kEngineAppDomain, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+            if (!localMachineUUID) {
+                localMachineUUID = [[NSString stringWithUUID] retain];
+                CFPreferencesSetValue(kEngineMachineIdKey, (CFStringRef)localMachineUUID, kEngineAppDomain, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+                CFPreferencesSynchronize(kEngineAppDomain, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+            }
+            
+            /*  Fire up the Bonjour service browser.
+             */
+            browser = [[NSNetServiceBrowser alloc] init];
+            [browser setDelegate:self];
+            [browser searchForServicesOfType:@"_com_multiplexapp_Engine._tcp." inDomain:@""]; 
+            
+            /*  Use launchctl to start the local engine (if one's not started 
+             *  already.)
+             */
+            NSString* pathToEngine = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Engine"];
+            NSTask* launchctl = [NSTask launchedTaskWithLaunchPath:@"/bin/launchctl" arguments:[NSArray arrayWithObjects:@"submit", @"-l", @"com.multiplexapp.Engine", pathToEngine, nil]];
+            [launchctl waitUntilExit];
+            if (0 == [launchctl terminationStatus]) {
+                NSLog(@"Started local engine.");
+            } else {
+                NSLog(@"Local engine may already be running.");
+            }
+        } @finally {
+            [managedObjectContext unlock];
         }
     }
     
@@ -325,6 +330,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                     for (Disc* disc in movie.allDiscs) {
                         [managedObjectContext deleteObject:disc];
                     }
+                    movie.boxArt = nil;
                     [managedObjectContext deleteObject:movie];
                 }
             }
@@ -436,6 +442,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
     NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
     [fetchRequest release];
     if (!error && [results count] == [movie.allDiscs count]) {
+        movie.boxArt = nil;
         [managedObjectContext deleteObject:movie];
     }
 }
@@ -515,30 +522,31 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
             NSDictionary* discInfo = [movieInfo objectForKey:@"discs"];
             for (NSString* discInfoFingerprint in discInfo) {
                 NSDictionary* otherDiscInfo = [discInfo objectForKey:discInfoFingerprint];
-                Disc* disc = [self _findDiscByFingerprint:discInfoFingerprint];
-                if (!disc) {
-                    disc = [[[Disc alloc] initWithEntity:discEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
-                    disc.fingerprint = discInfoFingerprint;
+                Disc* otherDisc = [self _findDiscByFingerprint:discInfoFingerprint];
+                if (!otherDisc) {
+                    otherDisc = [[[Disc alloc] initWithEntity:discEntity insertIntoManagedObjectContext:managedObjectContext] autorelease];
+                    otherDisc.fingerprint = discInfoFingerprint;
                 }
                 NSString* tag = [otherDiscInfo objectForKey:@"tag"];
                 if (tag && [tag length] == 2) {
                     int number = [tag characterAtIndex:0] - '0';
                     if (number >= 1 && number <= 9) {
-                        disc.number = [NSNumber numberWithInt:number];
+                        otherDisc.number = [NSNumber numberWithInt:number];
                     }
-                    disc.side = [tag substringFromIndex:1];
+                    otherDisc.side = [tag substringFromIndex:1];
                 }
                 NSString* synopsis = [otherDiscInfo objectForKey:@"description"];
                 if ([synopsis length]) {
-                    disc.synopsis = synopsis;
+                    otherDisc.synopsis = synopsis;
                 }
-                Movie* movieForDisc = disc.movie;
+                Movie* movieForDisc = otherDisc.movie;
                 if (!movie) {
                     movie = movieForDisc;
                 } else if (movie != movieForDisc) {
-                    disc.movie = movie;
+                    otherDisc.movie = movie;
                     if (movieForDisc) {
-                        [self _deleteMovieIfNoMediaRemainForAnyDisc:movieForDisc];
+                        movieForDisc.boxArt = nil;
+                        [managedObjectContext deleteObject:movieForDisc];
                     }
                 }
             }
@@ -559,14 +567,6 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
             }
             if ([gtin isNotEqualTo:movie.gtin]) {
                 movie.gtin = gtin;
-            }
-
-            Movie* oldMovie = disc.movie;
-            if ([movie isNotEqualTo:oldMovie]) {
-                disc.movie = movie;
-                if (oldMovie) {
-                    [self _deleteMovieIfNoMediaRemainForAnyDisc:oldMovie];
-                }
             }
             
             /*  Set any movie-related properties.
@@ -917,6 +917,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
                         for (Disc* disc in movie.allDiscs) {
                             [managedObjectContext deleteObject:disc];
                         }
+                        movie.boxArt = nil;
                         [managedObjectContext deleteObject:movie];
                     }
                 }

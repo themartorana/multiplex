@@ -59,7 +59,8 @@ NSString* const URL_PREFIX = @"multiplex://";
 {
     if (frame == [webView mainFrame]) {
         
-        int height = [[[frame DOMDocument] getElementById:@"tooltip"] offsetHeight];
+        int height = [[[frame DOMDocument] getElementById:@"hoverview"] offsetHeight];
+        int width = [[[frame DOMDocument] getElementById:@"hoverview"] offsetWidth];
         
         int yOffset = 52.0;
         if ([movie.availableDiscCount intValue] > 0) {
@@ -69,8 +70,10 @@ NSString* const URL_PREFIX = @"multiplex://";
         
         [self setFrame:NSMakeRect([self frame].origin.x, 
                                   [self frame].origin.y - yOffset, 
-                                  [self frame].size.width, 
-                                  height + 20.0)];
+                                  //[self frame].size.width, 
+								  width,
+								  height)]; 
+                                  //height + 20.0 + 5.0)];
     }
     
     [super setHidden:NO];
@@ -81,12 +84,15 @@ NSString* const URL_PREFIX = @"multiplex://";
     if (!hidden && movie) {
         NSPoint mousePoint = [[self window] mouseLocationOutsideOfEventStream];
         NSPoint positionOfMouse = [[self superview] convertPoint:mousePoint fromView:nil];
-                
-        int newx = positionOfMouse.x;
-        int newy = positionOfMouse.y;
+        
+		int xoffset = 10;
+		int yoffset = -20;
+		
+        int newx = positionOfMouse.x + xoffset;
+        int newy = positionOfMouse.y + yoffset;
         
         if (inFlipPosition) {
-            newx -= [self bounds].size.width;
+            newx -= [self bounds].size.width + (2*xoffset);
         }
 
         [self setFrame:NSMakeRect(newx, 

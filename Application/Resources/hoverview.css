@@ -1,12 +1,25 @@
-#tooltip {
-	width: 200px;
+body {
+	width: 229px;
+	overflow: hidden;
 	margin: 0;
-    margin-left: 10px;
-    padding: 0;
-	/*background: url(multiplexresource://tooltip-top.png) no-repeat left top;*/
+	padding: 0;
+}
+#tooltip {
+    padding: 5px 10px 15px;
+}
+#tooltip-inner {
+	width: 200px;
 	color: #000;
     font-family: "Lucida Grande";
     font-size: 11px;
+	-webkit-box-shadow: 0px 5px 10px #000;
+	-webkit-border-radius: 10px;
+}
+#tooltip.pointer-left {
+	padding-left: 19px;
+}
+#tooltip.pointer-right {
+	padding-right: 19px;
 }
 #tooltip a {
 	color: #000;
@@ -36,7 +49,7 @@
 #tooltip #info {
 	position: relative;
 	padding: 5px 10px;
-	background: #FFF url(multiplexresource://tooltip-middle.png) no-repeat left top;
+	background: #F8F8F8 url(multiplexresource://tooltip-middle.png) no-repeat center top;
 }
 #tooltip th {
 	padding-right: 5px;
@@ -52,23 +65,20 @@
 #tooltip td a {
 	color: #777;
 }
-#tooltip #pointer-left {
+#tooltip #tooltip-pointer {
 	position: absolute;
-	left: -19px;
 	top: 0px;
 	width: 19px;
-	height: 38px;
+	height: 53px;
 	overflow: hidden;
-	background: url(multiplexresource://tooltip-pointer-left.png) no-repeat left top;
 }
-#tooltip #pointer-right {
-	position: absolute;
+#tooltip.pointer-left #tooltip-pointer {
+	left: -19px;
+	background: url(multiplexresource://tooltip-pointer-left-shadow.png) no-repeat left top;
+}
+#tooltip.pointer-right #tooltip-pointer {
 	right: -19px;
-	top: 0px;
-	width: 19px;
-	height: 38px;
-	overflow: hidden;
-	background: url(multiplexresource://tooltip-pointer-right.png) no-repeat right top;
+	background: url(multiplexresource://tooltip-pointer-right-shadow.png) no-repeat right top;
 }
 #tooltip #tooltip-bottom {
 	height: 10px;

@@ -3,9 +3,7 @@
 	margin: 0;
     margin-left: 10px;
     padding: 0;
-	background-image: url(multiplexresource://tooltip-top.png);
-	background-repeat: no-repeat;
-	background-position: left top;
+	/*background: url(multiplexresource://tooltip-top.png) no-repeat left top;*/
 	color: #000;
     font-family: "Lucida Grande";
     font-size: 11px;
@@ -13,7 +11,7 @@
 #tooltip a {
 	color: #000;
 }
-#tooltip #tip-top {
+#tooltip #tooltip-top {
 	height: 10px;
 	background: url(multiplexresource://tooltip-top.png) no-repeat left top;
 }
@@ -72,7 +70,7 @@
 	overflow: hidden;
 	background: url(multiplexresource://tooltip-pointer-right.png) no-repeat right top;
 }
-#tooltip #tip-bottom {
+#tooltip #tooltip-bottom {
 	height: 10px;
 	background: url(multiplexresource://tooltip-bottom.png) no-repeat left bottom;
 }

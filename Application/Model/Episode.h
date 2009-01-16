@@ -2,7 +2,7 @@
 
 @class Disc;
 
-@interface Episode : NSObject {
+@interface Episode : NSManagedObject {
 }
 
 @property (retain) NSString* title;

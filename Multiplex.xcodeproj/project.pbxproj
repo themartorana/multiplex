@@ -76,7 +76,6 @@
 		5574AA590F1E56A700D4AA81 /* StartupSpinnerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5574AA580F1E56A700D4AA81 /* StartupSpinnerView.m */; };
 		5574AD130F1E968400D4AA81 /* tooltip-pointer-right.png in Resources */ = {isa = PBXBuildFile; fileRef = 5574AD120F1E968400D4AA81 /* tooltip-pointer-right.png */; };
 		557B69460E4CCD3F0009919E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 557B69450E4CCD3F0009919E /* MainMenu.xib */; };
-		5583D1640E51D82700EB7AE6 /* Multiplex.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */; };
 		558D1AF00E9D186B000F67FA /* MovieDetailDiscsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1AEF0E9D186B000F67FA /* MovieDetailDiscsView.m */; };
 		558D1B030E9D3F37000F67FA /* PageNumberLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1B020E9D3F37000F67FA /* PageNumberLayer.m */; };
 		558D1C3E0E9D5562000F67FA /* DiscPlayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1C3D0E9D5562000F67FA /* DiscPlayLayer.m */; };
@@ -164,6 +163,7 @@
 		F9B8DB370EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B8DB350EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F9B8DB380EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B8DB360EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.m */; };
 		F9B8E1970EB25628008589F3 /* LinearLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B8E1960EB25628008589F3 /* LinearLayoutManager.m */; };
+		F9BBEA510F1EFB7500667CAB /* Multiplex.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = F9BBEA500F1EFB7500667CAB /* Multiplex.xcdatamodel */; };
 		F9C2B0300E7B919B00474D97 /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
 		F9CA172A0E7C727C0049CD3E /* Movie.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CA17290E7C727C0049CD3E /* Movie.m */; };
 		F9CA172E0E7C72930049CD3E /* Disc.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CA172D0E7C72930049CD3E /* Disc.m */; };
@@ -511,7 +511,6 @@
 		5574AD120F1E968400D4AA81 /* tooltip-pointer-right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tooltip-pointer-right.png"; sourceTree = "<group>"; };
 		557B66A20E4A2F4D0009919E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		557B69450E4CCD3F0009919E /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
-		5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Multiplex.xcdatamodel; sourceTree = "<group>"; };
 		558D1AEE0E9D186B000F67FA /* MovieDetailDiscsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieDetailDiscsView.h; sourceTree = "<group>"; };
 		558D1AEF0E9D186B000F67FA /* MovieDetailDiscsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieDetailDiscsView.m; sourceTree = "<group>"; };
 		558D1B010E9D3F37000F67FA /* PageNumberLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageNumberLayer.h; sourceTree = "<group>"; };
@@ -621,6 +620,8 @@
 		F9B8DB360EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSValueTransformer+IndyHallLabs.m"; sourceTree = "<group>"; };
 		F9B8E1950EB25628008589F3 /* LinearLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinearLayoutManager.h; sourceTree = "<group>"; };
 		F9B8E1960EB25628008589F3 /* LinearLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinearLayoutManager.m; sourceTree = "<group>"; };
+		F9BBEA500F1EFB7500667CAB /* Multiplex.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Multiplex.xcdatamodel; sourceTree = "<group>"; };
+		F9BBF5880F1FF52700667CAB /* DVD-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DVD-Info.plist"; sourceTree = "<group>"; };
 		F9C2AE540E7B747B00474D97 /* JSONKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JSONKit.xcodeproj; path = Frameworks/JSONKit/JSONKit.xcodeproj; sourceTree = "<group>"; };
 		F9CA17280E7C727C0049CD3E /* Movie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Movie.h; sourceTree = "<group>"; };
 		F9CA17290E7C727C0049CD3E /* Movie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Movie.m; sourceTree = "<group>"; };
@@ -819,6 +820,7 @@
 				F98DC7080B63013B00371A83 /* Spotlight */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
+				F9BBF5880F1FF52700667CAB /* DVD-Info.plist */,
 			);
 			name = BookShelf;
 			sourceTree = "<group>";
@@ -893,7 +895,7 @@
 		5535DE020E508D3D00A45761 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				5583D1630E51D82700EB7AE6 /* Multiplex.xcdatamodel */,
+				F9BBEA500F1EFB7500667CAB /* Multiplex.xcdatamodel */,
 				55F83CFB0ECE7DDD00C68896 /* Participant.h */,
 				55F83CFC0ECE7DDD00C68896 /* Participant.m */,
 				F9B8D68E0EB0BFCD008589F3 /* BoxArt.h */,
@@ -1732,7 +1734,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F9D10E330EB522A0007B8B73 /* Engine.xcdatamodel in Sources */,
-				5583D1640E51D82700EB7AE6 /* Multiplex.xcdatamodel in Sources */,
 				556550D90EAE7FD600265A45 /* StadiumLayoutManager.m in Sources */,
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
 				5535D98F0E4E3F5400A45761 /* EngineController.m in Sources */,
@@ -1781,6 +1782,7 @@
 				55DCCE820F1530FA00B3DF41 /* HoverInfoView.m in Sources */,
 				55230CD50F1D7C4500A23E54 /* MultiplexResourceURLProtocol.m in Sources */,
 				5574AA590F1E56A700D4AA81 /* StartupSpinnerView.m in Sources */,
+				F9BBEA510F1EFB7500667CAB /* Multiplex.xcdatamodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

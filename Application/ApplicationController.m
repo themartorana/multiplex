@@ -124,11 +124,11 @@
         
         engineManagedObjectContext = [[NSManagedObjectContext alloc] init];
         [engineManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
-        [engineManagedObjectContext setPropagatesDeletesAtEndOfEvent:NO];
+//        [engineManagedObjectContext setPropagatesDeletesAtEndOfEvent:NO];
         
         appManagedObjectContext = [[NSManagedObjectContext alloc] init];
         [appManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
-        [appManagedObjectContext setPropagatesDeletesAtEndOfEvent:NO];
+//        [appManagedObjectContext setPropagatesDeletesAtEndOfEvent:NO];
 
         NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
         [notificationCenter addObserver:self selector:@selector(engineControllerObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:engineManagedObjectContext];

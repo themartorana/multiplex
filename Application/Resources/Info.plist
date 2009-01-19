@@ -19,7 +19,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>0.94.1</string>
+	<string>0.95.1</string>
 	<key>NSAppleScriptEnabled</key>
 	<string>NO</string>
 	<key>NSMainNibFile</key>
@@ -27,7 +27,7 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>SUFeedURL</key>
-	<string>http://multiplexapp.com/update.rss</string>
+	<string>http://buy.multiplexapp.com/update/</string>
 	<key>QuartzGLEnable</key>
 	<true/>
 	<key>UTExportedTypeDeclarations</key>

@@ -69,6 +69,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         [dirtyExplain appendString:@"To discard the search results and continue, click \"Ok\"\n\n"];
         [dirtyExplain appendString:@"To go back to the results screen, click \"Cancel\""];
 
+        [applicationController makeSureWeAreNotInFullscreen];        
         
         NSAlert* alert = [NSAlert alertWithMessageText:dirtyInfo
                                          defaultButton:@"Ok"

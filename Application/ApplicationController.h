@@ -66,6 +66,7 @@
 - (void) showMovieDetailAndSelectHomeTabForMovie:(Movie*)movie;
 - (void) showMovieDetailAndSelectDiscsTabMovie:(Movie*)movie;
 - (void) showMovieLookupForMovie:(Movie*)movie byTitle:(BOOL)byTitle;
+- (void) makeSureWeAreNotInFullscreen;
 
 - (void) setSelectedMovieFromNotificationIfNecessary:(NSNotification*)n;
 

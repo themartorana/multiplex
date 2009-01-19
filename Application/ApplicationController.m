@@ -618,6 +618,13 @@
     }
 }
 
+- (void) makeSureWeAreNotInFullscreen
+{
+    if (viewInFullScreen && [viewInFullScreen isInFullScreenMode]) {
+        [self toggleFullScreen:viewInFullScreen];
+    }
+}
+
 - (void) setSelectedSegment:(int)sel
 {
     selectedSegment = sel;

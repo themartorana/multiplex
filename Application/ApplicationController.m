@@ -256,9 +256,8 @@
          *  passed.  Let them know that they should pay up...  in a 
          *  nice way.
          */
-        NSAlert* alert = [NSAlert alertWithMessageText:NSLocalizedString(@"This beta of Multiplex has expired.", @"") defaultButton:nil alternateButton:NSLocalizedString(@"No, I'll yell at Dave or Jason", "") otherButton:nil informativeTextWithFormat:NSLocalizedString(@"If you haven't already received a new version to replace this one, go yell at Dave (and/or Jason)... Would you like to check for an update?", @"")];
+        NSAlert* alert = [NSAlert alertWithMessageText:NSLocalizedString(@"The trial period for Multiplex has ended.", @"") defaultButton:nil alternateButton:NSLocalizedString(@"No thanks.", "") otherButton:nil informativeTextWithFormat:NSLocalizedString(@"We hope you enjoyed Multiplex! Would you like to visit the Multiplex website now?", @"")];
         [alert setAlertStyle:NSCriticalAlertStyle];
-        NSLog(@"%@", self.window);
         [alert beginSheetModalForWindow:[self window] modalDelegate:self didEndSelector:@selector(_licensingAlertDidEnd:returnCode:contextInfo:) contextInfo:nil];
     }
 }
@@ -570,7 +569,8 @@
 - (void) _licensingAlertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
     if (NSAlertDefaultReturn == returnCode) {
-        [[SUUpdater sharedUpdater] checkForUpdates:self];
+        //[[SUUpdater sharedUpdater] checkForUpdates:self];
+        [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://multiplexapp.com"]];
     }
 }
 

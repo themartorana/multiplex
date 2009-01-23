@@ -535,6 +535,7 @@
 								</object>
 								<object class="NSMenuItem" id="675291026">
 									<reference key="NSMenu" ref="835318025"/>
+									<bool key="NSIsHidden">YES</bool>
 									<string key="NSTitle">Show Debug Window</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>

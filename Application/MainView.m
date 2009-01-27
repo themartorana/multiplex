@@ -26,6 +26,7 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
 - (NSArray*) _listOfLayersInOrder;
 - (void) _hoverTimerTicked:(NSTimer*)timer;
 - (void) _restartMouseTracking;
+- (void) _selectMovieLayerApproved:(MovieLayer*)movieLayer;
 @end
 
 @implementation MainView
@@ -214,6 +215,13 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     }
 }
 
+- (void) setNoSelectedMovieLayer
+{
+    selectedMovieLayer = nil;
+    [layoutManager setSelectedMovieLayer:nil];
+    [layoutManager layoutSublayersOfLayer:floorLayer];
+}
+
 // Not necessary since the change to a NSView
 /*- (void) mouseDown:(NSEvent*)theEvent
 {
@@ -252,17 +260,13 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     }
     
     else if (movieLayer) {
-        
         // Ask the application controller if we're allowed to do this
-        if ([applicationController canSwitchDrawerControllers])
-        {
-            selectedMovieLayer = movieLayer;
-            
-            [content setSelectedObjects:[NSArray arrayWithObject:[movieLayer movie]]];
-            [hoverInfoView setHidden:YES];
-            [self _cancelHoverTimer];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexShowMovieDialog" object:nil];
-        }        
+        NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:@selector(_selectMovieLayerApproved:)]];
+        [invocation setTarget:self];
+        [invocation setSelector:@selector(_selectMovieLayerApproved:)];
+        [invocation retainArguments];
+        [invocation setArgument:&movieLayer atIndex:2];
+        [applicationController approveMovieSelectionClick:invocation forMovieLayer:movieLayer];
     } 
 }
 
@@ -378,6 +382,7 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
         [newListOfMoviesInOrder addObject:[arrangedObjects copy]]; 
         listOfMoviesInOrder = newListOfMoviesInOrder;
         [self setHoveredMovie:nil];
+        
         [floorLayer setNeedsLayout];
     } else if ([@"isOpen" isEqualToString:keyPath]) {
         [layoutManager setShouldShowSelectedMovieHighlight:[drawerView isOpen]];
@@ -432,6 +437,16 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
             [hoverInfoView setHidden:NO];
         [CATransaction commit];
     }
+}
+
+- (void) _selectMovieLayerApproved:(MovieLayer*)movieLayer
+{
+    selectedMovieLayer = movieLayer;
+    
+    [content setSelectedObjects:[NSArray arrayWithObject:[movieLayer movie]]];
+    [hoverInfoView setHidden:YES];
+    [self _cancelHoverTimer];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexShowMovieDialog" object:nil];
 }
 
 @end

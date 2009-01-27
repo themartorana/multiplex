@@ -3,7 +3,8 @@
 @interface DrawerView : NSView {
     IBOutlet NSView* upperView;
     IBOutlet NSView* contentView;
-    IBOutlet NSView* button;
+    IBOutlet NSButton* button;
+    
     CGFloat minHeight;
     BOOL isOpen;
 }

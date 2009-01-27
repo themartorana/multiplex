@@ -73,4 +73,17 @@
     [super didChangeValueForKey:@"isLocal"];
 }
 
+- (BOOL) isPhysicalMedia
+{
+    NSArray* a = [self.pathToFile componentsSeparatedByString:@"/"];
+    if (3 == [a count] && 
+        [@"" isEqualToString:[a objectAtIndex:0]] && 
+        [@"Volumes" isEqualToString:[a objectAtIndex:1]]) {
+        return YES;
+    }
+    else {
+        return NO;
+    }
+}
+
 @end

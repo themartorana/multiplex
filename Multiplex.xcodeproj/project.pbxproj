@@ -509,6 +509,7 @@
 		5574AA570F1E56A700D4AA81 /* StartupSpinnerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupSpinnerView.h; sourceTree = "<group>"; };
 		5574AA580F1E56A700D4AA81 /* StartupSpinnerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartupSpinnerView.m; sourceTree = "<group>"; };
 		5574AD120F1E968400D4AA81 /* tooltip-pointer-right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tooltip-pointer-right.png"; sourceTree = "<group>"; };
+		557AFD320F2A811C00C53801 /* ExecuteTokenProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExecuteTokenProtocol.h; sourceTree = "<group>"; };
 		557B66A20E4A2F4D0009919E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		557B69450E4CCD3F0009919E /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		558D1AEE0E9D186B000F67FA /* MovieDetailDiscsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieDetailDiscsView.h; sourceTree = "<group>"; };
@@ -836,6 +837,7 @@
 				551558430EA53C1D006F2674 /* MultiplexColorFactory.m */,
 				55230CD30F1D7C4500A23E54 /* MultiplexResourceURLProtocol.h */,
 				55230CD40F1D7C4500A23E54 /* MultiplexResourceURLProtocol.m */,
+				557AFD320F2A811C00C53801 /* ExecuteTokenProtocol.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";

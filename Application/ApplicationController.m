@@ -31,6 +31,49 @@
 
 #import <Security/Security.h>
 
+@interface _AppControllerExecuteToken : NSObject <ExecuteTokenProtocol> {
+    NSInvocation* invocation;
+}
+
+- (id) initWithInvocation:(NSInvocation*)invoc;
+
+@end
+
+@implementation _AppControllerExecuteToken
+
+- (id) initWithInvocation:(NSInvocation*)invoc
+{
+    if (self = [super init]) {
+        invocation = [invoc retain];
+    }
+    
+    return self;
+}
+
+- (void) approve
+{
+    [invocation invoke];
+    [invocation release];
+}
+
+- (void) deny
+{
+    [invocation release];
+}
+
+@end
+
+
+
+
+@interface ApplicationController (Private)
+
+- (void) _closeDrawerViewApproved;
+- (void) _setCurrentDrawerViewControllerApproved:(id<DrawerViewControllerProtocol>)protocolObject;
+
+@end
+
+
 @implementation ApplicationController
 @synthesize searchQuery;
 @synthesize parameters;
@@ -124,31 +167,43 @@
         
         engineManagedObjectContext = [[NSManagedObjectContext alloc] init];
         [engineManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
-//        [engineManagedObjectContext setPropagatesDeletesAtEndOfEvent:NO];
+
+        appManagedObjectContext = engineManagedObjectContext; 
+        
+#ifdef DUAL_OBJECT_CONTEXT
         
         appManagedObjectContext = [[NSManagedObjectContext alloc] init];
         [appManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
-//        [appManagedObjectContext setPropagatesDeletesAtEndOfEvent:NO];
-
+        
         NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
         [notificationCenter addObserver:self selector:@selector(engineControllerObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:engineManagedObjectContext];
         [notificationCenter addObserver:self selector:@selector(appControllerObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:appManagedObjectContext];
-                
+            
+#endif
+        
         // Register our URL handler
         [NSURLProtocol registerClass:[MultiplexResourceURLProtocol class]];
     }
     return self;
 }
 
+#ifdef DUAL_OBJECT_CONTEXT
+
 - (void) engineControllerObjectContextDidSave:(NSNotification*)saveNotification 
 {
     [appManagedObjectContext performSelectorOnMainThread:@selector(mergeChangesFromContextDidSaveNotification:) withObject:saveNotification waitUntilDone:NO];
+
+    if ([[self selectedMovie] isDeleted]) {
+        [self setSelectedMovie:nil];
+    }
 }
 
 - (void) appControllerObjectContextDidSave:(NSNotification*)saveNotification 
 {
     [engineManagedObjectContext performSelectorOnMainThread:@selector(mergeChangesFromContextDidSaveNotification:) withObject:saveNotification waitUntilDone:NO];
 }
+
+#endif
 
 - (void) dealloc 
 {
@@ -326,30 +381,47 @@
     }
 }
 
-- (BOOL) canSwitchDrawerControllers
+- (void) setCurrentDrawerViewController:(id<DrawerViewControllerProtocol>)protocolObject
 {
     if (currentDrawerViewController) {
-        if ([currentDrawerViewController relinquishControl]) {
-            [currentDrawerViewController release];
-            currentDrawerViewController = nil;
-            
-            [mainView resetCurrentlySelectedMovieLayer];
-            
-            return YES;
-        }
-        else {
-            return NO;
-        }
-    }
+        NSInvocation* i = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:@selector(_setCurrentDrawerViewControllerApproved:)]];
+        [i setTarget:self];
+        [i setSelector:@selector(_setCurrentDrawerViewControllerApproved:)];
+        [i retainArguments];
+        [i setArgument:&protocolObject atIndex:2];
+        
+        _AppControllerExecuteToken* a = [[[_AppControllerExecuteToken alloc] initWithInvocation:i] autorelease];
 
-    return YES;
+        [currentDrawerViewController pleaseRelinquishControlAndApprove:a];
+    }
+    else {
+        [self _setCurrentDrawerViewControllerApproved:protocolObject];
+    }
 }
 
-- (void) setCurrentDrawerViewController:(DrawerViewControllerProtocol*)protocolObject
+- (void) _setCurrentDrawerViewControllerApproved:(id<DrawerViewControllerProtocol>)protocolObject
 {
-    if ([self canSwitchDrawerControllers]) {
-        currentDrawerViewController = [protocolObject retain];
-        [currentDrawerViewController takeControl];        
+    [mainView resetCurrentlySelectedMovieLayer];
+    
+    [currentDrawerViewController release], currentDrawerViewController = nil;
+    
+    currentDrawerViewController = [protocolObject retain];
+    [currentDrawerViewController takeControl];
+}
+
+- (void) approveMovieSelectionClick:(NSInvocation*)invocation forMovieLayer:(MovieLayer*)movieLayer
+{
+    if (selectedMovie == [movieLayer movie] && [drawerView isOpen]) {
+        // DENY!
+        return;
+    }
+    
+    if (currentDrawerViewController) {
+        _AppControllerExecuteToken* a = [[[_AppControllerExecuteToken alloc] initWithInvocation:invocation] autorelease];
+        [currentDrawerViewController pleaseRelinquishControlAndApprove:a];
+    }
+    else {
+        [invocation invoke];
     }
 }
 
@@ -359,8 +431,8 @@
     if (!movieDetailController) {
         movieDetailController = [[MovieDetailController alloc] initWithApplicationController:self drawerView:drawerView];
     }
-    [movieDetailController startWithMovie:movie];
-    [self setCurrentDrawerViewController:(DrawerViewControllerProtocol*)movieDetailController];
+
+    [self setCurrentDrawerViewController:(id<DrawerViewControllerProtocol>)movieDetailController];
 }
 
 - (void) showMovieDetailAndSelectHomeTabForMovie:(Movie*)movie
@@ -381,8 +453,7 @@
     if (!movieLookupController) {
         movieLookupController = [[MovieLookupController alloc] initWithApplicationController:self drawerView:drawerView];
     }
-    [movieLookupController startWithMovie:movie];
-    [self setCurrentDrawerViewController:(DrawerViewControllerProtocol*)movieLookupController];
+    [self setCurrentDrawerViewController:(id<DrawerViewControllerProtocol>)movieLookupController];
     
     if (byTitle) {
         [movieLookupController skipToTitleEntry:nil];
@@ -391,17 +462,32 @@
 
 - (void) closeDrawerView:(NSNotification*)notification
 {
-    if ([self canSwitchDrawerControllers]) {
-        [drawerView closeDrawer];
-        [[self window] makeFirstResponder:searchField];        
+    if (currentDrawerViewController) {
+        NSInvocation* i = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:@selector(_closeDrawerViewApproved)]];
+        [i setSelector:@selector(_closeDrawerViewApproved)];
+        [i setTarget:self];
+        
+        _AppControllerExecuteToken* a = [[[_AppControllerExecuteToken alloc] initWithInvocation:i] autorelease];
+        
+        [currentDrawerViewController pleaseRelinquishControlAndApprove:a];
     }
+    else {
+        [self _closeDrawerViewApproved];
+    }
+}
+
+- (void) _closeDrawerViewApproved
+{
+    [mainView resetCurrentlySelectedMovieLayer];
+    
+    [drawerView closeDrawer];
+    [[self window] makeFirstResponder:searchField];            
 }
 
 - (void) openInfoView:(NSNotification*)notification
 {
     [self setSelectedMovieFromNotificationIfNecessary:notification];
     
-    [infoViewButton setState:NSOnState];
     [drawerView openDrawer];
     [movieDetailController showHomeTab];
 }
@@ -524,6 +610,12 @@
             Movie* _selectedMovie = [movies valueForKeyPath:keyPath];
             if (_selectedMovie == NSNoSelectionMarker) {
                 _selectedMovie = nil;
+                
+                [mainView setNoSelectedMovieLayer];
+                
+                if ([drawerView isOpen]) {
+                    [drawerView setContentView:noMovieSelectedView];
+                }
             }
             if (selectedMovie != _selectedMovie) {
                 [self setSelectedMovie:_selectedMovie];
@@ -613,13 +705,6 @@
 - (void) windowDidResignMain:(NSNotification*)notification
 {
     NSLog(@"resigned");
-    if (viewInFullScreen && [viewInFullScreen isInFullScreenMode]) {
-        [self toggleFullScreen:viewInFullScreen];
-    }
-}
-
-- (void) makeSureWeAreNotInFullscreen
-{
     if (viewInFullScreen && [viewInFullScreen isInFullScreenMode]) {
         [self toggleFullScreen:viewInFullScreen];
     }

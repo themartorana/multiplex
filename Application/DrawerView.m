@@ -135,11 +135,13 @@
 - (void) openDrawer
 {
     [self setIsOpen:YES];
+    [button setTitle:@"▼ Hide Info"];
 }
 
 - (void) closeDrawer
 {
     [self setIsOpen:NO];
+    [button setTitle:@"▲ Show Info"];
 }
 
 - (IBAction) toggle:(id)sender

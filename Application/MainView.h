@@ -42,5 +42,6 @@ extern NSString* const kMultiplexDrawerIsClosedLayoutManagerClass;
 - (MovieLayer*) movieLayerForPoint:(CGPoint)p;
 
 - (void) resetCurrentlySelectedMovieLayer;
+- (void) setNoSelectedMovieLayer;
 
 @end

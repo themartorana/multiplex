@@ -37,12 +37,12 @@
 - (void) setAvailableMediaCount:(NSNumber*)_availableMediaCount
 {
     [super willChangeValueForKey:@"availableDiscCount"];
-    BOOL oldValue = 0 < [[self primitiveValueForKey:@"availableDiscCount"] intValue];
-    BOOL newValue = 0 < [_availableMediaCount intValue];
+    int oldValue = [[self primitiveValueForKey:@"availableDiscCount"] intValue];
+    int newValue = [_availableMediaCount intValue];
     Movie* movie = [self primitiveValueForKey:@"movie"];
     [self setPrimitiveValue:_availableMediaCount forKey:@"availableDiscCount"];
     if (movie && (oldValue != newValue)) {
-        if (newValue) {
+        if (newValue > oldValue) {
             movie.availableDiscCount = [NSNumber numberWithInt:[movie.availableDiscCount intValue] + 1];
         } else {
             movie.availableDiscCount = [NSNumber numberWithInt:[movie.availableDiscCount intValue] - 1];

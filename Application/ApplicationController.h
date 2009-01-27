@@ -1,4 +1,5 @@
 #import <Cocoa/Cocoa.h>
+#import "DrawerViewControllerProtocol.h"
 
 @class MainView;
 @class DrawerView;
@@ -7,7 +8,8 @@
 @class MovieLookupController;
 @class UserVoiceFeedbackPanel;
 @class Movie;
-@class DrawerViewControllerProtocol;
+@class MovieLayer;
+
 
 @interface ApplicationController : NSWindowController {
     NSDictionary* parameters;
@@ -43,7 +45,7 @@
     IBOutlet NSButton* fullScreenButton;
     IBOutlet NSButton* infoViewButton;
     
-    DrawerViewControllerProtocol* currentDrawerViewController;
+    id<DrawerViewControllerProtocol> currentDrawerViewController;
     
     int selectedSegment;
 }
@@ -52,7 +54,7 @@
 @property (retain) Movie* selectedMovie;
 @property (readonly) NSManagedObjectContext* appManagedObjectContext;
 @property (retain) NSDictionary* parameters;
-@property (retain) DrawerViewControllerProtocol* currentDrawerViewController;
+@property (retain) id<DrawerViewControllerProtocol> currentDrawerViewController;
 @property int selectedSegment;
 
 - (IBAction) checkForUpdates:(id)sender;
@@ -66,10 +68,11 @@
 - (void) showMovieDetailAndSelectHomeTabForMovie:(Movie*)movie;
 - (void) showMovieDetailAndSelectDiscsTabMovie:(Movie*)movie;
 - (void) showMovieLookupForMovie:(Movie*)movie byTitle:(BOOL)byTitle;
-- (void) makeSureWeAreNotInFullscreen;
 
 - (void) setSelectedMovieFromNotificationIfNecessary:(NSNotification*)n;
 
-- (BOOL) canSwitchDrawerControllers;
+- (void) approveMovieSelectionClick:(NSInvocation*)invocation forMovieLayer:(MovieLayer*)movieLayer;
+
+//- (BOOL) canSwitchDrawerControllers;
 
 @end

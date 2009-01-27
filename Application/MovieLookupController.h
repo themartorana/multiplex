@@ -1,6 +1,6 @@
 #import <Cocoa/Cocoa.h>
-
 #import "DrawerViewControllerProtocol.h"
+#import "ExecuteTokenProtocol.h"
 
 @class Activity;
 @class ApplicationController;
@@ -40,6 +40,8 @@
     
     NSString* gtinToSearch;
     NSString* titleToSearch;
+    
+    id<ExecuteTokenProtocol> relinquishExecuteToken;
 }
 
 @property (retain) Movie* movie;
@@ -53,8 +55,6 @@
 
 
 - (id) initWithApplicationController:(ApplicationController*)_applicationController drawerView:(DrawerView*)_drawerView;
-
-- (void) startWithMovie:(Movie*)movie;
 
 - (IBAction) skipToUPCEntry:(id)sender;
 - (IBAction) skipToTitleEntry:(id)sender;

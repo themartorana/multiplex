@@ -14,4 +14,6 @@
 @property (retain) NSNumber* isAvailable;
 @property (retain) NSNumber* isLocal;
 
+- (BOOL) isPhysicalMedia;
+
 @end

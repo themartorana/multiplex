@@ -12,6 +12,8 @@
 #import "AmazonQuery.h"
 #import "ImageQuery.h"
 
+#import "ExecuteTokenProtocol.h"
+
 #import <DiscIdentKit/DiscIdentKit.h>
 #import <WebKit/WebKit.h>
 #import <Toolkit/Toolkit.h>
@@ -54,46 +56,97 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             return nil;
         }
     }
+    
+    [self bind:@"movie" toObject:applicationController withKeyPath:@"selectedMovie" options:nil];
+    
     return self;
 }
 
 - (void) takeControl
 {
+    [self setResultIndex:nil];
+    [self setAmazonQueryResults:nil];
+    
+    NSString* gtin = movie.gtin;
+    if ([gtin length]) {
+        if ([gtin length] == 14 && [gtin characterAtIndex:0] == '0') {
+            gtin = [gtin substringFromIndex:1];
+        }        
+    }
+    [self setGtinToSearch:gtin];
+    
+    NSString* title = movie.title;
+    if ([title length]) {
+        int indexOfParen = [title rangeOfString:@"("].location;
+        if (indexOfParen != NSNotFound) {
+            title = [title substringToIndex:indexOfParen];
+        }
+        int indexOfDash = [title rangeOfString:@"-"].location;
+        if (indexOfDash != NSNotFound) {
+            title = [title substringToIndex:indexOfDash];
+        }
+    } else {
+        title = nil;
+    }
+    [self setTitleToSearch:title];
+    
+    [drawerView setContentView:searchByUPCorEANView];    
 }
 
-- (BOOL) relinquishControl
+- (void) cleanUp
 {
-    if ([movie.changedValues count]) {        
+    [searchResultsBoxArt setImage:(id)[ApplicationResources CGImageFromResource:@"search-result-no-image" ofType:@"pdf"]];
+}
+
+- (void) pleaseRelinquishControlAndApprove:(id<ExecuteTokenProtocol>)executeToken
+{
+    // Just "available discs count" can cause this to
+    // trigger in some circumstances
+    NSDictionary* a = movie.changedValues;
+    if ([a count] == 1 && [@"availableDiscCount" isEqualToString:[[a allKeys] objectAtIndex:0]]) {
+        // Just save it.
+        [self saveManagedObjectContext];
+    }
+    
+    if ([[movie changedValues] count]) {        
         NSString* dirtyInfo = @"You have not selected a result as your movie.";
         NSMutableString* dirtyExplain = [NSMutableString string];
         [dirtyExplain appendString:@"To discard the search results and continue, click \"Ok\"\n\n"];
         [dirtyExplain appendString:@"To go back to the results screen, click \"Cancel\""];
 
-        [applicationController makeSureWeAreNotInFullscreen];        
-        
         NSAlert* alert = [NSAlert alertWithMessageText:dirtyInfo
                                          defaultButton:@"Ok"
                                        alternateButton:@"Cancel"
                                            otherButton:nil
                              informativeTextWithFormat:dirtyExplain];
         
-        int buttonClicked = [alert runModal];
+        //int buttonClicked = [alert runModal];
         
-        switch (buttonClicked) {
-            case NSAlertDefaultReturn:
-                [self backToSearch:nil];
-                return YES;
-                break;
-            
-            case NSAlertAlternateReturn:
-            default:
-                return NO;
-                break;
-        }
+        relinquishExecuteToken = [executeToken retain];
+        [alert beginSheetModalForWindow:[drawerView window] modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
     }
     else {
-        return YES;
+        [self cleanUp];
+        [executeToken approve];
+    }    
+}
+
+- (void) alertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)executeToken
+{
+    switch (returnCode) {
+        case NSAlertDefaultReturn:
+            [self backToSearch:nil];
+            [self cleanUp];
+            [relinquishExecuteToken approve];
+            break;
+            
+        case NSAlertAlternateReturn:
+        default:
+            [relinquishExecuteToken deny];
+            break;
     }
+
+    [relinquishExecuteToken release];
 }
 
 - (void) awakeFromNib
@@ -124,14 +177,14 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         [self willChangeValueForKey:@"movie"];
         [movie release];
         movie = nil;
-        movie = [_movie retain];
+        if (_movie) {
+            movie = [_movie retain];
+            managedObjectContext = [movie managedObjectContext];
+            boxArtEntity = [NSEntityDescription entityForName:@"BoxArt" inManagedObjectContext:managedObjectContext];
+            participantEntity = [NSEntityDescription entityForName:@"Participant" inManagedObjectContext:managedObjectContext];
+            movieURLEntity = [NSEntityDescription entityForName:@"MovieURL" inManagedObjectContext:managedObjectContext];            
+        }
         [self didChangeValueForKey:@"movie"];
-
-        movie.metadataAcceptedDate = nil;
-        managedObjectContext = [movie managedObjectContext];
-        boxArtEntity = [NSEntityDescription entityForName:@"BoxArt" inManagedObjectContext:managedObjectContext];
-        participantEntity = [NSEntityDescription entityForName:@"Participant" inManagedObjectContext:managedObjectContext];
-        movieURLEntity = [NSEntityDescription entityForName:@"MovieURL" inManagedObjectContext:managedObjectContext];
     }
 }
 
@@ -262,39 +315,15 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         if (boxArt != movie.boxArt) {
             movie.boxArt = boxArt;
         }
-    }
-}
-
-- (void) startWithMovie:(Movie*)_movie
-{
-    [self setMovie:_movie];
-    [self setResultIndex:nil];
-    [self setAmazonQueryResults:nil];
-     
-    NSString* gtin = movie.gtin;
-    if ([gtin length]) {
-        if ([gtin length] == 14 && [gtin characterAtIndex:0] == '0') {
-            gtin = [gtin substringFromIndex:1];
-        }        
-    }
-    [self setGtinToSearch:gtin];
-
-    NSString* title = movie.title;
-    if ([title length]) {
-        int indexOfParen = [title rangeOfString:@"("].location;
-        if (indexOfParen != NSNotFound) {
-            title = [title substringToIndex:indexOfParen];
+        
+        // Binding was failing from time to time
+        if (!boxArt) {
+            [searchResultsBoxArt setImage:(id)[ApplicationResources CGImageFromResource:@"search-result-no-image" ofType:@"pdf"]];
         }
-        int indexOfDash = [title rangeOfString:@"-"].location;
-        if (indexOfDash != NSNotFound) {
-            title = [title substringToIndex:indexOfDash];
+        else {
+            [searchResultsBoxArt setImage:(id)boxArt.image];
         }
-    } else {
-        title = nil;
     }
-    [self setTitleToSearch:title];
-
-    [drawerView setContentView:searchByUPCorEANView];
 }
 
 - (IBAction) skipToUPCEntry:(id)sender

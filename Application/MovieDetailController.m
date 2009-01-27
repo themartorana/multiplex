@@ -9,10 +9,12 @@
 #import "BoxArt.h"
 #import "MovieURL.h"
 #import "Disc.h"
+#import "Media.h"
 #import "Participant.h"
 #import "LayerBackedButtonView.h"
 
 #import <WebKit/WebKit.h>
+#import <Toolkit/Toolkit.h>
 
 @interface NSScrollView (NSScrollViewWebKitPrivate)
 - (void) setAllowsHorizontalScrolling:(BOOL)allow;
@@ -23,6 +25,7 @@
 @interface MovieDetailController (Private)
 - (MovieURL*) getAmazonURL;
 - (void) addParticipant:(BOOL)isActor;
+- (BOOL) setBurnPossible;
 @end
 
 @implementation MovieDetailController
@@ -30,6 +33,7 @@
 @synthesize labelColor;
 @synthesize valuesAreEditable;
 @synthesize isAvailableFromAmazon;
+@synthesize isBurnPossible;
 
 - (id) initWithApplicationController:(ApplicationController*)_applicationController drawerView:(DrawerView*)_drawerView;
 {
@@ -43,6 +47,9 @@
             return nil;
         }
     }
+    
+    [self bind:@"movie" toObject:applicationController withKeyPath:@"selectedMovie" options:nil];
+    
     return self;
 }
 
@@ -85,16 +92,26 @@
                                                  name:NSManagedObjectContextObjectsDidChangeNotification 
                                                object:applicationController.appManagedObjectContext
      ];
+    
+    [drawerView setContentView:infoPaneView];
+    
+    NSString* noSynopsis = @"No description found. Replace this text to add one.";
+    [[descriptionWebView mainFrame] loadHTMLString:movie && movie.synopsis ? movie.synopsis : noSynopsis baseURL:[NSURL URLWithString:@""]];
+    [[overviewWebView mainFrame] loadHTMLString:movie ? [self generateDescriptionHtmlString] : @"" baseURL:[NSURL URLWithString:@""]];
+    
+    if (!drawerView.isOpen) {
+        [drawerView toggle:self];
+    }    
 }
 
-- (BOOL) relinquishControl
+- (void) pleaseRelinquishControlAndApprove:(id<ExecuteTokenProtocol>)executeToken
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self 
                                                     name:NSManagedObjectContextObjectsDidChangeNotification 
                                                   object:applicationController.appManagedObjectContext
      ];
     
-    return YES;
+    [executeToken approve];
 }
 
 - (IBAction) selectTab:(id)sender
@@ -136,7 +153,13 @@
 - (void) _saveObjectContext
 {
     NSError* error = nil;
-    movie.metadataAcceptedDate = [NSDate date];
+    if (![movie isDeleted]) {
+        movie.metadataAcceptedDate = [NSDate date];
+    }
+    else {
+        [applicationController setSelectedMovie:nil];
+    }
+        
     [[movie managedObjectContext] save:&error];
     
     if (error) {
@@ -164,6 +187,8 @@
     else {
         [self setIsAvailableFromAmazon:NO];
     }
+    
+    self.isBurnPossible = [self setBurnPossible];
 }
 
 - (MovieURL*) getAmazonURL
@@ -206,18 +231,31 @@
     return [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"number" ascending:YES]];;
 }
 
-- (IBAction) startWithMovie:(Movie*)_movie
+- (BOOL) setBurnPossible
 {
-    [self setMovie:_movie];
-    [drawerView setContentView:infoPaneView];
-
-    NSString* noSynopsis = @"No description found. Replace this text to add one.";
-    [[descriptionWebView mainFrame] loadHTMLString:movie && movie.synopsis ? movie.synopsis : noSynopsis baseURL:[NSURL URLWithString:@""]];
-    [[overviewWebView mainFrame] loadHTMLString:movie ? [self generateDescriptionHtmlString] : @"" baseURL:[NSURL URLWithString:@""]];
+    BOOL toastIsAvailable = NO;
     
-    if (!drawerView.isOpen) {
-        [drawerView toggle:self];
+    // Determine if we have a proper version of toast
+    NSString* s = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.roxio.Toast"];
+    if (s && ![s isEqualToString:@""]) {
+        NSBundle* b = [NSBundle bundleWithPath:s];
+        if (b && [[b version] intValue] >= 9) {
+            toastIsAvailable = YES;
+        }
     }
+    
+    BOOL hasLocalMedia = NO;
+    for (Disc* d in movie.allDiscs) {
+        if ([d.localMediaCount intValue] > 0) {
+            hasLocalMedia = YES;
+            break;
+        }
+    }
+    
+    if (toastIsAvailable && hasLocalMedia) {
+        return YES;
+    }
+    return NO;
 }
 
 - (IBAction) refreshMovieInfoFromInternetByUPC:(id)sender
@@ -252,6 +290,16 @@
     
 }
 
+- (IBAction) deleteMovie:(id)sender
+{
+    Movie* m = movie;
+    
+    [applicationController setSelectedMovie:nil];
+    
+    NSManagedObjectContext* c = [applicationController appManagedObjectContext];
+    [c deleteObject:m];
+}
+
 - (IBAction) buyFromAmazon:(id)sender
 {
     MovieURL* url = [self getAmazonURL];
@@ -281,6 +329,61 @@
 - (IBAction) addCrewMember:(id)sender
 {
     [self addParticipant:NO];
+}
+
+- (void) _burnApproved:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+{
+    if (returnCode == NSAlertDefaultReturn) {
+        Media* m = (Media*)contextInfo;
+        
+        NSString* s = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.roxio.Toast"];
+        [[NSWorkspace sharedWorkspace] openFile:m.pathToFile withApplication:s];
+    }
+}
+
+- (IBAction) burnWithToast:(id)sender
+{
+    Media* m = nil;
+    
+    // Get the media
+    for (Disc* d in movie.allDiscs) {
+        if (d.localMediaCount > 0) {
+            for (Media* discMedia in d.allMedia) {
+                if (discMedia.isLocal) { // && ![discMedia isPhysicalMedia]) {
+                    if (m) {
+                        if ([m isPhysicalMedia] && ![discMedia isPhysicalMedia]) {
+                            m = discMedia;
+                        }
+                    }
+                    else {
+                        m = discMedia;
+                    }
+                }
+            }
+        }
+    }
+
+    if (!m) {
+        NSAlert* a = [NSAlert alertWithMessageText:@"Media disconnected" 
+                                     defaultButton:@"Ok" 
+                                   alternateButton:@"Cancel" 
+                                       otherButton:nil 
+                         informativeTextWithFormat:@"The media for this movie has been recently disconnected.  This action is not possible."];
+        
+        [a beginSheetModalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(_burnApproved:returnCode:contextInfo:) contextInfo:m];
+    }
+    else if (m && [m isPhysicalMedia]) {
+        NSAlert* a = [NSAlert alertWithMessageText:@"Trying to copy physical media" 
+                                     defaultButton:@"Ok" 
+                                   alternateButton:@"Cancel" 
+                                       otherButton:nil 
+                         informativeTextWithFormat:@"You are attempting to copy a physical DVD. This may cause issues.  If you would like to continue, click OK."];
+        
+        [a beginSheetModalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(_burnApproved:returnCode:contextInfo:) contextInfo:m];
+    }
+    else {
+        [self _burnApproved:nil returnCode:NSAlertDefaultReturn contextInfo:m];
+    }
 }
 
 - (void) addParticipant:(BOOL)isActor

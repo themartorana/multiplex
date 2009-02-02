@@ -9,7 +9,6 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="1166"/>
-			<integer value="57"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -794,7 +793,7 @@
 									<bool key="NSViewIsLayerTreeHost">YES</bool>
 									<bool key="NSEnabled">YES</bool>
 									<object class="NSButtonCell" key="NSCell" id="156206809">
-										<int key="NSCellFlags">67239424</int>
+										<int key="NSCellFlags">-2080244224</int>
 										<int key="NSCellFlags2">0</int>
 										<string type="base64-UTF8" key="NSContents">4payIFNob3cgSW5mbw</string>
 										<object class="NSFont" key="NSSupport" id="1000022730">
@@ -823,7 +822,7 @@
 										<string key="NSContents"/>
 										<reference key="NSSupport" ref="707745533"/>
 										<reference key="NSControlView" ref="805436789"/>
-										<int key="NSButtonFlags">-926662401</int>
+										<int key="NSButtonFlags">-2033958657</int>
 										<int key="NSButtonFlags2">163</int>
 										<object class="NSCustomResource" key="NSNormalImage">
 											<string key="NSClassName">NSImage</string>
@@ -2884,14 +2883,6 @@
 					<int key="connectionID">1172</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">initialFirstResponder</string>
-						<reference key="source" ref="913744916"/>
-						<reference key="destination" ref="268782376"/>
-					</object>
-					<int key="connectionID">1404</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
 						<string key="label">showUserVoiceFeedbackSheet:</string>
 						<reference key="source" ref="623785332"/>
@@ -3018,14 +3009,6 @@
 						</object>
 					</object>
 					<int key="connectionID">1626</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">toggleFullScreen:</string>
-						<reference key="source" ref="623785332"/>
-						<reference key="destination" ref="805436789"/>
-					</object>
-					<int key="connectionID">1746</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -3217,14 +3200,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">fullScreenButton</string>
-						<reference key="source" ref="623785332"/>
-						<reference key="destination" ref="805436789"/>
-					</object>
-					<int key="connectionID">2195</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">applicationController</string>
 						<reference key="source" ref="572135655"/>
 						<reference key="destination" ref="623785332"/>
@@ -3302,6 +3277,86 @@
 						<reference key="destination" ref="238522557"/>
 					</object>
 					<int key="connectionID">2221</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">initialFirstResponder</string>
+						<reference key="source" ref="913744916"/>
+						<reference key="destination" ref="572135655"/>
+					</object>
+					<int key="connectionID">2222</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">nextKeyView</string>
+						<reference key="source" ref="268782376"/>
+						<reference key="destination" ref="572135655"/>
+					</object>
+					<int key="connectionID">2223</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">nextKeyView</string>
+						<reference key="source" ref="572135655"/>
+						<reference key="destination" ref="268782376"/>
+					</object>
+					<int key="connectionID">2224</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">applicationController</string>
+						<reference key="source" ref="384445475"/>
+						<reference key="destination" ref="623785332"/>
+					</object>
+					<int key="connectionID">2227</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">mainWindowContentView</string>
+						<reference key="source" ref="623785332"/>
+						<reference key="destination" ref="384445475"/>
+					</object>
+					<int key="connectionID">2229</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">nextKeyView</string>
+						<reference key="source" ref="384445475"/>
+						<reference key="destination" ref="572135655"/>
+					</object>
+					<int key="connectionID">2230</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">toggleFullScreenButton</string>
+						<reference key="source" ref="384445475"/>
+						<reference key="destination" ref="805436789"/>
+					</object>
+					<int key="connectionID">2232</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">toggleFullScreen:</string>
+						<reference key="source" ref="384445475"/>
+						<reference key="destination" ref="805436789"/>
+					</object>
+					<int key="connectionID">2233</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">mainView</string>
+						<reference key="source" ref="384445475"/>
+						<reference key="destination" ref="572135655"/>
+					</object>
+					<int key="connectionID">2234</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">searchField</string>
+						<reference key="source" ref="384445475"/>
+						<reference key="destination" ref="268782376"/>
+					</object>
+					<int key="connectionID">2235</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -4664,6 +4719,7 @@
 					<string>1150.NSWindowTemplate.visibleAtLaunch</string>
 					<string>1150.windowTemplate.hasMinSize</string>
 					<string>1150.windowTemplate.minSize</string>
+					<string>1151.CustomClassName</string>
 					<string>1151.IBPluginDependency</string>
 					<string>1151.IBViewIntegration.shadowBlurRadius</string>
 					<string>1151.IBViewIntegration.shadowColor</string>
@@ -4946,6 +5002,7 @@
 					<reference ref="9"/>
 					<reference ref="9"/>
 					<string>{1000, 700}</string>
+					<string>MainWindowContentView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="8"/>
 					<reference ref="4281419"/>
@@ -5127,7 +5184,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{{525, 802}, {197, 73}}</string>
-					<string>{{118, 529}, {315, 20}}</string>
+					<string>{{27, 536}, {315, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{74, 862}</string>
@@ -5136,7 +5193,7 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{130, 326}, {234, 203}}</string>
+					<string>{{39, 333}, {234, 203}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{{23, 794}, {245, 183}}</string>
@@ -5216,7 +5273,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2221</int>
+			<int key="maxID">2235</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -5251,10 +5308,10 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>currentDrawerViewController</string>
 							<string>drawerView</string>
-							<string>fullScreenButton</string>
 							<string>infoViewButton</string>
 							<string>licensingAndVersionInfo</string>
 							<string>mainView</string>
+							<string>mainWindowContentView</string>
 							<string>movies</string>
 							<string>noDiscsView</string>
 							<string>noMovieSelectedView</string>
@@ -5270,9 +5327,9 @@
 							<string>id</string>
 							<string>DrawerView</string>
 							<string>NSButton</string>
-							<string>NSButton</string>
 							<string>NSTextField</string>
 							<string>MainView</string>
+							<string>MainWindowContentView</string>
 							<string>NSArrayController</string>
 							<string>NSView</string>
 							<string>NSView</string>
@@ -5348,6 +5405,7 @@
 							<string>drawerView</string>
 							<string>hoverInfoView</string>
 							<string>layoutManager</string>
+							<string>searchField</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -5356,11 +5414,49 @@
 							<string>DrawerView</string>
 							<string>HoverInfoView</string>
 							<string>id</string>
+							<string>NSSearchField</string>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Application/MainView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">MainWindowContentView</string>
+					<string key="superclassName">NSView</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">toggleFullScreen:</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="outlets">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSMutableArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>applicationController</string>
+							<string>mainView</string>
+							<string>searchField</string>
+							<string>toggleFullScreenButton</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>ApplicationController</string>
+							<string>NSView</string>
+							<string>NSSearchField</string>
+							<string>NSButton</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Application/MainWindowContentView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">MainWindowContentView</string>
+					<string key="superclassName">NSView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBUserSource</string>
+						<string key="minorKey"/>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

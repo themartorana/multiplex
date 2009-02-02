@@ -2,15 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Expires</key>
-	<string>2009-02-01 12:00:00 -0500</string>
 	<key>Name</key>
 	<string>Beta User</string>
 	<key>Signature</key>
 	<data>
-	SEeSKbEOyKtrQtaQOJxD6zT+YJSjZaHY6C3D8smyRUMFyswV7Zyv68FwopQvYpMUV2+z
-	/jK/7xAFia82JVx5UActCSn0A8q8cUQaXQoE1hWzetld+wSMCRsnpy71RS1DXRNa4VTk
-	V7pRXexhMihostWruLqTpLmLA8Pi3v4jjFs=
+	PalYsQHCtX8ze4l9FUbpu/QX2VYlZe8kFc/ygJtZ+EoGKaugoC0YIEy3RBX1yazMDH3t
+	E2+pMAjeOciVKRzpu48jT1Oqi914nZ2kPbS2ktBjcBCMod2AkFgQ6nwQNtcxgub+6JoI
+	qJ8t4KsxL6RhJchCMQ94gyqr9yErQwn5+XI=
 	</data>
 </dict>
 </plist>

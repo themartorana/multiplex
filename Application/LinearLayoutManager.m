@@ -157,8 +157,6 @@ static const CGFloat HS = 75.0;
     for (MovieLayer* layer in layersInOrder) {
         
         [layer clearMoveData];
-        previousLayer.rightLayer = layer;
-        layer.leftLayer = previousLayer;
         previousLayer = layer;
         
         CGFloat chord = WS + (W / 2.0) + ((W + WS) * x);

@@ -33,6 +33,9 @@ extern NSString* const kMultiplexDrawerIsClosedLayoutManagerClass;
     
     Class <MultiplexLayoutManagerProtocol> floorLayerLayoutManagerClass;
     id<MultiplexLayoutManagerProtocol> layoutManager;
+    
+    // For pushing focus back
+    IBOutlet NSSearchField* searchField;
 }
 
 @property (retain) id content;

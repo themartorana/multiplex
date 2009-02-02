@@ -21,8 +21,6 @@
 
 @property (retain) MovieLayer* upLayer;
 @property (retain) MovieLayer* downLayer;
-@property (retain) MovieLayer* leftLayer;
-@property (retain) MovieLayer* rightLayer;
 
 + (id) layerWithMovie:(Movie*)movie;
 

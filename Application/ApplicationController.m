@@ -12,6 +12,7 @@
 #import "NSDescriptionValueTransformer.h"
 #import "IsExactlyOneValueTransformer.h"
 #import "ApplicationResources.h"
+#import "MainWindowContentView.h"
 
 #import "StadiumLayoutManager.h"
 #import "LinearLayoutManager.h"
@@ -481,7 +482,7 @@
     [mainView resetCurrentlySelectedMovieLayer];
     
     [drawerView closeDrawer];
-    [[self window] makeFirstResponder:searchField];            
+    [[self window] makeFirstResponder:mainView];            
 }
 
 - (void) openInfoView:(NSNotification*)notification
@@ -495,6 +496,7 @@
 - (void) engineDidFinishInitialScan:(NSNotification*)notification
 {
     // Turn off the spinner
+    [startUpSpinnerView retain];
     [[startUpSpinnerView animator] setHidden:YES];
     [[startUpSpinnerView animator] removeFromSuperview];
     
@@ -502,6 +504,8 @@
     if ([[movies content] count] == 0) {
         [self performSelector:@selector(bindNoDiscsView) withObject:nil afterDelay:1.0];
     }
+    
+    [startUpSpinnerView release];
 }
 
 - (void) bindNoDiscsView
@@ -585,7 +589,7 @@
                 } else {
                     [drawerView setContentView:noMovieSelectedView];
                 }
-                [[self window] makeFirstResponder:drawerView];
+                [[self window] makeFirstResponder:mainView];
             } else {
                 cLayoutManager = NSClassFromString([[NSUserDefaults standardUserDefaults] objectForKey:kMultiplexDrawerIsClosedLayoutManagerClass]);
                 if (!cLayoutManager)
@@ -595,7 +599,7 @@
                 [mainView setFloorLayerLayoutManagerClass:cLayoutManager];
                 
                 [drawerView setContentView:nil];
-                [[self window] makeFirstResponder:searchField];
+                [[self window] makeFirstResponder:mainView];
             }
             
             if (cLayoutManager == [StadiumLayoutManager class]) {
@@ -644,6 +648,16 @@
     }    
 }
 
+- (BOOL) isInFullScreen
+{
+    return [[[NSApp mainWindow] contentView] isInFullScreenMode];
+}
+
+- (BOOL) isDrawerViewOpen
+{
+    return [drawerView isOpen];
+}
+
 - (void) setSearchQuery:(NSString*)_searchQuery
 {
     if (_searchQuery != searchQuery) {
@@ -668,22 +682,13 @@
 
 - (IBAction) toggleFullScreen:(id)sender
 {
-    NSWindow* mainWindow = [sender window];
+    [mainWindowContentView toggleFullScreen];
     
-    if ([[mainWindow contentView] isInFullScreenMode]) {
-        [[mainWindow contentView] exitFullScreenModeWithOptions:nil];
-        [windowResizeThumb setHidden:NO];
-        viewInFullScreen = nil;
-        
-        //[fullScreenButton setImage:[NSImage imageNamed:]];
+    if ([mainWindowContentView isInFullScreenMode]) {
+        [windowResizeThumb setHidden:YES];
     }
     else {
-        [[mainWindow contentView] enterFullScreenMode:[NSScreen mainScreen] 
-                                          withOptions:nil]; //[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:NSFullScreenModeAllScreens]];
-        viewInFullScreen = [mainWindow contentView];
-        [windowResizeThumb setHidden:YES];
-        
-        //[fullScreenButton sh setImage:[NSImage imageNamed:@"collapse-screen"]];
+        [windowResizeThumb setHidden:NO];
     }
 }
 
@@ -705,8 +710,8 @@
 - (void) windowDidResignMain:(NSNotification*)notification
 {
     NSLog(@"resigned");
-    if (viewInFullScreen && [viewInFullScreen isInFullScreenMode]) {
-        [self toggleFullScreen:viewInFullScreen];
+    if (mainWindowContentView && [mainWindowContentView isInFullScreenMode]) {
+        [mainWindowContentView toggleFullScreen];
     }
 }
 

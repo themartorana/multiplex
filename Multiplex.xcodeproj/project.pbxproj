@@ -102,6 +102,7 @@
 		55DCCE860F15319400B3DF41 /* hoverview.html in Resources */ = {isa = PBXBuildFile; fileRef = 55DCCE850F15319400B3DF41 /* hoverview.html */; };
 		55E5B5180ED26AA40054DEC7 /* MovieURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E5B5170ED26AA40054DEC7 /* MovieURL.m */; };
 		55E5B56E0ED2719E0054DEC7 /* Episode.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E5B56D0ED2719E0054DEC7 /* Episode.m */; };
+		55F1CF9A0F2FB7F0002CD731 /* MainWindowContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F1CF990F2FB7F0002CD731 /* MainWindowContentView.m */; };
 		55F815360E94082A005EF5DE /* button-play.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55F815350E94082A005EF5DE /* button-play.pdf */; };
 		55F83CFD0ECE7DDD00C68896 /* Participant.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F83CFC0ECE7DDD00C68896 /* Participant.m */; };
 		55FC9CA10EB8382000CE3F05 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55FC9CA00EB8382000CE3F05 /* Security.framework */; };
@@ -548,6 +549,8 @@
 		55E5B5170ED26AA40054DEC7 /* MovieURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieURL.m; sourceTree = "<group>"; };
 		55E5B56C0ED2719E0054DEC7 /* Episode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Episode.h; sourceTree = "<group>"; };
 		55E5B56D0ED2719E0054DEC7 /* Episode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Episode.m; sourceTree = "<group>"; };
+		55F1CF980F2FB7F0002CD731 /* MainWindowContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainWindowContentView.h; sourceTree = "<group>"; };
+		55F1CF990F2FB7F0002CD731 /* MainWindowContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainWindowContentView.m; sourceTree = "<group>"; };
 		55F815350E94082A005EF5DE /* button-play.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "button-play.pdf"; sourceTree = "<group>"; };
 		55F83CFB0ECE7DDD00C68896 /* Participant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Participant.h; sourceTree = "<group>"; };
 		55F83CFC0ECE7DDD00C68896 /* Participant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Participant.m; sourceTree = "<group>"; };
@@ -622,7 +625,6 @@
 		F9B8E1950EB25628008589F3 /* LinearLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinearLayoutManager.h; sourceTree = "<group>"; };
 		F9B8E1960EB25628008589F3 /* LinearLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinearLayoutManager.m; sourceTree = "<group>"; };
 		F9BBEA500F1EFB7500667CAB /* Multiplex.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Multiplex.xcdatamodel; sourceTree = "<group>"; };
-		F9BBF5880F1FF52700667CAB /* DVD-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DVD-Info.plist"; sourceTree = "<group>"; };
 		F9C2AE540E7B747B00474D97 /* JSONKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JSONKit.xcodeproj; path = Frameworks/JSONKit/JSONKit.xcodeproj; sourceTree = "<group>"; };
 		F9CA17280E7C727C0049CD3E /* Movie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Movie.h; sourceTree = "<group>"; };
 		F9CA17290E7C727C0049CD3E /* Movie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Movie.m; sourceTree = "<group>"; };
@@ -821,7 +823,6 @@
 				F98DC7080B63013B00371A83 /* Spotlight */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
-				F9BBF5880F1FF52700667CAB /* DVD-Info.plist */,
 			);
 			name = BookShelf;
 			sourceTree = "<group>";
@@ -1104,6 +1105,8 @@
 			children = (
 				F966E5250EAF9A53001D0B3B /* BoxArtImageView.h */,
 				F966E5260EAF9A53001D0B3B /* BoxArtImageView.m */,
+				55F1CF980F2FB7F0002CD731 /* MainWindowContentView.h */,
+				55F1CF990F2FB7F0002CD731 /* MainWindowContentView.m */,
 				F966E49A0EAF9215001D0B3B /* DragDropTargetView.h */,
 				F966E49B0EAF9215001D0B3B /* DragDropTargetView.m */,
 				F914C9CE0EAD657900877991 /* DrawerView.h */,
@@ -1785,6 +1788,7 @@
 				55230CD50F1D7C4500A23E54 /* MultiplexResourceURLProtocol.m in Sources */,
 				5574AA590F1E56A700D4AA81 /* StartupSpinnerView.m in Sources */,
 				F9BBEA510F1EFB7500667CAB /* Multiplex.xcdatamodel in Sources */,
+				55F1CF9A0F2FB7F0002CD731 /* MainWindowContentView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

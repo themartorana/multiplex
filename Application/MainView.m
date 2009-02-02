@@ -299,45 +299,106 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     [self setHoveredMovie:nil];
 }
 
-#if 0
 - (void) keyDown:(NSEvent*)event
 {
+    NSLog(@"Key pressed: %d", [event keyCode]);
+    
+    NSArray* listOfLayersInOrder = [[self _listOfLayersInOrder] lastObject];
+    
+    int index = [listOfLayersInOrder indexOfObject:selectedMovieLayer];
+    
     switch ([event keyCode]) {
-        case 123:
-            if (selectedMovieLayer.leftLayer) {
-                selectedMovieLayer = selectedMovieLayer.leftLayer;
+        case 36:
+        case 76:
+            // RETURN or ENTER
+            if (selectedMovieLayer) {
+                [applicationController showMovieDetailAndSelectHomeTabForMovie:[selectedMovieLayer movie]];
             }
-            break;
-            
-        case 124:
-            if (selectedMovieLayer.rightLayer) {
-                selectedMovieLayer = selectedMovieLayer.rightLayer;
-            }
-            break;
-            
-        case 125:
-            if (selectedMovieLayer.upLayer) {
-                selectedMovieLayer = selectedMovieLayer.upLayer;
-            }
+            return;
             break;
         
-        case 126:
-            if (selectedMovieLayer.downLayer) {
-                selectedMovieLayer = selectedMovieLayer.downLayer;
-            }
+        case 48:
+            // TAB
+            // Determine if the next key views are set properly
+            [[self window] selectNextKeyView:self];
+            return;
             break;
             
-        default:
+        case 53:
+            // ESC
+            if ([applicationController isInFullScreen]) {
+                [applicationController toggleFullScreen:self];
+            }
+            if ([drawerView isOpen]) {
+                [applicationController closeDrawerView:nil];
+            }
+            return;
+            break;
+            
+        case 3:
+            // "F" - check for COMMAND button
+            if ([event modifierFlags] & NSCommandKeyMask) {
+                [applicationController toggleFullScreen:self];
+            }
+            return;
             break;
     }
     
+    if (selectedMovieLayer && [listOfLayersInOrder count]) {
+        switch ([event keyCode]) {
+            case 123:
+                // RIGHT ARROW
+                if (index > 0) {
+                    selectedMovieLayer = [listOfLayersInOrder objectAtIndex:index - 1];
+                }
+                else {
+                    selectedMovieLayer = [listOfLayersInOrder lastObject];
+                }
+                break;
+                
+            case 124:
+                // LEFT ARROW
+                if ((index + 1) != [listOfLayersInOrder count]) {
+                    selectedMovieLayer = [listOfLayersInOrder objectAtIndex:index + 1];
+                }
+                else {
+                    selectedMovieLayer = [listOfLayersInOrder objectAtIndex:0];
+                }
+                break;
+                
+            case 125:
+                // UP ARROW
+                if (selectedMovieLayer.upLayer) {
+                    selectedMovieLayer = selectedMovieLayer.upLayer;
+                }
+                break;
+                
+            case 126:
+                // DOWN ARROW
+                if (selectedMovieLayer.downLayer) {
+                    selectedMovieLayer = selectedMovieLayer.downLayer;
+                }
+                break;
+                
+            default:
+                break;
+        }
+    }
+    else {
+        selectedMovieLayer = [listOfLayersInOrder objectAtIndex:0];
+    }
+    
+    
     if (selectedMovieLayer && [selectedMovieLayer movie]) {
         [content setSelectedObjects:[NSArray arrayWithObject:[selectedMovieLayer movie]]];
+        
+        // Set the hovered layer to the selected layer
+        [self setHoveredMovie:[selectedMovieLayer movie]];
     }
 
     [floorLayer setNeedsLayout];
 }
-#endif
+
 
 - (BOOL) acceptsFirstResponder
 {

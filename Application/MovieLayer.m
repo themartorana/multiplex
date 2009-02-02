@@ -20,8 +20,6 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
 
 @dynamic upLayer;
 @dynamic downLayer;
-@dynamic leftLayer;
-@dynamic rightLayer;
 
 + (id) layerWithMovie:(Movie*)movie
 {
@@ -144,8 +142,6 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
 {
     self.upLayer = nil;
     self.downLayer = nil;
-    self.leftLayer = nil;
-    self.rightLayer = nil;
 }
 
 @end

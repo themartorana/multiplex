@@ -265,10 +265,11 @@ static const CGFloat HS = 75.0;
             
             /*  Setup for the next iteration.
              */
-            y -= 1;
-            if (!y) {
-                x++;
-                y = rows;
+            x++;
+            if (x >= columns) {
+                x = 0;
+                y -= 1;
+                //y = rows;
             }
         }
         

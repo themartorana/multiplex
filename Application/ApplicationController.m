@@ -18,6 +18,7 @@
 #import "LinearLayoutManager.h"
 
 #import "DrawerViewControllerProtocol.h"
+#import "PreferencesWindowController.h"
 
 #import "MultiplexResourceURLProtocol.h"
 
@@ -96,6 +97,8 @@
         [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
             [NSNumber numberWithInt:24 * 60 * 60], @"SUScheduledCheckInterval",
             kCFBooleanTrue, @"SUEnableAutomaticChecks",
+            kCFBooleanTrue, @"HoverTooltipEnabled",
+            kCFBooleanFalse, @"FullScreenOnLaunch",
             nil
         ]];
     }
@@ -297,6 +300,11 @@
     [self loadLocalFonts];
     NSFont* uniFont = [NSFont fontWithName:@"uni 05_53" size:8.0];
     [licensingAndVersionInfo setFont:uniFont];
+    
+    // Jump to full screen?
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"FullScreenOnLaunch"] boolValue]) {
+        [self toggleFullScreen:self];
+    }
 }
 
 - (void) applicationDidFinishLaunching:(NSNotification*)notification
@@ -668,7 +676,7 @@
         } else {
             movies.filterPredicate = nil;
         }
-        NSLog(@"%@", movies.filterPredicate);
+        NSLog(@"%@, %i", movies.filterPredicate, [[movies arrangedObjects] count]);
     }
 }
 
@@ -729,6 +737,16 @@
             [self switchToLinearLayoutManager:nil];
         }
     }
+}
+
+- (IBAction) showPreferencesWindow:(id)sender
+{
+    if (!preferencesWindowController)
+    {
+        preferencesWindowController = [[PreferencesWindowController alloc] initWithApplicationController:self];
+    }
+    
+    [[preferencesWindowController window] makeKeyAndOrderFront:self];
 }
 
 @end

@@ -11,7 +11,7 @@
 	<key>CFBundleIconFile</key>
 	<string>multiplex-mark01a</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.ripitapp.${PRODUCT_NAME:identifier}</string>
+	<string>com.multiplexapp.${PRODUCT_NAME:identifier}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
@@ -19,7 +19,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>0.95.2</string>
+	<string>0.95.3</string>
 	<key>NSAppleScriptEnabled</key>
 	<string>NO</string>
 	<key>NSMainNibFile</key>

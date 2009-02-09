@@ -19,6 +19,7 @@
     
     BOOL layoutTriggeredDueToHover;
     BOOL shouldShowHiglightLayer;
+    BOOL shouldShowHoverLayer;
 }
 
 @property (copy) NSArray* listOfLayersInOrder;

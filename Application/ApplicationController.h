@@ -10,6 +10,7 @@
 @class Movie;
 @class MovieLayer;
 @class MainWindowContentView;
+@class PreferencesWindowController;
 
 @interface ApplicationController : NSWindowController {
     NSDictionary* parameters;
@@ -34,6 +35,10 @@
     IBOutlet NSButton* userVoiceButton;
     /**/
     IBOutlet NSImageView* windowResizeThumb;
+    
+    /**/
+    PreferencesWindowController* preferencesWindowController;    
+    
     EngineController* engineController;
     NSManagedObjectModel* managedObjectModel;
     NSPersistentStoreCoordinator* persistentStoreCoordinator;
@@ -64,6 +69,8 @@
 - (IBAction) switchToStadiumLayoutManager:(id)sender;
 - (IBAction) switchToGridLayoutManager:(id)sender;
 - (IBAction) switchToLinearLayoutManager:(id)sender;
+
+- (IBAction) showPreferencesWindow:(id)sender;
 
 - (void) showMovieDetailAndSelectHomeTabForMovie:(Movie*)movie;
 - (void) showMovieDetailAndSelectDiscsTabMovie:(Movie*)movie;

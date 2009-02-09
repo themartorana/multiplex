@@ -74,6 +74,11 @@
     shouldShowHiglightLayer = show;
 }
 
+- (void) setShouldShowHoveredMovieHighlight:(BOOL)show
+{
+    shouldShowHoverLayer = show;
+}
+
 - (void) setSelectedMovieLayer:(MovieLayer*)movieLayer
 {
     if (selectedMovieLayer) {
@@ -101,7 +106,7 @@
             titleLayer.string = @" ";
         }
         
-        if (_hoveredMovieLayer) {
+        if (_hoveredMovieLayer && shouldShowHoverLayer) {
             if (!hoverHighlightLayer) {
                 hoverHighlightLayer = [CALayer layer];
                 hoverHighlightLayer.borderColor = [MultiplexColorFactory multiplexOrange];

@@ -137,14 +137,17 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     NSAssert(layer == floorLayer, @"wtf?");
     [layoutManager setListOfLayersInOrder:[self _listOfLayersInOrder]];
     [layoutManager setSelectedMovieLayer:selectedMovieLayer];
-    [layoutManager setShouldShowSelectedMovieHighlight:[drawerView isOpen]];
+    //[layoutManager setShouldShowSelectedMovieHighlight:[drawerView isOpen]];
+    [layoutManager setShouldShowSelectedMovieHighlight:YES];
     [layoutManager layoutSublayersOfLayer:floorLayer];
 }
 
 - (void) restartHoverTimer
 {
     [self _cancelHoverTimer];
-    if (hoveredMovie && ![drawerView isOpen]) {
+    if (hoveredMovie && 
+        ![drawerView isOpen] && 
+        [[[NSUserDefaults standardUserDefaults] objectForKey:@"HoverTooltipEnabled"] boolValue]) {
         hoverTimer = [[NSTimer scheduledTimerWithTimeInterval:0.75 target:self selector:@selector(_hoverTimerTicked:) userInfo:nil repeats:NO] retain];
     }
 }
@@ -166,7 +169,7 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
         [hoverInfoView setHidden:YES];
         [layoutManager setHoveredMovieLayer:[layersByID objectForKey:_hoveredMovie.objectID]];
     }
-    [self restartHoverTimer];
+    //[self restartHoverTimer];
 }
 
 - (void) setFrame:(NSRect)frame
@@ -275,6 +278,10 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     CGPoint position = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
     MovieLayer* movieLayer = [self movieLayerForPoint:position];
     Movie* movie = movieLayer.movie;
+
+    if (movieLayer) {
+        [layoutManager setShouldShowHoveredMovieHighlight:YES];
+    }
     
     if (movie && ![[content arrangedObjects] containsObject:movie]) {
         movie = nil;
@@ -307,6 +314,8 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     
     int index = [listOfLayersInOrder indexOfObject:selectedMovieLayer];
     
+    [layoutManager setShouldShowHoveredMovieHighlight:NO];
+    
     switch ([event keyCode]) {
         case 36:
         case 76:
@@ -329,7 +338,7 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
             if ([applicationController isInFullScreen]) {
                 [applicationController toggleFullScreen:self];
             }
-            if ([drawerView isOpen]) {
+            else if ([drawerView isOpen]) {
                 [applicationController closeDrawerView:nil];
             }
             return;

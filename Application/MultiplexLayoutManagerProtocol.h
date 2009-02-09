@@ -17,5 +17,6 @@
 - (void) layoutSublayersOfLayer:(CALayer*)layer;
 
 - (void) setShouldShowSelectedMovieHighlight:(BOOL)show;
+- (void) setShouldShowHoveredMovieHighlight:(BOOL)show;
 
 @end

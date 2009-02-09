@@ -94,11 +94,7 @@
      ];
     
     [drawerView setContentView:infoPaneView];
-    
-    NSString* noSynopsis = @"No description found. Replace this text to add one.";
-    [[descriptionWebView mainFrame] loadHTMLString:movie && movie.synopsis ? movie.synopsis : noSynopsis baseURL:[NSURL URLWithString:@""]];
-    [[overviewWebView mainFrame] loadHTMLString:movie ? [self generateDescriptionHtmlString] : @"" baseURL:[NSURL URLWithString:@""]];
-    
+       
     if (!drawerView.isOpen) {
         [drawerView toggle:self];
     }    
@@ -180,6 +176,10 @@
     movie = [_movie retain];
     [discsView setMovie:movie];
     [self didChangeValueForKey:@"movie"];
+    
+    NSString* noSynopsis = @"No description found. Replace this text to add one.";
+    [[descriptionWebView mainFrame] loadHTMLString:movie && movie.synopsis ? movie.synopsis : noSynopsis baseURL:[NSURL URLWithString:@""]];
+    [[overviewWebView mainFrame] loadHTMLString:movie ? [self generateDescriptionHtmlString] : @"" baseURL:[NSURL URLWithString:@""]];
     
     if ([self getAmazonURL]) {
         [self setIsAvailableFromAmazon:YES];

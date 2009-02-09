@@ -63,6 +63,11 @@
     shouldShowHiglightLayer = show;
 }
 
+- (void) setShouldShowHoveredMovieHighlight:(BOOL)show
+{
+    shouldShowHoverLayer = show;
+}
+
 - (void) setSelectedMovieLayer:(MovieLayer*)movieLayer
 {
     if (selectedMovieLayer) {
@@ -86,7 +91,7 @@
     [CATransaction begin];
     [CATransaction setValue:[NSNumber numberWithDouble:0.0] forKey:kCATransactionAnimationDuration];
     
-    if (movieLayer) {
+    if (movieLayer && shouldShowHoverLayer) {
         dontLayoutBecauseOfHighlight = YES;
         hoverHighlightLayer.hidden = NO;
         hoverHighlightLayer.anchorPoint = movieLayer.anchorPoint;

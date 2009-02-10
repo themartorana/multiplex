@@ -257,15 +257,23 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
 
     BOOL singleClickLaunchesMovie = [[MultiplexDefaults standardUserDefaults] boolForKey:@"SingleClickLaunchesMovie"];
     
-    if (1 == [theEvent clickCount] && singleClickLaunchesMovie) {
+    // Stupid logic, thinks it's so good.
+    if ([drawerView isOpen]) {
+        [self performClickOpenInfo:movieLayer];
+    }
+    else if (1 == [theEvent clickCount] && singleClickLaunchesMovie) {
         [self performSelector:@selector(performClickPlaysMovie:) withObject:movieLayer afterDelay:[MultiplexDefaults doubleClickDelayTimeInterval]];
     }
     else if (2 == [theEvent clickCount] && singleClickLaunchesMovie) {
         [NSObject cancelPreviousPerformRequestsWithTarget:self];
         [self performClickOpenInfo:movieLayer];
     }
-    else {
-        [self performClickOpenInfo:movieLayer];
+    else if (1 == [theEvent clickCount] && !singleClickLaunchesMovie) {
+        [self performSelector:@selector(performClickOpenInfo:) withObject:movieLayer afterDelay:[MultiplexDefaults doubleClickDelayTimeInterval]];
+    }
+    else if (2 == [theEvent clickCount] && !singleClickLaunchesMovie) {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        [self performClickPlaysMovie:movieLayer];
     }
 }
 

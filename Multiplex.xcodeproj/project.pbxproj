@@ -52,6 +52,7 @@
 		5531A7450EB3EC24009562A2 /* full-screen-icon-down.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5531A7440EB3EC24009562A2 /* full-screen-icon-down.gif */; };
 		553477810EA3AD5100436A8C /* multiplex-mark01a.icns in Resources */ = {isa = PBXBuildFile; fileRef = 553477800EA3AD5100436A8C /* multiplex-mark01a.icns */; };
 		5535D98F0E4E3F5400A45761 /* EngineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5535D98E0E4E3F5400A45761 /* EngineController.m */; };
+		553A64E80F4119A300DA134D /* MultiplexDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 553A64E70F4119A300DA134D /* MultiplexDefaults.m */; };
 		553AC77B0EC3B3D600A98A70 /* MovieDetailTokenFieldValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 553AC77A0EC3B3D600A98A70 /* MovieDetailTokenFieldValueTransformer.m */; };
 		554282C70EB3D69B00FF7E44 /* full-screen-icon.gif in Resources */ = {isa = PBXBuildFile; fileRef = 554282C60EB3D69B00FF7E44 /* full-screen-icon.gif */; };
 		5545BC040EB5171C0005A380 /* NSNumberToStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5545BC030EB5171C0005A380 /* NSNumberToStringValueTransformer.m */; };
@@ -481,6 +482,8 @@
 		553477800EA3AD5100436A8C /* multiplex-mark01a.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "multiplex-mark01a.icns"; sourceTree = "<group>"; };
 		5535D98D0E4E3F5400A45761 /* EngineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngineController.h; sourceTree = "<group>"; };
 		5535D98E0E4E3F5400A45761 /* EngineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngineController.m; sourceTree = "<group>"; };
+		553A64E60F4119A300DA134D /* MultiplexDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiplexDefaults.h; sourceTree = "<group>"; };
+		553A64E70F4119A300DA134D /* MultiplexDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiplexDefaults.m; sourceTree = "<group>"; };
 		553AC7790EC3B3D600A98A70 /* MovieDetailTokenFieldValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieDetailTokenFieldValueTransformer.h; sourceTree = "<group>"; };
 		553AC77A0EC3B3D600A98A70 /* MovieDetailTokenFieldValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieDetailTokenFieldValueTransformer.m; sourceTree = "<group>"; };
 		554282C60EB3D69B00FF7E44 /* full-screen-icon.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "full-screen-icon.gif"; sourceTree = "<group>"; };
@@ -847,6 +850,8 @@
 				55230CD30F1D7C4500A23E54 /* MultiplexResourceURLProtocol.h */,
 				55230CD40F1D7C4500A23E54 /* MultiplexResourceURLProtocol.m */,
 				557AFD320F2A811C00C53801 /* ExecuteTokenProtocol.h */,
+				553A64E60F4119A300DA134D /* MultiplexDefaults.h */,
+				553A64E70F4119A300DA134D /* MultiplexDefaults.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -1813,6 +1818,7 @@
 				55F1CF9A0F2FB7F0002CD731 /* MainWindowContentView.m in Sources */,
 				55AB54B70F3CF66B00BED2B7 /* PreferencesWindow.m in Sources */,
 				55AB54F10F3CFEF700BED2B7 /* PreferencesWindowController.m in Sources */,
+				553A64E80F4119A300DA134D /* MultiplexDefaults.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

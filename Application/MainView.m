@@ -9,6 +9,7 @@
 #import "ApplicationResources.h"
 #import "DrawerView.h"
 #import "HoverInfoView.h"
+#import "MultiplexDefaults.h"
 
 #import <Toolkit/Toolkit.h>
 #import <QuartzCore/QuartzCore.h>
@@ -225,44 +226,9 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     [layoutManager layoutSublayersOfLayer:floorLayer];
 }
 
-// Not necessary since the change to a NSView
-/*- (void) mouseDown:(NSEvent*)theEvent
+- (void) performClickOpenInfo:(MovieLayer*)movieLayer
 {
-    if (![hoverInfoView isHidden]) {
-        CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
-        CALayer *layer = [hoverInfoView hitTest:p];
-        if (layer && [layer isKindOfClass:[ButtonLayer class]]) {
-            hoverInfoView.isMouseDown = YES;
-        }
-    }
-}*/
-
-- (void) mouseUp:(NSEvent*)theEvent
-{
-    CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
-    /*hoverInfoView.isMouseDown = NO;
-    CALayer* playButtonLayer = [hoverInfoView hitTest:p];
-
-    if (playButtonLayer) {
-        if ([playButtonLayer isKindOfClass:[ButtonLayer class]]) {
-            [content setSelectedObjects:[NSArray arrayWithObject:hoveredMovie]];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayButtonClicked" object:nil];
-        }  
-        
-        return;
-    }*/
-
-    // This was the else for double-click with drawer open.  Leaving in
-    // since the move to single-click is experimental at this time.
-    //else if (movieLayer && ([drawerView isOpen] && [theEvent clickCount] == 1) ||
-    //    (![drawerView isOpen] && [theEvent clickCount] == 2)) {
-    
-    MovieLayer* movieLayer = [self movieLayerForPoint:p];
-    if (![[listOfMoviesInOrder objectAtIndex:[listOfMoviesInOrder count] - 1] containsObject:movieLayer.movie]) {
-        movieLayer = nil;
-    }
-    
-    else if (movieLayer) {
+    if (movieLayer) {
         // Ask the application controller if we're allowed to do this
         NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:@selector(_selectMovieLayerApproved:)]];
         [invocation setTarget:self];
@@ -271,6 +237,36 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
         [invocation setArgument:&movieLayer atIndex:2];
         [applicationController approveMovieSelectionClick:invocation forMovieLayer:movieLayer];
     } 
+}
+
+- (void) performClickPlaysMovie:(MovieLayer*)movieLayer
+{
+    NSNotification* n = [NSNotification notificationWithName:@"MultiplexPlayMovie" object:movieLayer.movie];
+    [[NSNotificationCenter defaultCenter] postNotification:n];
+}
+
+- (void) mouseUp:(NSEvent*)theEvent
+{
+    CGPoint p = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
+    
+    MovieLayer* movieLayer = [self movieLayerForPoint:p];
+    if (![[listOfMoviesInOrder objectAtIndex:[listOfMoviesInOrder count] - 1] containsObject:movieLayer.movie]) {
+        movieLayer = nil;
+        return;
+    }
+
+    BOOL singleClickLaunchesMovie = [[MultiplexDefaults standardUserDefaults] boolForKey:@"SingleClickLaunchesMovie"];
+    
+    if (1 == [theEvent clickCount] && singleClickLaunchesMovie) {
+        [self performSelector:@selector(performClickPlaysMovie:) withObject:movieLayer afterDelay:[MultiplexDefaults doubleClickDelayTimeInterval]];
+    }
+    else if (2 == [theEvent clickCount] && singleClickLaunchesMovie) {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        [self performClickOpenInfo:movieLayer];
+    }
+    else {
+        [self performClickOpenInfo:movieLayer];
+    }
 }
 
 - (void) mouseMoved:(NSEvent*)theEvent

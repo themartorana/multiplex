@@ -1,11 +1,3 @@
-//
-//  Preferences.m
-//  Multiplex
-//
-//  Created by David Martorana on 2/6/09.
-//  Copyright 2009 __MyCompanyName__. All rights reserved.
-//
-
 #import "PreferencesWindow.h"
 
 

@@ -99,6 +99,7 @@
             kCFBooleanTrue, @"SUEnableAutomaticChecks",
             kCFBooleanTrue, @"HoverTooltipEnabled",
             kCFBooleanFalse, @"FullScreenOnLaunch",
+            kCFBooleanFalse, @"SingleClickLaunchesMovie",
             nil
         ]];
     }

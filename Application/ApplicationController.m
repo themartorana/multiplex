@@ -304,7 +304,12 @@
     
     // Jump to full screen?
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"FullScreenOnLaunch"] boolValue]) {
-        [self toggleFullScreen:self];
+        //[[NSRunLoop currentRunLoop] performSelector:@selector(toggleFullScreen:) 
+        //                                     target:self 
+        //                                   argument:self 
+        //                                      order:0 
+        //                                      modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
+        [self performSelector:@selector(toggleFullScreen:) withObject:nil afterDelay:0.1];
     }
 }
 

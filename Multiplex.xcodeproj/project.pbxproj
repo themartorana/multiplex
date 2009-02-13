@@ -94,6 +94,7 @@
 		55AB54B70F3CF66B00BED2B7 /* PreferencesWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 55AB54B60F3CF66B00BED2B7 /* PreferencesWindow.m */; };
 		55AB54C60F3CFDE400BED2B7 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55AB54C50F3CFDE400BED2B7 /* Preferences.xib */; };
 		55AB54F10F3CFEF700BED2B7 /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55AB54F00F3CFEF700BED2B7 /* PreferencesWindowController.m */; };
+		55B587900F41E75000399BE7 /* new.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B5878F0F41E75000399BE7 /* new.png */; };
 		55B81A490EA049D500775EAE /* movie-description.css in Resources */ = {isa = PBXBuildFile; fileRef = 55B81A480EA049D500775EAE /* movie-description.css */; };
 		55C9F6260EB26A15001B9BCD /* HalfTransparentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C9F6250EB26A15001B9BCD /* HalfTransparentView.m */; };
 		55C9F6430EB26C5A001B9BCD /* LayerBackedButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C9F6420EB26C5A001B9BCD /* LayerBackedButtonView.m */; };
@@ -542,6 +543,7 @@
 		55AB54C50F3CFDE400BED2B7 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 		55AB54EF0F3CFEF700BED2B7 /* PreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesWindowController.h; sourceTree = "<group>"; };
 		55AB54F00F3CFEF700BED2B7 /* PreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesWindowController.m; sourceTree = "<group>"; };
+		55B5878F0F41E75000399BE7 /* new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = new.png; sourceTree = "<group>"; };
 		55B81A480EA049D500775EAE /* movie-description.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = "movie-description.css"; sourceTree = "<group>"; };
 		55C9F6240EB26A15001B9BCD /* HalfTransparentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HalfTransparentView.h; sourceTree = "<group>"; };
 		55C9F6250EB26A15001B9BCD /* HalfTransparentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HalfTransparentView.m; sourceTree = "<group>"; };
@@ -1049,6 +1051,7 @@
 		F96430AE0EB6412300D49FA0 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				55B5878F0F41E75000399BE7 /* new.png */,
 				96066C620F215195006F5463 /* tooltip-pointer-right-shadow.png */,
 				96066C5D0F2150F7006F5463 /* tooltip-pointer-left-shadow.png */,
 				967FF1F90F17A00B00A08F6F /* tooltip-bottom.png */,
@@ -1683,6 +1686,7 @@
 				96066C5E0F2150F7006F5463 /* tooltip-pointer-left-shadow.png in Resources */,
 				96066C630F215195006F5463 /* tooltip-pointer-right-shadow.png in Resources */,
 				55AB54C60F3CFDE400BED2B7 /* Preferences.xib in Resources */,
+				55B587900F41E75000399BE7 /* new.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

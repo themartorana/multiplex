@@ -325,7 +325,8 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
         case 76:
             // RETURN or ENTER
             if (selectedMovieLayer) {
-                [applicationController showMovieDetailAndSelectHomeTabForMovie:[selectedMovieLayer movie]];
+                //[applicationController showMovieDetailAndSelectHomeTabForMovie:[selectedMovieLayer movie]];
+                [self performClickPlaysMovie:selectedMovieLayer];
             }
             return;
             break;
@@ -340,17 +341,6 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
         case 53:
             // ESC
             if ([applicationController isInFullScreen]) {
-                [applicationController toggleFullScreen:self];
-            }
-            else if ([drawerView isOpen]) {
-                [applicationController closeDrawerView:nil];
-            }
-            return;
-            break;
-            
-        case 3:
-            // "F" - check for COMMAND button
-            if ([event modifierFlags] & NSCommandKeyMask) {
                 [applicationController toggleFullScreen:self];
             }
             return;
@@ -428,8 +418,7 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
 {
     if (mouseTrackingArea) {
         [self removeTrackingArea:mouseTrackingArea];
-        [mouseTrackingArea release];
-        mouseTrackingArea = nil;
+        [mouseTrackingArea release], mouseTrackingArea = nil;
     }
     mouseTrackingArea = [[NSTrackingArea alloc] initWithRect:[self frame] options:(NSTrackingActiveInKeyWindow | NSTrackingInVisibleRect | NSTrackingMouseMoved | NSTrackingMouseEnteredAndExited) owner:self userInfo:nil];
     [self addTrackingArea:mouseTrackingArea];    

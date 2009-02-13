@@ -9,11 +9,31 @@
         case 3:
             // "F" - check for COMMAND button
             if ([theEvent modifierFlags] & NSCommandKeyMask) {
+                // Put the cursor in the search box
+                [[self window] makeFirstResponder:searchField];
+                return YES;
+            }
+            break;
+        case 36:
+            // The Enter key - if cmd-enter, toggle full screen
+            if ([theEvent modifierFlags] & NSCommandKeyMask) {
                 [[NSRunLoop currentRunLoop] performSelector:@selector(toggleFullScreen) 
                                                      target:self 
                                                    argument:nil 
                                                       order:0 
                                                       modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
+                return YES;
+            }
+            break;
+        case 34:
+            // Open/close the drawer
+            if ([theEvent modifierFlags] & NSCommandKeyMask) {
+                if ([applicationController isDrawerViewOpen]) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexCloseDrawerView" object:nil];
+                }
+                else {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexShowMovieDialog" object:nil];
+                }
                 return YES;
             }
             break;

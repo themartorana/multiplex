@@ -304,11 +304,8 @@
     
     // Jump to full screen?
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"FullScreenOnLaunch"] boolValue]) {
-        //[[NSRunLoop currentRunLoop] performSelector:@selector(toggleFullScreen:) 
-        //                                     target:self 
-        //                                   argument:self 
-        //                                      order:0 
-        //                                      modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
+        // Do it on a delay to get the mouse coordinate system right.
+        // Kinda hackish
         [self performSelector:@selector(toggleFullScreen:) withObject:nil afterDelay:0.1];
     }
 }

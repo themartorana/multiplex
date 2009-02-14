@@ -82,6 +82,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
 {
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:engineEntity];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"uuid != 'Sample Data'"]];
     NSArray* enginesToDelete = [managedObjectContext executeFetchRequest:fetchRequest error:nil];
     if ([enginesToDelete count]) {
         for (Engine* engine in enginesToDelete) {
@@ -92,7 +93,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
     [fetchRequest release];
 }
 
-- (void) removeFailedBoxArt
+- (void) retryFailedBoxArt
 {
     NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:boxArtEntity];
@@ -100,7 +101,8 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
     NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:nil];
     if ([results count]) {
         for (BoxArt* boxArt in results) {
-            [managedObjectContext deleteObject:boxArt];
+            [ImageQuery imageQueryWithURL:[NSURL URLWithString:boxArt.url] delegate:self userInfo:[Activity activityWithName:kLoadingBoxArtActivityName userInfo:boxArt] startImmediately:YES];
+            //[managedObjectContext deleteObject:boxArt];
         }
         [managedObjectContext saveAndPrintErrors];
     }
@@ -145,7 +147,7 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
             participantEntity = [[NSEntityDescription entityForName:@"Participant" inManagedObjectContext:managedObjectContext] retain];
             
             [self removeOldEnginesAndAssociatedMedia];
-            [self removeFailedBoxArt];
+            [self retryFailedBoxArt];
             [self removeDanglingDiscs];
             [managedObjectContext saveAndPrintErrors];
             

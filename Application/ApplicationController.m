@@ -72,6 +72,8 @@
 
 - (void) _closeDrawerViewApproved;
 - (void) _setCurrentDrawerViewControllerApproved:(id<DrawerViewControllerProtocol>)protocolObject;
+- (void) _loadDatabase:(NSString*)pathToDatabaseFile isSampleData:(BOOL)isSample;
+- (NSString*) _copySampleDatabase;
 
 @end
 
@@ -161,35 +163,89 @@
             }
         }
 
-        managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Multiplex" ofType:@"mom"]]];
-        persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
-        if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabase] options:nil error:&error]) {
-            [fileManager removeItemAtPath:pathToDatabase error:nil];
-            if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabase] options:nil error:&error]) {
-                [NSException raise:NSStringFromClass([self class]) format:@"Unable to create a fresh database."];
-            }
-        }
-        
-        engineManagedObjectContext = [[NSManagedObjectContext alloc] init];
-        [engineManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
-
-        appManagedObjectContext = engineManagedObjectContext; 
-        
-#ifdef DUAL_OBJECT_CONTEXT
-        
-        appManagedObjectContext = [[NSManagedObjectContext alloc] init];
-        [appManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
-        
-        NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
-        [notificationCenter addObserver:self selector:@selector(engineControllerObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:engineManagedObjectContext];
-        [notificationCenter addObserver:self selector:@selector(appControllerObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:appManagedObjectContext];
-            
-#endif
+        [self _loadDatabase:pathToDatabase isSampleData:NO];
         
         // Register our URL handler
         [NSURLProtocol registerClass:[MultiplexResourceURLProtocol class]];
     }
     return self;
+}
+
+- (NSString*) _copySampleDatabase
+{
+    NSString* baseFolder = @"/Library/Application Support/Multiplex";
+    NSString* sampleDataFile = @"SampleData.database";
+    
+    NSString* resourcePathToDatabase = [[NSBundle mainBundle] pathForResource:@"SampleData" ofType:@"database"];
+    NSString* newPathToDatabase = [baseFolder stringByAppendingPathComponent:sampleDataFile];
+    
+    NSFileManager* fm = [NSFileManager defaultManager];
+    
+    // Check to see if it exists
+    if ([fm fileExistsAtPath:newPathToDatabase])
+    {
+        [fm removeFileAtPath:newPathToDatabase handler:nil];
+    }
+    
+    [fm copyItemAtPath:resourcePathToDatabase toPath:newPathToDatabase error:nil];
+    
+    return newPathToDatabase;
+}
+
+-(void) _loadDatabase:(NSString*)pathToDatabaseFile isSampleData:(BOOL)isSample
+{
+    // DEBUG
+    //pathToDatabaseFile = [[NSBundle mainBundle] pathForResource:@"SampleData" ofType:@"database"];
+    
+    // KVO
+    [self willChangeValueForKey:@"managedObjectModel"];
+    [self willChangeValueForKey:@"persistentStoreCoordinator"];
+    [self willChangeValueForKey:@"engineManagedObjectContext"];
+    [self willChangeValueForKey:@"appManagedObjectContext"];
+    
+    // Release
+    //[appManagedObjectContext release],
+    appManagedObjectContext = nil;
+    [engineManagedObjectContext release], engineManagedObjectContext = nil;
+    [persistentStoreCoordinator release], persistentStoreCoordinator = nil;
+    [managedObjectModel release], managedObjectModel = nil;
+
+    NSError* error = nil;
+    NSFileManager* fileManager = [NSFileManager defaultManager];
+    
+    managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Multiplex" ofType:@"mom"]]];
+    persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
+    
+    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabaseFile] options:nil error:&error]) {
+        if (!isSample) {
+            [fileManager removeItemAtPath:pathToDatabaseFile error:nil];
+            if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabaseFile] options:nil error:&error]) {
+                [NSException raise:NSStringFromClass([self class]) format:@"Unable to create a fresh database."];
+            }
+        }
+    }
+    
+    engineManagedObjectContext = [[NSManagedObjectContext alloc] init];
+    [engineManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
+    
+    appManagedObjectContext = engineManagedObjectContext; 
+    
+#ifdef DUAL_OBJECT_CONTEXT
+    
+    appManagedObjectContext = [[NSManagedObjectContext alloc] init];
+    [appManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
+    
+    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self selector:@selector(engineControllerObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:engineManagedObjectContext];
+    [notificationCenter addObserver:self selector:@selector(appControllerObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:appManagedObjectContext];
+    
+#endif
+    
+    // KVO
+    [self didChangeValueForKey:@"managedObjectModel"];
+    [self didChangeValueForKey:@"persistentStoreCoordinator"];
+    [self didChangeValueForKey:@"engineManagedObjectContext"];
+    [self didChangeValueForKey:@"appManagedObjectContext"];
 }
 
 #ifdef DUAL_OBJECT_CONTEXT
@@ -349,7 +405,15 @@
         
         if ([allMedia count] > 0) {
             for (Media* media in allMedia) {
-                if ([media.isAvailable boolValue] && [media.isLocal boolValue]) {
+                if ([media.pathToFile isEqualToString:@"SAMPLE_DATA"]) {
+                    NSAlert* sampleDataAlert = [NSAlert alertWithMessageText:@"Sample Data" 
+                                                               defaultButton:@"Ok" 
+                                                             alternateButton:nil 
+                                                                 otherButton:nil 
+                                                   informativeTextWithFormat:@"This is sample data only.  With real data, your movie would now play."];
+                    [sampleDataAlert beginSheetModalForWindow:[NSApp mainWindow] modalDelegate:nil didEndSelector:nil contextInfo:nil];
+                }
+                else if ([media.isAvailable boolValue] && [media.isLocal boolValue]) {
                     NSWorkspace* workspace = [NSWorkspace sharedWorkspace];
                     NSString* pathToExecutable = [workspace absolutePathForAppBundleWithIdentifier:@"com.apple.DVDPlayer"];
                     [workspace openFile:media.pathToFile withApplication:pathToExecutable];
@@ -507,16 +571,16 @@
 - (void) engineDidFinishInitialScan:(NSNotification*)notification
 {
     // Turn off the spinner
-    [startUpSpinnerView retain];
+    //[startUpSpinnerView retain];
     [[startUpSpinnerView animator] setHidden:YES];
-    [[startUpSpinnerView animator] removeFromSuperview];
+    //[[startUpSpinnerView animator] removeFromSuperview];
     
     // Turn on the "no discs" if necessary
     if ([[movies content] count] == 0) {
         [self performSelector:@selector(bindNoDiscsView) withObject:nil afterDelay:1.0];
     }
     
-    [startUpSpinnerView release];
+    //[startUpSpinnerView release];
 }
 
 - (void) bindNoDiscsView
@@ -544,6 +608,42 @@
           contextInfo:nil];
 }
 
+- (IBAction) showSampleData:(id)sender
+{
+    // Shut down the current engine
+    [engineController shutdown];
+    [engineController release], engineController = nil;
+
+    // Copy the database
+    NSString* pathToSampleDatabase = [self _copySampleDatabase];
+    
+    // Load up our database
+    [self _loadDatabase:pathToSampleDatabase isSampleData:YES];
+    
+    // Restart the engine
+    engineController = [[EngineController alloc] initWithManagedObjectContext:engineManagedObjectContext];
+    
+    NSEntityDescription* discEntity = [NSEntityDescription entityForName:@"Disc" inManagedObjectContext:engineManagedObjectContext];
+    NSEntityDescription* mediaEntity = [NSEntityDescription entityForName:@"Media" inManagedObjectContext:engineManagedObjectContext];
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:discEntity];
+    NSArray* discsToAddMediaTo = [engineManagedObjectContext executeFetchRequest:fetchRequest error:nil];
+    
+    int i = 0;
+    for (Disc* disc in discsToAddMediaTo) {
+        Media* m = [[Media alloc] initWithEntity:mediaEntity insertIntoManagedObjectContext:engineManagedObjectContext];
+        m.disc = disc;
+        m.isAvailable = [NSNumber numberWithBool:YES];
+        m.isLocal = [NSNumber numberWithBool:YES];
+        m.pathToFile = @"SAMPLE_DATA";
+        m.tag = [NSString stringWithFormat:@"%036d", i++];
+        m.type = @"SAMPLE_DATA";
+    }
+    
+    NSError* error = nil;
+    [engineManagedObjectContext save:&error];
+}
+
 - (void) setSelectedMovieFromNotificationIfNecessary:(NSNotification*)n
 {
     id obj = [n object];
@@ -563,7 +663,7 @@
     [userVoiceFeedbackPanel resetFeedbackPage];
 }
 
-- (NSArray*) feedParametersForUpdater:(SUUpdater*)updater sendingSystemProfile:(BOOL)sendingProfile;
+- (NSArray*) feedParametersForUpdater:(SUUpdater*)updater sendingSystemProfile:(BOOL)sendingProfile
 {
     NSMutableArray* pairs = [NSMutableArray array];
     for (NSString* key in parameters) {

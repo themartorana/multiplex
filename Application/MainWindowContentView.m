@@ -61,6 +61,11 @@
     [[self window] setInitialFirstResponder:mainView];
     [mainView setNextKeyView:searchField];
     [searchField setNextKeyView:mainView];
+    
+    [self setNeedsDisplay:YES];
+    
+    NSLog(@"%@", [[self window] firstResponder]);
+    
     [[self window] makeFirstResponder:mainView];
 }
 

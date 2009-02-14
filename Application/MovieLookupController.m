@@ -248,8 +248,12 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
             movie.theatricalReleaseDate = [resultAtIndex objectForKey:@"theatricalReleaseDate"] ? [NSDate dateFromShortDateString:[resultAtIndex objectForKey:@"theatricalReleaseDate"]] : nil;
             movie.productionYear = movie.theatricalReleaseDate ? [NSNumber numberWithInt:[[movie.theatricalReleaseDate descriptionWithCalendarFormat:@"%Y" timeZone:nil locale:nil] intValue]] : nil;
             
-            // Add in the actors
-            [movie.allParticipants removeAllObjects];
+            // Delete all participants
+            for (Participant* p in movie.allParticipants) {
+                [managedObjectContext deleteObject:p];
+            }
+            
+            // Add in the actors            
             NSArray* actors = [resultAtIndex objectForKey:@"actors"];
             if (actors) {
                 for (NSString* name in actors) {
@@ -421,7 +425,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         message = @"No results were found.";
     }
     NSAlert* alert = [NSAlert alertWithMessageText:message defaultButton:@"Ok" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Please check your information and try again.."];
-    [alert beginSheetModalForWindow:[searchResultsView window] modalDelegate:nil didEndSelector:nil contextInfo:nil];    
+    [alert beginSheetModalForWindow:[drawerView window] modalDelegate:nil didEndSelector:nil contextInfo:nil];    
 }
 
 #pragma mark "AmazonQuery delegate methods"

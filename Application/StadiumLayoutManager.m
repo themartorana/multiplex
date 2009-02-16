@@ -72,6 +72,7 @@
 - (void) setShouldShowSelectedMovieHighlight:(BOOL)show
 {
     shouldShowHiglightLayer = show;
+    [self positionSelectedMovieLayer];
 }
 
 - (void) setShouldShowHoveredMovieHighlight:(BOOL)show
@@ -87,6 +88,8 @@
     }
     
     selectedMovieLayer = [movieLayer retain];
+    
+    [self positionSelectedMovieLayer];
 }
 
 
@@ -172,6 +175,28 @@ static const CGFloat HS = 75.0;
         nil
     ];
 }
+
+- (void) positionSelectedMovieLayer {
+    
+    [CATransaction begin];
+    [CATransaction setValue:[NSNumber numberWithFloat:0.0] forKey:kCATransactionAnimationDuration];
+    
+    /*  Position, scale and rotate our selected highlight layer.
+     */
+      if (selectedMovieLayer && shouldShowHiglightLayer) {
+        selectedHighlightLayer.hidden = NO;
+        selectedHighlightLayer.anchorPoint = selectedMovieLayer.anchorPoint;
+        selectedHighlightLayer.bounds = CGRectInset(selectedMovieLayer.bounds, -20, -20);
+        selectedHighlightLayer.position = selectedMovieLayer.position;
+        selectedHighlightLayer.zPosition = selectedMovieLayer.zPosition - 1;
+        selectedHighlightLayer.transform = selectedMovieLayer.transform;
+    } else {
+        selectedHighlightLayer.hidden = YES;
+    }
+    
+    [CATransaction commit];
+}
+
 
 - (void) layoutSublayersOfLayer:(CALayer*)layer
 {
@@ -284,19 +309,6 @@ static const CGFloat HS = 75.0;
     if (!lastWasEmpty) {
         CGFloat const rotationalStank = 0.05;
         
-        /*  Position, scale and rotate our selected highlight layer.
-         */
-        if (selectedMovieLayer && shouldShowHiglightLayer) {
-            selectedHighlightLayer.hidden = NO;
-            selectedHighlightLayer.anchorPoint = selectedMovieLayer.anchorPoint;
-            selectedHighlightLayer.bounds = CGRectInset(selectedMovieLayer.bounds, -20, -20);
-            selectedHighlightLayer.position = selectedMovieLayer.position;
-            selectedHighlightLayer.zPosition = selectedMovieLayer.zPosition - 1;
-            selectedHighlightLayer.transform = selectedMovieLayer.transform;
-        } else {
-            selectedHighlightLayer.hidden = YES;
-        }
-        
         /*  Position, scale and rotate our gradient.
          */
         if (NO == (radialGradientLayer.hidden = (totalNumberOfLayers == 0))) {
@@ -339,6 +351,8 @@ static const CGFloat HS = 75.0;
     }
     
     [CATransaction commit];
+    
+    [self performSelectorOnMainThread:@selector(positionSelectedMovieLayer) withObject:nil waitUntilDone:NO];
 }
 
 @end

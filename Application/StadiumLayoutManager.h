@@ -24,4 +24,6 @@
 
 @property (copy) NSArray* listOfLayersInOrder;
 
+- (void) positionSelectedMovieLayer;
+
 @end

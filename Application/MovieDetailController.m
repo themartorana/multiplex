@@ -23,9 +23,10 @@
 @end
 
 @interface MovieDetailController (Private)
-- (MovieURL*) getAmazonURL;
-- (void) addParticipant:(BOOL)isActor;
-- (BOOL) setBurnPossible;
+- (MovieURL*) _getAmazonURL;
+- (void) _addParticipant:(BOOL)isActor;
+- (BOOL) _setBurnPossible;
+- (void) _rebuildSynopsisHtml:(NSString*)html;
 @end
 
 @implementation MovieDetailController
@@ -165,8 +166,8 @@
 
 - (void) webViewDidEndEditing:(NSNotification*)notification
 {
-    movie.synopsis = [(id)[[[[[descriptionWebView mainFrame] DOMDocument] documentElement] getElementsByTagName:@"body"] item:0] innerHTML];
-    [[overviewWebView mainFrame] loadHTMLString:[self generateDescriptionHtmlString] baseURL:[NSURL URLWithString:@""]];
+    NSString* newHtml = [(id)[[[[[descriptionWebView mainFrame] DOMDocument] documentElement] getElementsByTagName:@"body"] item:0] innerHTML];
+    [self _rebuildSynopsisHtml:newHtml];
 }
 
 - (void) setMovie:(Movie*)_movie
@@ -181,17 +182,17 @@
     [[descriptionWebView mainFrame] loadHTMLString:movie && movie.synopsis ? movie.synopsis : noSynopsis baseURL:[NSURL URLWithString:@""]];
     [[overviewWebView mainFrame] loadHTMLString:movie ? [self generateDescriptionHtmlString] : @"" baseURL:[NSURL URLWithString:@""]];
     
-    if ([self getAmazonURL]) {
+    if ([self _getAmazonURL]) {
         [self setIsAvailableFromAmazon:YES];
     }
     else {
         [self setIsAvailableFromAmazon:NO];
     }
     
-    self.isBurnPossible = [self setBurnPossible];
+    self.isBurnPossible = [self _setBurnPossible];
 }
 
-- (MovieURL*) getAmazonURL
+- (MovieURL*) _getAmazonURL
 {
     if (!movie) {
         return NO;
@@ -231,7 +232,7 @@
     return [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"number" ascending:YES]];;
 }
 
-- (BOOL) setBurnPossible
+- (BOOL) _setBurnPossible
 {
     BOOL toastIsAvailable = NO;
     
@@ -302,7 +303,7 @@
 
 - (IBAction) buyFromAmazon:(id)sender
 {
-    MovieURL* url = [self getAmazonURL];
+    MovieURL* url = [self _getAmazonURL];
     NSString* urlString = url.url;
     NSURL* nsurl = [NSURL URLWithString:urlString];
     
@@ -323,12 +324,12 @@
 
 - (IBAction) addActor:(id)sender
 {
-    [self addParticipant:YES];
+    [self _addParticipant:YES];
 }
 
 - (IBAction) addCrewMember:(id)sender
 {
-    [self addParticipant:NO];
+    [self _addParticipant:NO];
 }
 
 - (void) _burnApproved:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo;
@@ -386,7 +387,7 @@
     }
 }
 
-- (void) addParticipant:(BOOL)isActor
+- (void) _addParticipant:(BOOL)isActor
 {
     NSEntityDescription* participantEntity = [NSEntityDescription entityForName:@"Participant" inManagedObjectContext:[applicationController appManagedObjectContext]];
     Participant* p = [[Participant alloc] initWithEntity:participantEntity insertIntoManagedObjectContext:[applicationController appManagedObjectContext]];
@@ -417,8 +418,20 @@
     [tv editColumn:0 row:pos withEvent:nil select:YES];    
 }
 
+- (void) _rebuildSynopsisHtml:(NSString*)html
+{
+    if (html)
+    {
+        movie.synopsis = html;
+    }
+    
+    [[overviewWebView mainFrame] loadHTMLString:[self generateDescriptionHtmlString] baseURL:[NSURL URLWithString:@""]];
+}
+
 - (void) showHomeTab
 {
+    [self _rebuildSynopsisHtml:nil];
+    
     int index = [[infoTabView tabViewItems] indexOfObject:overviewTabViewItem];
     [tabSelector setSelectedSegment:index];
     [infoTabView selectTabViewItemAtIndex:index];

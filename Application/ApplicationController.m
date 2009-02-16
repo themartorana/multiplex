@@ -411,7 +411,7 @@
                                                              alternateButton:nil 
                                                                  otherButton:nil 
                                                    informativeTextWithFormat:@"This is sample data only.  With real data, your movie would now play."];
-                    [sampleDataAlert beginSheetModalForWindow:[NSApp mainWindow] modalDelegate:nil didEndSelector:nil contextInfo:nil];
+                    [sampleDataAlert beginSheetModalForWindow:[drawerView window] modalDelegate:nil didEndSelector:nil contextInfo:nil];
                 }
                 else if ([media.isAvailable boolValue] && [media.isLocal boolValue]) {
                     NSWorkspace* workspace = [NSWorkspace sharedWorkspace];

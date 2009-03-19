@@ -30,6 +30,7 @@
 				F9D10B940EB4FB7E007B8B73 /* PBXTargetDependency */,
 				F9A1D1820E82E4FC00AB691D /* PBXTargetDependency */,
 				F9A1D1840E82E4FC00AB691D /* PBXTargetDependency */,
+				55C943710F719A0B0071E03C /* PBXTargetDependency */,
 			);
 			name = "Engine and Plugins";
 			productName = "Engine and All Plugins";
@@ -60,6 +61,7 @@
 		5551FB9E0EB65F3C0022147A /* NoDiscsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5551FB9D0EB65F3C0022147A /* NoDiscsView.m */; };
 		555327790EB4103F0044B302 /* full-screen-icon-down.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 555327770EB4103F0044B302 /* full-screen-icon-down.pdf */; };
 		5553277A0EB4103F0044B302 /* full-screen-icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 555327780EB4103F0044B302 /* full-screen-icon.pdf */; };
+		5555AB8B0F71A5B600E1ADF2 /* NonDVDMedia.mediasource in Copy Files to Plugins */ = {isa = PBXBuildFile; fileRef = 55B252000F70872300477F96 /* NonDVDMedia.mediasource */; };
 		55570B990EB5A0970051D576 /* network-icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55570B930EB5A0970051D576 /* network-icon.pdf */; };
 		55570B9A0EB5A0970051D576 /* stadium-view.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55570B940EB5A0970051D576 /* stadium-view.pdf */; };
 		55570B9B0EB5A0970051D576 /* grid-view.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55570B950EB5A0970051D576 /* grid-view.pdf */; };
@@ -95,8 +97,14 @@
 		55AB54B70F3CF66B00BED2B7 /* PreferencesWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 55AB54B60F3CF66B00BED2B7 /* PreferencesWindow.m */; };
 		55AB54C60F3CFDE400BED2B7 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55AB54C50F3CFDE400BED2B7 /* Preferences.xib */; };
 		55AB54F10F3CFEF700BED2B7 /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55AB54F00F3CFEF700BED2B7 /* PreferencesWindowController.m */; };
+		55B251E70F7086AF00477F96 /* NonDVDMediaSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 55B251E50F7086AF00477F96 /* NonDVDMediaSource.h */; };
+		55B251EA0F7086EA00477F96 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55B251E90F7086EA00477F96 /* Info.plist */; };
+		55B251FC0F70872300477F96 /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
+		55B252100F70878A00477F96 /* NonDVDMediaSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B251E60F7086AF00477F96 /* NonDVDMediaSource.m */; };
 		55B587900F41E75000399BE7 /* new.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B5878F0F41E75000399BE7 /* new.png */; };
 		55B81A490EA049D500775EAE /* movie-description.css in Resources */ = {isa = PBXBuildFile; fileRef = 55B81A480EA049D500775EAE /* movie-description.css */; };
+		55C943160F7191590071E03C /* NSData+IndyHallLabs.h in Headers */ = {isa = PBXBuildFile; fileRef = 55C943150F7191590071E03C /* NSData+IndyHallLabs.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		55C943180F71916D0071E03C /* NSData+IndyHallLabs.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C943170F71916D0071E03C /* NSData+IndyHallLabs.m */; };
 		55C9F6260EB26A15001B9BCD /* HalfTransparentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C9F6250EB26A15001B9BCD /* HalfTransparentView.m */; };
 		55C9F6430EB26C5A001B9BCD /* LayerBackedButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C9F6420EB26C5A001B9BCD /* LayerBackedButtonView.m */; };
 		55D390750E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D390740E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m */; };
@@ -228,6 +236,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = F98DC6B50B63008700371A83;
 			remoteInfo = DVD.mdimporter;
+		};
+		55B251F50F70872300477F96 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F9A1D6210E8350C100AB691D;
+			remoteInfo = Engine;
+		};
+		55B251F70F70872300477F96 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F9C2AE540E7B747B00474D97 /* JSONKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
+			remoteInfo = JSONKit;
+		};
+		55C943700F719A0B0071E03C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 55B251F30F70872300477F96;
+			remoteInfo = NonDVDMedia.mediasource;
 		};
 		F94A06050E7B9B5800C8A8B7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -449,6 +478,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				5555AB8B0F71A5B600E1ADF2 /* NonDVDMedia.mediasource in Copy Files to Plugins */,
 				F9D314D80E7DD9C700D99DCA /* DVDMedia.mediasource in Copy Files to Plugins */,
 				F9D314BA0E7DD95000D99DCA /* PhysicalMedia.mediasource in Copy Files to Plugins */,
 			);
@@ -545,8 +575,14 @@
 		55AB54C50F3CFDE400BED2B7 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 		55AB54EF0F3CFEF700BED2B7 /* PreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesWindowController.h; sourceTree = "<group>"; };
 		55AB54F00F3CFEF700BED2B7 /* PreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesWindowController.m; sourceTree = "<group>"; };
+		55B251E50F7086AF00477F96 /* NonDVDMediaSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NonDVDMediaSource.h; sourceTree = "<group>"; };
+		55B251E60F7086AF00477F96 /* NonDVDMediaSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NonDVDMediaSource.m; sourceTree = "<group>"; };
+		55B251E90F7086EA00477F96 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		55B252000F70872300477F96 /* NonDVDMedia.mediasource */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NonDVDMedia.mediasource; sourceTree = BUILT_PRODUCTS_DIR; };
 		55B5878F0F41E75000399BE7 /* new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = new.png; sourceTree = "<group>"; };
 		55B81A480EA049D500775EAE /* movie-description.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = "movie-description.css"; sourceTree = "<group>"; };
+		55C943150F7191590071E03C /* NSData+IndyHallLabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+IndyHallLabs.h"; sourceTree = "<group>"; };
+		55C943170F71916D0071E03C /* NSData+IndyHallLabs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+IndyHallLabs.m"; sourceTree = "<group>"; };
 		55C9F6240EB26A15001B9BCD /* HalfTransparentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HalfTransparentView.h; sourceTree = "<group>"; };
 		55C9F6250EB26A15001B9BCD /* HalfTransparentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HalfTransparentView.m; sourceTree = "<group>"; };
 		55C9F6410EB26C5A001B9BCD /* LayerBackedButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerBackedButtonView.h; sourceTree = "<group>"; };
@@ -702,6 +738,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		55B251FB0F70872300477F96 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55B251FC0F70872300477F96 /* JSONKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D15AC330486D014006FF6A4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -823,6 +867,7 @@
 				F96430F30EB6431900D49FA0 /* Licensing.dylib */,
 				F96431220EB644D400D49FA0 /* make-data */,
 				F96431340EB644EF00D49FA0 /* compress */,
+				55B252000F70872300477F96 /* NonDVDMedia.mediasource */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -998,6 +1043,16 @@
 				55AB54B60F3CF66B00BED2B7 /* PreferencesWindow.m */,
 			);
 			name = Windows;
+			sourceTree = "<group>";
+		};
+		55B251E30F70866900477F96 /* NonDVDMedia */ = {
+			isa = PBXGroup;
+			children = (
+				55B251E50F7086AF00477F96 /* NonDVDMediaSource.h */,
+				55B251E60F7086AF00477F96 /* NonDVDMediaSource.m */,
+				55B251E90F7086EA00477F96 /* Info.plist */,
+			);
+			path = NonDVDMedia;
 			sourceTree = "<group>";
 		};
 		55D957DA0E94246800E35FF4 /* ValueTransformers */ = {
@@ -1250,6 +1305,8 @@
 		F9CE81A10EA68BED00602750 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				55C943150F7191590071E03C /* NSData+IndyHallLabs.h */,
+				55C943170F71916D0071E03C /* NSData+IndyHallLabs.m */,
 				F9CE81A40EA68BED00602750 /* MessageProtocol.h */,
 				F9CE81A50EA68BED00602750 /* MessageProtocol.m */,
 				F9CE84CA0EA7D3D900602750 /* Toolkit.h */,
@@ -1282,6 +1339,7 @@
 				F9D10DBF0EB51E70007B8B73 /* MediaFile.h */,
 				F9D10DC00EB51E70007B8B73 /* MediaFile.m */,
 				F9D10DC10EB51E70007B8B73 /* MediaFileSource.h */,
+				55B251E30F70866900477F96 /* NonDVDMedia */,
 				F9D314E40E7DDA0100D99DCA /* DVDMedia */,
 				F9D30D690E7DD60F00D99DCA /* PhysicalMedia */,
 			);
@@ -1348,6 +1406,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55C943160F7191590071E03C /* NSData+IndyHallLabs.h in Headers */,
 				F9CE84CB0EA7D3D900602750 /* Toolkit.h in Headers */,
 				F9CE81B30EA68BED00602750 /* CALayer+IndyHallLabs.h in Headers */,
 				F9CE81B50EA68BED00602750 /* MessageProtocol.h in Headers */,
@@ -1359,12 +1418,32 @@
 				F9CE81C10EA68BED00602750 /* NSString+IndyHallLabs.h in Headers */,
 				F9B8DB370EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.h in Headers */,
 				F9D4F92D0EB671E000B89FF4 /* NSBundle+IndyHallLabs.h in Headers */,
+				55B251E70F7086AF00477F96 /* NonDVDMediaSource.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		55B251F30F70872300477F96 /* NonDVDMedia.mediasource */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 55B251FD0F70872300477F96 /* Build configuration list for PBXNativeTarget "NonDVDMedia.mediasource" */;
+			buildPhases = (
+				55B251F80F70872300477F96 /* Resources */,
+				55B251F90F70872300477F96 /* Sources */,
+				55B251FB0F70872300477F96 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				55B251F40F70872300477F96 /* PBXTargetDependency */,
+				55B251F60F70872300477F96 /* PBXTargetDependency */,
+			);
+			name = NonDVDMedia.mediasource;
+			productName = DVDMedia.mediasource;
+			productReference = 55B252000F70872300477F96 /* NonDVDMedia.mediasource */;
+			productType = "com.apple.product-type.bundle";
+		};
 		8D15AC270486D014006FF6A4 /* Multiplex */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C05733C708A9546B00998B17 /* Build configuration list for PBXNativeTarget "Multiplex" */;
@@ -1571,6 +1650,7 @@
 				F9A1D6210E8350C100AB691D /* Engine */,
 				F9D30D600E7DD5B500D99DCA /* PhysicalMedia.mediasource */,
 				F9D314CD0E7DD99500D99DCA /* DVDMedia.mediasource */,
+				55B251F30F70872300477F96 /* NonDVDMedia.mediasource */,
 				F98DC6B50B63008700371A83 /* DVD.mdimporter */,
 				F9CE81550EA6894500602750 /* Toolkit */,
 				F964310D0EB643EB00D49FA0 /* Build Licensing and Generate C Source */,
@@ -1627,6 +1707,13 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		55B251F80F70872300477F96 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D15AC2B0486D014006FF6A4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1706,6 +1793,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55B251EA0F7086EA00477F96 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1769,6 +1857,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		55B251F90F70872300477F96 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55B252100F70878A00477F96 /* NonDVDMediaSource.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D15AC300486D014006FF6A4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1890,6 +1986,7 @@
 				F9CE81C20EA68BED00602750 /* NSString+IndyHallLabs.m in Sources */,
 				F9B8DB380EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.m in Sources */,
 				F9D4F92E0EB671E000B89FF4 /* NSBundle+IndyHallLabs.m in Sources */,
+				55C943180F71916D0071E03C /* NSData+IndyHallLabs.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1916,6 +2013,21 @@
 			isa = PBXTargetDependency;
 			target = F98DC6B50B63008700371A83 /* DVD.mdimporter */;
 			targetProxy = 5535DBE00E4FC99200A45761 /* PBXContainerItemProxy */;
+		};
+		55B251F40F70872300477F96 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F9A1D6210E8350C100AB691D /* Engine */;
+			targetProxy = 55B251F50F70872300477F96 /* PBXContainerItemProxy */;
+		};
+		55B251F60F70872300477F96 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = JSONKit;
+			targetProxy = 55B251F70F70872300477F96 /* PBXContainerItemProxy */;
+		};
+		55C943710F719A0B0071E03C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 55B251F30F70872300477F96 /* NonDVDMedia.mediasource */;
+			targetProxy = 55C943700F719A0B0071E03C /* PBXContainerItemProxy */;
 		};
 		F96430190EB63D7A00D49FA0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2026,6 +2138,67 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		55B251FE0F70872300477F96 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				BUNDLE_LOADER = "$(BUILD_ROOT)/$(BUILD_STYLE)/Engine";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				GCC_VERSION = 4.2;
+				INFOPLIST_FILE = /Users/dave/code/Mac/Multiplex/Engine/Plugins/NonDVDMedia/Info.plist;
+				INSTALL_PATH = "@executable_path/../Library/Plugins";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = NonDVDMedia;
+				VALID_ARCHS = "i386 x86_64";
+				WRAPPER_EXTENSION = mediasource;
+			};
+			name = Debug;
+		};
+		55B251FF0F70872300477F96 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				BUNDLE_LOADER = "$(BUILD_ROOT)/$(BUILD_STYLE)/Engine";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				GCC_VERSION = 4.2;
+				INFOPLIST_FILE = /Users/dave/code/Mac/Multiplex/Engine/Plugins/NonDVDMedia/Info.plist;
+				INSTALL_PATH = "@executable_path/../Library/Plugins";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = NonDVDMedia;
+				VALID_ARCHS = "i386 x86_64";
+				WRAPPER_EXTENSION = mediasource;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		C05733C808A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2426,6 +2599,7 @@
 					Foundation,
 					"-framework",
 					AppKit,
+					"-lcrypto",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = Toolkit;
@@ -2454,6 +2628,7 @@
 					Foundation,
 					"-framework",
 					AppKit,
+					"-lcrypto",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = Toolkit;
@@ -2585,6 +2760,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		55B251FD0F70872300477F96 /* Build configuration list for PBXNativeTarget "NonDVDMedia.mediasource" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				55B251FE0F70872300477F96 /* Debug */,
+				55B251FF0F70872300477F96 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C05733C708A9546B00998B17 /* Build configuration list for PBXNativeTarget "Multiplex" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

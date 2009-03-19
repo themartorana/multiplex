@@ -65,6 +65,7 @@
 - (IBAction) checkForUpdates:(id)sender;
 - (IBAction) showUserVoiceFeedbackSheet:(id)sender;
 - (IBAction) toggleFullScreen:(id)sender;
+- (IBAction) addNonDVDMovie:(id)sender;
 
 - (IBAction) switchToStadiumLayoutManager:(id)sender;
 - (IBAction) switchToGridLayoutManager:(id)sender;
@@ -86,5 +87,7 @@
 - (BOOL) isInFullScreen;
 - (BOOL) isDrawerViewOpen;
 //- (BOOL) canSwitchDrawerControllers;
+
+- (void) deleteCurrentMovie;
 
 @end

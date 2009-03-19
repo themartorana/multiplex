@@ -293,12 +293,7 @@
 
 - (IBAction) deleteMovie:(id)sender
 {
-    Movie* m = movie;
-    
-    [applicationController setSelectedMovie:nil];
-    
-    NSManagedObjectContext* c = [applicationController appManagedObjectContext];
-    [c deleteObject:m];
+    [applicationController deleteCurrentMovie];
 }
 
 - (IBAction) buyFromAmazon:(id)sender

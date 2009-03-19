@@ -33,6 +33,9 @@
 
 #import <Security/Security.h>
 
+static CFStringRef kMDItemMultiplexNonDVDFingerprint = (CFStringRef)@"com_multiplexapp_nonDVDFingerprint";
+static NSArray* fileTypes = nil;
+
 @interface _AppControllerExecuteToken : NSObject <ExecuteTokenProtocol> {
     NSInvocation* invocation;
 }
@@ -74,6 +77,10 @@
 - (void) _setCurrentDrawerViewControllerApproved:(id<DrawerViewControllerProtocol>)protocolObject;
 - (void) _loadDatabase:(NSString*)pathToDatabaseFile isSampleData:(BOOL)isSample;
 - (NSString*) _copySampleDatabase;
+- (BOOL) _setMetadataValue:(CFTypeRef)data forAttributeName:(CFStringRef)keyName onItem:(MDItemRef)mdItem;
+- (BOOL) _deleteMetadataAttribute:(CFStringRef)keyName forItem:(MDItemRef)mdItem;
+- (NSString*) _getFingerprintForFile:(NSString*)filePath;
+- (void) _addNonDVDMedia:(NSArray*)filenames;
 
 @end
 
@@ -104,6 +111,22 @@
             kCFBooleanFalse, @"SingleClickLaunchesMovie",
             nil
         ]];
+        
+        // Add in our file types
+        if (!fileTypes) {
+            fileTypes = [[NSArray arrayWithObjects:
+                         @"3g2", @"3gp", @"3gp2", @"3gpp", @"3mm", @"60d", @"aep", @"ajp", @"amv", @"amx", @"arf", @"asf", @"asx", @"avb", @"avi", @"avs",
+                         @"avs", @"axm", @"bik", @"bin", @"bix", @"box", @"bsf", @"byu", @"camrec", @"cvc", @"d2v", @"d3v", @"dat", @"dce", @"dif", @"dir", @"divx", @"dmb",
+                         @"dpg", @"dv", @"dvr-ms", @"dvx", @"dxr", @"evo", @"eye", @"fbr", @"fbz", @"fcp", @"flc", @"flh", @"fli", @"flv", @"flx", @"gl", @"grasp", @"gvi", @"gvp",
+                         @"hkm", @"ifo", @"imovieproj", @"imovieprojet", @"ivf", @"ivr", @"ivs", @"izz", @"izzy", @"lsf", @"lsx", @"m1pg", @"m1v", @"m21", @"m21", @"m2t",
+                         @"m2ts", @"m2v", @"m4e", @"m4u", @"m4v", @"mgv", @"mj2", @"mjp", @"mkv", @"mnv", @"mod", @"moov", @"mov", @"movie", @"mp21", @"mp21", @"mp4", @"mpe", @"mpeg",
+                         @"mpg", @"mpv2", @"mqv", @"msdvd", @"msh", @"mswmm", @"mts", @"mtv", @"mvb", @"mvc", @"mvd", @"nsv", @"nvc", @"ogm", @"par", @"pds", @"piv", @"playlist",
+                         @"pmf", @"pro", @"prproj", @"prx", @"pxv", @"qt", @"qtch", @"qtz", @"rdb", @"rm", @"rmvb", @"rp", @"rts", @"rts", @"rum", @"rv", @"sbk", @"scm", @"scm", @"scn",
+                         @"sfvidcap	", @"smil	", @"smk", @"smv", @"spl", @"srt", @"ssm", @"str", @"svi", @"swf", @"swi", @"tda3mt", @"tivo", @"tod", @"tp", @"ts", @"vdo", @"veg",
+                         @"vf", @"vfw", @"vgz", @"vid", @"viewlet", @"viv", @"vivo", @"vlab", @"vob", @"vp6", @"vp7", @"vro", @"w32", @"wcp", @"wm", @"wmd", @"wmmp", @"wmv", @"wmx",
+                         @"wvx", @"xvid", @"yuv", @"zm1", @"zm2", @"zm3", @"zmv",
+                         nil] retain];
+        }
     }
 }
 
@@ -169,83 +192,6 @@
         [NSURLProtocol registerClass:[MultiplexResourceURLProtocol class]];
     }
     return self;
-}
-
-- (NSString*) _copySampleDatabase
-{
-    NSString* baseFolder = @"/Library/Application Support/Multiplex";
-    NSString* sampleDataFile = @"SampleData.database";
-    
-    NSString* resourcePathToDatabase = [[NSBundle mainBundle] pathForResource:@"SampleData" ofType:@"database"];
-    NSString* newPathToDatabase = [baseFolder stringByAppendingPathComponent:sampleDataFile];
-    
-    NSFileManager* fm = [NSFileManager defaultManager];
-    
-    // Check to see if it exists
-    if ([fm fileExistsAtPath:newPathToDatabase])
-    {
-        [fm removeFileAtPath:newPathToDatabase handler:nil];
-    }
-    
-    [fm copyItemAtPath:resourcePathToDatabase toPath:newPathToDatabase error:nil];
-    
-    return newPathToDatabase;
-}
-
--(void) _loadDatabase:(NSString*)pathToDatabaseFile isSampleData:(BOOL)isSample
-{
-    // DEBUG
-    //pathToDatabaseFile = [[NSBundle mainBundle] pathForResource:@"SampleData" ofType:@"database"];
-    
-    // KVO
-    [self willChangeValueForKey:@"managedObjectModel"];
-    [self willChangeValueForKey:@"persistentStoreCoordinator"];
-    [self willChangeValueForKey:@"engineManagedObjectContext"];
-    [self willChangeValueForKey:@"appManagedObjectContext"];
-    
-    // Release
-    //[appManagedObjectContext release],
-    appManagedObjectContext = nil;
-    [engineManagedObjectContext release], engineManagedObjectContext = nil;
-    [persistentStoreCoordinator release], persistentStoreCoordinator = nil;
-    [managedObjectModel release], managedObjectModel = nil;
-
-    NSError* error = nil;
-    NSFileManager* fileManager = [NSFileManager defaultManager];
-    
-    managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Multiplex" ofType:@"mom"]]];
-    persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
-    
-    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabaseFile] options:nil error:&error]) {
-        if (!isSample) {
-            [fileManager removeItemAtPath:pathToDatabaseFile error:nil];
-            if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabaseFile] options:nil error:&error]) {
-                [NSException raise:NSStringFromClass([self class]) format:@"Unable to create a fresh database."];
-            }
-        }
-    }
-    
-    engineManagedObjectContext = [[NSManagedObjectContext alloc] init];
-    [engineManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
-    
-    appManagedObjectContext = engineManagedObjectContext; 
-    
-#ifdef DUAL_OBJECT_CONTEXT
-    
-    appManagedObjectContext = [[NSManagedObjectContext alloc] init];
-    [appManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
-    
-    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter addObserver:self selector:@selector(engineControllerObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:engineManagedObjectContext];
-    [notificationCenter addObserver:self selector:@selector(appControllerObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:appManagedObjectContext];
-    
-#endif
-    
-    // KVO
-    [self didChangeValueForKey:@"managedObjectModel"];
-    [self didChangeValueForKey:@"persistentStoreCoordinator"];
-    [self didChangeValueForKey:@"engineManagedObjectContext"];
-    [self didChangeValueForKey:@"appManagedObjectContext"];
 }
 
 #ifdef DUAL_OBJECT_CONTEXT
@@ -358,6 +304,9 @@
     NSFont* uniFont = [NSFont fontWithName:@"uni 05_53" size:8.0];
     [licensingAndVersionInfo setFont:uniFont];
     
+    // Register Pasteboard types
+    [[self window] registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
+    
     // Jump to full screen?
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"FullScreenOnLaunch"] boolValue]) {
         // Do it on a delay to get the mouse coordinate system right.
@@ -413,11 +362,16 @@
                                                    informativeTextWithFormat:@"This is sample data only.  With real data, your movie would now play."];
                     [sampleDataAlert beginSheetModalForWindow:[drawerView window] modalDelegate:nil didEndSelector:nil contextInfo:nil];
                 }
-                else if ([media.isAvailable boolValue] && [media.isLocal boolValue]) {
+                else {
                     NSWorkspace* workspace = [NSWorkspace sharedWorkspace];
-                    NSString* pathToExecutable = [workspace absolutePathForAppBundleWithIdentifier:@"com.apple.DVDPlayer"];
-                    [workspace openFile:media.pathToFile withApplication:pathToExecutable];
-                    break;
+                    if (![media.type isEqualToString:@"public.dvdmedia"]) {
+                        [workspace openFile:media.pathToFile];
+                    }
+                    else {
+                        NSString* pathToExecutable = [workspace absolutePathForAppBundleWithIdentifier:@"com.apple.DVDPlayer"];
+                        [workspace openFile:media.pathToFile withApplication:pathToExecutable];
+                        break;
+                    }
                 }
             } 
         }
@@ -473,16 +427,6 @@
     else {
         [self _setCurrentDrawerViewControllerApproved:protocolObject];
     }
-}
-
-- (void) _setCurrentDrawerViewControllerApproved:(id<DrawerViewControllerProtocol>)protocolObject
-{
-    [mainView resetCurrentlySelectedMovieLayer];
-    
-    [currentDrawerViewController release], currentDrawerViewController = nil;
-    
-    currentDrawerViewController = [protocolObject retain];
-    [currentDrawerViewController takeControl];
 }
 
 - (void) approveMovieSelectionClick:(NSInvocation*)invocation forMovieLayer:(MovieLayer*)movieLayer
@@ -550,14 +494,6 @@
     else {
         [self _closeDrawerViewApproved];
     }
-}
-
-- (void) _closeDrawerViewApproved
-{
-    [mainView resetCurrentlySelectedMovieLayer];
-    
-    [drawerView closeDrawer];
-    [[self window] makeFirstResponder:mainView];            
 }
 
 - (void) openInfoView:(NSNotification*)notification
@@ -783,14 +719,6 @@
     }
 }
 
-- (void) _licensingAlertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-    if (NSAlertDefaultReturn == returnCode) {
-        //[[SUUpdater sharedUpdater] checkForUpdates:self];
-        [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://multiplexapp.com"]];
-    }
-}
-
 - (IBAction) toggleFullScreen:(id)sender
 {
     [mainWindowContentView toggleFullScreen];
@@ -803,19 +731,46 @@
     }
 }
 
-- (IBAction) switchToStadiumLayoutManager:(id)sender
+- (IBAction) addNonDVDMovie:(id)sender
 {
-    [mainView setFloorLayerLayoutManagerClass:[StadiumLayoutManager class]];
+    NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+    [openPanel setCanChooseFiles:YES];
+    [openPanel setCanChooseDirectories:NO];
+    [openPanel setResolvesAliases:YES];
+    [openPanel setAllowsMultipleSelection:YES];
+    [openPanel beginSheetForDirectory:nil 
+                                 file:nil 
+                                types:fileTypes 
+                       modalForWindow:[drawerView window]
+                        modalDelegate:self
+                       didEndSelector:@selector(_addNonDVDMediaPanelDidEnd:returnCode:contextInfo:) 
+                          contextInfo:nil];
 }
 
-- (IBAction) switchToGridLayoutManager:(id)sender
+- (void) deleteCurrentMovie
 {
-    //[[mainView setFloorLayerLayoutManagerClass:[GridLayoutManager class]];    
-}
-
-- (IBAction) switchToLinearLayoutManager:(id)sender
-{
-    [mainView setFloorLayerLayoutManagerClass:[LinearLayoutManager class]];
+    Movie* m = selectedMovie;
+    [self setSelectedMovie:nil];
+    
+    // Delete from any media
+    NSMutableArray* allDiscs = [NSMutableArray arrayWithArray:[[m allDiscs] allObjects]];
+    NSMutableArray* allMedia = [NSMutableArray array];
+    for (Disc* d in allDiscs) {
+        [allMedia addObjectsFromArray:[[d allMedia] allObjects]];
+    }
+    
+    for (Media* m in allMedia) {
+        if (![m.type isEqualToString:@"public.dvdmedia"]) {
+            MDItemRef itemRef = MDItemCreate(NULL, (CFStringRef)m.pathToFile);
+            [self _deleteMetadataAttribute:kMDItemMultiplexNonDVDFingerprint forItem:itemRef];
+            CFRelease(itemRef);
+        }
+    }
+    
+    [allMedia removeAllObjects];
+    [allDiscs removeAllObjects];
+    
+    [appManagedObjectContext deleteObject:m];
 }
 
 - (void) windowDidResignMain:(NSNotification*)notification
@@ -842,6 +797,23 @@
     }
 }
 
+#pragma mark IBActions
+
+- (IBAction) switchToStadiumLayoutManager:(id)sender
+{
+    [mainView setFloorLayerLayoutManagerClass:[StadiumLayoutManager class]];
+}
+
+- (IBAction) switchToGridLayoutManager:(id)sender
+{
+    //[[mainView setFloorLayerLayoutManagerClass:[GridLayoutManager class]];    
+}
+
+- (IBAction) switchToLinearLayoutManager:(id)sender
+{
+    [mainView setFloorLayerLayoutManagerClass:[LinearLayoutManager class]];
+}
+
 - (IBAction) showPreferencesWindow:(id)sender
 {
     if (!preferencesWindowController)
@@ -850,6 +822,310 @@
     }
     
     [[preferencesWindowController window] makeKeyAndOrderFront:self];
+}
+
+#pragma mark Private Methods
+
+- (NSString*) _copySampleDatabase
+{
+    NSString* baseFolder = @"/Library/Application Support/Multiplex";
+    NSString* sampleDataFile = @"SampleData.database";
+    
+    NSString* resourcePathToDatabase = [[NSBundle mainBundle] pathForResource:@"SampleData" ofType:@"database"];
+    NSString* newPathToDatabase = [baseFolder stringByAppendingPathComponent:sampleDataFile];
+    
+    NSFileManager* fm = [NSFileManager defaultManager];
+    
+    // Check to see if it exists
+    if ([fm fileExistsAtPath:newPathToDatabase])
+    {
+        [fm removeFileAtPath:newPathToDatabase handler:nil];
+    }
+    
+    [fm copyItemAtPath:resourcePathToDatabase toPath:newPathToDatabase error:nil];
+    
+    return newPathToDatabase;
+}
+
+-(void) _loadDatabase:(NSString*)pathToDatabaseFile isSampleData:(BOOL)isSample
+{
+    // DEBUG
+    //pathToDatabaseFile = [[NSBundle mainBundle] pathForResource:@"SampleData" ofType:@"database"];
+    
+    // KVO
+    [self willChangeValueForKey:@"managedObjectModel"];
+    [self willChangeValueForKey:@"persistentStoreCoordinator"];
+    [self willChangeValueForKey:@"engineManagedObjectContext"];
+    [self willChangeValueForKey:@"appManagedObjectContext"];
+    
+    // Release
+    //[appManagedObjectContext release],
+    appManagedObjectContext = nil;
+    [engineManagedObjectContext release], engineManagedObjectContext = nil;
+    [persistentStoreCoordinator release], persistentStoreCoordinator = nil;
+    [managedObjectModel release], managedObjectModel = nil;
+    
+    NSError* error = nil;
+    NSFileManager* fileManager = [NSFileManager defaultManager];
+    
+    managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Multiplex" ofType:@"mom"]]];
+    persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
+    
+    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabaseFile] options:nil error:&error]) {
+        if (!isSample) {
+            [fileManager removeItemAtPath:pathToDatabaseFile error:nil];
+            if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabaseFile] options:nil error:&error]) {
+                [NSException raise:NSStringFromClass([self class]) format:@"Unable to create a fresh database."];
+            }
+        }
+    }
+    
+    engineManagedObjectContext = [[NSManagedObjectContext alloc] init];
+    [engineManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
+    
+    appManagedObjectContext = engineManagedObjectContext; 
+    
+#ifdef DUAL_OBJECT_CONTEXT
+    
+    appManagedObjectContext = [[NSManagedObjectContext alloc] init];
+    [appManagedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
+    
+    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self selector:@selector(engineControllerObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:engineManagedObjectContext];
+    [notificationCenter addObserver:self selector:@selector(appControllerObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:appManagedObjectContext];
+    
+#endif
+    
+    // KVO
+    [self didChangeValueForKey:@"managedObjectModel"];
+    [self didChangeValueForKey:@"persistentStoreCoordinator"];
+    [self didChangeValueForKey:@"engineManagedObjectContext"];
+    [self didChangeValueForKey:@"appManagedObjectContext"];
+}
+
+
+- (void) _closeDrawerViewApproved
+{
+    [mainView resetCurrentlySelectedMovieLayer];
+    
+    [drawerView closeDrawer];
+    [[self window] makeFirstResponder:mainView];            
+}
+
+- (BOOL) _setMetadataValue:(CFTypeRef)data forAttributeName:(CFStringRef)keyName onItem:(MDItemRef)mdItem
+{
+    typedef OSStatus (*MDItemSetAttribute_type)(MDItemRef, CFStringRef, CFTypeRef);
+    static MDItemSetAttribute_type mdItemSetAttributeFunc = NULL;
+    static bool didSymbolLookup = false;
+    if (!didSymbolLookup) {
+        didSymbolLookup = true;
+        CFBundleRef metadataBundle = CFBundleGetBundleWithIdentifier(CFSTR("com.apple.Metadata"));
+        if (!metadataBundle) {
+            return NO;
+        }
+        
+        mdItemSetAttributeFunc = (MDItemSetAttribute_type)CFBundleGetFunctionPointerForName(metadataBundle, CFSTR("MDItemSetAttribute"));
+    }
+    if (!mdItemSetAttributeFunc) {
+        return NO;
+    }
+    
+    Boolean b = mdItemSetAttributeFunc(mdItem, keyName, data);
+    return (BOOL)b;
+}
+
+- (BOOL) _deleteMetadataAttribute:(CFStringRef)keyName forItem:(MDItemRef)mdItem
+{
+    typedef OSStatus (*MDItemRemoveAttribute_type)(MDItemRef, CFStringRef);
+    static MDItemRemoveAttribute_type mdItemRemoveAttributeFunc = NULL;
+    static bool didSymbolLookup = false;
+    if (!didSymbolLookup) {
+        didSymbolLookup = true;
+        CFBundleRef metadataBundle = CFBundleGetBundleWithIdentifier(CFSTR("com.apple.Metadata"));
+        if (!metadataBundle) {
+            return NO;
+        }
+        
+        mdItemRemoveAttributeFunc = (MDItemRemoveAttribute_type)CFBundleGetFunctionPointerForName(metadataBundle, CFSTR("MDItemRemoveAttribute"));
+    }
+    if (!mdItemRemoveAttributeFunc) {
+        return NO;
+    }
+    
+    BOOL b = mdItemRemoveAttributeFunc(mdItem, keyName);
+    return b;
+}
+
+- (void) _licensingAlertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+    if (NSAlertDefaultReturn == returnCode) {
+        //[[SUUpdater sharedUpdater] checkForUpdates:self];
+        [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://multiplexapp.com"]];
+    }
+}
+
+- (void) _setCurrentDrawerViewControllerApproved:(id<DrawerViewControllerProtocol>)protocolObject
+{
+    [mainView resetCurrentlySelectedMovieLayer];
+    
+    [currentDrawerViewController release], currentDrawerViewController = nil;
+    
+    currentDrawerViewController = [protocolObject retain];
+    [currentDrawerViewController takeControl];
+}
+
+- (void)_addNonDVDMediaPanelDidEnd:(NSOpenPanel*)panel returnCode:(int)returnCode contextInfo:(void*)contextInfo
+{
+    if (returnCode == NSOKButton) {
+        [self _addNonDVDMedia:[panel filenames]];
+    }
+}
+
+- (void) _addNonDVDMedia:(NSArray*)filenames
+{
+    @try {
+        NSMutableArray* noPermissionsFiles = [NSMutableArray array];
+        
+        for (NSString* fileName in filenames) {
+            
+            // Fingerprint!
+            NSString* fingerprint = nil;
+            // Tag the item Spotlight style
+            MDItemRef mditem = MDItemCreate(kCFAllocatorDefault, (CFStringRef)fileName);
+            
+            // No item means permissions errors
+            if (!mditem) {
+                [noPermissionsFiles addObject:fileName];
+                continue;
+            }
+            
+            // If we have a fingerprint, this has been tagged before
+            fingerprint = [self _getFingerprintForFile:fileName];
+            
+            // If we can't add info, there are permissions errors.
+            if (!fingerprint || ![self _setMetadataValue:(CFTypeRef)fingerprint forAttributeName:kMDItemMultiplexNonDVDFingerprint onItem:mditem]) {
+                [noPermissionsFiles addObject:fileName];
+            }
+            
+            CFRelease(mditem);
+        }
+        
+        // If we couldn't add some
+        if ([noPermissionsFiles count]) {
+            NSMutableString* noPermissionsFileNames = nil;
+            for (NSString* fileName in noPermissionsFiles) {
+                if (noPermissionsFileNames) {
+                    [noPermissionsFileNames appendFormat:@"\n%@", fileName];
+                }
+                else {
+                    noPermissionsFileNames = [NSMutableString stringWithFormat:@"%@", fileName];
+                }
+            }
+            
+            NSAlert* alert = [NSAlert alertWithMessageText:@"Multiplex could not import some movies"
+                                             defaultButton:@"Ok" 
+                                           alternateButton:nil 
+                                               otherButton:nil 
+                                 informativeTextWithFormat:[NSString stringWithFormat:@"Multiplex could not read the following files. This could be a permissions problem.  Please make sure you have read/write permissions to the following files, and try again. \n\n%@", noPermissionsFileNames]];
+            [alert beginSheetModalForWindow:[drawerView window] modalDelegate:nil didEndSelector:nil contextInfo:nil];
+        }
+        
+    }
+    @finally {        
+        [[startUpSpinnerView animator] setHidden:YES];
+    }
+}
+
+- (NSString*) _getFingerprintForFile:(NSString*)filePath
+{
+    NSFileHandle* handle = [NSFileHandle fileHandleForReadingAtPath:filePath];
+    NSString* fp = nil;
+    
+    @try {
+        NSData* data = [handle readDataOfLength:64 * 1024];
+        fp = [data IHLFingerprint];
+    }
+    @catch (NSException* ex) {
+        NSLog(@"Exception caught: %@", [ex userInfo]);
+    }
+    @finally {
+        [handle closeFile];
+    }
+    
+    return fp;
+}
+
+
+#pragma mark Dragging protocol methods
+
+- (NSDragOperation) draggingEntered:(id<NSDraggingInfo>)sender 
+{
+    NSPasteboard* pasteBoard = [sender draggingPasteboard];
+    BOOL allowDrag = NO;
+    
+    NSArray* fileNames = [pasteBoard propertyListForType:NSFilenamesPboardType];
+   
+    for (NSString* fileName in fileNames) {
+        NSString* extension = [fileName pathExtension];
+        for (NSString* ext in fileTypes) {
+            NSRange r = [extension rangeOfString:ext options:NSCaseInsensitiveSearch];
+            if (r.location == 0 && r.length == [extension length]) {
+                allowDrag = YES;
+                break;
+            }
+        }
+        
+        if (allowDrag) {
+            break;
+        }
+    }
+    
+    if (allowDrag) {
+        [[startUpSpinnerView animator] setHidden:NO];
+        return NSDragOperationCopy;
+    } else {
+        [[startUpSpinnerView animator] setHidden:YES];
+        return NSDragOperationNone;
+    }
+}
+
+- (void) draggingExited:(id<NSDraggingInfo>)sender
+{
+    [[startUpSpinnerView animator] setHidden:YES];
+}
+
+- (BOOL) performDragOperation:(id<NSDraggingInfo>)sender 
+{
+    NSPasteboard* pasteBoard = [sender draggingPasteboard];
+    NSArray* fileNames = [pasteBoard propertyListForType:NSFilenamesPboardType];
+    NSMutableArray* filesToAdd = [NSMutableArray array];
+    for (NSString* fileName in fileNames) {
+        NSString* extension = [fileName pathExtension];
+        for (NSString* ext in fileTypes) {
+            NSRange r = [extension rangeOfString:ext options:NSCaseInsensitiveSearch];
+            if (r.location == 0 && r.length == [extension length]) {
+                [filesToAdd addObject:fileName];
+                break;
+            }
+        }
+    }
+    
+    if ([filesToAdd count]) {
+        [self _addNonDVDMedia:filesToAdd];
+        return YES;
+    }
+    else {
+        [[startUpSpinnerView animator] setHidden:YES];
+        return NO;
+    }
+}
+
+#pragma mark Application Delegate Methods
+
+- (void) application:(NSApplication*)sender openFiles:(NSArray*)filenames
+{
+    [self _addNonDVDMedia:filenames];
+    [NSApp replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
 }
 
 @end

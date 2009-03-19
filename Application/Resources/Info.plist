@@ -2,10 +2,23 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>LSMinimumSystemVersion</key>
-	<string>10.5</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>*</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Movie</string>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+		</dict>
+	</array>
 	<key>CFBundleExecutable</key>
 	<string>Multiplex</string>
 	<key>CFBundleIconFile</key>
@@ -20,16 +33,18 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>0.96.1</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.5</string>
 	<key>NSAppleScriptEnabled</key>
 	<string>NO</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>SUFeedURL</key>
-	<string>http://buy.multiplexapp.com/update/</string>
 	<key>QuartzGLEnable</key>
 	<true/>
+	<key>SUFeedURL</key>
+	<string>http://buy.multiplexapp.com/update/</string>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>

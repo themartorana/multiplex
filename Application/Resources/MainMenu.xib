@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1151"/>
+			<integer value="2238"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -190,6 +190,14 @@
 							<string key="NSTitle">File</string>
 							<object class="NSMutableArray" key="NSMenuItems">
 								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="NSMenuItem" id="120650205">
+									<reference key="NSMenu" ref="789758025"/>
+									<string key="NSTitle">Add non-DVD media</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="756751024"/>
+									<reference key="NSMixedImage" ref="908425081"/>
+								</object>
 								<object class="NSMenuItem" id="676164635">
 									<reference key="NSMenu" ref="789758025"/>
 									<string key="NSTitle">Close</string>
@@ -583,7 +591,7 @@
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{1000, 700}</string>
 				<object class="NSView" key="NSWindowView" id="384445475">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">274</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -823,6 +831,7 @@
 													<string>NeXT Rich Text Format v1.0 pasteboard type</string>
 													<string>NeXT TIFF v4.0 pasteboard type</string>
 													<string>WebURLsWithTitlesPboardType</string>
+													<string>public.png</string>
 													<string>public.url</string>
 													<string>public.url-name</string>
 												</object>
@@ -1183,7 +1192,6 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{1000, 700}</string>
-					<reference key="NSSuperview"/>
 					<bool key="NSViewIsLayerTreeHost">YES</bool>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1600, 1178}}</string>
@@ -2359,6 +2367,7 @@
 									<string>NeXT Rich Text Format v1.0 pasteboard type</string>
 									<string>NeXT TIFF v4.0 pasteboard type</string>
 									<string>WebURLsWithTitlesPboardType</string>
+									<string>public.png</string>
 									<string>public.url</string>
 									<string>public.url-name</string>
 								</object>
@@ -3373,6 +3382,22 @@
 					</object>
 					<int key="connectionID">2237</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">addNonDVDMovie:</string>
+						<reference key="source" ref="623785332"/>
+						<reference key="destination" ref="120650205"/>
+					</object>
+					<int key="connectionID">2239</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="1021"/>
+						<reference key="destination" ref="623785332"/>
+					</object>
+					<int key="connectionID">2240</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -3459,6 +3484,7 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="676164635"/>
+							<reference ref="120650205"/>
 						</object>
 						<reference key="parent" ref="952259628"/>
 					</object>
@@ -4697,6 +4723,11 @@
 						<reference key="object" ref="735003196"/>
 						<reference key="parent" ref="37906598"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2238</int>
+						<reference key="object" ref="120650205"/>
+						<reference key="parent" ref="789758025"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -4906,6 +4937,7 @@
 					<string>2212.IBPluginDependency</string>
 					<string>2213.IBPluginDependency</string>
 					<string>2216.IBPluginDependency</string>
+					<string>2238.IBPluginDependency</string>
 					<string>23.IBPluginDependency</string>
 					<string>23.ImportedFromIB2</string>
 					<string>236.IBPluginDependency</string>
@@ -5012,8 +5044,8 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{84, 73}, {1000, 700}}</string>
-					<string>{{84, 73}, {1000, 700}}</string>
+					<string>{{123, 64}, {1000, 700}}</string>
+					<string>{{123, 64}, {1000, 700}}</string>
 					<reference ref="9"/>
 					<reference ref="9"/>
 					<string>{1000, 700}</string>
@@ -5173,7 +5205,7 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{215, 506}, {118, 23}}</string>
+					<string>{{124, 493}, {222, 43}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{{365, 632}, {243, 243}}</string>
@@ -5188,6 +5220,7 @@
 					<string>{{486, 186}, {240, 240}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.WebKitIBPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
@@ -5288,7 +5321,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2237</int>
+			<int key="maxID">2240</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -5300,6 +5333,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>addNonDVDMovie:</string>
 							<string>checkForUpdates:</string>
 							<string>showPreferencesWindow:</string>
 							<string>showSampleData:</string>
@@ -5311,6 +5345,7 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>

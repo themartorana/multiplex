@@ -667,7 +667,6 @@
 		F9A1D6220E8350C100AB691D /* Engine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Engine; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9A1D66D0E8353C900AB691D /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		F9A91F5F0F0B163D005CAF9F /* license.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = license.plist; sourceTree = "<group>"; };
-		F9AFE3E40B65CC6D0035DA65 /* ScratchPad */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ScratchPad; sourceTree = "<group>"; };
 		F9B380DB0EAD029700FCAB1E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
 		F9B8D68E0EB0BFCD008589F3 /* BoxArt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoxArt.h; sourceTree = "<group>"; };
 		F9B8D68F0EB0BFCD008589F3 /* BoxArt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoxArt.m; sourceTree = "<group>"; };
@@ -875,7 +874,6 @@
 		2A37F4AAFDCFA73011CA2CEA /* BookShelf */ = {
 			isa = PBXGroup;
 			children = (
-				F9AFE3E40B65CC6D0035DA65 /* ScratchPad */,
 				F98DCA920B6307B400371A83 /* Application */,
 				557B66890E4A2DD00009919E /* Engine */,
 				F96430A10EB640F700D49FA0 /* Licensing */,

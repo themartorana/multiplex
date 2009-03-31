@@ -188,7 +188,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
      */
     NSString* baseFolder = [[[NSBundle mainBundle] executablePath] stringByDeletingLastPathComponent];
     if ([[baseFolder lastPathComponent] isEqualToString:@"Resources"]) {
-        baseFolder = [[baseFolder stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"Plugins"];
+        baseFolder = [[baseFolder stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"PlugIns"];
     }
     
     /*  Search for ".mediasource" plugins, loading them and checking that they

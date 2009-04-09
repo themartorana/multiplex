@@ -79,7 +79,7 @@
                      "&ResponseGroup=Small,ItemAttributes,Images,EditorialReview" \
                      "&IdType=EAN"\
                      "&SearchIndex=DVD"\
-                     "&Title=%@",
+                     "&Keywords=%@",
                      _accessKey,
                      _titleKeywords
                      ];

@@ -2151,7 +2151,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				GCC_VERSION = 4.2;
-				INFOPLIST_FILE = /Users/dave/code/Mac/Multiplex/Engine/Plugins/NonDVDMedia/Info.plist;
+				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Library/Plugins";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -2181,7 +2181,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				GCC_VERSION = 4.2;
-				INFOPLIST_FILE = /Users/dave/code/Mac/Multiplex/Engine/Plugins/NonDVDMedia/Info.plist;
+				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Library/Plugins";
 				OTHER_LDFLAGS = (
 					"-framework",

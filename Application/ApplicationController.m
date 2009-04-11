@@ -750,7 +750,6 @@ static NSArray* fileTypes = nil;
 - (void) deleteCurrentMovie
 {
     Movie* m = selectedMovie;
-    [self setSelectedMovie:nil];
     
     // Delete from any media
     NSMutableArray* allDiscs = [NSMutableArray arrayWithArray:[[m allDiscs] allObjects]];
@@ -759,13 +758,61 @@ static NSArray* fileTypes = nil;
         [allMedia addObjectsFromArray:[[d allMedia] allObjects]];
     }
     
+    int localCount = 0;
     for (Media* m in allMedia) {
         if (![m.type isEqualToString:@"public.dvdmedia"]) {
             MDItemRef itemRef = MDItemCreate(NULL, (CFStringRef)m.pathToFile);
             [self _deleteMetadataAttribute:kMDItemMultiplexNonDVDFingerprint forItem:itemRef];
             CFRelease(itemRef);
         }
+        
+        if (m.isLocal) {
+            localCount ++;
+        }
     }
+
+    BOOL sendMediaToTrash = NO;
+    NSString* alertText = nil;
+    if (localCount == 1) {
+        alertText = @"Would you also like to move the media associated with this movie to the trash?";
+    }
+    else if (localCount > 1) {
+        alertText = [NSString stringWithFormat:@"There are %d actual media files associated with this movie.  Would you like to move all of them to the trash?", localCount];
+    }
+    
+    if (localCount > 0) {
+        NSAlert* alert = [NSAlert alertWithMessageText:@"Send media to the trash?" 
+                                         defaultButton:@"Do it!" 
+                                       alternateButton:@"No thanks." 
+                                           otherButton:nil 
+                             informativeTextWithFormat:alertText];
+        if ([self isInFullScreen]) {
+            [self toggleFullScreen:nil];
+        }
+        
+        if ([alert runModal] == NSAlertDefaultReturn) {
+            sendMediaToTrash = YES;
+        }
+    }
+    
+    if (sendMediaToTrash) {
+        for (Media* m in allMedia) {
+            
+            const char* filePath = [m.pathToFile cStringUsingEncoding:NSUTF8StringEncoding];
+            OSStatus deleteError = FSPathMoveObjectToTrashSync(filePath, NULL, kFSFileOperationDefaultOptions);
+            
+            if (deleteError) {
+                NSAlert* alert = [NSAlert alertWithMessageText:@"Could not delete the media" 
+                                                 defaultButton:@"Ok" 
+                                               alternateButton:nil 
+                                                   otherButton:nil 
+                                     informativeTextWithFormat:[NSString stringWithFormat:@"Could not delete the media file\n%@\n\nPlease delete it manually.", m.pathToFile]];
+                [alert runModal];
+            }
+        }
+    }
+    
+    [self setSelectedMovie:nil];
     
     [allMedia removeAllObjects];
     [allDiscs removeAllObjects];

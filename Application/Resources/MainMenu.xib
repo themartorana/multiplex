@@ -1197,6 +1197,7 @@
 				<string key="NSScreenRect">{{0, 0}, {1600, 1178}}</string>
 				<string key="NSMinSize">{1000, 722}</string>
 				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
+				<string key="NSFrameAutosaveName">MainWindow</string>
 			</object>
 			<object class="NSWindowTemplate" id="924156165">
 				<int key="NSWindowStyleMask">15</int>

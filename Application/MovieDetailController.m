@@ -269,28 +269,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexRefreshMovieInfoFromInternetByTitle" object:movie];
 }
 
-- (IBAction) deleteCoverArtForMovie:(id)sender
-{
-    BoxArt* b = [movie boxArt];
-    if (b) {
-        NSManagedObjectContext* c = [b managedObjectContext];
-        
-        [c deleteObject:b];
-        
-        NSError* error = nil;
-        [c save:&error];
-        
-        if (error) {
-            NSLog(@"%@", error);
-        }
-    }
-}
-
-- (IBAction) deleteMetadataForMovie:(id)sender
-{
-    
-}
-
 - (IBAction) deleteMovie:(id)sender
 {
     [applicationController deleteCurrentMovie];

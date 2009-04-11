@@ -63,8 +63,6 @@
 
 - (IBAction) refreshMovieInfoFromInternetByUPC:(id)sender;
 - (IBAction) refreshMovieInfoFromInternetByTitle:(id)sender;
-- (IBAction) deleteCoverArtForMovie:(id)sender;
-- (IBAction) deleteMetadataForMovie:(id)sender;
 - (IBAction) deleteMovie:(id)sender;
 - (IBAction) buyFromAmazon:(id)sender;
 

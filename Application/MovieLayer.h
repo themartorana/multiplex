@@ -9,6 +9,8 @@
     CALayer* gradientLayer;
     CATiledLayer* boxImageLayer; 
     CALayer* smokeLayer;
+    CALayer* setIndicatorLayer;
+    CATextLayer* setInformationLayer;
     /**/
     Movie* movie;
     id boxArtImage;

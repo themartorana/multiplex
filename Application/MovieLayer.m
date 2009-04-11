@@ -63,6 +63,42 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
         ];
         [self addSublayer:boxImageLayer];
 
+        setIndicatorLayer = [CALayer layer];
+        setIndicatorLayer.delegate = self;
+        setIndicatorLayer.backgroundColor = [MultiplexColorFactory black];
+        setIndicatorLayer.cornerRadius = 15.0;
+        setIndicatorLayer.shadowColor = [MultiplexColorFactory black];
+        setIndicatorLayer.shadowOffset = CGSizeMake(0.0, -5.0);
+        setIndicatorLayer.shadowRadius = 2.0;
+        setIndicatorLayer.shadowOpacity = 0.9;
+        setIndicatorLayer.hidden = YES;
+        setIndicatorLayer.borderColor = [MultiplexColorFactory white];
+        setIndicatorLayer.borderWidth = 1.0;
+        setIndicatorLayer.constraints = [NSArray arrayWithObjects:
+             [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
+             [CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY offset:10.0],
+             [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.60 offset:0],
+             [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0 offset:40.0],
+             nil
+        ];
+        setIndicatorLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
+        [self addSublayer:setIndicatorLayer];     
+        
+        setInformationLayer = [CATextLayer layer];
+        setInformationLayer.font = [NSFont boldSystemFontOfSize:30.0];
+        setInformationLayer.fontSize = 30.0;
+        setInformationLayer.foregroundColor = [MultiplexColorFactory white];
+        setInformationLayer.alignmentMode = kCAAlignmentCenter;
+        setInformationLayer.constraints = [NSArray arrayWithObjects:
+             [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
+             [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY offset:-2.0],
+             [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth],
+             [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight],
+             nil
+        ];
+        [setIndicatorLayer addSublayer:setInformationLayer];
+        
+        
         [movie addObserver:self forKeyPath:@"availableDiscCount" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
         [movie addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
         [movie addObserver:self forKeyPath:@"boxArt.imageData" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
@@ -116,10 +152,19 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
                 [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
                 [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
                 [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:1.0 offset:20],
-                [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:1.0 offset:20],
+                [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:1.0 offset:30],
                 nil
             ];
             [self addSublayer:smokeLayer];
+        }
+        
+        if (availableDiscCount > 1) {
+            setInformationLayer.string = [NSString stringWithFormat:@"%d %@", availableDiscCount, @"disc set"];
+            setIndicatorLayer.hidden = NO;
+            [setIndicatorLayer setNeedsDisplay];
+        }
+        else {
+            setIndicatorLayer.hidden = YES;
         }
     } else if ([keyPath isEqualToString:@"title"]) {
         if ([keyPath isEqualToString:@"title"]) {

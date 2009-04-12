@@ -5,6 +5,7 @@
 #import "Movie.h"
 #import "Disc.h"
 #import "Media.h"
+#import "MovieURL.h"
 #import "MultiplexColorFactory.h"
 #import "MovieDetailController.h"
 #import "MovieLookupController.h"
@@ -81,6 +82,7 @@ static NSArray* fileTypes = nil;
 - (BOOL) _deleteMetadataAttribute:(CFStringRef)keyName forItem:(MDItemRef)mdItem;
 - (NSString*) _getFingerprintForFile:(NSString*)filePath;
 - (void) _addNonDVDMedia:(NSArray*)filenames;
+- (void) _burnApproved:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 
 @end
 
@@ -92,6 +94,7 @@ static NSArray* fileTypes = nil;
 @synthesize selectedMovie;
 @synthesize currentDrawerViewController;
 @synthesize selectedSegment;
+@synthesize movieContextMenu;
 
 + (void) initialize
 {
@@ -287,9 +290,6 @@ static NSArray* fileTypes = nil;
     
     [notificationCenter addObserver:self selector:@selector(engineDidFinishInitialScan:) name:@"MultiplexEngineDidFinishInitialScan" object:nil];
     
-    [notificationCenter addObserver:self selector:@selector(refreshInfoFromInternetByUPC:) name:@"MultiplexRefreshMovieInfoFromInternetByUPC" object:nil];
-    [notificationCenter addObserver:self selector:@selector(refreshInfoFromInternetByTitle:) name:@"MultiplexRefreshMovieInfoFromInternetByTitle" object:nil];
-    
     engineController = [[EngineController alloc] initWithManagedObjectContext:engineManagedObjectContext];
     
     // Put uservoice button forward
@@ -346,6 +346,8 @@ static NSArray* fileTypes = nil;
     return NO;
 }
 
+#pragma mark Public Methods
+
 - (void) playDiscRequest:(NSNotification*)notification
 {
     if ([notification object]) {
@@ -390,24 +392,6 @@ static NSArray* fileTypes = nil;
         else if ([selectedMovie.allDiscs count] > 1) {
             [self showMovieDetailAndSelectDiscsTabMovie:selectedMovie];
         }
-    }
-}
-
-- (void) refreshInfoFromInternetByUPC:(NSNotification*)notification
-{
-    Movie* m = (Movie*)[notification object];
-    
-    if (m) {
-        [self showMovieLookupForMovie:m byTitle:NO];
-    }
-}
-
-- (void) refreshInfoFromInternetByTitle:(NSNotification*)notification
-{
-    Movie* m = (Movie*)[notification object];
-    
-    if (m) {
-        [self showMovieLookupForMovie:m byTitle:YES];
     }
 }
 
@@ -469,6 +453,10 @@ static NSArray* fileTypes = nil;
 
 - (void) showMovieLookupForMovie:(Movie*)movie byTitle:(BOOL)byTitle
 {
+    if (![self isDrawerViewOpen]) {
+        [drawerView toggle:nil];
+    }
+    
     [movies setSelectedObjects:[NSArray arrayWithObject:movie]];
     if (!movieLookupController) {
         movieLookupController = [[MovieLookupController alloc] initWithApplicationController:self drawerView:drawerView];
@@ -526,58 +514,6 @@ static NSArray* fileTypes = nil;
         //[[noDiscsView animator] setHidden:NO];
         [[noDiscsView animator] bind:@"hidden" toObject:movies withKeyPath:@"content.@count" options:nil];        
     }
-}
-
-- (IBAction) checkForUpdates:(id)sender
-{
-    [[SUUpdater sharedUpdater] checkForUpdates:sender];
-}
-
-- (IBAction) showUserVoiceFeedbackSheet:(id)sender
-{
-    [userVoiceFeedbackPanel setFrame:[self.window.contentView frame] display:YES];
-        
-    [NSApp beginSheet:(NSWindow*)userVoiceFeedbackPanel 
-       modalForWindow:[mainView window] 
-        modalDelegate:self 
-       didEndSelector:@selector(userVoicePanelDidEnd:returnCode:contextInfo:) 
-          contextInfo:nil];
-}
-
-- (IBAction) showSampleData:(id)sender
-{
-    // Shut down the current engine
-    [engineController shutdown];
-    [engineController release], engineController = nil;
-
-    // Copy the database
-    NSString* pathToSampleDatabase = [self _copySampleDatabase];
-    
-    // Load up our database
-    [self _loadDatabase:pathToSampleDatabase isSampleData:YES];
-    
-    // Restart the engine
-    engineController = [[EngineController alloc] initWithManagedObjectContext:engineManagedObjectContext];
-    
-    NSEntityDescription* discEntity = [NSEntityDescription entityForName:@"Disc" inManagedObjectContext:engineManagedObjectContext];
-    NSEntityDescription* mediaEntity = [NSEntityDescription entityForName:@"Media" inManagedObjectContext:engineManagedObjectContext];
-    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:discEntity];
-    NSArray* discsToAddMediaTo = [engineManagedObjectContext executeFetchRequest:fetchRequest error:nil];
-    
-    int i = 0;
-    for (Disc* disc in discsToAddMediaTo) {
-        Media* m = [[Media alloc] initWithEntity:mediaEntity insertIntoManagedObjectContext:engineManagedObjectContext];
-        m.disc = disc;
-        m.isAvailable = [NSNumber numberWithBool:YES];
-        m.isLocal = [NSNumber numberWithBool:YES];
-        m.pathToFile = @"SAMPLE_DATA";
-        m.tag = [NSString stringWithFormat:@"%036d", i++];
-        m.type = @"SAMPLE_DATA";
-    }
-    
-    NSError* error = nil;
-    [engineManagedObjectContext save:&error];
 }
 
 - (void) setSelectedMovieFromNotificationIfNecessary:(NSNotification*)n
@@ -760,7 +696,7 @@ static NSArray* fileTypes = nil;
     
     int localCount = 0;
     for (Media* m in allMedia) {
-        if (![m.type isEqualToString:@"public.dvdmedia"]) {
+        if (![m.type isEqualToString:@"public.dvdmedia"] && ![m.type isEqualToString:@"SAMPLE_DATA"]) {
             MDItemRef itemRef = MDItemCreate(NULL, (CFStringRef)m.pathToFile);
             [self _deleteMetadataAttribute:kMDItemMultiplexNonDVDFingerprint forItem:itemRef];
             CFRelease(itemRef);
@@ -797,17 +733,18 @@ static NSArray* fileTypes = nil;
     
     if (sendMediaToTrash) {
         for (Media* m in allMedia) {
-            
-            const char* filePath = [m.pathToFile cStringUsingEncoding:NSUTF8StringEncoding];
-            OSStatus deleteError = FSPathMoveObjectToTrashSync(filePath, NULL, kFSFileOperationDefaultOptions);
-            
-            if (deleteError) {
-                NSAlert* alert = [NSAlert alertWithMessageText:@"Could not delete the media" 
-                                                 defaultButton:@"Ok" 
-                                               alternateButton:nil 
-                                                   otherButton:nil 
-                                     informativeTextWithFormat:[NSString stringWithFormat:@"Could not delete the media file\n%@\n\nPlease delete it manually.", m.pathToFile]];
-                [alert runModal];
+            if (![m.pathToFile isEqualToString:@"SAMPLE_DATA"]) {
+                const char* filePath = [m.pathToFile cStringUsingEncoding:NSUTF8StringEncoding];
+                OSStatus deleteError = FSPathMoveObjectToTrashSync(filePath, NULL, kFSFileOperationDefaultOptions);
+                
+                if (deleteError) {
+                    NSAlert* alert = [NSAlert alertWithMessageText:@"Could not delete the media" 
+                                                     defaultButton:@"Ok" 
+                                                   alternateButton:nil 
+                                                       otherButton:nil 
+                                         informativeTextWithFormat:[NSString stringWithFormat:@"Could not delete the media file\n%@\n\nPlease delete it manually.", m.pathToFile]];
+                    [alert runModal];
+                }                
             }
         }
     }
@@ -844,6 +781,23 @@ static NSArray* fileTypes = nil;
     }
 }
 
+- (MovieURL*) getAmazonURL:(Movie*)movie
+{
+    NSManagedObjectContext* managedObjectContext = [movie managedObjectContext];
+    NSEntityDescription* movieURLEntity = [NSEntityDescription entityForName:@"MovieURL" inManagedObjectContext:managedObjectContext];
+    
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:movieURLEntity];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"movie == %@ and siteName = %@", movie, @"Amazon"]]; 
+    NSError* error = nil;
+    NSArray* results = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    [fetchRequest release];
+    if (!error && [results count]) {
+        return [results objectAtIndex:0];
+    }
+    return nil; 
+}
+
 #pragma mark IBActions
 
 - (IBAction) switchToStadiumLayoutManager:(id)sender
@@ -870,6 +824,132 @@ static NSArray* fileTypes = nil;
     
     [[preferencesWindowController window] makeKeyAndOrderFront:self];
 }
+
+- (IBAction) checkForUpdates:(id)sender
+{
+    [[SUUpdater sharedUpdater] checkForUpdates:sender];
+}
+
+- (IBAction) showUserVoiceFeedbackSheet:(id)sender
+{
+    [userVoiceFeedbackPanel setFrame:[self.window.contentView frame] display:YES];
+    
+    [NSApp beginSheet:(NSWindow*)userVoiceFeedbackPanel 
+       modalForWindow:[mainView window] 
+        modalDelegate:self 
+       didEndSelector:@selector(userVoicePanelDidEnd:returnCode:contextInfo:) 
+          contextInfo:nil];
+}
+
+- (IBAction) showSampleData:(id)sender
+{
+    // Shut down the current engine
+    [engineController shutdown];
+    [engineController release], engineController = nil;
+    
+    // Copy the database
+    NSString* pathToSampleDatabase = [self _copySampleDatabase];
+    
+    // Load up our database
+    [self _loadDatabase:pathToSampleDatabase isSampleData:YES];
+    
+    // Restart the engine
+    engineController = [[EngineController alloc] initWithManagedObjectContext:engineManagedObjectContext];
+    
+    NSEntityDescription* discEntity = [NSEntityDescription entityForName:@"Disc" inManagedObjectContext:engineManagedObjectContext];
+    NSEntityDescription* mediaEntity = [NSEntityDescription entityForName:@"Media" inManagedObjectContext:engineManagedObjectContext];
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:discEntity];
+    NSArray* discsToAddMediaTo = [engineManagedObjectContext executeFetchRequest:fetchRequest error:nil];
+    
+    int i = 0;
+    for (Disc* disc in discsToAddMediaTo) {
+        Media* m = [[Media alloc] initWithEntity:mediaEntity insertIntoManagedObjectContext:engineManagedObjectContext];
+        m.disc = disc;
+        m.isAvailable = [NSNumber numberWithBool:YES];
+        m.isLocal = [NSNumber numberWithBool:YES];
+        m.pathToFile = @"SAMPLE_DATA";
+        m.tag = [NSString stringWithFormat:@"%036d", i++];
+        m.type = @"SAMPLE_DATA";
+    }
+    
+    NSError* error = nil;
+    [engineManagedObjectContext save:&error];
+}
+
+- (IBAction) refreshInfoFromInternetByUPC:(id)sender
+{
+    if (selectedMovie) {
+        [self showMovieLookupForMovie:selectedMovie byTitle:NO];
+    }
+}
+
+- (IBAction) refreshInfoFromInternetByTitle:(id)sender
+{
+    if (selectedMovie) {
+        [self showMovieLookupForMovie:selectedMovie byTitle:YES];
+    }
+}
+
+- (IBAction) deleteMovie:(id)sender
+{
+    [self deleteCurrentMovie];
+}
+
+- (IBAction) buyFromAmazon:(id)sender
+{
+    MovieURL* url = [self getAmazonURL:selectedMovie];
+    NSString* urlString = url.url;
+    NSURL* nsurl = [NSURL URLWithString:urlString];
+    
+    [[NSWorkspace sharedWorkspace] openURL:nsurl];
+}
+
+- (IBAction) burnWithToast:(id)sender
+{
+    Media* m = nil;
+    
+    // Get the media
+    for (Disc* d in selectedMovie.allDiscs) {
+        if (d.localMediaCount > 0) {
+            for (Media* discMedia in d.allMedia) {
+                if (discMedia.isLocal) { // && ![discMedia isPhysicalMedia]) {
+                    if (m) {
+                        if ([m isPhysicalMedia] && ![discMedia isPhysicalMedia]) {
+                            m = discMedia;
+                        }
+                    }
+                    else {
+                        m = discMedia;
+                    }
+                }
+            }
+        }
+    }
+    
+    if (!m) {
+        NSAlert* a = [NSAlert alertWithMessageText:@"Media disconnected" 
+                                     defaultButton:@"Ok" 
+                                   alternateButton:@"Cancel" 
+                                       otherButton:nil 
+                         informativeTextWithFormat:@"The media for this movie has been recently disconnected.  This action is not possible."];
+        
+        [a beginSheetModalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(_burnApproved:returnCode:contextInfo:) contextInfo:m];
+    }
+    else if (m && [m isPhysicalMedia]) {
+        NSAlert* a = [NSAlert alertWithMessageText:@"Trying to copy physical media" 
+                                     defaultButton:@"Ok" 
+                                   alternateButton:@"Cancel" 
+                                       otherButton:nil 
+                         informativeTextWithFormat:@"You are attempting to copy a physical DVD. This may cause issues.  If you would like to continue, click OK."];
+        
+        [a beginSheetModalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(_burnApproved:returnCode:contextInfo:) contextInfo:m];
+    }
+    else {
+        [self _burnApproved:nil returnCode:NSAlertDefaultReturn contextInfo:m];
+    }
+}
+
 
 #pragma mark Private Methods
 
@@ -1102,6 +1182,38 @@ static NSArray* fileTypes = nil;
     return fp;
 }
 
+- (void) _burnApproved:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+    if (returnCode == NSAlertDefaultReturn) {
+        Media* m = (Media*)contextInfo;
+        
+        NSString* s = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.roxio.Toast"];
+        [[NSWorkspace sharedWorkspace] openFile:m.pathToFile withApplication:s];
+    }
+}
+
+- (BOOL) _setBurnPossible
+{
+    static BOOL alreadyDetermined = NO;
+    static BOOL toastIsAvailable = NO;
+    
+    if (!alreadyDetermined) {
+        // Determine if we have a proper version of toast
+        NSString* s = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.roxio.Toast"];
+        if (s && ![s isEqualToString:@""]) {
+            NSBundle* b = [NSBundle bundleWithPath:s];
+            if (b && [[b version] intValue] >= 9) {
+                toastIsAvailable = YES;
+            }
+        }
+    }
+    
+    if (toastIsAvailable && selectedMovie.localMediaCount) {
+        return YES;
+    }
+    return NO;
+    
+}
 
 #pragma mark Dragging protocol methods
 
@@ -1173,6 +1285,20 @@ static NSArray* fileTypes = nil;
 {
     [self _addNonDVDMedia:filenames];
     [NSApp replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
+}
+
+#pragma mark Context Menu (NSMenu) Delegate Methods
+
+- (void)menuWillOpen:(NSMenu*)menu
+{
+    if ([self getAmazonURL:selectedMovie]) {
+        [buyFromAmazonMenuItem setEnabled:YES];
+    }
+    else {
+        [buyFromAmazonMenuItem setEnabled:NO];
+    }
+    
+    [burnWithToastMenuItem setHidden:![self _setBurnPossible]];
 }
 
 @end

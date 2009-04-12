@@ -28,4 +28,6 @@
 @property (readonly) NSMutableSet* allParticipants;
 @property (readonly) NSMutableSet* allMovieURLs;
 
+@property (readonly) int localMediaCount;
+
 @end

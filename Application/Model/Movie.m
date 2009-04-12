@@ -1,4 +1,5 @@
 #import "Movie.h"
+#import "Disc.h"
 
 @implementation Movie
 
@@ -24,5 +25,16 @@
 @dynamic allDiscs;
 @dynamic allParticipants;
 @dynamic allMovieURLs;
+
+- (int) localMediaCount
+{
+    int returnCount = 0;
+    
+    for (Disc* d in self.allDiscs) {
+        returnCount += [d.localMediaCount intValue];
+    }
+    
+    return returnCount;
+}
 
 @end

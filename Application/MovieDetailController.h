@@ -37,6 +37,8 @@
     
     IBOutlet NSTableView* actorsTableView;
     IBOutlet NSTableView* crewTableView;
+    
+    IBOutlet NSPopUpButton* gearsButton;
     /**/
     Movie* movie;
     NSColor* labelColor;
@@ -60,13 +62,6 @@
 @property (readonly) NSSortDescriptor* discsSortDescriptor;
 
 - (IBAction) selectTab:(id)sender;
-
-- (IBAction) refreshMovieInfoFromInternetByUPC:(id)sender;
-- (IBAction) refreshMovieInfoFromInternetByTitle:(id)sender;
-- (IBAction) deleteMovie:(id)sender;
-- (IBAction) buyFromAmazon:(id)sender;
-
-- (IBAction) burnWithToast:(id)sender;
 
 - (IBAction) playSelectedMovie:(id)sender;
 - (IBAction) playDisc:(id)obj;

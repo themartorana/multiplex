@@ -277,11 +277,40 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     }
 }
 
+- (void) rightMouseDown:(NSEvent*)theEvent
+{
+    if ([applicationController isDrawerViewOpen]) {
+        return;
+    }
+
+    [hoverTimer invalidate];
+    [hoverTimer release], hoverTimer = nil;
+    [hoverInfoView setHidden:YES];
+   
+    CGPoint position = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
+    MovieLayer* movieLayer = [self movieLayerForPoint:position];
+    if (movieLayer) {
+        [layoutManager setShouldShowHoveredMovieHighlight:YES];
+        selectedMovieLayer = movieLayer;
+        Movie* movie = movieLayer.movie;
+        [applicationController setSelectedMovie:movie];
+        [floorLayer setNeedsLayout];
+        //[super rightMouseDown:theEvent];
+    }
+}
+
+- (void) rightMouseUp:(NSEvent*)theEvent
+{
+    [NSMenu popUpContextMenu:[self menu] withEvent:theEvent forView:self];
+}
+
 - (void) mouseMoved:(NSEvent*)theEvent
 {
     CGPoint position = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
     MovieLayer* movieLayer = [self movieLayerForPoint:position];
     Movie* movie = movieLayer.movie;
+    
+    //NSLog(NSStringFromPoint(NSPointFromCGPoint(position)));
 
     if (movieLayer) {
         [layoutManager setShouldShowHoveredMovieHighlight:YES];

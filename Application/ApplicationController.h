@@ -11,6 +11,7 @@
 @class MovieLayer;
 @class MainWindowContentView;
 @class PreferencesWindowController;
+@class MovieURL;
 
 @interface ApplicationController : NSWindowController {
     NSDictionary* parameters;
@@ -35,6 +36,10 @@
     IBOutlet NSButton* userVoiceButton;
     /**/
     IBOutlet NSImageView* windowResizeThumb;
+    
+    IBOutlet NSMenu* movieContextMenu;
+    IBOutlet NSMenuItem* buyFromAmazonMenuItem;
+    IBOutlet NSMenuItem* burnWithToastMenuItem;
     
     /**/
     PreferencesWindowController* preferencesWindowController;    
@@ -61,6 +66,7 @@
 @property (retain) NSDictionary* parameters;
 @property (retain) id<DrawerViewControllerProtocol> currentDrawerViewController;
 @property int selectedSegment;
+@property (readonly) NSMenu* movieContextMenu;
 
 - (IBAction) checkForUpdates:(id)sender;
 - (IBAction) showUserVoiceFeedbackSheet:(id)sender;
@@ -74,6 +80,14 @@
 - (IBAction) showPreferencesWindow:(id)sender;
 
 - (IBAction) showSampleData:(id)sender;
+
+- (IBAction) refreshInfoFromInternetByUPC:(id)sender;
+- (IBAction) refreshInfoFromInternetByTitle:(id)sender;
+- (IBAction) deleteMovie:(id)sender;
+- (IBAction) buyFromAmazon:(id)sender;
+
+- (IBAction) burnWithToast:(id)sender;
+
 
 - (void) showMovieDetailAndSelectHomeTabForMovie:(Movie*)movie;
 - (void) showMovieDetailAndSelectDiscsTabMovie:(Movie*)movie;
@@ -89,5 +103,7 @@
 //- (BOOL) canSwitchDrawerControllers;
 
 - (void) deleteCurrentMovie;
+
+- (MovieURL*) getAmazonURL:(Movie*)movie;
 
 @end

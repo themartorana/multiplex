@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="2205"/>
+			<integer value="1166"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1047,7 +1047,10 @@
 										</object>
 										<reference key="NSControlView" ref="381313983"/>
 										<reference key="NSBackgroundColor" ref="288047085"/>
-										<reference key="NSTextColor" ref="288047085"/>
+										<object class="NSColor" key="NSTextColor">
+											<int key="NSColorSpace">3</int>
+											<bytes key="NSWhite">MC40OTU5Njc3NQA</bytes>
+										</object>
 									</object>
 								</object>
 								<object class="NSImageView" id="440268035">
@@ -5249,8 +5252,8 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{475, 276}, {1000, 700}}</string>
-					<string>{{475, 276}, {1000, 700}}</string>
+					<string>{{486, 361}, {1000, 700}}</string>
+					<string>{{486, 361}, {1000, 700}}</string>
 					<reference ref="9"/>
 					<reference ref="9"/>
 					<string>{1000, 700}</string>

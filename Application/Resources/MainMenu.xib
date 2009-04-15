@@ -565,6 +565,22 @@
 									<reference key="NSOnImage" ref="756751024"/>
 									<reference key="NSMixedImage" ref="908425081"/>
 								</object>
+								<object class="NSMenuItem" id="631177471">
+									<reference key="NSMenu" ref="374024848"/>
+									<string key="NSTitle">Support Forums</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="756751024"/>
+									<reference key="NSMixedImage" ref="908425081"/>
+								</object>
+								<object class="NSMenuItem" id="242191186">
+									<reference key="NSMenu" ref="374024848"/>
+									<string key="NSTitle">Suggest Features</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="756751024"/>
+									<reference key="NSMixedImage" ref="908425081"/>
+								</object>
 							</object>
 						</object>
 					</object>
@@ -1843,7 +1859,7 @@
 																					<string/>
 																					<string>0</string>
 																					<string type="base64-UTF8">K+KIng</string>
-																					<integer value="0" id="6"/>
+																					<integer value="0"/>
 																					<string>0</string>
 																				</object>
 																			</object>
@@ -3643,6 +3659,8 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="238773614"/>
+							<reference ref="631177471"/>
+							<reference ref="242191186"/>
 						</object>
 						<reference key="parent" ref="391199113"/>
 						<string key="objectName">2</string>
@@ -4927,6 +4945,16 @@
 						<reference key="object" ref="627211334"/>
 						<reference key="parent" ref="559793092"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2265</int>
+						<reference key="object" ref="631177471"/>
+						<reference key="parent" ref="374024848"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2266</int>
+						<reference key="object" ref="242191186"/>
+						<reference key="parent" ref="374024848"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -5146,6 +5174,8 @@
 					<string>2248.IBPluginDependency</string>
 					<string>2249.IBPluginDependency</string>
 					<string>2250.IBPluginDependency</string>
+					<string>2265.IBPluginDependency</string>
+					<string>2266.IBPluginDependency</string>
 					<string>23.IBPluginDependency</string>
 					<string>23.ImportedFromIB2</string>
 					<string>236.IBPluginDependency</string>
@@ -5252,8 +5282,8 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{486, 361}, {1000, 700}}</string>
-					<string>{{486, 361}, {1000, 700}}</string>
+					<string>{{211, 361}, {1000, 700}}</string>
+					<string>{{211, 361}, {1000, 700}}</string>
 					<reference ref="9"/>
 					<reference ref="9"/>
 					<string>{1000, 700}</string>
@@ -5440,6 +5470,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
@@ -5464,7 +5496,7 @@
 					<string>{{23, 794}, {245, 183}}</string>
 					<string>{{682, 100}, {799, 691}}</string>
 					<string>{{682, 100}, {799, 691}}</string>
-					<reference ref="6"/>
+					<reference ref="8"/>
 					<string>{3.40282e+38, 3.40282e+38}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -5538,7 +5570,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2264</int>
+			<int key="maxID">2266</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

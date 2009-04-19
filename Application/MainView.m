@@ -35,6 +35,7 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
 @synthesize content;
 @synthesize hoveredMovie;
 @synthesize floorLayerLayoutManagerClass;
+@synthesize layersByID;
 
 - (void) awakeFromNib
 {    
@@ -201,7 +202,14 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
 
 - (void) resetCurrentlySelectedMovieLayer
 {
+    MovieLayer* ml = [layersByID objectForKey:[[applicationController selectedMovie] objectID]];
+    
+    if (ml != selectedMovieLayer) {
+        selectedMovieLayer = ml;
+    }
+    
     if (selectedMovieLayer) {
+        [floorLayer setNeedsLayout];
         [selectedMovieLayer setNeedsDisplay];
     }
 }
@@ -375,39 +383,41 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
             break;
     }
     
+    MovieLayer* nextMovieLayer = nil;
+    
     if (selectedMovieLayer && [listOfLayersInOrder count]) {
         switch ([event keyCode]) {
             case 123:
                 // RIGHT ARROW
                 if (index > 0) {
-                    selectedMovieLayer = [listOfLayersInOrder objectAtIndex:index - 1];
+                    nextMovieLayer = [listOfLayersInOrder objectAtIndex:index - 1];
                 }
                 else {
-                    selectedMovieLayer = [listOfLayersInOrder lastObject];
+                    nextMovieLayer = [listOfLayersInOrder lastObject];
                 }
                 break;
                 
             case 124:
                 // LEFT ARROW
                 if ((index + 1) != [listOfLayersInOrder count]) {
-                    selectedMovieLayer = [listOfLayersInOrder objectAtIndex:index + 1];
+                    nextMovieLayer = [listOfLayersInOrder objectAtIndex:index + 1];
                 }
                 else {
-                    selectedMovieLayer = [listOfLayersInOrder objectAtIndex:0];
+                    nextMovieLayer = [listOfLayersInOrder objectAtIndex:0];
                 }
                 break;
                 
             case 125:
                 // UP ARROW
                 if (selectedMovieLayer.upLayer) {
-                    selectedMovieLayer = selectedMovieLayer.upLayer;
+                    nextMovieLayer = selectedMovieLayer.upLayer;
                 }
                 break;
                 
             case 126:
                 // DOWN ARROW
                 if (selectedMovieLayer.downLayer) {
-                    selectedMovieLayer = selectedMovieLayer.downLayer;
+                    nextMovieLayer = selectedMovieLayer.downLayer;
                 }
                 break;
                 
@@ -416,15 +426,20 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
         }
     }
     else {
-        selectedMovieLayer = [listOfLayersInOrder objectAtIndex:0];
+        nextMovieLayer = [listOfLayersInOrder objectAtIndex:0];
     }
     
     
-    if (selectedMovieLayer && [selectedMovieLayer movie]) {
-        [content setSelectedObjects:[NSArray arrayWithObject:[selectedMovieLayer movie]]];
-        
-        // Set the hovered layer to the selected layer
-        [self setHoveredMovie:[selectedMovieLayer movie]];
+    if (nextMovieLayer && [nextMovieLayer movie]) {
+        if ([applicationController isDrawerViewOpen]) {
+            [self performClickOpenInfo:nextMovieLayer];
+        }
+        else {
+            [content setSelectedObjects:[NSArray arrayWithObject:[selectedMovieLayer movie]]];
+            
+            // Set the hovered layer to the selected layer
+            [self setHoveredMovie:[selectedMovieLayer movie]];
+        }
     }
 
     [floorLayer setNeedsLayout];

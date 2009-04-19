@@ -40,6 +40,7 @@ extern NSString* const kMultiplexDrawerIsClosedLayoutManagerClass;
 
 @property (retain) id content;
 @property (retain) Movie* hoveredMovie;
+@property (readonly) NSMutableDictionary* layersByID;
 @property Class <MultiplexLayoutManagerProtocol> floorLayerLayoutManagerClass;
 
 - (MovieLayer*) movieLayerForPoint:(CGPoint)p;

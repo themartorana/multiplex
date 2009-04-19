@@ -453,11 +453,17 @@ static NSArray* fileTypes = nil;
     [movieDetailController showDiscsTab];
 }
 
-- (void) showMovieLookupForMovie:(Movie*)movie byTitle:(BOOL)byTitle
+
+- (void) showMovieLookupForMovie:(Movie*)movie byTitle:(NSNumber*)byTitle
 {
     if (![self isDrawerViewOpen]) {
         [drawerView toggle:nil];
     }
+    
+    //MovieLayer* ml = [mainView.layersByID objectForKey:[movie objectID]];
+    //[mainView selectMovieLayer:ml];
+    //[mainView resetCurrentlySelectedMovieLayer];
+    
     
     [movies setSelectedObjects:[NSArray arrayWithObject:movie]];
     if (!movieLookupController) {
@@ -465,7 +471,7 @@ static NSArray* fileTypes = nil;
     }
     [self setCurrentDrawerViewController:(id<DrawerViewControllerProtocol>)movieLookupController];
     
-    if (byTitle) {
+    if (byTitle && [byTitle boolValue]) {
         [movieLookupController skipToTitleEntry:nil];
     }
 }
@@ -881,17 +887,46 @@ static NSArray* fileTypes = nil;
 
 - (IBAction) refreshInfoFromInternetByUPC:(id)sender
 {
-    if ([self _movieForAction]) {
-        self.selectedMovie = [self _movieForAction];
-        [self showMovieLookupForMovie:selectedMovie byTitle:NO];
+    // TODO: DRY on both refreshInfo... functions
+    Movie* movieForAction = [self _movieForAction];
+    
+    if (movieForAction != selectedMovie) {
+        // Ask the app for permission
+        MovieLayer* layerToSelect = [mainView.layersByID objectForKey:[movieForAction objectID]];
+        NSNumber* byTitle = [NSNumber numberWithBool:NO];
+        
+        NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:@selector(showMovieLookupForMovie:byTitle:)]];
+        [invocation setTarget:self];
+        [invocation setSelector:@selector(showMovieLookupForMovie:byTitle:)];
+        [invocation retainArguments];
+        [invocation setArgument:&movieForAction atIndex:2];
+        [invocation setArgument:&byTitle atIndex:3];
+        [self approveMovieSelectionClick:invocation forMovieLayer:layerToSelect];
+    }
+    else {
+        [self showMovieLookupForMovie:movieForAction byTitle:[NSNumber numberWithBool:YES]];
     }
 }
 
 - (IBAction) refreshInfoFromInternetByTitle:(id)sender
 {
-    if ([self _movieForAction]) {
-        self.selectedMovie = [self _movieForAction];
-        [self showMovieLookupForMovie:selectedMovie byTitle:YES];
+    Movie* movieForAction = [self _movieForAction];
+    
+    if (movieForAction != selectedMovie) {
+        // Ask the app for permission
+        MovieLayer* layerToSelect = [mainView.layersByID objectForKey:[movieForAction objectID]];
+        NSNumber* byTitle = [NSNumber numberWithBool:YES];
+
+        NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:@selector(showMovieLookupForMovie:byTitle:)]];
+        [invocation setTarget:self];
+        [invocation setSelector:@selector(showMovieLookupForMovie:byTitle:)];
+        [invocation retainArguments];
+        [invocation setArgument:&movieForAction atIndex:2];
+        [invocation setArgument:&byTitle atIndex:3];
+        [self approveMovieSelectionClick:invocation forMovieLayer:layerToSelect];
+    }
+    else {
+        [self showMovieLookupForMovie:movieForAction byTitle:[NSNumber numberWithBool:YES]];
     }
 }
 

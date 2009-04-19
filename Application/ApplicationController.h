@@ -94,7 +94,7 @@
 
 - (void) showMovieDetailAndSelectHomeTabForMovie:(Movie*)movie;
 - (void) showMovieDetailAndSelectDiscsTabMovie:(Movie*)movie;
-- (void) showMovieLookupForMovie:(Movie*)movie byTitle:(BOOL)byTitle;
+- (void) showMovieLookupForMovie:(Movie*)movie byTitle:(NSNumber*)byTitle;
 - (void) closeDrawerView:(NSNotification*)notification;
 
 - (void) setSelectedMovieFromNotificationIfNecessary:(NSNotification*)n;

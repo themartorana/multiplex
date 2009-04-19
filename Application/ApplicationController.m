@@ -74,6 +74,7 @@ static NSArray* fileTypes = nil;
 
 @interface ApplicationController (Private)
 
+- (Movie*) _movieForAction;
 - (void) _closeDrawerViewApproved;
 - (void) _setCurrentDrawerViewControllerApproved:(id<DrawerViewControllerProtocol>)protocolObject;
 - (void) _loadDatabase:(NSString*)pathToDatabaseFile isSampleData:(BOOL)isSample;
@@ -92,6 +93,7 @@ static NSArray* fileTypes = nil;
 @synthesize parameters;
 @synthesize appManagedObjectContext;
 @synthesize selectedMovie;
+@synthesize hoveredMovie;
 @synthesize currentDrawerViewController;
 @synthesize selectedSegment;
 @synthesize movieContextMenu;
@@ -685,7 +687,7 @@ static NSArray* fileTypes = nil;
 
 - (void) deleteCurrentMovie
 {
-    Movie* m = selectedMovie;
+    Movie* m = [self _movieForAction];
     
     // Delete from any media
     NSMutableArray* allDiscs = [NSMutableArray arrayWithArray:[[m allDiscs] allObjects]];
@@ -879,14 +881,16 @@ static NSArray* fileTypes = nil;
 
 - (IBAction) refreshInfoFromInternetByUPC:(id)sender
 {
-    if (selectedMovie) {
+    if ([self _movieForAction]) {
+        self.selectedMovie = [self _movieForAction];
         [self showMovieLookupForMovie:selectedMovie byTitle:NO];
     }
 }
 
 - (IBAction) refreshInfoFromInternetByTitle:(id)sender
 {
-    if (selectedMovie) {
+    if ([self _movieForAction]) {
+        self.selectedMovie = [self _movieForAction];
         [self showMovieLookupForMovie:selectedMovie byTitle:YES];
     }
 }
@@ -898,7 +902,7 @@ static NSArray* fileTypes = nil;
 
 - (IBAction) buyFromAmazon:(id)sender
 {
-    MovieURL* url = [self getAmazonURL:selectedMovie];
+    MovieURL* url = [self getAmazonURL:[self _movieForAction]];
     NSString* urlString = url.url;
     NSURL* nsurl = [NSURL URLWithString:urlString];
     
@@ -910,7 +914,7 @@ static NSArray* fileTypes = nil;
     Media* m = nil;
     
     // Get the media
-    for (Disc* d in selectedMovie.allDiscs) {
+    for (Disc* d in [self _movieForAction].allDiscs) {
         if (d.localMediaCount > 0) {
             for (Media* discMedia in d.allMedia) {
                 if (discMedia.isLocal) { // && ![discMedia isPhysicalMedia]) {
@@ -952,6 +956,16 @@ static NSArray* fileTypes = nil;
 
 
 #pragma mark Private Methods
+
+- (Movie*) _movieForAction
+{
+    if (self.hoveredMovie) {
+        return self.hoveredMovie;
+    }
+    else {
+        return self.selectedMovie;
+    }
+}
 
 - (NSString*) _copySampleDatabase
 {
@@ -1208,7 +1222,7 @@ static NSArray* fileTypes = nil;
         }
     }
     
-    if (toastIsAvailable && selectedMovie.localMediaCount) {
+    if (toastIsAvailable && [self _movieForAction].localMediaCount) {
         return YES;
     }
     return NO;
@@ -1291,7 +1305,7 @@ static NSArray* fileTypes = nil;
 
 - (void)menuWillOpen:(NSMenu*)menu
 {
-    if ([self getAmazonURL:selectedMovie]) {
+    if ([self getAmazonURL:[self _movieForAction]]) {
         [buyFromAmazonMenuItem setEnabled:YES];
     }
     else {

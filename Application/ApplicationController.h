@@ -51,6 +51,7 @@
     NSManagedObjectContext* engineManagedObjectContext;
     /**/
     Movie* selectedMovie;
+    Movie* hoveredMovie;
     NSString* searchQuery;
     NSView* viewInFullScreen;
     IBOutlet NSButton* infoViewButton;
@@ -62,11 +63,13 @@
 
 @property (retain) NSString* searchQuery;
 @property (retain) Movie* selectedMovie;
+@property (retain) Movie* hoveredMovie;
 @property (readonly) NSManagedObjectContext* appManagedObjectContext;
 @property (retain) NSDictionary* parameters;
 @property (retain) id<DrawerViewControllerProtocol> currentDrawerViewController;
 @property int selectedSegment;
 @property (readonly) NSMenu* movieContextMenu;
+
 
 - (IBAction) checkForUpdates:(id)sender;
 - (IBAction) showUserVoiceFeedbackSheet:(id)sender;

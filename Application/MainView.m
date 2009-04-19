@@ -67,6 +67,7 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     layersByID = [[NSMutableDictionary alloc] init];
     
     [hoverInfoView bind:@"movie" toObject:self withKeyPath:@"hoveredMovie" options:nil];
+    [applicationController bind:@"hoveredMovie" toObject:self withKeyPath:@"hoveredMovie" options:nil];
     
     [drawerView addObserver:self forKeyPath:@"isOpen" options:NSKeyValueObservingOptionNew context:nil];
     
@@ -279,29 +280,27 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
 
 - (void) rightMouseDown:(NSEvent*)theEvent
 {
-    if ([applicationController isDrawerViewOpen]) {
-        return;
-    }
-
     [hoverTimer invalidate];
     [hoverTimer release], hoverTimer = nil;
     [hoverInfoView setHidden:YES];
-   
+    
     CGPoint position = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
     MovieLayer* movieLayer = [self movieLayerForPoint:position];
+    NSLog(NSStringFromPoint(NSPointFromCGPoint(position)));
     if (movieLayer) {
         [layoutManager setShouldShowHoveredMovieHighlight:YES];
-        selectedMovieLayer = movieLayer;
-        Movie* movie = movieLayer.movie;
-        [applicationController setSelectedMovie:movie];
+        self.hoveredMovie = movieLayer.movie;
         [floorLayer setNeedsLayout];
-        //[super rightMouseDown:theEvent];
     }
+        
+    //[super rightMouseDown:theEvent];
 }
 
 - (void) rightMouseUp:(NSEvent*)theEvent
 {
-    [NSMenu popUpContextMenu:[self menu] withEvent:theEvent forView:self];
+    if (self.hoveredMovie) {
+        [NSMenu popUpContextMenu:[self menu] withEvent:theEvent forView:self];        
+    }
 }
 
 - (void) mouseMoved:(NSEvent*)theEvent

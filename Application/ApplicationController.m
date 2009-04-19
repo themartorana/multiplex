@@ -445,6 +445,7 @@ static NSArray* fileTypes = nil;
 {
     [self showMovieDetailForMovie:movie];
     [movieDetailController showHomeTab];
+    [[self window] makeFirstResponder:mainView];
 }
 
 - (void) showMovieDetailAndSelectDiscsTabMovie:(Movie*)movie

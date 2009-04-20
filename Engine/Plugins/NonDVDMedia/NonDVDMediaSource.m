@@ -77,11 +77,11 @@ static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, NonDVDMedia
      */
     MDQueryBatchingParams batchingParameters = {
         250,    // first_max_num
-        0,      // first_max_ms
+        1000,   // first_max_ms
         250,    // progress_max_num
-        0,      // progress_max_ms
+        1000,   // progress_max_ms
         1,      // update_max_num
-        0       // update_max_ms
+        1000    // update_max_ms
     };
     MDQuerySetBatchingParameters(query, batchingParameters);
     
@@ -170,12 +170,14 @@ static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, NonDVDMedia
 - (void) setFrontCover:(NSData*)frontCover forMedia:(MediaFile*)media
 {
     NSAssert(media.mediaFileSource == self, @"This media doesn't belong to me.");    
-    /*NSString* pathToQuickLookFolder = [media.pathToFile stringByAppendingPathComponent:@"QuickLook"];
+#if 0
+    NSString* pathToQuickLookFolder = [media.pathToFile stringByAppendingPathComponent:@"QuickLook"];
     NSFileManager* fileManager = [NSFileManager defaultManager];
     [fileManager createDirectoryAtPath:pathToQuickLookFolder attributes:nil];
     if ([fileManager fileExistsAtPath:pathToQuickLookFolder]) {
         [frontCover writeToFile:[pathToQuickLookFolder stringByAppendingPathComponent:@"FrontCover.png"] atomically:YES];
-    }*/
+    }
+#endif
     NSLog(@"Once implemented, set the icon");
 }
 
@@ -186,10 +188,10 @@ static MediaFile* newSpotlightItem(MDQueryRef query, MDItemRef item, NonDVDMedia
 #if 0
     MDItemRef item = (MDItemRef)[mediaInfo objectForKey:@"item"];
     CFDictionaryRef meta = MDItemCopyAttributeList(
-                                                   item,
-                                                   @"com_discident_fingerprint",
-                                                   nil
-                                                   );
+        item,
+        @"com_discident_fingerprint",
+        nil
+    );
     [mediaInfo setObject:(id)meta forKey:@"meta"];
     CFRelease(meta);
 #endif

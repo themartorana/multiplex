@@ -165,6 +165,7 @@ BOOL GetMetadataForFile(void* thisInterface, NSMutableDictionary* attributes, NS
             if (!info) {
                 info = [NSMutableDictionary dictionaryWithObject:fingerprint forKey:@"fingerprint"];
             } else {
+                [info removeObjectForKey:fingerprint];
                 [info setObject:fingerprint forKey:@"fingerprint"]; 
             }
             [[NSData dataWithObjectAsJSON:[NSDictionary dictionaryWithDictionary:info]] writeToFile:infoFile atomically:YES];                    

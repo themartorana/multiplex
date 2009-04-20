@@ -1,0 +1,133 @@
+body {
+	background: #333;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+.wrapper {
+	width: 860px;
+	margin-right: auto;
+	margin-left: auto;
+}
+.set {
+	width: 860px;
+	height: 420px;
+	margin-bottom: 20px;
+	-webkit-margin-collapse: separate;
+	background: #666;
+	-webkit-border-radius: 10px;
+}
+.set .discs {
+	min-width: 800px;
+	overflow-x: auto;
+	overflow-y: hidden;
+	margin: 20px 30px 0;
+	padding: 20px 0;
+	text-align: center;
+	list-style-type: none;
+	white-space: nowrap;
+}
+.disc {
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
+	width: 196px;
+	max-height: 280px;
+	-webkit-border-radius: 10px;
+	overflow: hidden;
+	padding: 10px 0 20px;
+	color: rgb(255,255,255);
+	text-align: center;
+	white-space: normal;
+}
+.disc a {
+	display: block;
+	width: 100%;
+	height: 100%;
+	color: #FFF;
+	text-decoration: none;
+}
+.disc img {
+	display: inline-block;
+	width: 180px;
+	height: 180px;
+	border: 0;
+	margin-bottom: 10px;
+}
+.disc .pos {
+	display: block;
+	font-size: 2em;
+}
+.disc .menu {
+	display: none;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+	-webkit-border-radius: 10px;
+	background: rgba(0,0,0,.5);
+}
+.disc:hover .menu {
+	display: block;
+}
+.disc .menu .options {
+	position: absolute;
+	left: 6px;
+	right: 6px;
+	top: 6px;
+	padding: 0;
+	list-style-type: none;
+}
+.disc .menu .option {
+	-webkit-border-radius: 5px;
+	padding: 8px 0 9px;
+	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgba(0,0,0,.95)), color-stop(1, rgba(0,0,0,.75)));
+	font-size: 16px;
+}
+.disc .menu .option + .option {
+	margin-top: 4px;
+}
+.disc .menu .option:hover {
+	background: rgba(0,0,0,.95);
+	cursor: pointer;
+}
+.disc .menu .option.play {
+	-webkit-border-radius: 6px;
+	padding: 12px 0 13px;
+	background: -webkit-gradient(linear, left bottom, left top, color-stop(.25, rgba(3,156,41,.95)), color-stop(1, rgba(0,200,0,.75)));
+	font-size: 24px;
+	font-weight: bold;
+	text-shadow: 0 1px 1px rgba(3,156,41,1);
+}
+.disc .menu .option.play:hover {
+	background: rgba(0,200,0,.95);
+}
+.disc .menu .option.drag {
+	background: -webkit-gradient(linear, left bottom, left top, color-stop(.25, rgba(255,255,255,.95)), color-stop(1, rgba(255,255,255,.75)));
+	color: rgba(13,13,13,1);
+}
+
+/* SCROLLBARS */
+::-webkit-scrollbar {
+	width: 18px;
+	height: 18px;
+}
+::-webkit-scrollbar-track-piece:disabled {
+	display: none !important;
+}
+::-webkit-scrollbar-track:disabled {
+	margin: 1px;
+}
+::-webkit-scrollbar:horizontal {
+	-webkit-border-image: url(multiplexresource://horizontal-button.png) 0 12 0 12;
+	border-color: transparent;
+	border-width: 0px 12px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+	-webkit-border-image: url(multiplexresource://horizontal-thumb.png) 0 10 0 10;
+	border-color: transparent;
+	border-width: 0px 10px;
+	min-width: 80px;
+}
+::-webkit-scrollbar-button {
+	display: none;
+}

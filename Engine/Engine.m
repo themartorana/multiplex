@@ -476,7 +476,9 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
         for (MediaFile* mediaFile in arrayOfMedia) {
             MediaLocator* mediaLocator = [self _findMediaLocatorByTag:mediaFile.tag];
-            NSAssert(mediaLocator, @"wtf?");
+            if (!mediaLocator) {
+                continue;
+            }
             
             [mediaFile reload];
 

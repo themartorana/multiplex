@@ -84,6 +84,7 @@ static NSArray* fileTypes = nil;
 - (NSString*) _getFingerprintForFile:(NSString*)filePath;
 - (void) _addNonDVDMedia:(NSArray*)filenames;
 - (void) _burnApproved:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (void) _setUnavailableMoviePredicate:(BOOL)hide;
 
 @end
 
@@ -97,6 +98,7 @@ static NSArray* fileTypes = nil;
 @synthesize currentDrawerViewController;
 @synthesize selectedSegment;
 @synthesize movieContextMenu;
+@synthesize moviesFilterPredicate;
 
 + (void) initialize
 {
@@ -114,6 +116,7 @@ static NSArray* fileTypes = nil;
             kCFBooleanTrue, @"HoverTooltipEnabled",
             kCFBooleanFalse, @"FullScreenOnLaunch",
             kCFBooleanFalse, @"SingleClickLaunchesMovie",
+            kCFBooleanFalse, @"HideUnavailableMovies",
             nil
         ]];
         
@@ -308,6 +311,10 @@ static NSArray* fileTypes = nil;
     
     // Register Pasteboard types
     [[self window] registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
+    
+    // Filter?
+    BOOL hide = [[NSUserDefaults standardUserDefaults] boolForKey:@"HideUnavailableMovies"];
+    [self _setUnavailableMoviePredicate:hide];
     
     // Jump to full screen?
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"FullScreenOnLaunch"] boolValue]) {
@@ -988,6 +995,12 @@ static NSArray* fileTypes = nil;
     }
 }
 
+- (IBAction) toggleHideUnavailableMovies:(id)sender
+{
+    // This is backwards, no big deal
+    BOOL hidden = ![[NSUserDefaults standardUserDefaults] boolForKey:@"HideUnavailableMovies"];
+    [self _setUnavailableMoviePredicate:hidden];
+}
 
 #pragma mark Private Methods
 
@@ -1261,6 +1274,16 @@ static NSArray* fileTypes = nil;
     }
     return NO;
     
+}
+
+- (void) _setUnavailableMoviePredicate:(BOOL)hide
+{
+    if (hide) {
+        self.moviesFilterPredicate = [NSPredicate predicateWithFormat:@"availableDiscCount > 0"];
+    }
+    else {
+        self.moviesFilterPredicate = nil;
+    }
 }
 
 #pragma mark Dragging protocol methods

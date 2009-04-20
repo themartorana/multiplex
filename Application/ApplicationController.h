@@ -59,17 +59,21 @@
     id<DrawerViewControllerProtocol> currentDrawerViewController;
     
     int selectedSegment;
+    
+    NSPredicate* moviesFilterPredicate;
 }
 
 @property (retain) NSString* searchQuery;
 @property (retain) Movie* selectedMovie;
 @property (retain) Movie* hoveredMovie;
-@property (readonly) NSManagedObjectContext* appManagedObjectContext;
 @property (retain) NSDictionary* parameters;
 @property (retain) id<DrawerViewControllerProtocol> currentDrawerViewController;
-@property int selectedSegment;
+@property (retain) NSPredicate* moviesFilterPredicate;
+
+@property (readonly) NSManagedObjectContext* appManagedObjectContext;
 @property (readonly) NSMenu* movieContextMenu;
 
+@property int selectedSegment;
 
 - (IBAction) checkForUpdates:(id)sender;
 - (IBAction) showUserVoiceFeedbackSheet:(id)sender;
@@ -91,6 +95,7 @@
 
 - (IBAction) burnWithToast:(id)sender;
 
+- (IBAction) toggleHideUnavailableMovies:(id)sender;
 
 - (void) showMovieDetailAndSelectHomeTabForMovie:(Movie*)movie;
 - (void) showMovieDetailAndSelectDiscsTabMovie:(Movie*)movie;

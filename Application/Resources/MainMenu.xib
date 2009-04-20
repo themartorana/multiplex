@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.02">
+<archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.03">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
 		<string key="IBDocument.SystemVersion">9G55</string>
-		<string key="IBDocument.InterfaceBuilderVersion">672</string>
+		<string key="IBDocument.InterfaceBuilderVersion">677</string>
 		<string key="IBDocument.AppKitVersion">949.43</string>
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1166"/>
-			<integer value="29"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<string>com.apple.WebKitIBPlugin</string>
 			<string>com.apple.InterfaceBuilderKit</string>
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+		</object>
+		<object class="NSMutableDictionary" key="IBDocument.Metadata">
+			<bool key="EncodedWithXMLCoder">YES</bool>
+			<object class="NSArray" key="dict.sortedKeys">
+				<bool key="EncodedWithXMLCoder">YES</bool>
+			</object>
+			<object class="NSMutableArray" key="dict.values">
+				<bool key="EncodedWithXMLCoder">YES</bool>
+			</object>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.RootObjects" id="1048">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -684,7 +691,7 @@
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{1000, 700}</string>
 				<object class="NSView" key="NSWindowView" id="384445475">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">274</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -931,7 +938,6 @@
 											</object>
 											<string key="NSFrameSize">{240, 240}</string>
 											<reference key="NSSuperview" ref="223232862"/>
-											<reference key="NSNextKeyView"/>
 											<string key="FrameName"/>
 											<string key="GroupName"/>
 											<object class="WebPreferences" key="Preferences" id="817572752">
@@ -1288,7 +1294,6 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{1000, 700}</string>
-					<reference key="NSSuperview"/>
 					<bool key="NSViewIsLayerTreeHost">YES</bool>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1600, 1178}}</string>
@@ -1945,7 +1950,7 @@
 																					<string/>
 																					<string>0</string>
 																					<string type="base64-UTF8">K+KIng</string>
-																					<integer value="0"/>
+																					<boolean value="NO"/>
 																					<string>0</string>
 																				</object>
 																			</object>
@@ -2259,6 +2264,35 @@
 			</object>
 			<object class="NSCustomObject" id="623785332">
 				<string key="NSClassName">ApplicationController</string>
+			</object>
+			<object class="NSArrayController" id="349008549">
+				<object class="NSMutableArray" key="NSDeclaredKeys">
+					<bool key="EncodedWithXMLCoder">YES</bool>
+					<string>gtin</string>
+					<string>title</string>
+					<string>movieDiscs</string>
+					<string>discs</string>
+					<string>side</string>
+					<string>allDiscs</string>
+					<string>status</string>
+					<string>@count</string>
+					<string>labelColor</string>
+					<string>studio</string>
+					<string>releaseDate</string>
+					<string>theatricalReleaseDate</string>
+					<string>movie.productionYear</string>
+					<string>movie.allDiscs.@count</string>
+				</object>
+				<string key="NSObjectClassName">Movie</string>
+				<bool key="NSEditable">YES</bool>
+				<bool key="NSAutomaticallyPreparesContent">YES</bool>
+				<object class="_NSManagedProxy" key="_NSManagedProxy">
+					<string key="NSEntityName">Movie</string>
+				</object>
+				<bool key="_NSIsUsingManagedProxy">YES</bool>
+				<bool key="NSPreservesSelection">YES</bool>
+				<bool key="NSFilterRestrictsInsertion">YES</bool>
+				<bool key="NSAutomaticallyRearrangesObjects">YES</bool>
 			</object>
 			<object class="NSArrayController" id="697403151">
 				<object class="NSMutableArray" key="NSDeclaredKeys">
@@ -2581,6 +2615,13 @@
 					</object>
 				</object>
 				<bool key="NSNoAutoenable">YES</bool>
+			</object>
+			<object class="NSUserDefaultsController" id="173498544">
+				<object class="NSMutableArray" key="NSDeclaredKeys">
+					<bool key="EncodedWithXMLCoder">YES</bool>
+					<string>HideUnavailableMovies</string>
+				</object>
+				<bool key="NSSharedInstance">YES</bool>
 			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -3648,6 +3689,78 @@
 						<reference key="destination" ref="366890124"/>
 					</object>
 					<int key="connectionID">2264</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">toggleHideUnavailableMovies:</string>
+						<reference key="source" ref="623785332"/>
+						<reference key="destination" ref="1053133779"/>
+					</object>
+					<int key="connectionID">2293</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: values.HideUnavailableMovies</string>
+						<reference key="source" ref="1053133779"/>
+						<reference key="destination" ref="173498544"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="1053133779"/>
+							<reference key="NSDestination" ref="173498544"/>
+							<string key="NSLabel">value: values.HideUnavailableMovies</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">values.HideUnavailableMovies</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2295</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">filterPredicate: moviesFilterPredicate</string>
+						<reference key="source" ref="349008549"/>
+						<reference key="destination" ref="623785332"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="349008549"/>
+							<reference key="NSDestination" ref="623785332"/>
+							<string key="NSLabel">filterPredicate: moviesFilterPredicate</string>
+							<string key="NSBinding">filterPredicate</string>
+							<string key="NSKeyPath">moviesFilterPredicate</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2305</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">contentArray: arrangedObjects</string>
+						<reference key="source" ref="697403151"/>
+						<reference key="destination" ref="349008549"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="697403151"/>
+							<reference key="NSDestination" ref="349008549"/>
+							<string key="NSLabel">contentArray: arrangedObjects</string>
+							<string key="NSBinding">contentArray</string>
+							<string key="NSKeyPath">arrangedObjects</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2312</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">managedObjectContext: appManagedObjectContext</string>
+						<reference key="source" ref="349008549"/>
+						<reference key="destination" ref="623785332"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="349008549"/>
+							<reference key="NSDestination" ref="623785332"/>
+							<string key="NSLabel">managedObjectContext: appManagedObjectContext</string>
+							<string key="NSBinding">managedObjectContext</string>
+							<string key="NSKeyPath">appManagedObjectContext</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2313</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -5061,9 +5174,9 @@
 							<reference ref="102122723"/>
 							<reference ref="426809856"/>
 							<reference ref="116686142"/>
-							<reference ref="1053133779"/>
 							<reference ref="245842231"/>
 							<reference ref="264220718"/>
+							<reference ref="1053133779"/>
 						</object>
 						<reference key="parent" ref="110788157"/>
 					</object>
@@ -5106,6 +5219,17 @@
 						<int key="objectID">2292</int>
 						<reference key="object" ref="264220718"/>
 						<reference key="parent" ref="908551607"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2294</int>
+						<reference key="object" ref="173498544"/>
+						<reference key="parent" ref="1049"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2299</int>
+						<reference key="object" ref="349008549"/>
+						<reference key="parent" ref="1049"/>
+						<string key="objectName">Movie Pre Array Controller</string>
 					</object>
 				</object>
 			</object>
@@ -5342,6 +5466,7 @@
 					<string>2290.IBPluginDependency</string>
 					<string>2291.IBPluginDependency</string>
 					<string>2292.IBPluginDependency</string>
+					<string>2299.IBPluginDependency</string>
 					<string>23.IBPluginDependency</string>
 					<string>23.ImportedFromIB2</string>
 					<string>236.IBPluginDependency</string>
@@ -5435,7 +5560,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{948, 242}, {190, 63}}</string>
+					<string>{{660, 497}, {190, 63}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{{596, 852}, {216, 23}}</string>
@@ -5448,8 +5573,8 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{230, 394}, {1000, 700}}</string>
-					<string>{{230, 394}, {1000, 700}}</string>
+					<string>{{46, 394}, {1000, 700}}</string>
+					<string>{{46, 394}, {1000, 700}}</string>
 					<reference ref="9"/>
 					<reference ref="9"/>
 					<string>{1000, 700}</string>
@@ -5609,7 +5734,7 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{252, 514}, {222, 43}}</string>
+					<string>{{453, 517}, {222, 43}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{{365, 632}, {243, 243}}</string>
@@ -5626,7 +5751,7 @@
 					<string>com.apple.WebKitIBPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{605, 395}, {251, 163}}</string>
+					<string>{{605, 395}, {251, 123}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -5640,7 +5765,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{252, 514}, {222, 43}}</string>
+					<string>{{539, 417}, {217, 143}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{{365, 632}, {243, 243}}</string>
@@ -5652,16 +5777,17 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{877, 212}, {223, 93}}</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<reference ref="9"/>
+					<string>{{589, 467}, {223, 93}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{{525, 802}, {197, 73}}</string>
-					<string>{{694, 305}, {365, 20}}</string>
+					<string>{{356, 560}, {365, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{74, 862}</string>
@@ -5750,7 +5876,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2292</int>
+			<int key="maxID">2313</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -5776,9 +5902,11 @@
 							<string>switchToLinearLayoutManager:</string>
 							<string>switchToStadiumLayoutManager:</string>
 							<string>toggleFullScreen:</string>
+							<string>toggleHideUnavailableMovies:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>

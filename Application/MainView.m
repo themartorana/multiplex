@@ -429,16 +429,21 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
         nextMovieLayer = [listOfLayersInOrder objectAtIndex:0];
     }
     
+    // Make sure it gets selected
+    if (nextMovieLayer) {
+        selectedMovieLayer = nextMovieLayer;
+    }
     
     if (nextMovieLayer && [nextMovieLayer movie]) {
         if ([applicationController isDrawerViewOpen]) {
             [self performClickOpenInfo:nextMovieLayer];
         }
         else {
-            [content setSelectedObjects:[NSArray arrayWithObject:[selectedMovieLayer movie]]];
+            [content setSelectedObjects:[NSArray arrayWithObject:[nextMovieLayer movie]]];
+            
             
             // Set the hovered layer to the selected layer
-            [self setHoveredMovie:[selectedMovieLayer movie]];
+            [self setHoveredMovie:[nextMovieLayer movie]];
         }
     }
 
@@ -514,9 +519,13 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
             [layers addObject:layer];
         }
         [listOfLayersInOrder addObject:layers];
+        
+        // Cleanup
+        //for (NSManagedObjectID* objectID in  
     }
     for (NSManagedObjectID* objectID in keysOfLayersToDelete) {
         [[layersByID objectForKey:objectID] removeFromSuperlayer];
+        [layersByID removeObjectForKey:objectID];
     }
     
     return listOfLayersInOrder;

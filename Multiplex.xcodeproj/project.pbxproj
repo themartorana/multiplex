@@ -38,6 +38,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		5503E64A0F9CEE2300396062 /* MAAttachedWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5503E6480F9CEE2300396062 /* MAAttachedWindow.m */; };
+		5503E8260F9D1A2C00396062 /* FilterSearchFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5503E8250F9D1A2C00396062 /* FilterSearchFieldCell.m */; };
+		5503E86B0F9D1F4B00396062 /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5503E86A0F9D1F4B00396062 /* BWToolkitFramework.framework */; };
+		5503E8760F9D1F5000396062 /* BWToolkitFramework.framework in Copy Files to Frameworks */ = {isa = PBXBuildFile; fileRef = 5503E86A0F9D1F4B00396062 /* BWToolkitFramework.framework */; };
 		550D082C0E9AE14E008F0275 /* MovieDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 550D082B0E9AE14E008F0275 /* MovieDetailController.m */; };
 		550D08700E9AFDF4008F0275 /* NSDescriptionValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 550D086F0E9AFDF4008F0275 /* NSDescriptionValueTransformer.m */; };
 		551554A00EA456C8006F2674 /* SoftEditTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5515549F0EA456C8006F2674 /* SoftEditTextFieldCell.m */; };
@@ -466,6 +470,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				5503E8760F9D1F5000396062 /* BWToolkitFramework.framework in Copy Files to Frameworks */,
 				F9CE81680EA6897900602750 /* Toolkit.framework in Copy Files to Frameworks */,
 				F96430410EB63DD100D49FA0 /* Sparkle.framework in Copy Files to Frameworks */,
 				F9970F490E7B9DCB009A1B6A /* JSONKit.framework in Copy Files to Frameworks */,
@@ -492,6 +497,11 @@
 /* Begin PBXFileReference section */
 		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5503E6480F9CEE2300396062 /* MAAttachedWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MAAttachedWindow.m; path = ../../../Downloads/MAAttachedWindow/MAAttachedWindow.m; sourceTree = SOURCE_ROOT; };
+		5503E6490F9CEE2300396062 /* MAAttachedWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAAttachedWindow.h; path = ../../../Downloads/MAAttachedWindow/MAAttachedWindow.h; sourceTree = SOURCE_ROOT; };
+		5503E8240F9D1A2C00396062 /* FilterSearchFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterSearchFieldCell.h; sourceTree = "<group>"; };
+		5503E8250F9D1A2C00396062 /* FilterSearchFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterSearchFieldCell.m; sourceTree = "<group>"; };
+		5503E86A0F9D1F4B00396062 /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = "../twistori/Twistori Desktop/Frameworks/BWToolkit/BWToolkitFramework.framework"; sourceTree = SOURCE_ROOT; };
 		550D082A0E9AE14E008F0275 /* MovieDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieDetailController.h; sourceTree = "<group>"; };
 		550D082B0E9AE14E008F0275 /* MovieDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieDetailController.m; sourceTree = "<group>"; };
 		550D086E0E9AFDF4008F0275 /* NSDescriptionValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDescriptionValueTransformer.h; sourceTree = "<group>"; };
@@ -762,6 +772,7 @@
 				F967B0800E7E1F3100C12B92 /* QuartzCore.framework in Frameworks */,
 				55A8E81D0E9BE18200DC9F35 /* WebKit.framework in Frameworks */,
 				55FC9CA10EB8382000CE3F05 /* Security.framework in Frameworks */,
+				5503E86B0F9D1F4B00396062 /* BWToolkitFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -843,6 +854,7 @@
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5503E86A0F9D1F4B00396062 /* BWToolkitFramework.framework */,
 				55FC9CA00EB8382000CE3F05 /* Security.framework */,
 				F9B380DB0EAD029700FCAB1E /* SystemConfiguration.framework */,
 				55A8E81C0E9BE18200DC9F35 /* WebKit.framework */,
@@ -949,6 +961,8 @@
 				551555030EA45D84006F2674 /* SoftEditTextField.m */,
 				55743F9C0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.h */,
 				55743F9D0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.m */,
+				5503E8240F9D1A2C00396062 /* FilterSearchFieldCell.h */,
+				5503E8250F9D1A2C00396062 /* FilterSearchFieldCell.m */,
 			);
 			name = Controls;
 			sourceTree = "<group>";
@@ -1041,6 +1055,8 @@
 		55AB54B30F3CF65300BED2B7 /* Windows */ = {
 			isa = PBXGroup;
 			children = (
+				5503E6490F9CEE2300396062 /* MAAttachedWindow.h */,
+				5503E6480F9CEE2300396062 /* MAAttachedWindow.m */,
 				55AB54B50F3CF66B00BED2B7 /* PreferencesWindow.h */,
 				55AB54B60F3CF66B00BED2B7 /* PreferencesWindow.m */,
 			);
@@ -1929,6 +1945,8 @@
 				55AB54B70F3CF66B00BED2B7 /* PreferencesWindow.m in Sources */,
 				55AB54F10F3CFEF700BED2B7 /* PreferencesWindowController.m in Sources */,
 				553A64E80F4119A300DA134D /* MultiplexDefaults.m in Sources */,
+				5503E64A0F9CEE2300396062 /* MAAttachedWindow.m in Sources */,
+				5503E8260F9D1A2C00396062 /* FilterSearchFieldCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2213,6 +2231,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Frameworks/JSONKit/build/${BUILD_STYLE}\"",
+					"\"$(SRCROOT)/../twistori/Twistori Desktop/Frameworks/BWToolkit\"",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -2250,6 +2269,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Frameworks/JSONKit/build/${BUILD_STYLE}\"",
+					"\"$(SRCROOT)/../twistori/Twistori Desktop/Frameworks/BWToolkit\"",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_GC = unsupported;

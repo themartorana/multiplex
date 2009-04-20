@@ -12,6 +12,7 @@
 @class MainWindowContentView;
 @class PreferencesWindowController;
 @class MovieURL;
+@class MAAttachedWindow;
 
 @interface ApplicationController : NSWindowController {
     NSDictionary* parameters;
@@ -28,6 +29,7 @@
     IBOutlet NSView* noDiscsView;
     IBOutlet NSView* noMovieSelectedView;
     IBOutlet NSView* searchForMovieView;
+    IBOutlet NSView* searchExplanationView;
     /**/
     MovieDetailController* movieDetailController;
     MovieLookupController* movieLookupController;
@@ -61,6 +63,9 @@
     int selectedSegment;
     
     NSPredicate* moviesFilterPredicate;
+    
+    /* Attached windows */
+    MAAttachedWindow* tipWindow;
 }
 
 @property (retain) NSString* searchQuery;
@@ -88,29 +93,34 @@
 
 - (IBAction) showSampleData:(id)sender;
 
+- (IBAction) playMovie:(id)sender;
 - (IBAction) refreshInfoFromInternetByUPC:(id)sender;
 - (IBAction) refreshInfoFromInternetByTitle:(id)sender;
 - (IBAction) deleteMovie:(id)sender;
 - (IBAction) buyFromAmazon:(id)sender;
+- (IBAction) focusSearch:(id)sender;
+- (IBAction) goToMultiplexSupport:(id)sender;
 
 - (IBAction) burnWithToast:(id)sender;
 
 - (IBAction) toggleHideUnavailableMovies:(id)sender;
 
+- (IBAction) dontShowTooltipAgain:(id)sender;
+- (IBAction) resetToolTipAlerts:(id)sender;
+
 - (void) showMovieDetailAndSelectHomeTabForMovie:(Movie*)movie;
 - (void) showMovieDetailAndSelectDiscsTabMovie:(Movie*)movie;
 - (void) showMovieLookupForMovie:(Movie*)movie byTitle:(NSNumber*)byTitle;
 - (void) closeDrawerView:(NSNotification*)notification;
-
 - (void) setSelectedMovieFromNotificationIfNecessary:(NSNotification*)n;
-
 - (void) approveMovieSelectionClick:(NSInvocation*)invocation forMovieLayer:(MovieLayer*)movieLayer;
+- (void) deleteCurrentMovie;
+
+- (void) showSearchTooltip;
+- (void) removeToolTipWindow;
 
 - (BOOL) isInFullScreen;
 - (BOOL) isDrawerViewOpen;
-//- (BOOL) canSwitchDrawerControllers;
-
-- (void) deleteCurrentMovie;
 
 - (MovieURL*) getAmazonURL:(Movie*)movie;
 

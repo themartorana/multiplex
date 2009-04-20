@@ -37,6 +37,9 @@
                 return YES;
             }
             break;
+        case 53:
+            // Just remove any tooltip windows
+            [applicationController removeToolTipWindow];
     }
     
     return NO;

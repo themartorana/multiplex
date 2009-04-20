@@ -461,11 +461,6 @@ static NSArray* fileTypes = nil;
         [drawerView toggle:nil];
     }
     
-    //MovieLayer* ml = [mainView.layersByID objectForKey:[movie objectID]];
-    //[mainView selectMovieLayer:ml];
-    //[mainView resetCurrentlySelectedMovieLayer];
-    
-    
     [movies setSelectedObjects:[NSArray arrayWithObject:movie]];
     if (!movieLookupController) {
         movieLookupController = [[MovieLookupController alloc] initWithApplicationController:self drawerView:drawerView];
@@ -474,6 +469,9 @@ static NSArray* fileTypes = nil;
     
     if (byTitle && [byTitle boolValue]) {
         [movieLookupController skipToTitleEntry:nil];
+    }
+    else {
+        [movieLookupController skipToUPCEntry:nil];
     }
 }
 

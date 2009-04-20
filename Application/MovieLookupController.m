@@ -333,11 +333,14 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 - (IBAction) skipToUPCEntry:(id)sender
 {
     [drawerView setContentView:searchByUPCorEANView];
+    [[drawerView window] makeFirstResponder:eanTextField];
 }
 
 - (IBAction) skipToTitleEntry:(id)sender
 {
     [drawerView setContentView:searchByTitleView];
+    [[drawerView window] makeFirstResponder:titleTextField];
+    [titleTextField performClick:nil];
 }
 
 - (IBAction) skipToManualEntry:(id)sender

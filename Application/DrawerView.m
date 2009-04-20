@@ -155,9 +155,4 @@
     }
 }
 
-- (void) keyDown:(NSEvent*)event
-{
-    NSLog(@"%@", event);
-}
-
 @end

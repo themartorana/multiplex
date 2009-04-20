@@ -26,6 +26,9 @@
     IBOutlet NSView* searchingView;
     IBOutlet NSView* searchResultsView;
     
+    IBOutlet NSTextField* titleTextField;
+    IBOutlet NSTextField* eanTextField;
+    
     int amazonQueryType;
     NSArray* amazonQueryResults;
     NSNumber* resultIndex;

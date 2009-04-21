@@ -2263,7 +2263,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Frameworks/JSONKit/build/${BUILD_STYLE}\"",
-					"\"$(SRCROOT)/../twistori/Twistori Desktop/Frameworks/BWToolkit\"",
 					"\"$(SRCROOT)/Frameworks/BWToolkit\"",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2302,7 +2301,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Frameworks/JSONKit/build/${BUILD_STYLE}\"",
-					"\"$(SRCROOT)/../twistori/Twistori Desktop/Frameworks/BWToolkit\"",
 					"\"$(SRCROOT)/Frameworks/BWToolkit\"",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;

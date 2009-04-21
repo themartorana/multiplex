@@ -1050,7 +1050,6 @@ static NSArray* fileTypes = nil;
 {    
     [self removeToolTipWindow];
     [[drawerView window] makeFirstResponder:searchField];        
-    [self showSearchTooltip];
 }
 
 - (IBAction) goToMultiplexSupport:(id)sender

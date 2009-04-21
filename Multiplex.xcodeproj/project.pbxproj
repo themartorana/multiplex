@@ -41,8 +41,6 @@
 		5503E8260F9D1A2C00396062 /* FilterSearchFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5503E8250F9D1A2C00396062 /* FilterSearchFieldCell.m */; };
 		5503E8AE0F9D215000396062 /* MAAttachedWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5503E8AC0F9D215000396062 /* MAAttachedWindow.m */; };
 		5503E8E50F9D290700396062 /* MovieDetailDiscsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1AEF0E9D186B000F67FA /* MovieDetailDiscsView.m */; };
-		5503E9B70F9D48A100396062 /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5503E9B60F9D48A100396062 /* BWToolkitFramework.framework */; };
-		5503E9C00F9D48A500396062 /* BWToolkitFramework.framework in Copy Files to Frameworks */ = {isa = PBXBuildFile; fileRef = 5503E9B60F9D48A100396062 /* BWToolkitFramework.framework */; };
 		5503EA3A0F9D4BFA00396062 /* jquery.js in Resources */ = {isa = PBXBuildFile; fileRef = 5503EA390F9D4BFA00396062 /* jquery.js */; };
 		5503ED260F9D62F500396062 /* NSSet+IndyHallLabs.m in Sources */ = {isa = PBXBuildFile; fileRef = 5503ED250F9D62F500396062 /* NSSet+IndyHallLabs.m */; };
 		550D082C0E9AE14E008F0275 /* MovieDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 550D082B0E9AE14E008F0275 /* MovieDetailController.m */; };
@@ -139,6 +137,8 @@
 		967FF2040F17A00B00A08F6F /* tooltip-title-top.png in Resources */ = {isa = PBXBuildFile; fileRef = 967FF1FD0F17A00B00A08F6F /* tooltip-title-top.png */; };
 		967FF2050F17A00B00A08F6F /* tooltip-title.png in Resources */ = {isa = PBXBuildFile; fileRef = 967FF1FE0F17A00B00A08F6F /* tooltip-title.png */; };
 		967FF2060F17A00B00A08F6F /* tooltip-top.png in Resources */ = {isa = PBXBuildFile; fileRef = 967FF1FF0F17A00B00A08F6F /* tooltip-top.png */; };
+		969ECC0E0F9D803F0056572D /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 969ECC0D0F9D803F0056572D /* BWToolkitFramework.framework */; };
+		969ECC110F9D804B0056572D /* BWToolkitFramework.framework in Copy Files to Frameworks */ = {isa = PBXBuildFile; fileRef = 969ECC0D0F9D803F0056572D /* BWToolkitFramework.framework */; };
 		96A02DA80F9D2C6600DED204 /* discs-tab.html in Resources */ = {isa = PBXBuildFile; fileRef = 96A02DA70F9D2C6600DED204 /* discs-tab.html */; };
 		96A02DAB0F9D2C8800DED204 /* horizontal-thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 96A02DA90F9D2C8800DED204 /* horizontal-thumb.png */; };
 		96A02DAC0F9D2C8800DED204 /* horizontal-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 96A02DAA0F9D2C8800DED204 /* horizontal-button.png */; };
@@ -478,7 +478,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				5503E9C00F9D48A500396062 /* BWToolkitFramework.framework in Copy Files to Frameworks */,
+				969ECC110F9D804B0056572D /* BWToolkitFramework.framework in Copy Files to Frameworks */,
 				F9CE81680EA6897900602750 /* Toolkit.framework in Copy Files to Frameworks */,
 				F96430410EB63DD100D49FA0 /* Sparkle.framework in Copy Files to Frameworks */,
 				F9970F490E7B9DCB009A1B6A /* JSONKit.framework in Copy Files to Frameworks */,
@@ -509,7 +509,6 @@
 		5503E8250F9D1A2C00396062 /* FilterSearchFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterSearchFieldCell.m; sourceTree = "<group>"; };
 		5503E8AC0F9D215000396062 /* MAAttachedWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAAttachedWindow.m; sourceTree = "<group>"; };
 		5503E8AD0F9D215000396062 /* MAAttachedWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAAttachedWindow.h; sourceTree = "<group>"; };
-		5503E9B60F9D48A100396062 /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = "../twistori/Twistori Desktop/Frameworks/BWToolkit/BWToolkitFramework.framework"; sourceTree = SOURCE_ROOT; };
 		5503EA390F9D4BFA00396062 /* jquery.js */ = {isa = PBXFileReference; explicitFileType = sourcecode.javascript; fileEncoding = 4; path = jquery.js; sourceTree = "<group>"; };
 		5503ED250F9D62F500396062 /* NSSet+IndyHallLabs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSSet+IndyHallLabs.m"; sourceTree = "<group>"; };
 		550D082A0E9AE14E008F0275 /* MovieDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieDetailController.h; sourceTree = "<group>"; };
@@ -642,6 +641,7 @@
 		967FF1FD0F17A00B00A08F6F /* tooltip-title-top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tooltip-title-top.png"; sourceTree = "<group>"; };
 		967FF1FE0F17A00B00A08F6F /* tooltip-title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tooltip-title.png"; sourceTree = "<group>"; };
 		967FF1FF0F17A00B00A08F6F /* tooltip-top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tooltip-top.png"; sourceTree = "<group>"; };
+		969ECC0D0F9D803F0056572D /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = Frameworks/BWToolkit/BWToolkitFramework.framework; sourceTree = "<group>"; };
 		96A02DA70F9D2C6600DED204 /* discs-tab.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "discs-tab.html"; sourceTree = "<group>"; };
 		96A02DA90F9D2C8800DED204 /* horizontal-thumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "horizontal-thumb.png"; sourceTree = "<group>"; };
 		96A02DAA0F9D2C8800DED204 /* horizontal-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "horizontal-button.png"; sourceTree = "<group>"; };
@@ -788,7 +788,7 @@
 				F967B0800E7E1F3100C12B92 /* QuartzCore.framework in Frameworks */,
 				55A8E81D0E9BE18200DC9F35 /* WebKit.framework in Frameworks */,
 				55FC9CA10EB8382000CE3F05 /* Security.framework in Frameworks */,
-				5503E9B70F9D48A100396062 /* BWToolkitFramework.framework in Frameworks */,
+				969ECC0E0F9D803F0056572D /* BWToolkitFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -870,7 +870,7 @@
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5503E9B60F9D48A100396062 /* BWToolkitFramework.framework */,
+				969ECC0D0F9D803F0056572D /* BWToolkitFramework.framework */,
 				55FC9CA00EB8382000CE3F05 /* Security.framework */,
 				F9B380DB0EAD029700FCAB1E /* SystemConfiguration.framework */,
 				55A8E81C0E9BE18200DC9F35 /* WebKit.framework */,
@@ -2264,6 +2264,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Frameworks/JSONKit/build/${BUILD_STYLE}\"",
 					"\"$(SRCROOT)/../twistori/Twistori Desktop/Frameworks/BWToolkit\"",
+					"\"$(SRCROOT)/Frameworks/BWToolkit\"",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -2302,6 +2303,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Frameworks/JSONKit/build/${BUILD_STYLE}\"",
 					"\"$(SRCROOT)/../twistori/Twistori Desktop/Frameworks/BWToolkit\"",
+					"\"$(SRCROOT)/Frameworks/BWToolkit\"",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_GC = unsupported;

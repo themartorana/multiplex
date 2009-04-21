@@ -116,6 +116,9 @@
 - (IBAction) selectTab:(id)sender
 {
     [infoTabView selectTabViewItemAtIndex:[sender selectedSegment]];
+    if ([sender selectedSegment] == 3) {
+        [[discsWebView window] makeFirstResponder:discsWebView];
+    }
 }
 
 - (void) _objectContextDidChange:(NSNotification*)notification
@@ -384,7 +387,6 @@
         // Participants
         if ([movie.allParticipants count]) {
             NSSortDescriptor* sort = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
-            
             NSArray* participantsInOrder = [[movie.allParticipants allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sort]];
 
             // Director

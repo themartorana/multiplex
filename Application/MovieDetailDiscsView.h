@@ -1,26 +1,18 @@
 #import <Cocoa/Cocoa.h>
+#import <WebKit/WebKit.h>
 
 @class Movie;
-@class DiscPlayLayer;
-@class ButtonLayer;
+@class MovieDetailController;
 
 @interface MovieDetailDiscsView : NSView {
+    IBOutlet WebView* webView;
+    IBOutlet MovieDetailController* movieDetailController;
+    
     Movie* movie;
-    
-    CALayer* viewLayer;
-    CALayer* scrollingLayer;
-    CALayer* discsHostingLayer;
-    CALayer* pageNumbersLayer;
-    
-    NSTrackingArea* mouseTrackingArea;
-    
-    DiscPlayLayer* hoveredLayer;
-    ButtonLayer* playButtonDownLayer;
+    BOOL isReady;
 }
 
 @property (retain) Movie* movie;
-
-- (void) setUpDiscLayers;
-- (void) unhoverHoveredLayer;
+@property BOOL isReady;
 
 @end

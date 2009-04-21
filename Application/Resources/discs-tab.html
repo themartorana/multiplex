@@ -2,40 +2,129 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 
-<head profile="http://gmpg.org/xfn/11">
-	
-	<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
+<head>
+
 	<meta http-equiv="Content-Language" content="en-us" />
 	<title>Multiplex Discs Tab Disc Hover View</title>
+    
+    <script type="text/javascript" src="multiplexresource://jquery.js"></script>
+    <script type="text/javascript">
+    
+        function resetDiscs(movie) {
+        
+            // Clear out the discs li tags
+            var discsOL = $("#discs");
+            discsOL.empty();
+            
+            try {
+                var discs = movie.discsInOrder();
+                for (var i = 0; i < discs.length; i++) {
+                    var disc = discs[i];
+
+                    var li = jQuery("<li></li>").addClass("disc");
+                    discsOL.append(li);
+                    
+                    var img = jQuery("<img></img>");
+                    
+                    // Append the image
+                    var isDVD = true;
+                    var imgSrc = null;
+                    var allMedia = disc.allMedia().allObjects();
+                    for (var j = 0; j < allMedia.length; j++) {
+                        var media = allMedia[j];
+                        if (media.type() != "public.dvdmedia" && media.type() != "SAMPLE_DATA") {
+                            isDVD = false;
+                            break;
+                        }
+                    }
+                    
+                    if (isDVD) {
+                        imgSrc = "multiplexresource://disc-dvd-sm.png";
+                    }
+                    else {
+                        imgSrc = "multiplexresource://disc-blank-sm.png";
+                    }
+                    li.append(jQuery("<img></img>").attr("src", imgSrc));
+                    
+                    // Append the title
+                    var dTitle = null;
+                    if (!isDVD) {
+                        dTitle = movie.title();
+                    }
+                    else if (disc.discTitle() != "" && disc.discTitle() != null) {
+                        dTitle = disc.discTitle();
+                    }
+                    else { 
+                        if (discs.length == 1) {
+                            dTitle = movie.title();
+                        }
+                        else {
+                            dTitle = "Disc " + disc.number();
+                        }
+                    }
+                    li.append(jQuery("<div></div>").addClass("pos").append(dTitle));
+
+                    // Append the synopsis
+                    li.append(jQuery("<div></div>").addClass("desc").append(disc.synopsis()));
+                    
+                    // Append the options
+                    var menu = jQuery("<div></div>").addClass("menu");
+                    var ul = jQuery("<ul></ul>").addClass("options");
+                    menu.append(ul);
+                    li.append(menu);
+                    
+                    // Add in play button
+                    var playButton = jQuery("<li></li>").addClass("option play").append("Play");
+                    ul.append(playButton);
+                    playButton.bind("click", disc, function(e) {
+                        mplex.playDisc(e.data);
+                    });
+                                        
+                    // Add Drop From Set
+                    ul.append(jQuery("<li></li>").addClass("option").append("Drop From Set"));
+
+                    // Add Send To Trash
+                    ul.append(jQuery("<li></li>").addClass("option").append("Send to Trash"));
+
+                    // Add Drag, somehow...
+                    ul.append(jQuery("<li></li>").addClass("option drag").append("&larr;&nbsp;Drag to Reorder&nbsp;&rarr;"));
+                }
+            } 
+            catch (err) {
+                alert(err);
+            }
+        }
+        
+        jQuery(document).ready(function() {
+            mplex.signalIsReady();
+        });
+    
+    </script>
 	
 </head>
 
 <body>
-	
-	<!-- WRAPPER -->
-	<div id="wrapper" class="wrapper">
-		
-		<div class="set">
-			<ol class="discs">
-				<li class="disc">
-					<img src="images/disc-dvd.png" width="180" height="180" />
-					<div class="pos">Disc 1</div>
-					<div class="desc">Feature Presentation</div>
-					<div class="menu">
-						<ul class="options">
-							<li class="option play">Play</li>
-							<li class="option">Drop From Set</li>
-							<li class="option">Reveal in Finder</li>
-							<li class="option">Send to Trash</li>
-							<li class="option drag">&larr;&nbsp;Drag to Reorder&nbsp;&rarr;</li>
-						</ul>
-					</div>
-				</li>
-			</ol>
-		</div>
-		
-	</div>
-	<!-- END: WRAPPER -->
+
+    <div class="set">
+        <ol id="discs" class="discs">
+            <!--
+            <li class="disc">
+                <img src="images/disc-dvd.png" width="180" height="180" />
+                <div class="pos">Disc 1</div>
+                <div class="desc">Feature Presentation</div>
+                <div class="menu">
+                    <ul class="options">
+                        <li class="option play">Play</li>
+                        <li class="option">Drop From Set</li>
+                        <li class="option">Reveal in Finder</li>
+                        <li class="option">Send to Trash</li>
+                        <li class="option drag">&larr;&nbsp;Drag to Reorder&nbsp;&rarr;</li>
+                    </ul>
+                </div>
+            </li>
+            -->
+        </ol>
+    </div>
 	
 </body>
 

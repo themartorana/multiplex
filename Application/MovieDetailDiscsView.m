@@ -8,10 +8,12 @@
 
 #import <Toolkit/Toolkit.h>
 #import <JSONKit/JSONKit.h>
+#import <WebKit/WebKit.h>
 
 @interface MovieDetailDiscsView (Private)
 
 - (void) _setUpDiscLayers;
+- (Disc*) _discForManagedObjectID:(NSString*)coreDataObjectId;
 
 @end
 
@@ -24,6 +26,9 @@
     if (selector == @selector(playDisc:)) {
         return NO;
     }
+    if (selector == @selector(reorderDiscs:)) {
+        return NO;
+    }
     return YES;
 }
 
@@ -31,6 +36,9 @@
 {
     if (sel == @selector(playDisc:))
         return @"playDisc";
+    if (sel == @selector(reorderDiscs:)) {
+        return @"reorderDiscs";
+    }
     return nil;
 }
 
@@ -74,7 +82,7 @@
     NSMutableArray* arr = [NSMutableArray array];
     
     // Loop the discs
-    for (Disc* disc in [movie.allDiscs allObjects]) {
+    for (Disc* disc in [movie discsInOrder]) {
         NSMutableDictionary* discDict = [NSMutableDictionary dictionary];
         [discDict setValue:disc.number forKey:@"number"];
         [discDict setValue:(disc.discTitle ? disc.discTitle : [NSString stringWithFormat:@"Disc %i", [disc.number intValue]]) forKey:@"title"];
@@ -88,17 +96,39 @@
                 break;
             }
         }
+
         [discDict setValue:(isDVD ? @"YES" : @"NO") forKey:@"isDVD"];
         
         [arr addObject:discDict];
     }
-    
+
+    [dict setObject:movie.title forKey:@"title"];
     [dict setObject:arr forKey:@"discs"];
     
     // Send it to the JS
     id a = [webView windowScriptObject];
-    [a callWebScriptMethod:@"resetDiscs" withArguments:[NSArray arrayWithObject:movie]];
+    [a callWebScriptMethod:@"resetDiscs" withArguments:[NSArray arrayWithObject:[NSString stringWithObjectAsJSON:dict]]];
 }
+
+- (Disc*) _discForManagedObjectID:(NSString*)coreDataObjectId
+{
+    Disc* d = nil;
+    
+    @try {
+        NSURL* coreDataUri = [NSURL URLWithString:coreDataObjectId];
+        NSManagedObjectContext* moc = [movie managedObjectContext];
+        NSManagedObjectID* objectID = [[moc persistentStoreCoordinator] managedObjectIDForURIRepresentation:coreDataUri];
+        d = (Disc*)[moc objectWithID:objectID];
+    }
+    @catch (NSException* ex) {
+        NSLog(@"Error getting Disc object for id %@, exception is: %@", coreDataObjectId, [ex userInfo]);
+    }
+    
+    return d;
+}
+
+
+#pragma mark Javascript Calls
 
 - (void) signalIsReady
 {
@@ -108,9 +138,44 @@
     }
 }
 
-- (void) playDisc:(id)disc
+- (void) playDisc:(NSString*)coreDataObjectId
 {
-    [movieDetailController playDisc:disc];
+    Disc* d = [self _discForManagedObjectID:coreDataObjectId];
+    if (d) {
+        [movieDetailController playDisc:d];
+    }
+}
+
+- (void) reorderDiscs:(WebScriptObject*)orderArray
+{
+    for (int i = 0; i < INT32_MAX; i++) {
+        id coreDataObjectId = [orderArray webScriptValueAtIndex:i];
+        if (coreDataObjectId == [WebUndefined undefined]) {
+            break;
+        }
+        
+        Disc* d = [self _discForManagedObjectID:coreDataObjectId];
+        if (d) {
+            d.number = [NSNumber numberWithInt:(i + 1)];
+        }
+    }
+    
+    NSError* error = nil;
+    [[movie managedObjectContext] save:&error];
+    
+    if (error) {
+        NSLog(@"Error reordering discs: %@", [error userInfo]);
+    }
+    
+    [self _setUpDiscLayers];
+}
+
+- (void) removeFromSet:(NSString*)coreDataObjectId
+{
+    Disc* d = [self _discForManagedObjectID:coreDataObjectId];
+    if (d) {
+        
+    }
 }
 
 #pragma mark WebFrameLoadDelegate Methods

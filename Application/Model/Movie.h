@@ -30,4 +30,6 @@
 
 @property (readonly) int localMediaCount;
 
+- (NSArray*) discsInOrder;
+
 @end

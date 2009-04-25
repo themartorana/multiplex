@@ -45,6 +45,8 @@
     NSString* titleToSearch;
     
     id<ExecuteTokenProtocol> relinquishExecuteToken;
+    
+    BOOL lastSearchWasByEAN;
 }
 
 @property (retain) Movie* movie;

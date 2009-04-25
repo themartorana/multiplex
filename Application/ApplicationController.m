@@ -23,6 +23,8 @@
 
 #import "MultiplexResourceURLProtocol.h"
 
+#import "MAAttachedWindow.h"
+
 #import <QuartzCore/QuartzCore.h>
 #import <Sparkle/Sparkle.h>
 #import <Toolkit/Toolkit.h>
@@ -70,8 +72,6 @@ static NSArray* fileTypes = nil;
 @end
 
 
-
-
 @interface ApplicationController (Private)
 
 - (Movie*) _movieForAction;
@@ -85,9 +85,9 @@ static NSArray* fileTypes = nil;
 - (void) _addNonDVDMedia:(NSArray*)filenames;
 - (void) _burnApproved:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (void) _setUnavailableMoviePredicate:(BOOL)hide;
+- (void) _prepareToolTipWindowWithView:(NSView*)view attachedToPoint:(NSPoint)point inWindow:(NSWindow*)window onSide:(MAWindowPosition)position atDistance:(CGFloat)distance;
 
 @end
-
 
 @implementation ApplicationController
 @synthesize searchQuery;
@@ -117,6 +117,7 @@ static NSArray* fileTypes = nil;
             kCFBooleanFalse, @"FullScreenOnLaunch",
             kCFBooleanFalse, @"SingleClickLaunchesMovie",
             kCFBooleanFalse, @"HideUnavailableMovies",
+            kCFBooleanTrue, @"ShowToolTipSearch",
             nil
         ]];
         
@@ -424,6 +425,8 @@ static NSArray* fileTypes = nil;
 
 - (void) approveMovieSelectionClick:(NSInvocation*)invocation forMovieLayer:(MovieLayer*)movieLayer
 {
+    [self removeToolTipWindow];
+    
     if (selectedMovie == [movieLayer movie] && [drawerView isOpen]) {
         // DENY!
         return;
@@ -642,7 +645,7 @@ static NSArray* fileTypes = nil;
         }
         SUUpdater* updater = [SUUpdater sharedUpdater];
         [updater setDelegate:self];
-    }    
+    }
 }
 
 - (BOOL) isInFullScreen
@@ -657,6 +660,8 @@ static NSArray* fileTypes = nil;
 
 - (void) setSearchQuery:(NSString*)_searchQuery
 {
+    [self removeToolTipWindow];
+    
     if (_searchQuery != searchQuery) {
         [searchQuery release];
         searchQuery = [_searchQuery retain];
@@ -812,6 +817,24 @@ static NSArray* fileTypes = nil;
     return nil; 
 }
 
+- (void) showSearchTooltip {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"ShowToolTipSearch"]) {
+        CGFloat centerPoint = [searchField frame].origin.x + ([searchField frame].size.width / 2.0);
+        NSPoint windowPoint = NSMakePoint(centerPoint, [searchField frame].origin.y);
+        [self _prepareToolTipWindowWithView:searchExplanationView attachedToPoint:windowPoint inWindow:[drawerView window] onSide:MAPositionTop atDistance:20.0];
+    }
+    
+}
+
+- (void) removeToolTipWindow
+{
+    if (tipWindow) {
+        [[tipWindow animator] setAlphaValue:0.0];
+        [[tipWindow parentWindow] removeChildWindow:tipWindow];
+        [tipWindow release], tipWindow = nil;
+    }
+}
+
 #pragma mark IBActions
 
 - (IBAction) switchToStadiumLayoutManager:(id)sender
@@ -846,6 +869,8 @@ static NSArray* fileTypes = nil;
 
 - (IBAction) showUserVoiceFeedbackSheet:(id)sender
 {
+    [self removeToolTipWindow];
+    
     [userVoiceFeedbackPanel setFrame:[self.window.contentView frame] display:YES];
     
     [NSApp beginSheet:(NSWindow*)userVoiceFeedbackPanel 
@@ -857,6 +882,8 @@ static NSArray* fileTypes = nil;
 
 - (IBAction) showSampleData:(id)sender
 {
+    [self removeToolTipWindow];
+    
     // Shut down the current engine
     [engineController shutdown];
     [engineController release], engineController = nil;
@@ -893,6 +920,8 @@ static NSArray* fileTypes = nil;
 
 - (IBAction) refreshInfoFromInternetByUPC:(id)sender
 {
+    [self removeToolTipWindow];
+    
     // TODO: DRY on both refreshInfo... functions
     Movie* movieForAction = [self _movieForAction];
     
@@ -916,6 +945,8 @@ static NSArray* fileTypes = nil;
 
 - (IBAction) refreshInfoFromInternetByTitle:(id)sender
 {
+    [self removeToolTipWindow];
+    
     Movie* movieForAction = [self _movieForAction];
     
     if (movieForAction != selectedMovie) {
@@ -938,11 +969,14 @@ static NSArray* fileTypes = nil;
 
 - (IBAction) deleteMovie:(id)sender
 {
+    [self removeToolTipWindow];
     [self deleteCurrentMovie];
 }
 
 - (IBAction) buyFromAmazon:(id)sender
 {
+    [self removeToolTipWindow];
+    
     MovieURL* url = [self getAmazonURL:[self _movieForAction]];
     NSString* urlString = url.url;
     NSURL* nsurl = [NSURL URLWithString:urlString];
@@ -952,6 +986,8 @@ static NSArray* fileTypes = nil;
 
 - (IBAction) burnWithToast:(id)sender
 {
+    [self removeToolTipWindow];
+
     Media* m = nil;
     
     // Get the media
@@ -997,9 +1033,46 @@ static NSArray* fileTypes = nil;
 
 - (IBAction) toggleHideUnavailableMovies:(id)sender
 {
+    [self removeToolTipWindow];
+    
     // This is backwards, no big deal
     BOOL hidden = ![[NSUserDefaults standardUserDefaults] boolForKey:@"HideUnavailableMovies"];
     [self _setUnavailableMoviePredicate:hidden];
+}
+
+- (IBAction) playMovie:(id)sender
+{
+    [self removeToolTipWindow];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexPlayMovie" object:nil];
+}
+
+- (IBAction) focusSearch:(id)sender
+{    
+    [self removeToolTipWindow];
+    [[drawerView window] makeFirstResponder:searchField];        
+}
+
+- (IBAction) goToMultiplexSupport:(id)sender
+{
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://multiplexapp.com/support/"]];
+}
+
+- (IBAction) dontShowTooltipAgain:(id)sender
+{
+    NSView* parentView = [(NSView*)sender superview];
+    
+    if (parentView == searchExplanationView) {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"ShowToolTipSearch"];
+    }
+    
+    [self removeToolTipWindow];
+}
+
+- (IBAction) resetToolTipAlerts:(id)sender
+{
+    // Reset all tooltip stuff
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ShowToolTipSearch"];
+    
 }
 
 #pragma mark Private Methods
@@ -1284,6 +1357,19 @@ static NSArray* fileTypes = nil;
     else {
         self.moviesFilterPredicate = nil;
     }
+}
+
+- (void) _prepareToolTipWindowWithView:(NSView*)view attachedToPoint:(NSPoint)point inWindow:(NSWindow*)window onSide:(MAWindowPosition)position atDistance:(CGFloat)distance
+{
+    tipWindow = [[MAAttachedWindow alloc] initWithView:view 
+                                       attachedToPoint:point 
+                                              inWindow:window 
+                                                onSide:position 
+                                            atDistance:20.0];
+    
+    [tipWindow setAlphaValue:0.0];
+    [[drawerView window] addChildWindow:tipWindow ordered:NSWindowAbove];
+    [[tipWindow animator] setAlphaValue:1.0];
 }
 
 #pragma mark Dragging protocol methods

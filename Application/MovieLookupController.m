@@ -351,6 +351,8 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (IBAction) lookUpByUPCorEAN:(id)sender
 {
+    lastSearchWasByEAN = YES;
+    
     NSMutableString* ean = [NSMutableString stringWithString:[self gtinToSearch]];
     while ([ean length] < 13) {
         [ean insertString:@"0" atIndex:0];
@@ -366,6 +368,8 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 
 - (IBAction) lookUpByTitle:(id)sender
 {
+    lastSearchWasByEAN = NO;
+    
     [self setAmazonQueryResults:nil];
     [self setResultIndex:nil];
     [AmazonQuery amazonQueryWithAccessKey:kAmazonAccessKey titleKeywords:[self titleToSearch] delegate:self userInfo:[Activity activityWithName:@"Looking up by title" userInfo:nil] startImmediately:YES];
@@ -401,7 +405,13 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
 {
     [managedObjectContext rollback];
     [managedObjectContext processPendingChanges];
-    [drawerView setContentView:searchByUPCorEANView];
+    
+    if (lastSearchWasByEAN) {
+        [drawerView setContentView:searchByUPCorEANView];        
+    }
+    else {
+        [drawerView setContentView:searchByTitleView];
+    }
 }
 
 - (void) saveManagedObjectContext

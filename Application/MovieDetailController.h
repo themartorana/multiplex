@@ -20,6 +20,7 @@
     
     IBOutlet WebView* overviewWebView;
     IBOutlet WebView* descriptionWebView;
+    IBOutlet WebView* discsWebView;
     
     IBOutlet MovieDetailDiscsView* discsView;
     

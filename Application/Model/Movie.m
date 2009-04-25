@@ -37,4 +37,9 @@
     return returnCount;
 }
 
+- (NSArray*) discsInOrder {
+    NSSortDescriptor* sort = [[NSSortDescriptor alloc] initWithKey:@"number" ascending:YES];
+    return [[self.allDiscs allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sort]];
+}
+
 @end

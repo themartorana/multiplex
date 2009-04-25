@@ -3,6 +3,19 @@
 
 @implementation Media
 
++ (BOOL) isSelectorExcludedFromWebScript:(SEL)selector {
+    const char* sName = sel_getName(selector);
+    NSString* selectorName = [[[NSString alloc] initWithCString:sName] autorelease];
+    
+    if ([selectorName rangeOfString:@"set"].location == 0) {
+        NSLog(@"Denied permission to %@", selectorName);
+        return YES;
+    }
+    
+    NSLog(@"Granted permission for %@", selectorName);
+    return NO;
+}
+
 @dynamic disc;
 @dynamic tag;
 @dynamic type;

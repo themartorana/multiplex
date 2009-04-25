@@ -98,7 +98,6 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
         ];
         [setIndicatorLayer addSublayer:setInformationLayer];
         
-        
         [movie addObserver:self forKeyPath:@"availableDiscCount" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
         [movie addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
         [movie addObserver:self forKeyPath:@"boxArt.imageData" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];

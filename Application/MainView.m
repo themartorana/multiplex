@@ -3,6 +3,7 @@
 #import "Movie.h"
 #import "MovieLayer.h"
 #import "ButtonLayer.h"
+#import "BoxArt.h"
 #import "MultiplexColorFactory.h"
 #import "StadiumLayoutManager.h"
 #import "LayerBackedButtonView.h"
@@ -13,6 +14,8 @@
 
 #import <Toolkit/Toolkit.h>
 #import <QuartzCore/QuartzCore.h>
+
+#define DiscSimplePboardType @"DiscSimplePboardType"
 
 NSString* const kMultiplexDrawerIsOpenLayoutManagerClass = @"MultiplexDrawerIsOpenLayoutManagerClass";
 NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIsClosedLayoutManagerClass";
@@ -88,7 +91,7 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
 - (void) setFloorLayerLayoutManagerClass:(Class)class
 {
     // Figure out what state we're in and which key to use
-    NSString* userDefaultsKey = kMultiplexDrawerIsClosedLayoutManagerClass;;
+    NSString* userDefaultsKey = kMultiplexDrawerIsClosedLayoutManagerClass;
     if ([drawerView isOpen]) {
         userDefaultsKey = kMultiplexDrawerIsOpenLayoutManagerClass;
     }
@@ -252,6 +255,80 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
 {
     NSNotification* n = [NSNotification notificationWithName:@"MultiplexPlayMovie" object:movieLayer.movie];
     [[NSNotificationCenter defaultCenter] postNotification:n];
+}
+
+- (void) mouseDragged:(NSEvent*)theEvent
+{
+    if (!hoveredMovie || ![applicationController selectedMovie] || ![applicationController isDrawerViewOpen])
+        return;
+    
+    if (hoveredMovie == applicationController.selectedMovie)
+        return;
+    
+    [hoverTimer invalidate], [hoverTimer release], hoverTimer = nil;
+    [hoverInfoView setHidden:YES];
+    
+    // Notify
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"MovieDragInitiated" object:nil];
+    
+    NSPasteboard* pb = [NSPasteboard pasteboardWithName:NSDragPboard];
+    [pb declareTypes:[NSArray arrayWithObject:DiscSimplePboardType] owner:self];
+    [pb setData:[NSData data] forType:DiscSimplePboardType];
+    
+    NSImage* image = nil;
+    CGImageRef cgImage = hoveredMovie.boxArt.image;
+    if (cgImage) {
+        // Use the box art
+        CGSize size = CGSizeMake(100.0, 140.7);
+        image = [[NSImage alloc] initWithSize:NSSizeFromCGSize(size)];
+        [image lockFocus];
+        CGContextRef c = [[NSGraphicsContext currentContext] graphicsPort];
+        CGContextSetAlpha(c, 0.5);
+        CGContextDrawImage(c, CGRectMake(0, 0, 100.0, 140.7), cgImage);
+        CGContextSetAlpha(c, 1.0);
+        [image unlockFocus];
+    }
+    if (!image) {
+        // Do it up generic disc style
+        CGSize size = CGSizeMake(100.0, 100.0);
+        image = [[NSImage alloc] initWithSize:NSSizeFromCGSize(size)];
+        [image lockFocus];
+        CGContextRef c = [[NSGraphicsContext currentContext] graphicsPort];
+        CGContextSetAlpha(c, 0.5);
+        
+        NSData* data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForImageResource:@"disc-dvd-sm.png"]];
+        CFDataRef imgData = (CFDataRef)data;
+        CGDataProviderRef imgDataProvider = CGDataProviderCreateWithCFData(imgData);
+        CGImageRef discImage = CGImageCreateWithPNGDataProvider(imgDataProvider, NULL, true, kCGRenderingIntentDefault);
+        
+        CGContextDrawImage(c, CGRectMake(0, 0, 100.0, 100.0), discImage);
+        CGContextSetAlpha(c, 1.0);
+        [image unlockFocus];
+
+        CFRelease(imgDataProvider);
+        CFRelease(discImage);
+    }
+    
+    // Create the offset
+    NSSize imageSize = [image size];
+    NSPoint mousePoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+    NSPoint imagePoint = NSMakePoint(mousePoint.x - (imageSize.width / 2.0), mousePoint.y - (imageSize.height / 2.0));
+    
+    [self dragImage:image 
+                 at:imagePoint
+             offset:NSMakeSize(0, 0)
+              event:theEvent 
+         pasteboard:pb
+             source:self 
+          slideBack:YES];
+    
+    [image release];
+}
+
+- (void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"MovieDragCompleted" object:nil];
+    //[super draggedImage:anImage endedAt:aPoint operation:operation];
 }
 
 - (void) mouseUp:(NSEvent*)theEvent

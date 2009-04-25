@@ -5,6 +5,8 @@
 #import "MultiplexColorFactory.h"
 #import "ApplicationResources.h"
 #import "MovieDetailController.h"
+#import "DiscDropView.h"
+#import "DiscRenameAndMakeIndependentMovie.h"
 
 #import <Toolkit/Toolkit.h>
 #import <JSONKit/JSONKit.h>
@@ -20,13 +22,11 @@
 @implementation MovieDetailDiscsView (JavascriptHooks)
 
 + (BOOL) isSelectorExcludedFromWebScript:(SEL)selector {
-    if (selector == @selector(signalIsReady)) {
-        return NO;
-    }
-    if (selector == @selector(playDisc:)) {
-        return NO;
-    }
-    if (selector == @selector(reorderDiscs:)) {
+    if (selector == @selector(signalIsReady) ||
+        selector == @selector(playDisc:) ||
+        selector == @selector(reorderDiscs:) ||
+        selector == @selector(removeFromSet:) ||
+        selector == @selector(renameDisc:)) {
         return NO;
     }
     return YES;
@@ -38,6 +38,12 @@
         return @"playDisc";
     if (sel == @selector(reorderDiscs:)) {
         return @"reorderDiscs";
+    }
+    if (sel == @selector(removeFromSet:)) {
+        return @"removeFromSet";
+    }
+    if (sel == @selector(renameDisc:)) {
+        return @"renameDisc";
     }
     return nil;
 }
@@ -60,6 +66,22 @@
     // Load the initial html
     NSString* html = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"discs-tab" ofType:@"html"]];
     [[webView mainFrame] loadHTMLString:html baseURL:[NSURL URLWithString:@""]];
+    
+    dropView = [[DiscDropView alloc] init];
+    [dropView setHidden:YES];
+    [self addSubview:dropView];
+    [dropView setFrame:[webView frame]];
+    
+    NSNotificationCenter* dc = [NSNotificationCenter defaultCenter];
+    [dc addObserver:self selector:@selector(_dragInitiated:) name:@"MovieDragInitiated" object:nil];
+    [dc addObserver:self selector:@selector(_dragCompleted:) name:@"MovieDragCompleted" object:nil];
+    [dc addObserver:self selector:@selector(_combineDidFinish:) name:@"MultiplexCombineMoviesDidFinish" object:nil];
+}
+
+- (void) dealloc
+{
+    [dropView release];
+    [super dealloc];
 }
 
 - (void) setMovie:(Movie*)_selectedMovie
@@ -127,6 +149,80 @@
     return d;
 }
 
+- (void) _dragInitiated:(NSNotification*)notification
+{
+    [dropView setHidden:NO];
+}
+
+- (void) _dragCompleted:(NSNotification*)notification
+{
+    [dropView setHidden:YES];
+    [[self window] makeFirstResponder:webView];
+}
+
+- (void) _combineDidFinish:(NSNotification*)notification
+{
+    if (self.movie) {
+        [self _setUpDiscLayers];
+    }
+}
+
+- (void) _removeFromSetSheetDidEnd:(NSWindow*)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
+{
+    if (returnCode == NSRunStoppedResponse) {
+
+        Disc* d = (Disc*)contextInfo;
+        
+        if (d) {
+            Movie* oldMovie = d.movie;
+            
+            NSManagedObjectContext* moc = [movie managedObjectContext];
+            NSEntityDescription* movieEntity = [NSEntityDescription entityForName:@"Movie" inManagedObjectContext:moc];
+            Movie* m = [[[Movie alloc] initWithEntity:movieEntity insertIntoManagedObjectContext:moc] autorelease];
+            
+            m.title = [renameOrBreakOutField stringValue];
+            d.movie = m;
+            d.number = [NSNumber numberWithInt:1];
+
+            // Now reorder the old movie's discs
+            NSArray* oldMovieDiscs = [oldMovie discsInOrder];
+            for (int i = 0; i < [oldMovieDiscs count]; i++) {
+                Disc* d = [oldMovieDiscs objectAtIndex:i];
+                d.number = [NSNumber numberWithInt:(i + 1)];
+            }
+            
+            NSError* error = nil;
+            [moc save:&error];
+            
+            if (error) {
+                NSLog(@"Error breaking out a new movie.  Error is: %@", [error userInfo]);
+            }
+            
+            [self _setUpDiscLayers];
+        }
+    }
+}
+
+- (void) _renameDiscDidEnd:(NSWindow*)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
+{
+    if (returnCode == NSRunStoppedResponse) {
+        
+        Disc* d = (Disc*)contextInfo;
+        
+        if (d) {
+            d.discTitle = [renameOrBreakOutField stringValue];
+            
+            NSError* error = nil;
+            [[movie managedObjectContext] save:&error];
+            
+            if (error) {
+                NSLog(@"Error renaming a disc.  Error is: %@", [error userInfo]);
+            }
+            
+            [self _setUpDiscLayers];
+        }
+    }
+}
 
 #pragma mark Javascript Calls
 
@@ -170,11 +266,45 @@
     [self _setUpDiscLayers];
 }
 
+- (void) renameDisc:(NSString*)coreDataObjectId
+{
+    Disc* d = [self _discForManagedObjectID:coreDataObjectId];
+    if (d) {
+        [renamePanel prepareForDiscRename];
+        
+        if (d.discTitle) {
+            [renameOrBreakOutField setStringValue:d.discTitle];
+        }
+        else {
+            [renameOrBreakOutField setStringValue:[NSString stringWithFormat:@"Disc %d", [d.number intValue]]];
+        }
+        
+        [NSApp beginSheet:renamePanel 
+           modalForWindow:[self window] 
+            modalDelegate:self 
+           didEndSelector:@selector(_renameDiscDidEnd:returnCode:contextInfo:) 
+              contextInfo:d];
+    }
+}
+
 - (void) removeFromSet:(NSString*)coreDataObjectId
 {
     Disc* d = [self _discForManagedObjectID:coreDataObjectId];
     if (d) {
+        [renamePanel prepareForRemoveFromSet];
         
+        if (d.discTitle) {
+            [renameOrBreakOutField setStringValue:d.discTitle];
+        }
+        else {
+            [renameOrBreakOutField setStringValue:d.movie.title];
+        }
+        
+        [NSApp beginSheet:renamePanel 
+           modalForWindow:[self window] 
+            modalDelegate:self 
+           didEndSelector:@selector(_removeFromSetSheetDidEnd:returnCode:contextInfo:) 
+              contextInfo:d];
     }
 }
 
@@ -197,6 +327,16 @@
                      informativeTextWithFormat:message];
     
     [a runModal];
+}
+
+- (NSUInteger)webView:(WebView *)sender dragDestinationActionMaskForDraggingInfo:(id <NSDraggingInfo>)draggingInfo
+{
+    return WebDragDestinationActionNone;
+}
+
+- (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems
+{
+    return [NSArray array];
 }
 
 @end

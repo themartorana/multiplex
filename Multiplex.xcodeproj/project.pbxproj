@@ -111,6 +111,8 @@
 		55C943180F71916D0071E03C /* NSData+IndyHallLabs.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C943170F71916D0071E03C /* NSData+IndyHallLabs.m */; };
 		55C9F6260EB26A15001B9BCD /* HalfTransparentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C9F6250EB26A15001B9BCD /* HalfTransparentView.m */; };
 		55C9F6430EB26C5A001B9BCD /* LayerBackedButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C9F6420EB26C5A001B9BCD /* LayerBackedButtonView.m */; };
+		55D230990FA39FB900873AFF /* DiscDropView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D230980FA39FB900873AFF /* DiscDropView.m */; };
+		55D2320D0FA3B8CD00873AFF /* DiscRenameAndMakeIndependentMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D2320C0FA3B8CD00873AFF /* DiscRenameAndMakeIndependentMovie.m */; };
 		55D390750E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D390740E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m */; };
 		55D390770E82DE72007413C5 /* Progress.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55D390760E82DE72007413C5 /* Progress.pdf */; };
 		55D9581B0E942EB300E35FF4 /* button-play-down.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55D9581A0E942EB300E35FF4 /* button-play-down.pdf */; };
@@ -608,6 +610,10 @@
 		55C9F6250EB26A15001B9BCD /* HalfTransparentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HalfTransparentView.m; sourceTree = "<group>"; };
 		55C9F6410EB26C5A001B9BCD /* LayerBackedButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerBackedButtonView.h; sourceTree = "<group>"; };
 		55C9F6420EB26C5A001B9BCD /* LayerBackedButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayerBackedButtonView.m; sourceTree = "<group>"; };
+		55D230970FA39FB900873AFF /* DiscDropView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscDropView.h; sourceTree = "<group>"; };
+		55D230980FA39FB900873AFF /* DiscDropView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscDropView.m; sourceTree = "<group>"; };
+		55D2320B0FA3B8CD00873AFF /* DiscRenameAndMakeIndependentMovie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscRenameAndMakeIndependentMovie.h; sourceTree = "<group>"; };
+		55D2320C0FA3B8CD00873AFF /* DiscRenameAndMakeIndependentMovie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscRenameAndMakeIndependentMovie.m; sourceTree = "<group>"; };
 		55D390730E82D692007413C5 /* IndeterminateProgressIndicatorLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndeterminateProgressIndicatorLayer.h; sourceTree = "<group>"; };
 		55D390740E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndeterminateProgressIndicatorLayer.m; sourceTree = "<group>"; };
 		55D390760E82DE72007413C5 /* Progress.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Progress.pdf; sourceTree = "<group>"; };
@@ -1259,6 +1265,10 @@
 				55DCCE810F1530FA00B3DF41 /* HoverInfoView.m */,
 				5574AA570F1E56A700D4AA81 /* StartupSpinnerView.h */,
 				5574AA580F1E56A700D4AA81 /* StartupSpinnerView.m */,
+				55D230970FA39FB900873AFF /* DiscDropView.h */,
+				55D230980FA39FB900873AFF /* DiscDropView.m */,
+				55D2320B0FA3B8CD00873AFF /* DiscRenameAndMakeIndependentMovie.h */,
+				55D2320C0FA3B8CD00873AFF /* DiscRenameAndMakeIndependentMovie.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1979,6 +1989,8 @@
 				5503E8260F9D1A2C00396062 /* FilterSearchFieldCell.m in Sources */,
 				5503E8AE0F9D215000396062 /* MAAttachedWindow.m in Sources */,
 				5503E8E50F9D290700396062 /* MovieDetailDiscsView.m in Sources */,
+				55D230990FA39FB900873AFF /* DiscDropView.m in Sources */,
+				55D2320D0FA3B8CD00873AFF /* DiscRenameAndMakeIndependentMovie.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

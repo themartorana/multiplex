@@ -20,6 +20,7 @@ NSString* const URL_PREFIX = @"multiplex://";
     
     [webView setFrameLoadDelegate:self];
     [webView setPolicyDelegate:self];
+    [webView setUIDelegate:self];
 
     //[self setWantsLayer:YES];
     //[[self layer] setBackgroundColor:[MultiplexColorFactory whiteOneQuarterTransparent]];
@@ -77,6 +78,11 @@ NSString* const URL_PREFIX = @"multiplex://";
     }
     
     [super setHidden:NO];
+}
+
+- (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems
+{
+    return [NSArray array];
 }
 
 - (void) setHidden:(BOOL)hidden

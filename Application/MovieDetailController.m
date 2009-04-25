@@ -69,6 +69,7 @@
     [overviewWebView setEditable:NO];
     [overviewWebView setDrawsBackground:NO];
     [overviewWebView setPreferences:[ApplicationResources movieDescriptionWebPreferences]];
+    [overviewWebView setUIDelegate:self];
     
     [playButtonView setButtonLayerButtonWithUpState:[ApplicationResources playButton] andDownState:[ApplicationResources playButtonDown]];
     [playButtonView setNotificationNameToPost:@"MultiplexPlayMovie"];
@@ -173,6 +174,16 @@
 {
     NSString* newHtml = [(id)[[[[[descriptionWebView mainFrame] DOMDocument] documentElement] getElementsByTagName:@"body"] item:0] innerHTML];
     [self _rebuildSynopsisHtml:newHtml];
+}
+
+- (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems
+{
+    if (sender == overviewWebView) {
+        return [NSArray array];        
+    }
+    else {
+        return defaultMenuItems;
+    }
 }
 
 - (void) setMovie:(Movie*)_movie
@@ -285,6 +296,7 @@
     int index = [[infoTabView tabViewItems] indexOfObject:discsTabViewItem];
     [tabSelector setSelectedSegment:index];
     [infoTabView selectTabViewItemAtIndex:index];
+    [[discsWebView window] makeFirstResponder:discsWebView];
 }
 
 - (NSArray*) registeredDragTypesForDragDropTargetView:(DragDropTargetView*)sender

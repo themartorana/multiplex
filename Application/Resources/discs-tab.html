@@ -41,14 +41,11 @@
                     
                     // Append the title
                     var dTitle = null;
-                    if (disc.isDVD == "NO") {
-                        dTitle = movie.title;
-                    }
-                    else if (disc.title != "" && disc.title != null) {
+                    if (disc.title != "" && disc.title != null) {
                         dTitle = disc.title;
                     }
                     else { 
-                        if (discs.length == 1) {
+                        if (disc.isDVD == "NO" || discs.length == 1) {
                             dTitle = movie.title;
                         }
                         else {
@@ -58,7 +55,7 @@
                     li.append(jQuery("<div></div>").addClass("pos").append(dTitle));
 
                     // Append the synopsis
-                    li.append(jQuery("<div></div>").addClass("desc").append(disc.synopsis));
+                    //li.append(jQuery("<div></div>").addClass("desc").append(disc.synopsis));
                     
                     // Append the options
                     var menu = jQuery("<div></div>").addClass("menu");
@@ -76,9 +73,20 @@
                     if (discs.length > 1) {
                         // Add Drag, somehow...
                         ul.append(jQuery("<li></li>").addClass("option drag").append("&larr;&nbsp;Drag to Reorder&nbsp;&rarr;"));
-                                            
+                           
+                        // Add Rename
+                        var renameButton = jQuery("<li></li>").addClass("option").append("Rename Disc");
+                        ul.append(renameButton);
+                        renameButton.bind("click", disc, function(e) {
+                            mplex.renameDisc(e.data.objectID);
+                        });
+                                                                              
                         // Add Drop From Set
-                        ul.append(jQuery("<li></li>").addClass("option").append("Drop From Set"));
+                        var dropFromSetButton = jQuery("<li></li>").addClass("option").append("Drop From Set");
+                        ul.append(dropFromSetButton);
+                        dropFromSetButton.bind("click", disc, function(e) {
+                            mplex.removeFromSet(e.data.objectID);
+                        });
                     }
 
                     // Add Send To Trash
@@ -98,6 +106,7 @@
                 handle : '.drag', 
                 axis: 'x',
                 tolerance: 'pointer',
+                containment: $('.set'),
                 update : function () { 
                   var orderArray = $('#discs').sortable('toArray'); 
                   mplex.reorderDiscs(orderArray);

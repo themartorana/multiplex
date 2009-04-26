@@ -377,6 +377,7 @@
         NSMutableString* htmlString = [NSMutableString string];
 
         // Set up the synopsis
+        [htmlString appendString:@"<div id=\"overview\">"];
         [htmlString appendString:@"<div id=\"description_synopsis_info\">"];
         [htmlString appendFormat:@"<div id=\"description_synopsis_header\">%@</div>", @"Synopsis"];
         [htmlString appendFormat:@"<div id=\"description_synopsis\">%@</div>", movie.synopsis ? movie.synopsis : noSynopsis];
@@ -433,6 +434,7 @@
             }
         }
         
+        [htmlString appendString:@"</div>"];
         [htmlString appendString:@"</div>"];
         
         return htmlString;

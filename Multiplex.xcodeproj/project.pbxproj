@@ -72,6 +72,10 @@
 		55570B9D0EB5A0970051D576 /* coverflow-view.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55570B970EB5A0970051D576 /* coverflow-view.pdf */; };
 		55570B9E0EB5A0970051D576 /* collapse-screen.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55570B980EB5A0970051D576 /* collapse-screen.pdf */; };
 		55581D760ED48F03004762BF /* search-result-no-image.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55581D750ED48F03004762BF /* search-result-no-image.pdf */; };
+		5559878C0FA4EFA500B4C77C /* Multiplex.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5559878B0FA4EFA500B4C77C /* Multiplex.xcdatamodeld */; };
+		5559879B0FA4F14200B4C77C /* betaToOnePointZero.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 5559879A0FA4F14200B4C77C /* betaToOnePointZero.xcmappingmodel */; };
+		5559882F0FA4FBAB00B4C77C /* Multiplex.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = F9BBEA500F1EFB7500667CAB /* Multiplex.xcdatamodel */; };
+		555988300FA4FBAB00B4C77C /* MultiplexOnePointZero.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 5559878D0FA4EFA500B4C77C /* MultiplexOnePointZero.xcdatamodel */; };
 		556550D90EAE7FD600265A45 /* StadiumLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 55654E7A0EAD97D400265A45 /* StadiumLayoutManager.m */; };
 		556B15630EC0A8AC001B5E74 /* row-view.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 556B15620EC0A8AC001B5E74 /* row-view.pdf */; };
 		556BD78C0E9444ED00EC698A /* WorkingStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 556BD78B0E9444ED00EC698A /* WorkingStatusView.m */; };
@@ -194,7 +198,6 @@
 		F9B8DB370EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.h in Headers */ = {isa = PBXBuildFile; fileRef = F9B8DB350EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F9B8DB380EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B8DB360EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.m */; };
 		F9B8E1970EB25628008589F3 /* LinearLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F9B8E1960EB25628008589F3 /* LinearLayoutManager.m */; };
-		F9BBEA510F1EFB7500667CAB /* Multiplex.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = F9BBEA500F1EFB7500667CAB /* Multiplex.xcdatamodel */; };
 		F9C2B0300E7B919B00474D97 /* JSONKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9C2AE590E7B747B00474D97 /* JSONKit.framework */; };
 		F9CA172A0E7C727C0049CD3E /* Movie.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CA17290E7C727C0049CD3E /* Movie.m */; };
 		F9CA172E0E7C72930049CD3E /* Disc.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CA172D0E7C72930049CD3E /* Disc.m */; };
@@ -554,6 +557,8 @@
 		55570B970EB5A0970051D576 /* coverflow-view.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "coverflow-view.pdf"; sourceTree = "<group>"; };
 		55570B980EB5A0970051D576 /* collapse-screen.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "collapse-screen.pdf"; sourceTree = "<group>"; };
 		55581D750ED48F03004762BF /* search-result-no-image.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "search-result-no-image.pdf"; sourceTree = "<group>"; };
+		5559878D0FA4EFA500B4C77C /* MultiplexOnePointZero.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MultiplexOnePointZero.xcdatamodel; sourceTree = "<group>"; };
+		5559879A0FA4F14200B4C77C /* betaToOnePointZero.xcmappingmodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcmappingmodel; path = betaToOnePointZero.xcmappingmodel; sourceTree = "<group>"; };
 		55654E790EAD97D400265A45 /* StadiumLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StadiumLayoutManager.h; sourceTree = "<group>"; };
 		55654E7A0EAD97D400265A45 /* StadiumLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StadiumLayoutManager.m; sourceTree = "<group>"; };
 		55654E7C0EAD981000265A45 /* MultiplexLayoutManagerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiplexLayoutManagerProtocol.h; sourceTree = "<group>"; };
@@ -1003,7 +1008,8 @@
 		5535DE020E508D3D00A45761 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				F9BBEA500F1EFB7500667CAB /* Multiplex.xcdatamodel */,
+				5559878B0FA4EFA500B4C77C /* Multiplex.xcdatamodeld */,
+				5559879A0FA4F14200B4C77C /* betaToOnePointZero.xcmappingmodel */,
 				55F83CFB0ECE7DDD00C68896 /* Participant.h */,
 				55F83CFC0ECE7DDD00C68896 /* Participant.m */,
 				F9B8D68E0EB0BFCD008589F3 /* BoxArt.h */,
@@ -1981,7 +1987,7 @@
 				55DCCE820F1530FA00B3DF41 /* HoverInfoView.m in Sources */,
 				55230CD50F1D7C4500A23E54 /* MultiplexResourceURLProtocol.m in Sources */,
 				5574AA590F1E56A700D4AA81 /* StartupSpinnerView.m in Sources */,
-				F9BBEA510F1EFB7500667CAB /* Multiplex.xcdatamodel in Sources */,
+				5559878C0FA4EFA500B4C77C /* Multiplex.xcdatamodeld in Sources */,
 				55F1CF9A0F2FB7F0002CD731 /* MainWindowContentView.m in Sources */,
 				55AB54B70F3CF66B00BED2B7 /* PreferencesWindow.m in Sources */,
 				55AB54F10F3CFEF700BED2B7 /* PreferencesWindowController.m in Sources */,
@@ -1991,6 +1997,9 @@
 				5503E8E50F9D290700396062 /* MovieDetailDiscsView.m in Sources */,
 				55D230990FA39FB900873AFF /* DiscDropView.m in Sources */,
 				55D2320D0FA3B8CD00873AFF /* DiscRenameAndMakeIndependentMovie.m in Sources */,
+				5559879B0FA4F14200B4C77C /* betaToOnePointZero.xcmappingmodel in Sources */,
+				5559882F0FA4FBAB00B4C77C /* Multiplex.xcdatamodel in Sources */,
+				555988300FA4FBAB00B4C77C /* MultiplexOnePointZero.xcdatamodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2948,6 +2957,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		5559878B0FA4EFA500B4C77C /* Multiplex.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				F9BBEA500F1EFB7500667CAB /* Multiplex.xcdatamodel */,
+				5559878D0FA4EFA500B4C77C /* MultiplexOnePointZero.xcdatamodel */,
+			);
+			currentVersion = 5559878D0FA4EFA500B4C77C /* MultiplexOnePointZero.xcdatamodel */;
+			path = Multiplex.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 }

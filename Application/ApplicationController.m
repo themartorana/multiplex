@@ -1131,13 +1131,15 @@ static NSArray* fileTypes = nil;
     NSError* error = nil;
     NSFileManager* fileManager = [NSFileManager defaultManager];
     
-    managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Multiplex" ofType:@"mom"]]];
+    managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"MultiplexOnePointZero" ofType:@"mom"]]];
     persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
     
-    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabaseFile] options:nil error:&error]) {
+    NSDictionary* pscOptions = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSMigratePersistentStoresAutomaticallyOption];
+    
+    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabaseFile] options:pscOptions error:&error]) {
         if (!isSample) {
             [fileManager removeItemAtPath:pathToDatabaseFile error:nil];
-            if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabaseFile] options:nil error:&error]) {
+            if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabaseFile] options:pscOptions error:&error]) {
                 [NSException raise:NSStringFromClass([self class]) format:@"Unable to create a fresh database."];
             }
         }

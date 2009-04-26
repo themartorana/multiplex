@@ -129,6 +129,15 @@ static CGImageRef _createCGImageFromFile(NSString* path);
     return color;
 }
 
++ (CGColorRef) setIndicatorColor
+{
+    static CGColorRef color = NULL;
+    if (!color) {
+        color = CGColorCreateGenericRGB(31.0/255.0, 31.0/255.0, 31.0/255.0, 1.0);        
+    }
+    return color;
+}
+
 + (CGColorRef) unhoveredGrayForDisc
 {
     static CGColorRef color = NULL;

@@ -6,12 +6,15 @@
 #import "IndeterminateProgressIndicatorLayer.h"
 #import "Activity.h"
 #import "MultiplexColorFactory.h"
+#import "NSColor+IndyHallLabs.h"
+#import "NSBezierPath+IndyHallLabs.h"
 
 static void glossInterpolation(void *info, const float *input, float *output);
 static float perceptualGlossFractionForColor(float *inputComponents);
 static void perceptualCausticColorForColor(float *inputComponents, float *outputComponents);
 static void drawGlossGradient(CGContextRef context, NSColor *color, NSRect inRect);
-static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title); 
+static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title);
+static void drawSetNumberLayer(CGContextRef context, NSRect inRect, int numberOfDiscs);
 
 @implementation MovieLayer
 
@@ -65,39 +68,39 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
 
         setIndicatorLayer = [CALayer layer];
         setIndicatorLayer.delegate = self;
-        setIndicatorLayer.backgroundColor = [MultiplexColorFactory black];
-        setIndicatorLayer.cornerRadius = 15.0;
-        setIndicatorLayer.shadowColor = [MultiplexColorFactory black];
-        setIndicatorLayer.shadowOffset = CGSizeMake(0.0, -5.0);
-        setIndicatorLayer.shadowRadius = 2.0;
-        setIndicatorLayer.shadowOpacity = 0.9;
-        setIndicatorLayer.hidden = YES;
-        setIndicatorLayer.borderColor = [MultiplexColorFactory white];
-        setIndicatorLayer.borderWidth = 1.0;
+        //setIndicatorLayer.backgroundColor = [MultiplexColorFactory setIndicatorColor];
+        //setIndicatorLayer.cornerRadius = 5.0;
+        //setIndicatorLayer.shadowColor = [MultiplexColorFactory black];
+        //setIndicatorLayer.shadowOffset = CGSizeMake(-5.0, 5.0);
+        //setIndicatorLayer.shadowRadius = 0.0;
+        //setIndicatorLayer.shadowOpacity = 1.0;
+        //setIndicatorLayer.hidden = YES;
+        //setIndicatorLayer.borderColor = [MultiplexColorFactory white];
+        //setIndicatorLayer.borderWidth = 1.0;
         setIndicatorLayer.constraints = [NSArray arrayWithObjects:
-             [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
-             [CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY offset:10.0],
-             [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0.60 offset:0],
-             [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0 offset:40.0],
+             [CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX offset:30.0],
+             [CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY offset:-30.0],
+             [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0 offset:80.0],
+             [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0 offset:80.0],
              nil
         ];
-        setIndicatorLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
+        //setIndicatorLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
         [self addSublayer:setIndicatorLayer];     
         
-        setInformationLayer = [CATextLayer layer];
-        setInformationLayer.font = [NSFont boldSystemFontOfSize:30.0];
-        setInformationLayer.fontSize = 30.0;
+        /*setInformationLayer = [CATextLayer layer];
+        setInformationLayer.font = [NSFont boldSystemFontOfSize:45.0];
+        setInformationLayer.fontSize = 45.0;
         setInformationLayer.foregroundColor = [MultiplexColorFactory white];
         setInformationLayer.alignmentMode = kCAAlignmentCenter;
         setInformationLayer.constraints = [NSArray arrayWithObjects:
              [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
-             [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY offset:-2.0],
+             [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY offset:-15.0],
              [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth],
              [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight],
              nil
         ];
         [setIndicatorLayer addSublayer:setInformationLayer];
-        
+        */
         [movie addObserver:self forKeyPath:@"availableDiscCount" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
         [movie addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
         [movie addObserver:self forKeyPath:@"boxArt.imageData" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
@@ -107,9 +110,12 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
 
 - (void) dealloc
 {
-    [movie removeObserver:self forKeyPath:@"availableDiscCount"];
-    [movie removeObserver:self forKeyPath:@"title"];
-    [movie removeObserver:self forKeyPath:@"boxArt.imageData"];
+    if (movie) {
+        [movie removeObserver:self forKeyPath:@"availableDiscCount"];
+        [movie removeObserver:self forKeyPath:@"title"];
+        [movie removeObserver:self forKeyPath:@"boxArt.imageData"];
+    }
+
     [movie release];
     [boxArtImage release];
     [super dealloc];
@@ -135,6 +141,8 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
     } else if (layer == gradientLayer) {
         drawGlossGradient(c, [NSColor colorWithDeviceRed:0.05f green:0.05f blue:0.05f alpha:1.0], NSRectFromCGRect(self.bounds));
         drawTitleLayer(c, NSRectFromCGRect(self.bounds), movieTitle);
+    } else if (layer == setIndicatorLayer) {
+        drawSetNumberLayer(c, NSRectFromCGRect(setIndicatorLayer.bounds), [[movie allDiscs] count]);
     }
 }
 
@@ -162,7 +170,7 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
         }
         
         if (availableDiscCount > 1) {
-            setInformationLayer.string = [NSString stringWithFormat:@"%d %@", availableDiscCount, @"disc set"];
+            //setInformationLayer.string = [NSString stringWithFormat:@"%d", availableDiscCount];
             setIndicatorLayer.hidden = NO;
             [setIndicatorLayer setNeedsDisplay];
         }
@@ -327,6 +335,47 @@ void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
                                   height);
     
     [title drawInRect:titleRect withAttributes:atts];
+    [pStyle release];
+    
+    [NSGraphicsContext restoreGraphicsState];
+}
+
+void drawSetNumberLayer(CGContextRef context, NSRect inRect, int numberOfDiscs)
+{
+    NSGraphicsContext *nsContext = [NSGraphicsContext graphicsContextWithGraphicsPort:context flipped:NO];
+    [NSGraphicsContext saveGraphicsState];
+    [NSGraphicsContext setCurrentContext:nsContext];
+    
+    // Draw black
+    NSBezierPath* path = [NSBezierPath bezierPathWithRoundedRect:inRect cornerRadius:5.0];
+    [path fill];
+    
+    // Draw gray
+    [[NSColor colorWithRGBIn0To255ValuesForRed:31.0 green:31.0 blue:31.0 alpha:255.0] set];
+    NSRect rectToFill = NSMakeRect(5.0, 5.0, inRect.size.width - 10.0, inRect.size.height- 8.0);
+    path = [NSBezierPath bezierPathWithRoundedRect:rectToFill cornerRadius:5.0];
+    [path fill];
+
+    // Draw text
+    NSMutableParagraphStyle* pStyle = [[NSMutableParagraphStyle alloc] init];
+    [pStyle setParagraphStyle:[NSParagraphStyle defaultParagraphStyle]];
+    [pStyle setAlignment:NSCenterTextAlignment];
+    
+    NSDictionary* atts = [NSDictionary dictionaryWithObjectsAndKeys:
+                          pStyle, NSParagraphStyleAttributeName,
+                          [NSColor colorWithCalibratedWhite:1.0 alpha:1.0], NSForegroundColorAttributeName,
+                          [NSFont boldSystemFontOfSize:45.0], NSFontAttributeName,
+                          nil];
+    
+    
+    float width = (CGFloat)inRect.size.width * 0.9;
+    float height = (CGFloat)inRect.size.height * 0.9;
+    NSRect titleRect = NSMakeRect(((CGFloat)inRect.size.width - width) / 2.0, 
+                                  ((CGFloat)inRect.size.height - height) / 2.0 - 10.0,
+                                  width, 
+                                  height);
+    
+    [[NSString stringWithFormat:@"%d", numberOfDiscs] drawInRect:titleRect withAttributes:atts];
     [pStyle release];
     
     [NSGraphicsContext restoreGraphicsState];

@@ -70,18 +70,20 @@
                         mplex.playDisc(e.data.objectID);
                     });
                     
+                    // Add Drag
                     if (discs.length > 1) {
-                        // Add Drag, somehow...
                         ul.append(jQuery("<li></li>").addClass("option drag").append("&larr;&nbsp;Drag to Reorder&nbsp;&rarr;"));
-                           
-                        // Add Rename
-                        var renameButton = jQuery("<li></li>").addClass("option").append("Rename Disc");
-                        ul.append(renameButton);
-                        renameButton.bind("click", disc, function(e) {
-                            mplex.renameDisc(e.data.objectID);
-                        });
-                                                                              
-                        // Add Drop From Set
+                    }
+                    
+                    // Add Rename
+                    var renameButton = jQuery("<li></li>").addClass("option").append("Rename Disc");
+                    ul.append(renameButton);
+                    renameButton.bind("click", disc, function(e) {
+                        mplex.renameDisc(e.data.objectID);
+                    });
+                    
+                    // Add Drop From Set
+                    if (discs.length > 1) {
                         var dropFromSetButton = jQuery("<li></li>").addClass("option").append("Drop From Set");
                         ul.append(dropFromSetButton);
                         dropFromSetButton.bind("click", disc, function(e) {

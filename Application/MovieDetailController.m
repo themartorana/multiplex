@@ -330,7 +330,7 @@
     }
 }
 
-- (BOOL) dragDropTargetView:(DragDropTargetView*)sender acceptDragForPasteboard:(NSPasteboard*)pasteBoard
+- (BOOL) dragDropTargetView:(DragDropTargetView*)sender acceptDragForPasteboard:(NSPasteboard*)pasteBoard fromSender:(id <NSDraggingInfo>)dragSender
 {
     NSURL* url = nil;
     NSString* item = nil;

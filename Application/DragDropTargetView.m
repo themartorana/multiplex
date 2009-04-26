@@ -87,8 +87,8 @@
 
     NSPasteboard *pb = [sender draggingPasteboard];
     BOOL acceptDragOperation = NO;
-    if ([delegate respondsToSelector:@selector(dragDropTargetView:acceptDragForPasteboard:)]) {
-        acceptDragOperation = [delegate dragDropTargetView:self acceptDragForPasteboard:pb];
+    if ([delegate respondsToSelector:@selector(dragDropTargetView:acceptDragForPasteboard:fromSender:)]) {
+        acceptDragOperation = [delegate dragDropTargetView:self acceptDragForPasteboard:pb fromSender:sender];
     }
     return acceptDragOperation;
 }

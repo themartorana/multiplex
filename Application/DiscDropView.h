@@ -1,6 +1,7 @@
 #import <Cocoa/Cocoa.h>
+#import "DragDropTargetView.h"
 
-@interface DiscDropView : NSView {
+@interface DiscDropView : DragDropTargetView {
 }
 
 @end

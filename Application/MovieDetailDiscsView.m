@@ -100,36 +100,38 @@
 
 - (void) _setUpDiscLayers
 {
-    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-    NSMutableArray* arr = [NSMutableArray array];
-    
-    // Loop the discs
-    for (Disc* disc in [movie discsInOrder]) {
-        NSMutableDictionary* discDict = [NSMutableDictionary dictionary];
-        [discDict setValue:disc.number forKey:@"number"];
-        [discDict setValue:(disc.discTitle ? disc.discTitle : [NSString stringWithFormat:@"Disc %i", [disc.number intValue]]) forKey:@"title"];
-        [discDict setValue:disc.synopsis forKey:@"synopsis"];
-        [discDict setValue:[NSString stringWithFormat:@"%@", [[[disc objectID] URIRepresentation] absoluteURL]] forKey:@"objectID"];
+    if (movie) {
+        NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+        NSMutableArray* arr = [NSMutableArray array];
+        
+        // Loop the discs
+        for (Disc* disc in [movie discsInOrder]) {
+            NSMutableDictionary* discDict = [NSMutableDictionary dictionary];
+            [discDict setValue:disc.number forKey:@"number"];
+            [discDict setValue:(disc.discTitle ? disc.discTitle : [NSString stringWithFormat:@"Disc %i", [disc.number intValue]]) forKey:@"title"];
+            [discDict setValue:disc.synopsis forKey:@"synopsis"];
+            [discDict setValue:[NSString stringWithFormat:@"%@", [[[disc objectID] URIRepresentation] absoluteURL]] forKey:@"objectID"];
 
-        BOOL isDVD = YES;
-        for (Media* m in [disc.allMedia allObjects]) {
-            if (![m.type isEqualToString:@"public.dvdmedia"] && ![m.type isEqualToString:@"SAMPLE_DATA"]) {
-                isDVD = NO;
-                break;
+            BOOL isDVD = YES;
+            for (Media* m in [disc.allMedia allObjects]) {
+                if (![m.type isEqualToString:@"public.dvdmedia"] && ![m.type isEqualToString:@"SAMPLE_DATA"]) {
+                    isDVD = NO;
+                    break;
+                }
             }
+
+            [discDict setValue:(isDVD ? @"YES" : @"NO") forKey:@"isDVD"];
+            
+            [arr addObject:discDict];
         }
 
-        [discDict setValue:(isDVD ? @"YES" : @"NO") forKey:@"isDVD"];
+        [dict setObject:movie.title forKey:@"title"];
+        [dict setObject:arr forKey:@"discs"];
         
-        [arr addObject:discDict];
+        // Send it to the JS
+        id a = [webView windowScriptObject];
+        [a callWebScriptMethod:@"resetDiscs" withArguments:[NSArray arrayWithObject:[NSString stringWithObjectAsJSON:dict]]];
     }
-
-    [dict setObject:movie.title forKey:@"title"];
-    [dict setObject:arr forKey:@"discs"];
-    
-    // Send it to the JS
-    id a = [webView windowScriptObject];
-    [a callWebScriptMethod:@"resetDiscs" withArguments:[NSArray arrayWithObject:[NSString stringWithObjectAsJSON:dict]]];
 }
 
 - (Disc*) _discForManagedObjectID:(NSString*)coreDataObjectId

@@ -120,7 +120,11 @@ static void drawTitleLayer(CGContextRef context, NSRect inRect, NSString* title)
     if (boxArtImage != _boxArtImage) {
         [boxArtImage release];
         boxArtImage = [_boxArtImage retain];
+        gradientLayer.hidden = YES;
         [boxImageLayer setNeedsDisplay];
+    }
+    else {
+        gradientLayer.hidden = NO;
     }
 }
 

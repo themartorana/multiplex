@@ -10,37 +10,33 @@
 {
     if (self = [super init]) {
         // Register to receive drags
-        [self registerForDraggedTypes:[NSArray arrayWithObject:DiscSimplePboardType]];
+        [self setDelegate:self];
     }
     
     return self;
 }
 
-#pragma mark Dragging Stuff
+#pragma mark DragDropTargetView Delegate Methods
 
-- (NSDragOperation) draggingEntered:(id<NSDraggingInfo>)sender 
+- (NSArray*) registeredDragTypesForDragDropTargetView:(DragDropTargetView*)sender
 {
-    //NSPasteboard* pasteBoard = [sender draggingPasteboard];
-    return NSDragOperationCopy;
-    //return NSDragOperationNone;
+    return [NSArray arrayWithObject:DiscSimplePboardType];
 }
 
-- (void) draggingExited:(id<NSDraggingInfo>)sender
+- (BOOL) dragDropTargetView:(DragDropTargetView*)sender allowDragForPasteboard:(NSPasteboard*)pasteBoard
 {
-    
+    return YES;
 }
 
-- (BOOL) performDragOperation:(id<NSDraggingInfo>)sender 
+- (BOOL) dragDropTargetView:(DragDropTargetView*)sender acceptDragForPasteboard:(NSPasteboard*)pasteBoard fromSender:(id <NSDraggingInfo>)dragSender
 {
-    /*NSPasteboard* pasteBoard = [sender draggingPasteboard];
-    NSArray* fileNames = [pasteBoard propertyListForType:DiscSimplePboardType];
-    NSLog(@"%@", fileNames);*/
-    MainView* mv = (MainView*)[sender draggingSource];
+    MainView* mv = (MainView*)[dragSender draggingSource];
     Movie* m = mv.hoveredMovie;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexCombineMoviesIntoSet" object:m];
     
     return YES;
 }
+
 
 @end

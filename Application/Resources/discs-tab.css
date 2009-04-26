@@ -1,29 +1,23 @@
 body {
-	/*background: #333;*/
 	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     overflow: hidden;
-}
-.wrapper {
-	width: 100%;
-	margin-right: auto;
-	margin-left: auto;
+	margin: 0;
+	padding: 0;
 }
 .set {
-	width: 800px;
-	height: 340px;
-	margin-bottom: 20px;
-    margin-left: auto;
-    margin-right: auto;
-	-webkit-margin-collapse: separate;
-	background: #666;
+	width: 790px;
+	height: 347px;
+	background: #262626;
 	-webkit-border-radius: 10px;
+	-webkit-margin-collapse: separate;
 }
 .set .discs {
-	min-width: 780px;
+	min-width: 790px;
+	height: 347px;
 	overflow-x: auto;
 	overflow-y: hidden;
-	margin: 20px 10px;
-	padding: 20px 0;
+	margin: 0;
+	padding: 0;
 	text-align: center;
 	list-style-type: none;
 	white-space: nowrap;
@@ -32,14 +26,14 @@ body {
 	position: relative;
 	display: inline-block;
 	vertical-align: top;
-	width: 196px;
-	max-height: 280px;
-	-webkit-border-radius: 10px;
+	width: 170px;
+	height: 250px;
 	overflow: hidden;
+	margin-top: 30px;
+	-webkit-border-radius: 10px;
 	padding: 10px 10px 20px 10px;
 	color: rgb(255,255,255);
 	text-align: center;
-	/*white-space: normal;*/
 }
 .disc a {
 	display: block;
@@ -50,8 +44,8 @@ body {
 }
 .disc img {
 	display: inline-block;
-	width: 180px;
-	height: 180px;
+	width: 158px;
+	height: 158px;
 	border: 0;
 	margin-bottom: 10px;
 }
@@ -96,18 +90,22 @@ body {
 }
 .disc .menu .option.play {
 	-webkit-border-radius: 6px;
+	border-bottom: 1px solid rgba(246,106,38,1);
 	padding: 12px 0 13px;
-	background: -webkit-gradient(linear, left bottom, left top, color-stop(.25, rgba(3,156,41,.95)), color-stop(1, rgba(0,200,0,.75)));
+	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgba(224,90,31,.85)), color-stop(1, rgba(246,106,38,1)));
 	font-size: 24px;
 	font-weight: bold;
-	text-shadow: 0 1px 1px rgba(3,156,41,1);
+	text-shadow: 0 1px 1px rgba(0,0,0,.5);
 }
 .disc .menu .option.play:hover {
-	background: rgba(0,200,0,.95);
+	background: rgba(246,106,38,1)
 }
 .disc .menu .option.drag {
 	background: -webkit-gradient(linear, left bottom, left top, color-stop(.25, rgba(255,255,255,.95)), color-stop(1, rgba(255,255,255,.75)));
 	color: rgba(13,13,13,1);
+}
+.disc .menu .option.drag:hover {
+	background: rgba(255,255,255,1);
 }
 
 /* SCROLLBARS */
@@ -117,9 +115,6 @@ body {
 }
 ::-webkit-scrollbar-track-piece:disabled {
 	display: none !important;
-}
-::-webkit-scrollbar-track:disabled {
-	margin: 1px;
 }
 ::-webkit-scrollbar:horizontal {
 	-webkit-border-image: url(multiplexresource://horizontal-button.png) 0 12 0 12;

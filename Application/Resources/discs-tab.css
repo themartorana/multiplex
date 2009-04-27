@@ -49,9 +49,10 @@ body {
 	border: 0;
 	margin-bottom: 10px;
 }
+.disc .pos,
 .disc .pos {
 	display: block;
-	font-size: 2em;
+	font-size: 18px;
     white-space: normal;
 }
 .disc .menu {

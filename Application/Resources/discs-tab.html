@@ -90,17 +90,17 @@
                         mplex.renameDisc(e.data.objectID);
                     });
                     
-                    // Add Drop From Set
+                    // Add Remove From Set
                     if (discs.length > 1) {
-                        var dropFromSetButton = jQuery("<li></li>").addClass("option").append("Drop From Set");
-                        ul.append(dropFromSetButton);
-                        dropFromSetButton.bind("click", disc, function(e) {
+                        var removeFromSetButton = jQuery("<li></li>").addClass("option").append("Remove From Set");
+                        ul.append(removeFromSetButton);
+                        removeFromSetButton.bind("click", disc, function(e) {
                             mplex.removeFromSet(e.data.objectID);
                         });
                     }
 
-                    // Add Send To Trash
-                    ul.append(jQuery("<li></li>").addClass("option").append("Send to Trash"));
+                    // Add Remove From Multiplex
+                    ul.append(jQuery("<li></li>").addClass("option").append("Delete Disc From Multiplex"));
                 }
             } 
             catch (err) {

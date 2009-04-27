@@ -259,14 +259,14 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
 
 - (void) mouseDragged:(NSEvent*)theEvent
 {
+    [hoverTimer invalidate], [hoverTimer release], hoverTimer = nil;
+    [hoverInfoView setHidden:YES];
+    
     if (!hoveredMovie || ![applicationController selectedMovie] || ![applicationController isDrawerViewOpen])
         return;
     
     if (hoveredMovie == applicationController.selectedMovie)
         return;
-    
-    [hoverTimer invalidate], [hoverTimer release], hoverTimer = nil;
-    [hoverInfoView setHidden:YES];
     
     // Notify
     [[NSNotificationCenter defaultCenter] postNotificationName:@"MovieDragInitiated" object:nil];

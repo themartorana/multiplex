@@ -1,5 +1,5 @@
 #import "MainWindowContentView.h"
-
+#import "ZoomableWindow.h"
 
 @implementation MainWindowContentView
 
@@ -47,29 +47,15 @@
 
 - (void) toggleFullScreen
 {
-    //[applicationController toggleFullScreen:self];
-    if ([self isInFullScreenMode]) {
-        [self exitFullScreenModeWithOptions:nil];
+    if ([[NSApp mainWindow] isBig]) {
         [toggleFullScreenButton setImage:[NSImage imageNamed:@"NSEnterFullScreenTemplate"]];
     }
     else {
-        [self enterFullScreenMode:[NSScreen mainScreen] withOptions:nil];
         [toggleFullScreenButton setImage:[NSImage imageNamed:@"NSExitFullScreenTemplate"]];
     }
 
-    
-    // TODO: Hacktastic.  Think about using a custom window
-    // SEE: http://cocoadevcentral.com/articles/000028.php
-    [[self window] setAutorecalculatesKeyViewLoop:NO];
-    [[self window] setInitialFirstResponder:mainView];
-    [mainView setNextKeyView:searchField];
-    [searchField setNextKeyView:mainView];
-    
-    [self setNeedsDisplay:YES];
-    
-    NSLog(@"%@", [[self window] firstResponder]);
-    
-    [[self window] makeFirstResponder:mainView];
+    [NSWindow swizzleZoomerMethods];
+    [[NSApp keyWindow] toggleMegaZoom];
 }
 
 - (IBAction) toggleFullScreen:(id)sender

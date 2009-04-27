@@ -24,6 +24,7 @@
 #import "MultiplexResourceURLProtocol.h"
 
 #import "MAAttachedWindow.h"
+#import "ZoomableWindow.h"
 
 #import <QuartzCore/QuartzCore.h>
 #import <Sparkle/Sparkle.h>
@@ -652,7 +653,7 @@ static NSArray* fileTypes = nil;
 
 - (BOOL) isInFullScreen
 {
-    return [[[NSApp mainWindow] contentView] isInFullScreenMode];
+    return [[NSApp mainWindow] isBig];
 }
 
 - (BOOL) isDrawerViewOpen
@@ -680,7 +681,7 @@ static NSArray* fileTypes = nil;
 {
     [mainWindowContentView toggleFullScreen];
     
-    if ([mainWindowContentView isInFullScreenMode]) {
+    if ([self isInFullScreen]) {
         [windowResizeThumb setHidden:YES];
     }
     else {

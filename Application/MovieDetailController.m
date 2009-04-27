@@ -117,6 +117,9 @@
 - (IBAction) selectTab:(id)sender
 {
     [infoTabView selectTabViewItemAtIndex:[sender selectedSegment]];
+    if ([sender selectedSegment] == 0) {
+        [[overviewWebView window] makeFirstResponder:overviewWebView];
+    }
     if ([sender selectedSegment] == 3) {
         [[discsWebView window] makeFirstResponder:discsWebView];
     }
@@ -289,6 +292,9 @@
     int index = [[infoTabView tabViewItems] indexOfObject:overviewTabViewItem];
     [tabSelector setSelectedSegment:index];
     [infoTabView selectTabViewItemAtIndex:index];
+    
+    // This will reset our first responder appropriately
+    [self selectTab:tabSelector];
 }
 
 - (void) showDiscsTab
@@ -297,6 +303,9 @@
     [tabSelector setSelectedSegment:index];
     [infoTabView selectTabViewItemAtIndex:index];
     [[discsWebView window] makeFirstResponder:discsWebView];
+
+    // This will reset our first responder appropriately
+    //[self selectTab:tabSelector];
 }
 
 - (NSArray*) registeredDragTypesForDragDropTargetView:(DragDropTargetView*)sender

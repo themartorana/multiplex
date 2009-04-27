@@ -115,6 +115,8 @@
 		55C943180F71916D0071E03C /* NSData+IndyHallLabs.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C943170F71916D0071E03C /* NSData+IndyHallLabs.m */; };
 		55C9F6260EB26A15001B9BCD /* HalfTransparentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C9F6250EB26A15001B9BCD /* HalfTransparentView.m */; };
 		55C9F6430EB26C5A001B9BCD /* LayerBackedButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C9F6420EB26C5A001B9BCD /* LayerBackedButtonView.m */; };
+		55CD48EF0FA52CDF0095791D /* ZoomableWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 55CD48ED0FA52CDF0095791D /* ZoomableWindow.m */; };
+		55CD49100FA52DC80095791D /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CD490F0FA52DC80095791D /* Carbon.framework */; };
 		55D230990FA39FB900873AFF /* DiscDropView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D230980FA39FB900873AFF /* DiscDropView.m */; };
 		55D2320D0FA3B8CD00873AFF /* DiscRenameAndMakeIndependentMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D2320C0FA3B8CD00873AFF /* DiscRenameAndMakeIndependentMovie.m */; };
 		55D390750E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D390740E82D692007413C5 /* IndeterminateProgressIndicatorLayer.m */; };
@@ -615,6 +617,9 @@
 		55C9F6250EB26A15001B9BCD /* HalfTransparentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HalfTransparentView.m; sourceTree = "<group>"; };
 		55C9F6410EB26C5A001B9BCD /* LayerBackedButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerBackedButtonView.h; sourceTree = "<group>"; };
 		55C9F6420EB26C5A001B9BCD /* LayerBackedButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayerBackedButtonView.m; sourceTree = "<group>"; };
+		55CD48ED0FA52CDF0095791D /* ZoomableWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoomableWindow.m; sourceTree = "<group>"; };
+		55CD48EE0FA52CDF0095791D /* ZoomableWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomableWindow.h; sourceTree = "<group>"; };
+		55CD490F0FA52DC80095791D /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		55D230970FA39FB900873AFF /* DiscDropView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscDropView.h; sourceTree = "<group>"; };
 		55D230980FA39FB900873AFF /* DiscDropView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscDropView.m; sourceTree = "<group>"; };
 		55D2320B0FA3B8CD00873AFF /* DiscRenameAndMakeIndependentMovie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscRenameAndMakeIndependentMovie.h; sourceTree = "<group>"; };
@@ -800,6 +805,7 @@
 				55A8E81D0E9BE18200DC9F35 /* WebKit.framework in Frameworks */,
 				55FC9CA10EB8382000CE3F05 /* Security.framework in Frameworks */,
 				969ECC0E0F9D803F0056572D /* BWToolkitFramework.framework in Frameworks */,
+				55CD49100FA52DC80095791D /* Carbon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -881,6 +887,7 @@
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				55CD490F0FA52DC80095791D /* Carbon.framework */,
 				969ECC0D0F9D803F0056572D /* BWToolkitFramework.framework */,
 				55FC9CA00EB8382000CE3F05 /* Security.framework */,
 				F9B380DB0EAD029700FCAB1E /* SystemConfiguration.framework */,
@@ -1086,6 +1093,8 @@
 		55AB54B30F3CF65300BED2B7 /* Windows */ = {
 			isa = PBXGroup;
 			children = (
+				55CD48ED0FA52CDF0095791D /* ZoomableWindow.m */,
+				55CD48EE0FA52CDF0095791D /* ZoomableWindow.h */,
 				5503E8AC0F9D215000396062 /* MAAttachedWindow.m */,
 				5503E8AD0F9D215000396062 /* MAAttachedWindow.h */,
 				55AB54B50F3CF66B00BED2B7 /* PreferencesWindow.h */,
@@ -2000,6 +2009,7 @@
 				5559879B0FA4F14200B4C77C /* betaToOnePointZero.xcmappingmodel in Sources */,
 				5559882F0FA4FBAB00B4C77C /* Multiplex.xcdatamodel in Sources */,
 				555988300FA4FBAB00B4C77C /* MultiplexOnePointZero.xcdatamodel in Sources */,
+				55CD48EF0FA52CDF0095791D /* ZoomableWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

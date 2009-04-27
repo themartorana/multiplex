@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1594"/>
+			<integer value="1464"/>
 			<integer value="2664"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -1250,7 +1250,7 @@
 																	<string>public.url-name</string>
 																</object>
 															</object>
-															<string key="NSFrame">{{15, 15}, {790, 347}}</string>
+															<string key="NSFrame">{{16, 15}, {788, 347}}</string>
 															<reference key="NSSuperview" ref="471116866"/>
 															<reference key="NSNextKeyView"/>
 															<string key="FrameName"/>
@@ -4558,7 +4558,7 @@
 					<string>{{184, 146}, {370, 120}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{184, 146}, {370, 120}}</string>
-					<integer value="0"/>
+					<reference ref="8"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.brandonwalkin.BWToolkit</string>
@@ -4830,6 +4830,13 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Frameworks/Toolkit/Source/MessageProtocol.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSWindow</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Application/ZoomableWindow.h</string>
 					</object>
 				</object>
 			</object>

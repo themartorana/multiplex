@@ -5,14 +5,14 @@ body {
 	padding: 0;
 }
 .set {
-	width: 790px;
+	width: 788px;
 	height: 347px;
 	background: #262626;
 	-webkit-border-radius: 10px;
 	-webkit-margin-collapse: separate;
 }
 .set .discs {
-	min-width: 790px;
+	min-width: 788px;
 	height: 347px;
 	overflow-x: auto;
 	overflow-y: hidden;
@@ -26,7 +26,7 @@ body {
 	position: relative;
 	display: inline-block;
 	vertical-align: top;
-	width: 170px;
+	width: 177px;
 	height: 250px;
 	overflow: hidden;
 	margin-top: 30px;

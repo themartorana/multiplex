@@ -28,7 +28,11 @@
                     var li = jQuery("<li></li>").addClass("disc").attr("id", disc.objectID);
                     discsOL.append(li);
                     
-                    var img = jQuery("<img></img>");
+                    // Add Drag
+                    if (discs.length > 1) {
+						var drag = jQuery("<div></div>").addClass("drag").append("&larr;&nbsp;Drag&nbsp;&rarr;")
+                        li.append(drag);
+                    }
                     
                     // Append the image
                     if (disc.isDVD == "YES") {
@@ -37,7 +41,7 @@
                     else {
                         imgSrc = "multiplexresource://disc-blank-sm.png";
                     }
-                    li.append(jQuery("<img></img>").attr("src", imgSrc));
+                    li.append(jQuery("<img></img>").addClass("disc-art").attr("src", imgSrc));
                     
                     // Append the title
                     var dTitle = null;
@@ -54,53 +58,55 @@
                     }
                     li.append(jQuery("<div></div>").addClass("pos").append(dTitle));
 
-                    // Append the synopsis
-                    //li.append(jQuery("<div></div>").addClass("desc").append(disc.synopsis));
-                    
-                    // Append the options
+                    // Append the menu
                     var menu = jQuery("<div></div>").addClass("menu");
                     var ul = jQuery("<ul></ul>").addClass("options");
                     menu.append(ul);
                     li.append(menu);
                     
-                    // Add hover capability
-                    li.bind("mouseenter", menu, function(e) {
-                        e.data.fadeIn(50);
-                    });
-                    li.bind("mouseleave", menu, function(e) {
-                        e.data.fadeOut(50);
-                    });
-                    
-                    // Add in play button
-                    var playButton = jQuery("<li></li>").addClass("option play").append("Play");
-                    ul.append(playButton);
-                    playButton.bind("click", disc, function(e) {
-                        mplex.playDisc(e.data.objectID);
-                    });
-                    
-                    // Add Drag
-                    if (discs.length > 1) {
-                        ul.append(jQuery("<li></li>").addClass("option drag").append("&larr;&nbsp;Drag to Reorder&nbsp;&rarr;"));
-                    }
-                    
-                    // Add Rename
-                    var renameButton = jQuery("<li></li>").addClass("option").append("Rename Disc");
+					// Add Rename Button
+                    var renameButton = jQuery("<li></li>").addClass("option rename").text("R").attr("title", "Rename Disc");
                     ul.append(renameButton);
                     renameButton.bind("click", disc, function(e) {
                         mplex.renameDisc(e.data.objectID);
-                    });
-                    
-                    // Add Remove From Set
+                    }).css('cursor', 'pointer');
+					
+                    // Add Remove From Set Button
                     if (discs.length > 1) {
-                        var removeFromSetButton = jQuery("<li></li>").addClass("option").append("Remove From Set");
+                        var removeFromSetButton = jQuery("<li></li>").addClass("option remove").html("&ndash;").attr("title", "Detach From Set");
                         ul.append(removeFromSetButton);
                         removeFromSetButton.bind("click", disc, function(e) {
                             mplex.removeFromSet(e.data.objectID);
-                        });
+                        }).css('cursor', 'pointer');
                     }
-
-                    // Add Remove From Multiplex
-                    ul.append(jQuery("<li></li>").addClass("option").append("Delete Disc From Multiplex"));
+					
+                    // Add Delete From Multiplex
+					var deleteFromAppButton = jQuery("<li></li>").addClass("option delete").text("X").attr("title", "Delete From Multiplex");
+                    ul.append(deleteFromAppButton);
+					deleteFromAppButton.bind("click", disc, function(e) {
+						// mplex.deleteFromApp(e.data.objectID);
+					}).css('cursor', 'pointer');
+                    
+                    // Add Play Button
+                    var playButton = jQuery("<li></li>").addClass("option play").html("&gt;").attr("title", "Play");
+                    ul.append(playButton);
+                    playButton.bind("click", disc, function(e) {
+                        mplex.playDisc(e.data.objectID);
+                    }).css('cursor', 'pointer');
+					
+					// Add Play on Double-Click
+					li.find('img.disc-art').bind("dblclick", disc, function(e) {
+						mplex.playDisc(e.data.objectID);
+					}).css('cursor', 'pointer');
+					
+                    // Add hover fade-in for menu
+                    li.bind("mouseenter", function() {
+                        $(this).find('.menu,.drag').fadeIn('fast');
+                    });
+                    li.bind("mouseleave", function() {
+                        $(this).find('.menu,.drag').fadeOut('fast');
+                    });
+                    
                 }
             } 
             catch (err) {
@@ -116,10 +122,16 @@
                 handle : '.drag', 
                 axis: 'x',
                 tolerance: 'pointer',
-                containment: $('.set'),
+                containment: '.set',
+				start: function (e,ui) {
+					$(ui.helper).find('.menu').fadeOut(50);
+				},
+				end: function (e,ui) {
+					$(ui.helper).find('.menu').fadeIn(50);
+				},
                 update : function () { 
-                  var orderArray = $('#discs').sortable('toArray'); 
-                  mplex.reorderDiscs(orderArray);
+					var orderArray = $('#discs').sortable('toArray'); 
+					mplex.reorderDiscs(orderArray);
                 } 
             });
         });

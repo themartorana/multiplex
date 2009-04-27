@@ -28,19 +28,28 @@ body {
 	vertical-align: top;
 	width: 177px;
 	height: 250px;
-	overflow: hidden;
-	margin-top: 30px;
+	margin: 20px 10px 0 10px;
 	-webkit-border-radius: 10px;
-	padding: 10px 10px 20px 10px;
+	padding: 20px 0px 20px 0px;
 	color: rgb(255,255,255);
 	text-align: center;
 }
-.disc a {
-	display: block;
-	width: 100%;
-	height: 100%;
-	color: #FFF;
-	text-decoration: none;
+
+/* DRAG HANDLE */
+.disc .drag {
+	display: none;
+	position: absolute;
+	left: 50px;
+	right: 50px;
+	top: 0px;
+	background: rgba(255,255,255,.25);
+	color: rgba(13,13,13,1);
+	font-size: 12px;
+	line-height: 24px;
+	cursor: pointer;
+}
+.disc .drag:hover {
+	background: rgba(255,255,255,1);
 }
 .disc img {
 	display: inline-block;
@@ -55,58 +64,37 @@ body {
 	font-size: 18px;
     white-space: normal;
 }
+
+/* MENU ICONS */
 .disc .menu {
 	display: none;
 	position: absolute;
-	top: 0px;
-	right: 0px;
-	bottom: 0px;
-	left: 0px;
+	bottom: 110px;
+	right: 10px;
+	left: 10px;
 	-webkit-border-radius: 10px;
-	background: rgba(0,0,0,.5);
+	background: rgba(0,0,0,.75);
 }
-/*.disc:hover .menu {
-	display: block;
-}*/
 .disc .menu .options {
-	position: absolute;
-	left: 6px;
-	right: 6px;
-	top: 6px;
-	padding: 0;
+	margin: 0;
+	padding: 4px;
 	list-style-type: none;
 }
 .disc .menu .option {
+	display: inline-block;
+	width: 22px;
+	height: 22px;
 	-webkit-border-radius: 5px;
-	padding: 6px 0 7px;
-	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgba(0,0,0,.95)), color-stop(1, rgba(0,0,0,.75)));
-	font-size: 16px;
+	background: green;
+	font-size: 12px;
+	line-height: 22px;
 }
 .disc .menu .option + .option {
-	margin-top: 4px;
+	margin-left: 4px;
 }
 .disc .menu .option:hover {
 	background: rgba(0,0,0,.95);
 	cursor: pointer;
-}
-.disc .menu .option.play {
-	-webkit-border-radius: 6px;
-	border-bottom: 1px solid rgba(246,106,38,1);
-	padding: 12px 0 13px;
-	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgba(224,90,31,.85)), color-stop(1, rgba(246,106,38,1)));
-	font-size: 24px;
-	font-weight: bold;
-	text-shadow: 0 1px 1px rgba(0,0,0,.5);
-}
-.disc .menu .option.play:hover {
-	background: rgba(246,106,38,1)
-}
-.disc .menu .option.drag {
-	background: -webkit-gradient(linear, left bottom, left top, color-stop(.25, rgba(255,255,255,.95)), color-stop(1, rgba(255,255,255,.75)));
-	color: rgba(13,13,13,1);
-}
-.disc .menu .option.drag:hover {
-	background: rgba(255,255,255,1);
 }
 
 /* SCROLLBARS */

@@ -12,53 +12,31 @@ body {
 	height: 347px;
     overflow-x: hidden;
 }
-
-/* SCROLLBARS */
-::-webkit-scrollbar {
-	width: 18px;
-	height: 18px;
-}
-::-webkit-scrollbar-track-piece:disabled {
-	display: none !important;
-}
-::-webkit-scrollbar:vertical {
-	-webkit-border-image: url(multiplexresource://vertical-button.png) 14 0 10 0;
-	border-color: transparent;
-	border-width: 14px 0px 10px;
-}
-::-webkit-scrollbar-thumb:vertical {
-	-webkit-border-image: url(multiplexresource://vertical-thumb.png) 9 0 12 0;
-	border-color: transparent;
-	border-width: 9px 0px 12px;
-	min-height: 80px;
-}
-::-webkit-scrollbar-track-piece:vertical:end {
-	margin-bottom: -3px;
-}
-::-webkit-scrollbar-button {
-	display: none;
+#overview > div {
+	margin-right: 10px;
 }
 
 /* OVERVIEW CONTENT */
-div#multiplex_results_count
-{
-    float: left;
-    background-color: black;
-    -webkit-border-radius: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+div#description_quick_facts {
+	overflow: hidden;
+	margin-bottom: 1em;
+	-webkit-border-radius: 5px;
+	padding: 10px;
+	background: #222;
+	color: #FFF;
+	font-size: 16px;
+    line-height: 16px;
 }
-
-div#multiplex_results_title
-{
-    clear: both;
-    display: block;
-    font-size: 26px;
-    line-height: normal;
-    padding: 10px 0 10px 0;
+div#description_run_time {
+	float: left;
+	width: 50%;
+	text-align: left;
 }
-
-
+div#description_rating {
+	float: right;
+	width: 50%;
+	text-align: right;
+}
 div#description_synopsis_header
 {
     font-weight: bold;
@@ -87,4 +65,50 @@ div#description_directors,
 div#description_actors
 {
 }
+
+/* SCROLLBARS */
+::-webkit-scrollbar {
+	width: 18px;
+	height: 18px;
+}
+::-webkit-scrollbar-track-piece:disabled {
+	display: none !important;
+}
+::-webkit-scrollbar:vertical {
+	-webkit-border-image: url(multiplexresource://vertical-button.png) 14 0 10 0;
+	border-color: transparent;
+	border-width: 14px 0px 10px;
+}
+::-webkit-scrollbar-thumb:vertical {
+	-webkit-border-image: url(multiplexresource://vertical-thumb.png) 9 0 12 0;
+	border-color: transparent;
+	border-width: 9px 0px 12px;
+	min-height: 80px;
+}
+::-webkit-scrollbar-track-piece:vertical:end {
+	margin-bottom: -3px;
+}
+::-webkit-scrollbar-button {
+	display: none;
+}
+
+/* SEARCH RESULTS */
+div#multiplex_results_count
+{
+    float: left;
+    background-color: black;
+    -webkit-border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+div#multiplex_results_title
+{
+    clear: both;
+    display: block;
+    font-size: 26px;
+    line-height: normal;
+    padding: 10px 0 10px 0;
+}
+
 

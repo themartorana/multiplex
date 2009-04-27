@@ -376,21 +376,35 @@
     else {
         NSMutableString* htmlString = [NSMutableString string];
 
-        // Set up the synopsis
-        [htmlString appendString:@"<div id=\"overview\">"];
+        // begin overview
+		[htmlString appendString:@"<div id=\"overview\">"];
+		
+		// begin quick facts
+        [htmlString appendString:@"<div id=\"description_quick_facts\">"];
+			
+		// Running time
+		if (movie.runningTime) {
+			[htmlString appendFormat:@"<div id=\"description_run_time\">%@ %@ %@</div>", @"Running Time:", [movie.runningTime stringValue], @"minutes" ];
+		}
+			
+		// rating
+		if (movie.rating) {
+			[htmlString appendFormat:@"<div id=\"description_rating\">%@ %@</div>", @"Rating:", @"R"]; //[movie.rating stringValue]];
+		}
+		
+        [htmlString appendString:@"</div>"];
+		// end quick facts
+		
+        // begin synopsis
         [htmlString appendString:@"<div id=\"description_synopsis_info\">"];
         [htmlString appendFormat:@"<div id=\"description_synopsis_header\">%@</div>", @"Synopsis"];
         [htmlString appendFormat:@"<div id=\"description_synopsis\">%@</div>", movie.synopsis ? movie.synopsis : noSynopsis];
         [htmlString appendString:@"</div>"];
+		// end synopsis
         
+		// begin secondary info
         [htmlString appendString:@"<div id=\"description_secondary_info\">"];
-        
-        // Running time
-        if (movie.runningTime) {
-            [htmlString appendFormat:@"<div id=\"description_run_time_header\">%@</div>", @"Running Time"];
-            [htmlString appendFormat:@"<div id=\"description_run_time\">%@ %@</div>", [movie.runningTime stringValue], @"minutes"];
-        }
-        
+		
         // Production year
         if (movie.productionYear) {
             [htmlString appendFormat:@"<div id=\"description_production_year_header\">%@</div>", @"Produced in"];
@@ -435,8 +449,11 @@
         }
         
         [htmlString appendString:@"</div>"];
+		// end secondary info
+		
         [htmlString appendString:@"</div>"];
-        
+        // end overview
+		
         return htmlString;
     }
 }

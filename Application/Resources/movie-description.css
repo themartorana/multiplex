@@ -1,69 +1,42 @@
-body
-{
-    margin: 0;
-    padding: 0;
-    margin-right: 5px;
-    color: white;
- 
-    background-image: url(desc_bg.png);
-    
-    overflow-x: hidden;
-    font-family: "Lucida Grande";
+body {
+    overflow: hidden;
+	margin: 0;
+	padding: 0;
+    color: #FFF;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     font-size: 13px;
     line-height: 22px;
 }
-::-webkit-scrollbar {
-    width: 18px;
-    height: 18px;
+#overview {
+	width: 540px;
+	height: 347px;
+    overflow-x: hidden;
 }
-::-webkit-scrollbar-track-piece:disabled {
-    display: none !important;
-}
-::-webkit-scrollbar-track:disabled {
-    margin: 1px; /* ??? */
-}
-::-webkit-scrollbar:vertical {
-    -webkit-border-image: url(multiplexresource://vertical-button.png) 14 9 13 9;
-    border-color: transparent;
-    border-width: 14px 9px 13px;
-}
-::-webkit-scrollbar-thumb:vertical {
-    -webkit-border-image: url(multiplexresource://vertical-thumb.png) 11 9 11 9;
-    border-color: transparent;
-    border-width: 11px 9px;
-    min-height: 80px;
-}
-::-webkit-scrollbar-track-piece:vertical:start:no-button,
-.none::-webkit-scrollbar-track-piece:vertical:start {
-    margin-top: 1px;
-}
-::-webkit-scrollbar-track-piece:vertical:end:no-button,
-.none::-webkit-scrollbar-track-piece:vertical:end {
-    margin-bottom: -2px;
-}
-.none::-webkit-scrollbar-button {
-    display: none;
-}
-div#multiplex_results_count
-{
-    float: left;
-    background-color: black;
-    /*line-height: normal;*/
-    -webkit-border-radius: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+#overview > div {
+	margin-right: 10px;
 }
 
-div#multiplex_results_title
-{
-    clear: both;
-    display: block;
-    font-size: 26px;
-    line-height: normal;
-    padding: 10px 0 10px 0;
+/* OVERVIEW CONTENT */
+div#description_quick_facts {
+	overflow: hidden;
+	margin-bottom: 1em;
+	-webkit-border-radius: 5px;
+	padding: 10px;
+	background: #222;
+	color: #FFF;
+	font-size: 16px;
+    line-height: 16px;
 }
-
-
+div#description_run_time {
+	float: left;
+	width: 50%;
+	text-align: left;
+}
+div#description_rating {
+	float: right;
+	width: 50%;
+	text-align: right;
+}
 div#description_synopsis_header
 {
     font-weight: bold;
@@ -92,3 +65,50 @@ div#description_directors,
 div#description_actors
 {
 }
+
+/* SCROLLBARS */
+::-webkit-scrollbar {
+	width: 18px;
+	height: 18px;
+}
+::-webkit-scrollbar-track-piece:disabled {
+	display: none !important;
+}
+::-webkit-scrollbar:vertical {
+	-webkit-border-image: url(multiplexresource://vertical-button.png) 14 0 10 0;
+	border-color: transparent;
+	border-width: 14px 0px 10px;
+}
+::-webkit-scrollbar-thumb:vertical {
+	-webkit-border-image: url(multiplexresource://vertical-thumb.png) 9 0 12 0;
+	border-color: transparent;
+	border-width: 9px 0px 12px;
+	min-height: 80px;
+}
+::-webkit-scrollbar-track-piece:vertical:end {
+	margin-bottom: -3px;
+}
+::-webkit-scrollbar-button {
+	display: none;
+}
+
+/* SEARCH RESULTS */
+div#multiplex_results_count
+{
+    float: left;
+    background-color: black;
+    -webkit-border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+div#multiplex_results_title
+{
+    clear: both;
+    display: block;
+    font-size: 26px;
+    line-height: normal;
+    padding: 10px 0 10px 0;
+}
+
+

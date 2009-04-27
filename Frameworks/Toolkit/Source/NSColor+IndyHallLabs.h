@@ -2,7 +2,7 @@
 
 @interface NSColor (IndyHallLabs)
 
-+ (NSColor*) colorWithRGBIn0To255ValuesForRed:(int)red green:(int)green blue:(int)blue alpha:(int)alpha;
++ (NSColor*) colorWithRGBIn0To255ValuesForRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha;
 
 - (CGColorRef) colorAsCGColorRef;
 

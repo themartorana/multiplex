@@ -32,6 +32,7 @@
 + (CGColorRef) softEditTextFieldBGColor;
 + (CGColorRef) softEditTextFieldBorderColor;
 + (CGColorRef) discPlayLayerUnhoveredForegroundColor;
++ (CGColorRef) setIndicatorColor;
 
 + (CGColorRef) multiplexOrange;
 + (CGColorRef) multiplexOrangeSlightlyTransparent;

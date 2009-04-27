@@ -24,6 +24,7 @@
 #import "MultiplexResourceURLProtocol.h"
 
 #import "MAAttachedWindow.h"
+#import "ZoomableWindow.h"
 
 #import <QuartzCore/QuartzCore.h>
 #import <Sparkle/Sparkle.h>
@@ -293,8 +294,10 @@ static NSArray* fileTypes = nil;
     [notificationCenter addObserver:self selector:@selector(playSelectedMovie:) name:@"MultiplexPlayMovie" object:nil];
     [notificationCenter addObserver:self selector:@selector(toggleFullScreen:) name:@"MultiplexToggleFullScreen" object:nil];
     [notificationCenter addObserver:self selector:@selector(openInfoView:) name:@"MultiplexShowMovieDialog" object:nil];
+    [notificationCenter addObserver:self selector:@selector(_combineMovies:) name:@"MultiplexCombineMoviesIntoSet" object:nil];
     
     [notificationCenter addObserver:self selector:@selector(engineDidFinishInitialScan:) name:@"MultiplexEngineDidFinishInitialScan" object:nil];
+        
     
     engineController = [[EngineController alloc] initWithManagedObjectContext:engineManagedObjectContext];
     
@@ -650,7 +653,7 @@ static NSArray* fileTypes = nil;
 
 - (BOOL) isInFullScreen
 {
-    return [[[NSApp mainWindow] contentView] isInFullScreenMode];
+    return [[NSApp mainWindow] isBig];
 }
 
 - (BOOL) isDrawerViewOpen
@@ -678,7 +681,7 @@ static NSArray* fileTypes = nil;
 {
     [mainWindowContentView toggleFullScreen];
     
-    if ([mainWindowContentView isInFullScreenMode]) {
+    if ([self isInFullScreen]) {
         [windowResizeThumb setHidden:YES];
     }
     else {
@@ -1129,13 +1132,15 @@ static NSArray* fileTypes = nil;
     NSError* error = nil;
     NSFileManager* fileManager = [NSFileManager defaultManager];
     
-    managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Multiplex" ofType:@"mom"]]];
+    managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"MultiplexOnePointZero" ofType:@"mom"]]];
     persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
     
-    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabaseFile] options:nil error:&error]) {
+    NSDictionary* pscOptions = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSMigratePersistentStoresAutomaticallyOption];
+    
+    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabaseFile] options:pscOptions error:&error]) {
         if (!isSample) {
             [fileManager removeItemAtPath:pathToDatabaseFile error:nil];
-            if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabaseFile] options:nil error:&error]) {
+            if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:pathToDatabaseFile] options:pscOptions error:&error]) {
                 [NSException raise:NSStringFromClass([self class]) format:@"Unable to create a fresh database."];
             }
         }
@@ -1370,6 +1375,44 @@ static NSArray* fileTypes = nil;
     [tipWindow setAlphaValue:0.0];
     [[drawerView window] addChildWindow:tipWindow ordered:NSWindowAbove];
     [[tipWindow animator] setAlphaValue:1.0];
+}
+
+- (void) _combineMovies:(NSNotification*)notification
+{
+    Movie* m = (Movie*)[notification object];
+    if (!m) {
+        NSLog(@"Got combine movie call without movie object");
+    }
+    else {
+        Movie* selected = selectedMovie;
+        int oldDiscNumber = 1;
+        int nextDiscNumber = [selected.allDiscs count] + 1;
+        
+        for (Disc* d in [m discsInOrder]) {
+            if (d.discTitle == nil) {
+                if ([m.title rangeOfString:@"disc" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+                    d.discTitle = m.title;
+                }
+                else {
+                    d.discTitle = [NSString stringWithFormat:@"%@ - Disc %d", m.title, oldDiscNumber];                    
+                }
+            }
+            d.movie = selected;
+            d.number = [NSNumber numberWithInt:nextDiscNumber];
+            oldDiscNumber ++;
+            nextDiscNumber ++;
+        }
+        
+        [appManagedObjectContext deleteObject:m];
+        
+        NSError* error = nil;
+        [appManagedObjectContext save:&error];
+        if (error) {
+            NSLog(@"Error combining movies: %@", [error userInfo]);
+        }
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexCombineMoviesDidFinish" object:nil];
 }
 
 #pragma mark Dragging protocol methods

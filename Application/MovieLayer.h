@@ -10,7 +10,7 @@
     CATiledLayer* boxImageLayer; 
     CALayer* smokeLayer;
     CALayer* setIndicatorLayer;
-    CATextLayer* setInformationLayer;
+    //CATextLayer* setInformationLayer;
     /**/
     Movie* movie;
     id boxArtImage;

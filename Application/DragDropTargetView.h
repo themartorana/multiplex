@@ -14,6 +14,6 @@
 @interface NSObject (DragDropTargetView)
 - (NSArray*) registeredDragTypesForDragDropTargetView:(DragDropTargetView*)sender;
 - (BOOL) dragDropTargetView:(DragDropTargetView*)sender allowDragForPasteboard:(NSPasteboard*)pasteBoard;
-- (BOOL) dragDropTargetView:(DragDropTargetView*)sender acceptDragForPasteboard:(NSPasteboard*)pasteBoard;
+- (BOOL) dragDropTargetView:(DragDropTargetView*)sender acceptDragForPasteboard:(NSPasteboard*)pasteBoard fromSender:(id <NSDraggingInfo>)dragSender;
 @end
 

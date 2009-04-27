@@ -69,6 +69,7 @@
     [overviewWebView setEditable:NO];
     [overviewWebView setDrawsBackground:NO];
     [overviewWebView setPreferences:[ApplicationResources movieDescriptionWebPreferences]];
+    [overviewWebView setUIDelegate:self];
     
     [playButtonView setButtonLayerButtonWithUpState:[ApplicationResources playButton] andDownState:[ApplicationResources playButtonDown]];
     [playButtonView setNotificationNameToPost:@"MultiplexPlayMovie"];
@@ -116,6 +117,9 @@
 - (IBAction) selectTab:(id)sender
 {
     [infoTabView selectTabViewItemAtIndex:[sender selectedSegment]];
+    if ([sender selectedSegment] == 0) {
+        [[overviewWebView window] makeFirstResponder:overviewWebView];
+    }
     if ([sender selectedSegment] == 3) {
         [[discsWebView window] makeFirstResponder:discsWebView];
     }
@@ -173,6 +177,16 @@
 {
     NSString* newHtml = [(id)[[[[[descriptionWebView mainFrame] DOMDocument] documentElement] getElementsByTagName:@"body"] item:0] innerHTML];
     [self _rebuildSynopsisHtml:newHtml];
+}
+
+- (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems
+{
+    if (sender == overviewWebView) {
+        return [NSArray array];        
+    }
+    else {
+        return defaultMenuItems;
+    }
 }
 
 - (void) setMovie:(Movie*)_movie
@@ -278,6 +292,9 @@
     int index = [[infoTabView tabViewItems] indexOfObject:overviewTabViewItem];
     [tabSelector setSelectedSegment:index];
     [infoTabView selectTabViewItemAtIndex:index];
+    
+    // This will reset our first responder appropriately
+    [self selectTab:tabSelector];
 }
 
 - (void) showDiscsTab
@@ -285,6 +302,10 @@
     int index = [[infoTabView tabViewItems] indexOfObject:discsTabViewItem];
     [tabSelector setSelectedSegment:index];
     [infoTabView selectTabViewItemAtIndex:index];
+    [[discsWebView window] makeFirstResponder:discsWebView];
+
+    // This will reset our first responder appropriately
+    //[self selectTab:tabSelector];
 }
 
 - (NSArray*) registeredDragTypesForDragDropTargetView:(DragDropTargetView*)sender
@@ -318,7 +339,7 @@
     }
 }
 
-- (BOOL) dragDropTargetView:(DragDropTargetView*)sender acceptDragForPasteboard:(NSPasteboard*)pasteBoard
+- (BOOL) dragDropTargetView:(DragDropTargetView*)sender acceptDragForPasteboard:(NSPasteboard*)pasteBoard fromSender:(id <NSDraggingInfo>)dragSender
 {
     NSURL* url = nil;
     NSString* item = nil;
@@ -364,20 +385,35 @@
     else {
         NSMutableString* htmlString = [NSMutableString string];
 
-        // Set up the synopsis
+        // begin overview
+		[htmlString appendString:@"<div id=\"overview\">"];
+		
+		// begin quick facts
+        [htmlString appendString:@"<div id=\"description_quick_facts\">"];
+			
+		// Running time
+		if (movie.runningTime) {
+			[htmlString appendFormat:@"<div id=\"description_run_time\">%@ %@ %@</div>", @"Running Time:", [movie.runningTime stringValue], @"minutes" ];
+		}
+			
+		// rating
+		if (movie.rating) {
+			[htmlString appendFormat:@"<div id=\"description_rating\">%@ %@</div>", @"Rating:", @"R"]; //[movie.rating stringValue]];
+		}
+		
+        [htmlString appendString:@"</div>"];
+		// end quick facts
+		
+        // begin synopsis
         [htmlString appendString:@"<div id=\"description_synopsis_info\">"];
         [htmlString appendFormat:@"<div id=\"description_synopsis_header\">%@</div>", @"Synopsis"];
         [htmlString appendFormat:@"<div id=\"description_synopsis\">%@</div>", movie.synopsis ? movie.synopsis : noSynopsis];
         [htmlString appendString:@"</div>"];
+		// end synopsis
         
+		// begin secondary info
         [htmlString appendString:@"<div id=\"description_secondary_info\">"];
-        
-        // Running time
-        if (movie.runningTime) {
-            [htmlString appendFormat:@"<div id=\"description_run_time_header\">%@</div>", @"Running Time"];
-            [htmlString appendFormat:@"<div id=\"description_run_time\">%@ %@</div>", [movie.runningTime stringValue], @"minutes"];
-        }
-        
+		
         // Production year
         if (movie.productionYear) {
             [htmlString appendFormat:@"<div id=\"description_production_year_header\">%@</div>", @"Produced in"];
@@ -422,7 +458,11 @@
         }
         
         [htmlString appendString:@"</div>"];
-        
+		// end secondary info
+		
+        [htmlString appendString:@"</div>"];
+        // end overview
+		
         return htmlString;
     }
 }

@@ -1167,6 +1167,7 @@
 		F96430AE0EB6412300D49FA0 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				967FF1FF0F17A00B00A08F6F /* tooltip-top.png */,
 				96E4F59E0FA5291F00A7EEC0 /* vertical-thumb.png */,
 				96B4E74B0FA523FC00E7F129 /* vertical-button.png */,
 				96C2A6C50FA4FFE5001944A4 /* disc-dvd-sm.png */,
@@ -1233,7 +1234,6 @@
 		F96430B00EB6415600D49FA0 /* CSS */ = {
 			isa = PBXGroup;
 			children = (
-				967FF1FF0F17A00B00A08F6F /* tooltip-top.png */,
 				5574409C0EABDD54002E0B80 /* uservoice-feedback.css */,
 				55B81A480EA049D500775EAE /* movie-description.css */,
 				55DCCE830F15314700B3DF41 /* hoverview.css */,

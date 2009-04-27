@@ -63,6 +63,14 @@
                     menu.append(ul);
                     li.append(menu);
                     
+                    // Add hover capability
+                    li.bind("mouseenter", menu, function(e) {
+                        e.data.fadeIn(50);
+                    });
+                    li.bind("mouseleave", menu, function(e) {
+                        e.data.fadeOut(50);
+                    });
+                    
                     // Add in play button
                     var playButton = jQuery("<li></li>").addClass("option play").append("Play");
                     ul.append(playButton);

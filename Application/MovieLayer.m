@@ -78,10 +78,10 @@ static void drawSetNumberLayer(CGContextRef context, NSRect inRect, int numberOf
         //setIndicatorLayer.borderColor = [MultiplexColorFactory white];
         //setIndicatorLayer.borderWidth = 1.0;
         setIndicatorLayer.constraints = [NSArray arrayWithObjects:
-             [CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX offset:30.0],
-             [CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY offset:-30.0],
-             [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0 offset:80.0],
-             [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0 offset:80.0],
+             [CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX offset:40.0],
+             [CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY offset:-40.0],
+             [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0 offset:90.0],
+             [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0 offset:90.0],
              nil
         ];
         //setIndicatorLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
@@ -352,7 +352,7 @@ void drawSetNumberLayer(CGContextRef context, NSRect inRect, int numberOfDiscs)
     
     // Draw gray
     [[NSColor colorWithRGBIn0To255ValuesForRed:31.0 green:31.0 blue:31.0 alpha:255.0] set];
-    NSRect rectToFill = NSMakeRect(5.0, 5.0, inRect.size.width - 10.0, inRect.size.height- 8.0);
+    NSRect rectToFill = NSMakeRect(10.0, 10.0, inRect.size.width - 20.0, inRect.size.height - 20.0);
     path = [NSBezierPath bezierPathWithRoundedRect:rectToFill cornerRadius:5.0];
     [path fill];
 

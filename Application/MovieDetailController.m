@@ -388,21 +388,25 @@
         // begin overview
 		[htmlString appendString:@"<div id=\"overview\">"];
 		
-		// begin quick facts
-        [htmlString appendString:@"<div id=\"description_quick_facts\">"];
+		if (movie.runningTime || movie.rating) {
 			
-		// Running time
-		if (movie.runningTime) {
-			[htmlString appendFormat:@"<div id=\"description_run_time\">%@ %@ %@</div>", @"Running Time:", [movie.runningTime stringValue], @"minutes" ];
-		}
+			// begin quick facts
+			[htmlString appendString:@"<div id=\"description_quick_facts\">"];
+				
+			// Running time
+			if (movie.runningTime) {
+				[htmlString appendFormat:@"<div id=\"description_run_time\">%@ %@ %@</div>", @"Running Time:", [movie.runningTime stringValue], @"minutes" ];
+			}
+				
+			// rating
+			if (movie.rating) {
+				[htmlString appendFormat:@"<div id=\"description_rating\">%@ %@</div>", @"Rating:", @"R"]; //[movie.rating stringValue]];
+			}
 			
-		// rating
-		if (movie.rating) {
-			[htmlString appendFormat:@"<div id=\"description_rating\">%@ %@</div>", @"Rating:", @"R"]; //[movie.rating stringValue]];
+			[htmlString appendString:@"</div>"];
+			// end quick facts
+			
 		}
-		
-        [htmlString appendString:@"</div>"];
-		// end quick facts
 		
         // begin synopsis
         [htmlString appendString:@"<div id=\"description_synopsis_info\">"];

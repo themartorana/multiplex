@@ -1,29 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.03">
+<archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.02">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
 		<string key="IBDocument.SystemVersion">9G55</string>
-		<string key="IBDocument.InterfaceBuilderVersion">677</string>
+		<string key="IBDocument.InterfaceBuilderVersion">672</string>
 		<string key="IBDocument.AppKitVersion">949.43</string>
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1472"/>
+			<integer value="1464"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<string>com.apple.WebKitIBPlugin</string>
 			<string>com.apple.InterfaceBuilderKit</string>
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-		</object>
-		<object class="NSMutableDictionary" key="IBDocument.Metadata">
-			<bool key="EncodedWithXMLCoder">YES</bool>
-			<object class="NSArray" key="dict.sortedKeys">
-				<bool key="EncodedWithXMLCoder">YES</bool>
-			</object>
-			<object class="NSMutableArray" key="dict.values">
-				<bool key="EncodedWithXMLCoder">YES</bool>
-			</object>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.RootObjects" id="1048">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -205,14 +196,14 @@
 																				<object class="NSCustomView" id="920096225">
 																					<reference key="NSNextResponder" ref="720496593"/>
 																					<int key="NSvFlags">268</int>
-																					<string key="NSFrame">{{10, 41}, {198, 275}}</string>
+																					<string key="NSFrame">{{10, 36}, {198, 275}}</string>
 																					<reference key="NSSuperview" ref="720496593"/>
 																					<string key="NSClassName">BoxArtImageView</string>
 																				</object>
 																				<object class="NSTextField" id="510816237">
 																					<reference key="NSNextResponder" ref="720496593"/>
 																					<int key="NSvFlags">268</int>
-																					<string key="NSFrame">{{6, 13}, {206, 17}}</string>
+																					<string key="NSFrame">{{6, 11}, {206, 17}}</string>
 																					<reference key="NSSuperview" ref="720496593"/>
 																					<bool key="NSEnabled">YES</bool>
 																					<object class="NSTextFieldCell" key="NSCell" id="823104335">
@@ -231,11 +222,11 @@
 																					</object>
 																				</object>
 																			</object>
-																			<string key="NSFrame">{{1, 1}, {218, 325}}</string>
+																			<string key="NSFrame">{{1, 1}, {218, 320}}</string>
 																			<reference key="NSSuperview" ref="1015919726"/>
 																		</object>
 																	</object>
-																	<string key="NSFrame">{{7, 7}, {220, 327}}</string>
+																	<string key="NSFrame">{{7, 7}, {220, 322}}</string>
 																	<reference key="NSSuperview" ref="384994586"/>
 																	<string key="NSOffsets">{0, 0}</string>
 																	<object class="NSTextFieldCell" key="NSTitleCell">
@@ -268,7 +259,7 @@
 																	<bool key="NSTransparent">NO</bool>
 																</object>
 															</object>
-															<string key="NSFrame">{{8, 3}, {234, 341}}</string>
+															<string key="NSFrame">{{8, 8}, {234, 336}}</string>
 															<reference key="NSSuperview" ref="733430975"/>
 															<string key="NSClassName">DragDropTargetView</string>
 														</object>
@@ -295,7 +286,7 @@
 																	<string>public.url-name</string>
 																</object>
 															</object>
-															<string key="NSFrame">{{265, 10}, {540, 327}}</string>
+															<string key="NSFrame">{{265, 15}, {540, 322}}</string>
 															<reference key="NSSuperview" ref="733430975"/>
 															<reference key="NSNextKeyView"/>
 															<bool key="NSViewIsLayerTreeHost">YES</bool>
@@ -3865,9 +3856,9 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="384994586"/>
-							<reference ref="482924379"/>
 							<reference ref="337916165"/>
 							<reference ref="650385800"/>
+							<reference ref="482924379"/>
 						</object>
 						<reference key="parent" ref="375240923"/>
 					</object>
@@ -4382,7 +4373,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilderKit</string>
 					<string>com.apple.InterfaceBuilderKit</string>
-					<string>{{71, 524}, {900, 500}}</string>
+					<string>{{564, 409}, {900, 500}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSMutableDictionary">
 						<string key="NS.key.0">InitialTabViewItem</string>

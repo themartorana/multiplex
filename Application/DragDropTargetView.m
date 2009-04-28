@@ -26,7 +26,7 @@
 
 		NSRect bounds = [self bounds];
 		[[NSColor colorWithCalibratedWhite:0.9 alpha:1.0] set];
-		NSBezierPath* path = [NSBezierPath bezierPathWithRoundedRect:NSInsetRect(bounds, 3, 3) cornerRadius:10.0 inCorners:kIHTopLeftCorner | kIHBottomLeftCorner | kIHTopRightCorner | kIHBottomRightCorner];
+		NSBezierPath* path = [NSBezierPath bezierPathWithRoundedRect:NSInsetRect(bounds, 3, 3) cornerRadius:6.0 inCorners:kIHTopLeftCorner | kIHBottomLeftCorner | kIHTopRightCorner | kIHBottomRightCorner];
 		float lineDash[2];
 		lineDash[0] = 20.0;
 		lineDash[1] = 5.0;

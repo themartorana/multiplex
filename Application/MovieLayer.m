@@ -102,6 +102,7 @@ static void drawSetNumberLayer(CGContextRef context, NSRect inRect, int numberOf
         [setIndicatorLayer addSublayer:setInformationLayer];
         */
         [movie addObserver:self forKeyPath:@"availableDiscCount" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
+        [movie addObserver:self forKeyPath:@"allDiscs" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
         [movie addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
         [movie addObserver:self forKeyPath:@"boxArt.imageData" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
     }
@@ -112,6 +113,7 @@ static void drawSetNumberLayer(CGContextRef context, NSRect inRect, int numberOf
 {
     if (movie) {
         [movie removeObserver:self forKeyPath:@"availableDiscCount"];
+        [movie removeObserver:self forKeyPath:@"allDiscs"];
         [movie removeObserver:self forKeyPath:@"title"];
         [movie removeObserver:self forKeyPath:@"boxArt.imageData"];
     }
@@ -168,15 +170,6 @@ static void drawSetNumberLayer(CGContextRef context, NSRect inRect, int numberOf
             ];
             [self addSublayer:smokeLayer];
         }
-        
-        if (availableDiscCount > 1) {
-            //setInformationLayer.string = [NSString stringWithFormat:@"%d", availableDiscCount];
-            setIndicatorLayer.hidden = NO;
-            [setIndicatorLayer setNeedsDisplay];
-        }
-        else {
-            setIndicatorLayer.hidden = YES;
-        }
     } else if ([keyPath isEqualToString:@"title"]) {
         if ([keyPath isEqualToString:@"title"]) {
             if (movieTitle) {
@@ -191,6 +184,16 @@ static void drawSetNumberLayer(CGContextRef context, NSRect inRect, int numberOf
     } else if ([keyPath isEqualToString:@"boxArt.imageData"]) {
         CGImageRef newBoxArtImage = [(Movie*)object boxArt].image;
         [self setBoxArtImage:(id)newBoxArtImage];
+    } else if ([keyPath isEqualToString:@"allDiscs"]) {
+        int allDiscsCount = [[movie allDiscs] count];
+        if (allDiscsCount > 1) {
+            //setInformationLayer.string = [NSString stringWithFormat:@"%d", availableDiscCount];
+            setIndicatorLayer.hidden = NO;
+            [setIndicatorLayer setNeedsDisplay];
+        }
+        else {
+            setIndicatorLayer.hidden = YES;
+        }
     }
 }
 

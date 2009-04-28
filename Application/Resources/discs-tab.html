@@ -54,18 +54,26 @@
 					});
                     
                     // Add Play Button
-                    var playButton = jQuery("<img></img>").addClass('play').attr('src', 'multiplexresource://play-button-small.png');
-                    li.append(playButton);
-                    playButton.bind("mousedown", function() {
-                        $(this).attr('src', 'multiplexresource://play-button-small-dwn.png');
-                    }).css('cursor', 'pointer');
-                    playButton.bind("mouseup", disc, function(e) {
-                        $(this).attr('src', 'multiplexresource://play-button-small.png');
-                        mplex.playDisc(e.data.objectID);
-                    }).css('cursor', 'pointer');
-                    playButton.bind("mouseleave", function() {
-                        $(this).attr('src', 'multiplexresource://play-button-small.png');
-                    }).css('cursor', 'pointer');
+                    if (disc.availableMedia > 0) {
+                        var playButton = jQuery("<img></img>").addClass('play').attr('src', 'multiplexresource://play-button-small.png');
+                        li.append(playButton);
+                        disc["playable"] = false;
+                        playButton.bind("mousedown", disc, function(e) {
+                            e.data["playable"] = true;
+                            $(this).attr('src', 'multiplexresource://play-button-small-dwn.png');
+                        }).css('cursor', 'pointer');
+                        playButton.bind("mouseup", disc, function(e) {
+                            $(this).attr('src', 'multiplexresource://play-button-small.png');
+                            if (e.data["playable"] == true) {
+                                mplex.playDisc(e.data.objectID);
+                            }
+                            e.data["playable"] = false;
+                        }).css('cursor', 'pointer');
+                        playButton.bind("mouseleave", disc, function(e) {
+                            e.data["playable"] = false;
+                            $(this).attr('src', 'multiplexresource://play-button-small.png');
+                        }).css('cursor', 'pointer');
+                    }
                     
                     // Append the title
                     var dTitle = null;

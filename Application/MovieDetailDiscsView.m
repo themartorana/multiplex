@@ -115,11 +115,12 @@
             [discDict setValue:(disc.discTitle ? disc.discTitle : [NSString stringWithFormat:@"Disc %i", [disc.number intValue]]) forKey:@"title"];
             [discDict setValue:disc.synopsis forKey:@"synopsis"];
             [discDict setValue:[NSString stringWithFormat:@"%@", [[[disc objectID] URIRepresentation] absoluteURL]] forKey:@"objectID"];
-
-            BOOL isDVD = YES;
+            [discDict setValue:disc.availableMediaCount forKey:@"availableMedia"];
+            
+            BOOL isDVD = NO;
             for (Media* m in [disc.allMedia allObjects]) {
-                if (![m.type isEqualToString:@"public.dvdmedia"] && ![m.type isEqualToString:@"SAMPLE_DATA"]) {
-                    isDVD = NO;
+                if ([m.type isEqualToString:@"public.dvdmedia"] || [m.type isEqualToString:@"SAMPLE_DATA"]) {
+                    isDVD = YES;
                     break;
                 }
             }

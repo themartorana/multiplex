@@ -207,7 +207,8 @@ static const CGFloat HS = 75.0;
     }
     
     [CATransaction begin];
-    [CATransaction setValue:[NSNumber numberWithDouble:([[NSApp currentEvent] modifierFlags] & NSShiftKeyMask) ? 3.0 : 0.3] forKey:kCATransactionAnimationDuration];
+    //[CATransaction setValue:[NSNumber numberWithDouble:([[NSApp currentEvent] modifierFlags] & NSShiftKeyMask) ? 3.0 : 0.3] forKey:kCATransactionAnimationDuration];
+    [CATransaction setValue:[NSNumber numberWithDouble:0.3] forKey:kCATransactionAnimationDuration];
     
     CGFloat opacity = 1.0;
     NSMutableSet* tagged = [NSMutableSet set];

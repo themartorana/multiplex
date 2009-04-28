@@ -134,6 +134,7 @@
 		55E5B5180ED26AA40054DEC7 /* MovieURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E5B5170ED26AA40054DEC7 /* MovieURL.m */; };
 		55E5B56E0ED2719E0054DEC7 /* Episode.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E5B56D0ED2719E0054DEC7 /* Episode.m */; };
 		55F1CF9A0F2FB7F0002CD731 /* MainWindowContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F1CF990F2FB7F0002CD731 /* MainWindowContentView.m */; };
+		55F5403F0FA79A0C0069CE4F /* DeleteConfirmationPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F5403E0FA79A0C0069CE4F /* DeleteConfirmationPanel.m */; };
 		55F815360E94082A005EF5DE /* button-play.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55F815350E94082A005EF5DE /* button-play.pdf */; };
 		55F83CFD0ECE7DDD00C68896 /* Participant.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F83CFC0ECE7DDD00C68896 /* Participant.m */; };
 		55FC9CA10EB8382000CE3F05 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55FC9CA00EB8382000CE3F05 /* Security.framework */; };
@@ -649,6 +650,8 @@
 		55E5B56D0ED2719E0054DEC7 /* Episode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Episode.m; sourceTree = "<group>"; };
 		55F1CF980F2FB7F0002CD731 /* MainWindowContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainWindowContentView.h; sourceTree = "<group>"; };
 		55F1CF990F2FB7F0002CD731 /* MainWindowContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainWindowContentView.m; sourceTree = "<group>"; };
+		55F5403D0FA79A0C0069CE4F /* DeleteConfirmationPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeleteConfirmationPanel.h; sourceTree = "<group>"; };
+		55F5403E0FA79A0C0069CE4F /* DeleteConfirmationPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeleteConfirmationPanel.m; sourceTree = "<group>"; };
 		55F815350E94082A005EF5DE /* button-play.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "button-play.pdf"; sourceTree = "<group>"; };
 		55F83CFB0ECE7DDD00C68896 /* Participant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Participant.h; sourceTree = "<group>"; };
 		55F83CFC0ECE7DDD00C68896 /* Participant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Participant.m; sourceTree = "<group>"; };
@@ -1139,6 +1142,17 @@
 			name = ValueTransformers;
 			sourceTree = "<group>";
 		};
+		55F5403C0FA799D00069CE4F /* Panels */ = {
+			isa = PBXGroup;
+			children = (
+				55D2320B0FA3B8CD00873AFF /* DiscRenameAndMakeIndependentMovie.h */,
+				55D2320C0FA3B8CD00873AFF /* DiscRenameAndMakeIndependentMovie.m */,
+				55F5403D0FA79A0C0069CE4F /* DeleteConfirmationPanel.h */,
+				55F5403E0FA79A0C0069CE4F /* DeleteConfirmationPanel.m */,
+			);
+			name = Panels;
+			sourceTree = "<group>";
+		};
 		F94A05FE0E7B9B5800C8A8B7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1297,8 +1311,6 @@
 				5574AA580F1E56A700D4AA81 /* StartupSpinnerView.m */,
 				55D230970FA39FB900873AFF /* DiscDropView.h */,
 				55D230980FA39FB900873AFF /* DiscDropView.m */,
-				55D2320B0FA3B8CD00873AFF /* DiscRenameAndMakeIndependentMovie.h */,
-				55D2320C0FA3B8CD00873AFF /* DiscRenameAndMakeIndependentMovie.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1345,6 +1357,7 @@
 			isa = PBXGroup;
 			children = (
 				55AB54B30F3CF65300BED2B7 /* Windows */,
+				55F5403C0FA799D00069CE4F /* Panels */,
 				2A37F4B0FDCFA73011CA2CEA /* main.m */,
 				2A37F4ABFDCFA73011CA2CEA /* Classes */,
 				551554980EA456B3006F2674 /* Controls */,
@@ -2030,6 +2043,7 @@
 				5559882F0FA4FBAB00B4C77C /* Multiplex.xcdatamodel in Sources */,
 				555988300FA4FBAB00B4C77C /* MultiplexOnePointZero.xcdatamodel in Sources */,
 				55CD48EF0FA52CDF0095791D /* ZoomableWindow.m in Sources */,
+				55F5403F0FA79A0C0069CE4F /* DeleteConfirmationPanel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

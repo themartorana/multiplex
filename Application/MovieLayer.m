@@ -68,15 +68,6 @@ static void drawSetNumberLayer(CGContextRef context, NSRect inRect, int numberOf
 
         setIndicatorLayer = [CALayer layer];
         setIndicatorLayer.delegate = self;
-        //setIndicatorLayer.backgroundColor = [MultiplexColorFactory setIndicatorColor];
-        //setIndicatorLayer.cornerRadius = 5.0;
-        //setIndicatorLayer.shadowColor = [MultiplexColorFactory black];
-        //setIndicatorLayer.shadowOffset = CGSizeMake(-5.0, 5.0);
-        //setIndicatorLayer.shadowRadius = 0.0;
-        //setIndicatorLayer.shadowOpacity = 1.0;
-        //setIndicatorLayer.hidden = YES;
-        //setIndicatorLayer.borderColor = [MultiplexColorFactory white];
-        //setIndicatorLayer.borderWidth = 1.0;
         setIndicatorLayer.constraints = [NSArray arrayWithObjects:
              [CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX offset:30.0],
              [CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY offset:-30.0],
@@ -84,23 +75,8 @@ static void drawSetNumberLayer(CGContextRef context, NSRect inRect, int numberOf
              [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0 offset:86.0],
              nil
         ];
-        //setIndicatorLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
         [self addSublayer:setIndicatorLayer];     
         
-        /*setInformationLayer = [CATextLayer layer];
-        setInformationLayer.font = [NSFont boldSystemFontOfSize:45.0];
-        setInformationLayer.fontSize = 45.0;
-        setInformationLayer.foregroundColor = [MultiplexColorFactory white];
-        setInformationLayer.alignmentMode = kCAAlignmentCenter;
-        setInformationLayer.constraints = [NSArray arrayWithObjects:
-             [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
-             [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY offset:-15.0],
-             [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth],
-             [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight],
-             nil
-        ];
-        [setIndicatorLayer addSublayer:setInformationLayer];
-        */
         [movie addObserver:self forKeyPath:@"availableDiscCount" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
         [movie addObserver:self forKeyPath:@"allDiscs" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
         [movie addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
@@ -115,7 +91,14 @@ static void drawSetNumberLayer(CGContextRef context, NSRect inRect, int numberOf
         [movie removeObserver:self forKeyPath:@"availableDiscCount"];
         [movie removeObserver:self forKeyPath:@"allDiscs"];
         [movie removeObserver:self forKeyPath:@"title"];
-        [movie removeObserver:self forKeyPath:@"boxArt.imageData"];
+        
+        // TODO: FIX THIS FOR WHATEVER REASON
+        @try {
+            [movie removeObserver:self forKeyPath:@"boxArt.imageData"];            
+        }
+        @catch (NSException* ex) {
+            NSLog(@"Exception removing observer, %@", [ex userInfo]);
+        }
     }
 
     [movie release];
@@ -157,18 +140,18 @@ static void drawSetNumberLayer(CGContextRef context, NSRect inRect, int numberOf
             smokeLayer = nil;
         } else if (!smokeLayer && !availableDiscCount) {
             smokeLayer = [CALayer layer];
-            smokeLayer.zPosition = 1;
+            //smokeLayer.zPosition = 1;
             smokeLayer.backgroundColor = [MultiplexColorFactory blackOneQuarterTransparent];
             //smokeLayer.borderColor = [MultiplexColorFactory multiplexOrange];
             //smokeLayer.borderWidth = 10;
             smokeLayer.constraints = [NSArray arrayWithObjects:
                 [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX],
                 [CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY],
-                [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:1.0 offset:20],
-                [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:1.0 offset:30],
+                [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:1.0 offset:10],
+                [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:1.0 offset:10],
                 nil
             ];
-            [self addSublayer:smokeLayer];
+            [self insertSublayer:smokeLayer atIndex:[[self sublayers] count] - 1];
         }
     } else if ([keyPath isEqualToString:@"title"]) {
         if ([keyPath isEqualToString:@"title"]) {

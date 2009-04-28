@@ -2,174 +2,168 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 
-<head>
+    <head>
 
-	<meta http-equiv="Content-Language" content="en-us" />
-	<title>Multiplex Discs Tab Disc Hover View</title>
-    
-    <script type="text/javascript" src="multiplexresource://jquery.js"></script>
-    <script type="text/javascript" src="multiplexresource://jquery-ui.js"></script>
-    <script type="text/javascript" src="multiplexresource://jquery.jeditable.js"></script>
-    <script type="text/javascript">
-    
-        var renamable = null;
-    
-        function resetDiscs(movieJSONText) {
+        <meta http-equiv="Content-Language" content="en-us" />
+        <title>Multiplex Discs Tab Disc Hover View</title>
         
-            // Clear out the discs li tags
-            var discsOL = $("#discs");
-            discsOL.empty();
+        <script type="text/javascript" src="multiplexresource://jquery.js"></script>
+        <script type="text/javascript" src="multiplexresource://jquery-ui.js"></script>
+        <script type="text/javascript" src="multiplexresource://jquery.jeditable.js"></script>
+        <script type="text/javascript">
+        
+            var renamable = null;
+        
+            function resetDiscs(movieJSONText) {
             
-            eval("var movie = " + movieJSONText);
-            
-            try {
-                var discs = movie.discs;
-                renamable = {};
+                // Clear out the discs li tags
+                var discsOL = $("#discs");
+                discsOL.empty();
+                
+                eval("var movie = " + movieJSONText);
+                
+                try {
+                    var discs = movie.discs;
+                    renamable = {};
 
-                $("#discs").sortable('option', 'helper', (discs.length > 3 ? 'clone' : 'original'));
+                    $("#discs").sortable('option', 'helper', (discs.length > 3 ? 'clone' : 'original'));
 
-                for (var i = 0; i < discs.length; i++) {
-                    var disc = discs[i];
+                    for (var i = 0; i < discs.length; i++) {
+                        var disc = discs[i];
 
-                    var li = jQuery("<li></li>").addClass("disc").attr("id", disc.objectID);
-                    discsOL.append(li);
-                    
-                    // Append the image
-                    if (disc.isDVD == "YES") {
-                        imgSrc = "multiplexresource://disc-dvd-sm.png";
-                    }
-                    else {
-                        imgSrc = "multiplexresource://disc-blank-sm.png";
-                    }
-                    var img = jQuery("<img></img>").addClass("disc-art").attr("src", imgSrc).css('cursor', 'pointer');
-                    li.append(img);
-                    img.bind("mouseenter", disc, function(e){
-                        mplex.setDisc(e.data.objectID);
-                    });
-                    img.bind("mouseleave", function(){
-                        mplex.setDisc(null);
-                    });
-					img.bind("dblclick", disc, function(e) {
-						mplex.playDisc(e.data.objectID);
-					});
-                    
-                    // Add Play Button
-                    if (disc.availableMedia > 0) {
-                        var playButton = jQuery("<img></img>").addClass('play').attr('src', 'multiplexresource://play-button-small.png');
-                        li.append(playButton);
-                        disc["playable"] = false;
-                        playButton.bind("mousedown", disc, function(e) {
-                            e.data["playable"] = true;
-                            $(this).attr('src', 'multiplexresource://play-button-small-dwn.png');
-                        }).css('cursor', 'pointer');
-                        playButton.bind("mouseup", disc, function(e) {
-                            $(this).attr('src', 'multiplexresource://play-button-small.png');
-                            if (e.data["playable"] == true) {
-                                mplex.playDisc(e.data.objectID);
-                            }
-                            e.data["playable"] = false;
-                        }).css('cursor', 'pointer');
-                        playButton.bind("mouseleave", disc, function(e) {
-                            e.data["playable"] = false;
-                            $(this).attr('src', 'multiplexresource://play-button-small.png');
-                        }).css('cursor', 'pointer');
-                    }
-                    
-                    // Append the title
-                    var dTitle = null;
-                    if (disc.title != "" && disc.title != null) {
-                        dTitle = disc.title;
-                    }
-                    else { 
-                        if (disc.isDVD == "NO" || discs.length == 1) {
-                            dTitle = movie.title;
+                        var li = jQuery("<li></li>").addClass("disc").attr("id", disc.objectID);
+                        discsOL.append(li);
+                        
+                        // Append the image
+                        if (disc.isDVD == "YES") {
+                            imgSrc = "multiplexresource://disc-dvd-sm.png";
                         }
                         else {
-                            dTitle = "Disc " + disc.number;
+                            imgSrc = "multiplexresource://disc-blank-sm.png";
                         }
+                        var img = jQuery("<img></img>").addClass("disc-art").attr("src", imgSrc).css('cursor', 'pointer');
+                        li.append(img);
+                        img.bind("mouseenter", disc, function(e){
+                            mplex.setDisc(e.data.objectID);
+                        });
+                        img.bind("mouseleave", function(){
+                            mplex.setDisc(null);
+                        });
+                        img.bind("dblclick", disc, function(e) {
+                            mplex.playDisc(e.data.objectID);
+                        });
+                        
+                        // Add Play Button
+                        if (disc.availableMedia > 0) {
+                            var playButton = jQuery("<img></img>").addClass('play').attr('src', 'multiplexresource://play-button-small.png');
+                            li.append(playButton);
+                            disc["playable"] = false;
+                            playButton.bind("mousedown", disc, function(e) {
+                                e.data["playable"] = true;
+                                $(this).attr('src', 'multiplexresource://play-button-small-dwn.png');
+                            }).css('cursor', 'pointer');
+                            playButton.bind("mouseup", disc, function(e) {
+                                $(this).attr('src', 'multiplexresource://play-button-small.png');
+                                if (e.data["playable"] == true) {
+                                    mplex.playDisc(e.data.objectID);
+                                }
+                                e.data["playable"] = false;
+                            }).css('cursor', 'pointer');
+                            playButton.bind("mouseleave", disc, function(e) {
+                                e.data["playable"] = false;
+                                $(this).attr('src', 'multiplexresource://play-button-small.png');
+                            }).css('cursor', 'pointer');
+                        }
+                        
+                        // Append the title
+                        var dTitle = null;
+                        if (disc.title != "" && disc.title != null) {
+                            dTitle = disc.title;
+                        }
+                        else { 
+                            if (disc.isDVD == "NO" || discs.length == 1) {
+                                dTitle = movie.title;
+                            }
+                            else {
+                                dTitle = "Disc " + disc.number;
+                            }
+                        }
+                        var title = jQuery("<div></div>").addClass("title").append(dTitle);
+                        li.append(title);
+                        title.editable(function(value, settings) { 
+                            mplex.renameDisc(settings['name'], value);
+                            return value;
+                        }, 
+                        {
+                            tooltip: "Doubleclick to edit...",
+                            event: "dblclick",
+                            onblur: 'submit',
+                            name: disc.objectID,
+                            style: 'position: absolute;',
+                            height: 25,
+                            width: 170
+                        });
+                        renamable[disc.objectID] = title;                    
+                        
+                        // Add hover fade-in for certain items
+                        li.bind("mouseenter", function() {
+                            $(this).find('.fade').fadeIn('fast');
+                        });
+                        li.bind("mouseleave", function() {
+                            $(this).find('.fade').fadeOut('fast');
+                        });
+                        
                     }
-                    var title = jQuery("<div></div>").addClass("title").append(dTitle);
-                    li.append(title);
-                    title.editable(function(value, settings) { 
-                        alert(settings['name']);
-                        return value;
-                    }, 
-                    {
-                        tooltip: "Doubleclick to edit...",
-                        event: "dblclick",
-                        onblur: 'submit',
-                        name: disc.objectID,
-                        cssclass : 'disc-edit'
-                    });
-                    renamable[disc.objectID] = title;                    
-                    
-                    // Add hover fade-in for certain items
-                    li.bind("mouseenter", function() {
-                        $(this).find('.fade').fadeIn('fast');
-                    });
-                    li.bind("mouseleave", function() {
-                        $(this).find('.fade').fadeOut('fast');
-                    });
-                    
-                }
-            } 
-            catch (err) {
-                alert(err);
-            }
-        }
-        
-        function simulateNameDoubleClick(objectID) {
-            var element = renamable[objectID];
-            element.dblclick();
-        }
-        
-        jQuery(document).ready(function() {
-            mplex.signalIsReady();
-            
-            // Sortable
-            $("#discs").sortable({ 
-                //handle : '.disc', 
-                axis: 'x',
-                tolerance: 'pointer',
-                containment: '.set',
-                opacity: 0.6,
-                cursor: 'pointer',
-				start: function (e,ui) {
-					// fade out fadeable controls while dragging
-					$(ui.helper).find('.fade').fadeOut(50);
-				},
-				end: function (e,ui) {
-					// fade in fadeable controls when dragging is done
-					$(ui.helper).find('.fade').fadeIn(50);
-				},
-                update : function () { 
-					var orderArray = $('#discs').sortable('toArray'); 
-					mplex.reorderDiscs(orderArray);
                 } 
+                catch (err) {
+                    alert(err);
+                }
+            }
+            
+            function simulateNameDoubleClick(objectID) {
+                var element = renamable[objectID];
+                element.dblclick();
+            }
+            
+            jQuery(document).ready(function() {
+                mplex.signalIsReady();
+                
+                // Sortable
+                $("#discs").sortable({ 
+                    //handle : '.disc', 
+                    axis: 'x',
+                    tolerance: 'pointer',
+                    containment: '.set',
+                    opacity: 0.6,
+                    cursor: 'pointer',
+                    start: function (e,ui) {
+                        // fade out fadeable controls while dragging
+                        $(ui.helper).find('.fade').fadeOut(50);
+                    },
+                    end: function (e,ui) {
+                        // fade in fadeable controls when dragging is done
+                        $(ui.helper).find('.fade').fadeIn(50);
+                    },
+                    update : function () { 
+                        var orderArray = $('#discs').sortable('toArray'); 
+                        mplex.reorderDiscs(orderArray);
+                    } 
+                });
             });
-        });
 
 
-    </script>
-	
-</head>
+        </script>
+        
+    </head>
 
-<body>
+    <body>
 
-    <div class="set">
-        <ol id="discs" class="discs">
-            <!--
-            <li class="disc">
-                <img src="images/disc-dvd.png" width="158" height="158" />
-                <div class="title">Disc 1</div>
-                <div class="desc">Feature Presentation</div>
-                <div class="play">Play &gt;</div>
-            </li>
-            -->
-        </ol>
-    </div>
-	
-</body>
+        <div class="set">
+            <ol id="discs" class="discs">
+            </ol>
+        </div>
+        
+    </body>
 
 
 </html>

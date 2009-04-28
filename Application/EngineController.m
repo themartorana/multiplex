@@ -825,7 +825,12 @@ NSString* const kLoadingDiscInfo = @"LoadingDiscInfo";
             for (NSString* tag in update) {
                 NSDictionary* info = [add objectForKey:tag];
                 Media* media = [self _findMediaByEngine:engine tag:tag];
-                NSAssert(media, @"wtf?");
+                //NSAssert(media, @"wtf?");
+                
+                // Deleting discs in sets can fuck with this
+                if (!media) {
+                    continue;
+                }
 
                 NSString* fingerprint = [info objectForKey:@"fingerprint"];
                 Disc* disc = media.disc;

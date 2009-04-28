@@ -85,6 +85,17 @@ NSString* const URL_PREFIX = @"multiplex://";
     return [NSArray array];
 }
 
+- (NSUInteger)webView:(WebView *)sender dragDestinationActionMaskForDraggingInfo:(id <NSDraggingInfo>)draggingInfo
+{
+    return WebDragDestinationActionNone;
+}
+
+- (NSUInteger)webView:(WebView *)sender dragSourceActionMaskForPoint:(NSPoint)point
+{
+    return WebDragSourceActionNone;
+}
+
+
 - (void) setHidden:(BOOL)hidden
 {
     if (!hidden && movie) {

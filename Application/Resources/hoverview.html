@@ -5,6 +5,26 @@
     <head>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
         <title></title>
+        
+        <script type="text/javascript" src="multiplexresource://jquery.js"></script>
+        <script type="text/javascript">
+        
+            jQuery(document).ready(function() {
+                var pb = $('#playbutton');
+                if (pb != null) {
+                    pb.bind("mousedown", function() {
+                        $(this).attr('src', 'multiplexresource://play-button-small-dwn.png');
+                    });
+                    pb.bind("mouseup", function() {
+                        $(this).attr('src', 'multiplexresource://play-button-small.png');
+                    });
+                    pb.bind("mouseleave", function() {
+                        $(this).attr('src', 'multiplexresource://play-button-small.png');
+                    });
+                }
+            });
+               
+        </script>
     </head>
     <body id="hoverview" onload="">
 		<div id="tooltip" class="<!--[POINTER-ID]-->">
@@ -24,12 +44,14 @@
 						<tr id="open">
 							<th>&nbsp;</th> <td><a href="multiplex://OPEN_MOVIE">Open Movie Info</a></td>
 						</tr>
-						<!--[PLAY_MOVIE]
-						<tr id="play">
-							<th>&nbsp;</th> <td><a href="multiplex://PLAY_MOVIE">Play Movie</a></td>
-						</tr>
-						[PLAY_MOVIE]-->
 					</table>
+					<!--[PLAY_MOVIE]
+                    <div id="playbuttondiv">
+                        <a href="multiplex://PLAY_MOVIE">
+                            <img src="multiplexresource://play-button-small.png" id="playbutton" />
+                        </a>
+                    </div>
+                    [PLAY_MOVIE]-->
 					<div id="tooltip-pointer"></div>
 				</div>
 				<div id="tooltip-bottom"></div>

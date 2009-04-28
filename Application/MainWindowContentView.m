@@ -17,6 +17,7 @@
         case 36:
             // The Enter key - if cmd-enter, toggle full screen
             if ([theEvent modifierFlags] & NSCommandKeyMask) {
+                [applicationController removeToolTipWindow];
                 [[NSRunLoop currentRunLoop] performSelector:@selector(toggleFullScreen) 
                                                      target:self 
                                                    argument:nil 

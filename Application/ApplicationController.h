@@ -13,6 +13,7 @@
 @class PreferencesWindowController;
 @class MovieURL;
 @class MAAttachedWindow;
+@class DeleteConfirmationPanel;
 
 @interface ApplicationController : NSWindowController {
     NSDictionary* parameters;
@@ -42,6 +43,8 @@
     IBOutlet NSMenu* movieContextMenu;
     IBOutlet NSMenuItem* buyFromAmazonMenuItem;
     IBOutlet NSMenuItem* burnWithToastMenuItem;
+    
+    IBOutlet DeleteConfirmationPanel* deletePanel;
     
     /**/
     PreferencesWindowController* preferencesWindowController;    

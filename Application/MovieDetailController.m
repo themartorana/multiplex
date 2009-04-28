@@ -171,6 +171,8 @@
     if (error) {
         NSLog(@"%@", [error userInfo]);
     }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexDiscViewResetDiscs" object:nil];
 }
 
 - (void) webViewDidEndEditing:(NSNotification*)notification

@@ -122,7 +122,8 @@ static const CGFloat HS = 75.0;
     NSLog(@"laying out");
     
     [CATransaction begin];
-    [CATransaction setValue:[NSNumber numberWithDouble:([[NSApp currentEvent] modifierFlags] & NSShiftKeyMask) ? 3.0 : 0.3] forKey:kCATransactionAnimationDuration];
+    //[CATransaction setValue:[NSNumber numberWithDouble:([[NSApp currentEvent] modifierFlags] & NSShiftKeyMask) ? 3.0 : 0.3] forKey:kCATransactionAnimationDuration];
+    [CATransaction setValue:[NSNumber numberWithDouble:0.3] forKey:kCATransactionAnimationDuration];
     
     NSMutableSet* tagged = [NSMutableSet set];
     BOOL hidden = NO;

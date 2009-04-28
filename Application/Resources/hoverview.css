@@ -84,3 +84,9 @@ body {
 	height: 10px;
 	background: url(multiplexresource://tooltip-bottom.png) no-repeat left bottom;
 }
+
+#tooltip #playbuttondiv
+{
+    padding-top: 10px;
+    text-align: center;
+}

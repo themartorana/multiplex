@@ -79,11 +79,16 @@
     [dc addObserver:self selector:@selector(_dragInitiated:) name:@"MovieDragInitiated" object:nil];
     [dc addObserver:self selector:@selector(_dragCompleted:) name:@"MovieDragCompleted" object:nil];
     [dc addObserver:self selector:@selector(_combineDidFinish:) name:@"MultiplexCombineMoviesDidFinish" object:nil];
+    
+    [dc addObserver:self selector:@selector(_resetDiscs:) name:@"MultiplexDiscViewResetDiscs" object:nil];
 }
 
 - (void) dealloc
 {
-    [contextMenuItemsForRightClickOnDiscs release];
+    [renameMenuItem release];
+    [removeMenuItem release];
+    [sepMenuItem release];
+    [deleteFromMultiplexItem release];
     [dropView release];
     [super dealloc];
 }
@@ -137,6 +142,11 @@
         id a = [webView windowScriptObject];
         [a callWebScriptMethod:@"resetDiscs" withArguments:[NSArray arrayWithObject:[NSString stringWithObjectAsJSON:dict]]];
     }
+}
+
+- (void) _resetDiscs:(NSNotification*)notification
+{
+    [self _setUpDiscLayers];
 }
 
 - (Disc*) _discForManagedObjectID:(NSString*)coreDataObjectId
@@ -236,7 +246,7 @@
     renameMenuItem = [[NSMenuItem alloc] initWithTitle:@"Rename disc" action:@selector(_renameDisc:) keyEquivalent:@""];
     removeMenuItem = [[NSMenuItem alloc] initWithTitle:@"Drop from set" action:@selector(_removeFromSet:) keyEquivalent:@""];
     sepMenuItem = [[NSMenuItem separatorItem] retain];
-    deleteFromMultiplexItem = [[NSMenuItem alloc] initWithTitle:@"Delete from Multiplex" action:nil keyEquivalent:@""];
+    deleteFromMultiplexItem = [[NSMenuItem alloc] initWithTitle:@"Delete from Multiplex" action:@selector(_deleteFromMultiplex:) keyEquivalent:@""];
 }
 
 - (void) _renameDisc:(id)sender
@@ -274,6 +284,28 @@
     }
 }
 
+- (void) _deleteFromMultiplex:(id)sender
+{
+    if (!currentCoreDataObjectID) {
+        return;
+    }
+
+    Disc* d = [self _discForManagedObjectID:currentCoreDataObjectID];
+    if (d) {
+        id toSend = nil;
+        Movie* m = d.movie;
+        
+        if ([m.allDiscs count] == 1) {
+            toSend = m;
+        }
+        else {
+            toSend = d;
+        }
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexDeleteMovieOrDisc" object:toSend];
+        [[NSRunLoop currentRunLoop] performSelector:@selector(_setUpDiscLayers) target:self argument:nil order:0 modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
+    }
+}
 
 #pragma mark Javascript Calls
 

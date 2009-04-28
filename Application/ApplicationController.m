@@ -25,6 +25,7 @@
 
 #import "MAAttachedWindow.h"
 #import "ZoomableWindow.h"
+#import "DeleteConfirmationPanel.h"
 
 #import <QuartzCore/QuartzCore.h>
 #import <Sparkle/Sparkle.h>
@@ -295,9 +296,9 @@ static NSArray* fileTypes = nil;
     [notificationCenter addObserver:self selector:@selector(toggleFullScreen:) name:@"MultiplexToggleFullScreen" object:nil];
     [notificationCenter addObserver:self selector:@selector(openInfoView:) name:@"MultiplexShowMovieDialog" object:nil];
     [notificationCenter addObserver:self selector:@selector(_combineMovies:) name:@"MultiplexCombineMoviesIntoSet" object:nil];
+    [notificationCenter addObserver:self selector:@selector(_deleteMovieOrDisc:) name:@"MultiplexDeleteMovieOrDisc" object:nil];
     
     [notificationCenter addObserver:self selector:@selector(engineDidFinishInitialScan:) name:@"MultiplexEngineDidFinishInitialScan" object:nil];
-        
     
     engineController = [[EngineController alloc] initWithManagedObjectContext:engineManagedObjectContext];
     
@@ -705,78 +706,105 @@ static NSArray* fileTypes = nil;
                           contextInfo:nil];
 }
 
+- (void) _deleteMovieOrDisc:(NSNotification*)notification
+{
+    id obj = [notification object];
+    Movie* m = nil;
+    Disc* d = nil;
+
+    if (obj) {
+        NSMutableArray* allMedia = [NSMutableArray array];
+        
+        if ([obj isKindOfClass:[Movie class]]) {
+            m = (Movie*)obj;
+        }
+        else if ([obj isKindOfClass:[Disc class]]) {
+            d = (Disc*)obj;
+        }
+        
+        if (m) {
+            // Delete from any media
+            NSMutableArray* allDiscs = [NSMutableArray arrayWithArray:[[m allDiscs] allObjects]];
+            for (Disc* d in allDiscs) {
+                [allMedia addObjectsFromArray:[[d allMedia] allObjects]];
+            }
+        }
+        else if (d) {
+            [allMedia addObjectsFromArray:[[d allMedia] allObjects]];
+        }
+        
+        int localCount = 0;
+        for (Media* media in allMedia) {
+            if (media.isLocal) {
+                localCount ++;
+            }
+        }
+
+        [deletePanel prepareForDelete:obj withNumberOfLocalMediaObjects:localCount];
+        
+        NSArray* contextInfo = [[NSArray alloc] initWithObjects:obj, allMedia, nil];
+        [NSApp beginSheet:deletePanel 
+           modalForWindow:[drawerView window] 
+            modalDelegate:self 
+           didEndSelector:@selector(_deleteAlertDidEnd:returnCode:contextInfo:) 
+              contextInfo:contextInfo]; 
+    }
+}
+
 - (void) deleteCurrentMovie
 {
     Movie* m = [self _movieForAction];
-    
-    // Delete from any media
-    NSMutableArray* allDiscs = [NSMutableArray arrayWithArray:[[m allDiscs] allObjects]];
-    NSMutableArray* allMedia = [NSMutableArray array];
-    for (Disc* d in allDiscs) {
-        [allMedia addObjectsFromArray:[[d allMedia] allObjects]];
-    }
-    
-    int localCount = 0;
-    for (Media* m in allMedia) {
-        if (![m.type isEqualToString:@"public.dvdmedia"] && ![m.type isEqualToString:@"SAMPLE_DATA"]) {
-            MDItemRef itemRef = MDItemCreate(NULL, (CFStringRef)m.pathToFile);
-            [self _deleteMetadataAttribute:kMDItemMultiplexNonDVDFingerprint forItem:itemRef];
-            CFRelease(itemRef);
-        }
-        
-        if (m.isLocal) {
-            localCount ++;
-        }
-    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexDeleteMovieOrDisc" object:m];
+}
 
-    BOOL sendMediaToTrash = NO;
-    NSString* alertText = nil;
-    if (localCount == 1) {
-        alertText = @"Would you also like to move the media associated with this movie to the trash?";
+- (void) _deleteAlertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+    if (0 == returnCode) {
+        return;
     }
-    else if (localCount > 1) {
-        alertText = [NSString stringWithFormat:@"There are %d actual media files associated with this movie.  Would you like to move all of them to the trash?", localCount];
-    }
-    
-    if (localCount > 0) {
-        NSAlert* alert = [NSAlert alertWithMessageText:@"Send media to the trash?" 
-                                         defaultButton:@"Do it!" 
-                                       alternateButton:@"No thanks." 
-                                           otherButton:nil 
-                             informativeTextWithFormat:alertText];
-        if ([self isInFullScreen]) {
-            [self toggleFullScreen:nil];
-        }
+    else {
+        NSArray* arrToDealWith = (NSArray*)contextInfo;
+        NSManagedObject* toDelete = (NSManagedObject*)[arrToDealWith objectAtIndex:0];
+        NSArray* allMedia = (NSArray*)[arrToDealWith objectAtIndex:1];
         
-        if ([alert runModal] == NSAlertDefaultReturn) {
-            sendMediaToTrash = YES;
-        }
-    }
-    
-    if (sendMediaToTrash) {
+        // Unregister media
         for (Media* m in allMedia) {
-            if (![m.pathToFile isEqualToString:@"SAMPLE_DATA"]) {
-                const char* filePath = [m.pathToFile cStringUsingEncoding:NSUTF8StringEncoding];
-                OSStatus deleteError = FSPathMoveObjectToTrashSync(filePath, NULL, kFSFileOperationDefaultOptions);
-                
-                if (deleteError) {
-                    NSAlert* alert = [NSAlert alertWithMessageText:@"Could not delete the media" 
-                                                     defaultButton:@"Ok" 
-                                                   alternateButton:nil 
-                                                       otherButton:nil 
-                                         informativeTextWithFormat:[NSString stringWithFormat:@"Could not delete the media file\n%@\n\nPlease delete it manually.", m.pathToFile]];
-                    [alert runModal];
-                }                
+            if (![m.type isEqualToString:@"public.dvdmedia"] && ![m.type isEqualToString:@"SAMPLE_DATA"]) {
+                MDItemRef itemRef = MDItemCreate(NULL, (CFStringRef)m.pathToFile);
+                [self _deleteMetadataAttribute:kMDItemMultiplexNonDVDFingerprint forItem:itemRef];
+                CFRelease(itemRef);
             }
         }
+        
+        // Delete files?
+        if (2 == returnCode) {
+            for (Media* m in allMedia) {
+                if (![m.pathToFile isEqualToString:@"SAMPLE_DATA"]) {
+                    const char* filePath = [m.pathToFile cStringUsingEncoding:NSUTF8StringEncoding];
+                    OSStatus deleteError = FSPathMoveObjectToTrashSync(filePath, NULL, kFSFileOperationDefaultOptions);
+                    
+                    if (deleteError) {
+                        NSAlert* alert = [NSAlert alertWithMessageText:@"Could not delete the media" 
+                                                         defaultButton:@"Ok" 
+                                                       alternateButton:nil 
+                                                           otherButton:nil 
+                                             informativeTextWithFormat:[NSString stringWithFormat:@"Could not delete the media file\n%@\n\nPlease delete it manually.", m.pathToFile]];
+                        [alert beginSheetModalForWindow:[drawerView window] modalDelegate:nil didEndSelector:nil contextInfo:nil];
+                    }                
+                }
+            } 
+        }
+                
+        // Delete
+        if ([toDelete isKindOfClass:[Movie class]]) {
+            [self setSelectedMovie:nil];
+        }
+        
+        [appManagedObjectContext deleteObject:toDelete];
+        [arrToDealWith release];
     }
     
-    [self setSelectedMovie:nil];
-    
-    [allMedia removeAllObjects];
-    [allDiscs removeAllObjects];
-    
-    [appManagedObjectContext deleteObject:m];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"MultiplexDiscViewResetDiscs" object:nil];
 }
 
 - (void) windowDidResignMain:(NSNotification*)notification

@@ -26,4 +26,9 @@
                                  alpha:alpha/255.0];
 }
 
++ (NSColor*) colorWithCGColor:(CGColorRef)color
+{
+    return [NSColor colorWithCIColor:[CIColor colorWithCGColor:color]];
+}
+
 @end

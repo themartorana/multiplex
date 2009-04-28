@@ -78,10 +78,10 @@ static void drawSetNumberLayer(CGContextRef context, NSRect inRect, int numberOf
         //setIndicatorLayer.borderColor = [MultiplexColorFactory white];
         //setIndicatorLayer.borderWidth = 1.0;
         setIndicatorLayer.constraints = [NSArray arrayWithObjects:
-             [CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX offset:40.0],
-             [CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY offset:-40.0],
-             [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0 offset:90.0],
-             [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0 offset:90.0],
+             [CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX offset:30.0],
+             [CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY offset:-30.0],
+             [CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:0 offset:86.0],
+             [CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:0 offset:86.0],
              nil
         ];
         //setIndicatorLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
@@ -347,12 +347,14 @@ void drawSetNumberLayer(CGContextRef context, NSRect inRect, int numberOfDiscs)
     [NSGraphicsContext setCurrentContext:nsContext];
     
     // Draw black
+    [[NSColor colorWithCGColor:[MultiplexColorFactory multiplexOrangeSlightlyTransparent]] set];
     NSBezierPath* path = [NSBezierPath bezierPathWithRoundedRect:inRect cornerRadius:5.0];
     [path fill];
     
     // Draw gray
-    [[NSColor colorWithRGBIn0To255ValuesForRed:31.0 green:31.0 blue:31.0 alpha:255.0] set];
-    NSRect rectToFill = NSMakeRect(10.0, 10.0, inRect.size.width - 20.0, inRect.size.height - 20.0);
+    //[[NSColor colorWithRGBIn0To255ValuesForRed:31.0 green:31.0 blue:31.0 alpha:255.0] set];
+    [[NSColor blackColor] set];
+    NSRect rectToFill = NSMakeRect(8.0, 8.0, inRect.size.width - 16.0, inRect.size.height - 16.0);
     path = [NSBezierPath bezierPathWithRoundedRect:rectToFill cornerRadius:5.0];
     [path fill];
 
@@ -363,14 +365,14 @@ void drawSetNumberLayer(CGContextRef context, NSRect inRect, int numberOfDiscs)
     
     NSDictionary* atts = [NSDictionary dictionaryWithObjectsAndKeys:
                           pStyle, NSParagraphStyleAttributeName,
-                          [NSColor colorWithCalibratedWhite:1.0 alpha:1.0], NSForegroundColorAttributeName,
+                          [NSColor whiteColor], NSForegroundColorAttributeName,
                           [NSFont boldSystemFontOfSize:45.0], NSFontAttributeName,
                           nil];
     
     
     float width = (CGFloat)inRect.size.width * 0.9;
     float height = (CGFloat)inRect.size.height * 0.9;
-    NSRect titleRect = NSMakeRect(((CGFloat)inRect.size.width - width) / 2.0, 
+    NSRect titleRect = NSMakeRect(((CGFloat)inRect.size.width - width) / 2.0 + 2.0, 
                                   ((CGFloat)inRect.size.height - height) / 2.0 - 10.0,
                                   width, 
                                   height);

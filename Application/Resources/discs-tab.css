@@ -22,85 +22,50 @@ body {
 	list-style-type: none;
 	white-space: nowrap;
 }
+
+/* DISC */
 .disc {
 	position: relative;
 	display: inline-block;
 	vertical-align: top;
 	width: 177px;
-	height: 260px;
-	margin: 10px 10px 0 10px;
+	height: 270px;
+	margin: 25px 10px 0px 10px;
 	-webkit-border-radius: 10px;
-	padding: 20px 0px 20px 0px;
+	padding: 10px 0px 0px 0px;
 	color: rgb(255,255,255);
 	text-align: center;
 }
 
-/* DRAG HANDLE */
-/*
-.disc .drag {
-	display: none;
-	position: absolute;
-	left: 50px;
-	right: 50px;
-	top: 0px;
-	background: rgba(255,255,255,.25);
-	color: rgba(13,13,13,1);
-	font-size: 12px;
-	line-height: 24px;
-	cursor: pointer;
-}
-.disc .drag:hover {
-	background: rgba(255,255,255,1);
-}
-*/
+/* DISC IMAGE */
 .disc img {
 	display: inline-block;
 	width: 158px;
 	height: 158px;
 	border: 0;
-	margin-bottom: 20px;
 }
-.disc .title,
-.disc .desc {
+
+/* TITLE AND DESCRIPTION */
+.disc .title {
 	display: block;
+	height: 80px;
+	overflow: hidden;
 	font-size: 18px;
+	line-height: 20px;
     white-space: normal;
+	text-overflow: ellipsis;
+}
+.disc .desc {
+	display: none;
 }
 
 /* MENU ICONS */
 .disc .play {
-	/*display: none;*/ 
-	position: absolute;
-	bottom: 80px;
-	right: 38px;
-    width: 100px;
+	display: block;
+	width: 100px;
 	height: 22px;
-	font-size: 16px;
-	line-height: 22px;
+	margin: 0 auto 10px;
 }
-/*
-.disc .menu .options {
-	margin: 0;
-	padding: 4px;
-	list-style-type: none;
-}
-.disc .menu .option {
-	display: inline-block;
-	width: 22px;
-	height: 22px;
-	-webkit-border-radius: 5px;
-	background: green;
-	font-size: 12px;
-	line-height: 22px;
-}
-.disc .menu .option + .option {
-	margin-left: 4px;
-}
-.disc .menu .option:hover {
-	background: rgba(0,0,0,.95);
-	cursor: pointer;
-}
-*/
 
 /* SCROLLBARS */
 ::-webkit-scrollbar {

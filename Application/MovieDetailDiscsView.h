@@ -11,11 +11,15 @@
     IBOutlet MovieDetailController* movieDetailController;
     IBOutlet DiscRenameAndMakeIndependentMovie* renamePanel;
     IBOutlet NSTextField* renameOrBreakOutField;
+
+    NSArray* contextMenuItemsForRightClickOnDiscs;
     
     Movie* movie;
     BOOL isReady;
     
     DiscDropView* dropView;
+    
+    NSString* currentCoreDataObjectID;
 }
 
 @property (retain) Movie* movie;

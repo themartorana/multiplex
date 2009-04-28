@@ -15,6 +15,7 @@
 @interface MovieDetailDiscsView (Private)
 
 - (void) _setUpDiscLayers;
+- (void) _setUpContextMenuItems;
 - (Disc*) _discForManagedObjectID:(NSString*)coreDataObjectId;
 
 @end
@@ -25,8 +26,7 @@
     if (selector == @selector(signalIsReady) ||
         selector == @selector(playDisc:) ||
         selector == @selector(reorderDiscs:) ||
-        selector == @selector(removeFromSet:) ||
-        selector == @selector(renameDisc:)) {
+        selector == @selector(setCurrentCoreDataObjectID:)) {
         return NO;
     }
     return YES;
@@ -39,11 +39,8 @@
     if (sel == @selector(reorderDiscs:)) {
         return @"reorderDiscs";
     }
-    if (sel == @selector(removeFromSet:)) {
-        return @"removeFromSet";
-    }
-    if (sel == @selector(renameDisc:)) {
-        return @"renameDisc";
+    if (sel == @selector(setCurrentCoreDataObjectID:)) {
+        return @"setDisc";
     }
     return nil;
 }
@@ -72,6 +69,8 @@
     [self addSubview:dropView];
     [dropView setFrame:[webView frame]];
     
+    [self _setUpContextMenuItems];
+    
     NSNotificationCenter* dc = [NSNotificationCenter defaultCenter];
     [dc addObserver:self selector:@selector(_dragInitiated:) name:@"MovieDragInitiated" object:nil];
     [dc addObserver:self selector:@selector(_dragCompleted:) name:@"MovieDragCompleted" object:nil];
@@ -80,6 +79,7 @@
 
 - (void) dealloc
 {
+    [contextMenuItemsForRightClickOnDiscs release];
     [dropView release];
     [super dealloc];
 }
@@ -226,6 +226,67 @@
     }
 }
 
+- (void) _setUpContextMenuItems
+{
+    NSMenuItem* renameMenuItem = [[[NSMenuItem alloc] initWithTitle:@"Rename disc" action:@selector(_renameDisc:) keyEquivalent:@""] autorelease];
+    NSMenuItem* removeMenuItem = [[[NSMenuItem alloc] initWithTitle:@"Drop from set" action:@selector(_removeFromSet:) keyEquivalent:@""] autorelease];
+    NSMenuItem* sep = [NSMenuItem separatorItem];
+    NSMenuItem* deleteFromMultiplexItem = [[[NSMenuItem alloc] initWithTitle:@"Delete from Multiplex" action:nil keyEquivalent:@""] autorelease];
+    
+    contextMenuItemsForRightClickOnDiscs = [[NSArray arrayWithObjects:renameMenuItem, removeMenuItem, sep, deleteFromMultiplexItem, nil] retain];
+}
+
+- (void) _renameDisc:(id)sender
+{
+    if (!currentCoreDataObjectID) {
+        return;
+    }
+    
+    Disc* d = [self _discForManagedObjectID:currentCoreDataObjectID];
+    if (d) {
+        [renamePanel prepareForDiscRename];
+        
+        if (d.discTitle) {
+            [renameOrBreakOutField setStringValue:d.discTitle];
+        }
+        else {
+            [renameOrBreakOutField setStringValue:[NSString stringWithFormat:@"Disc %d", [d.number intValue]]];
+        }
+        
+        [NSApp beginSheet:renamePanel 
+           modalForWindow:[self window] 
+            modalDelegate:self 
+           didEndSelector:@selector(_renameDiscDidEnd:returnCode:contextInfo:) 
+              contextInfo:d];
+    }
+}
+
+- (void) _removeFromSet:(id)sender
+{
+    if (!currentCoreDataObjectID) {
+        return;
+    }
+    
+    Disc* d = [self _discForManagedObjectID:currentCoreDataObjectID];
+    if (d) {
+        [renamePanel prepareForRemoveFromSet];
+        
+        if (d.discTitle) {
+            [renameOrBreakOutField setStringValue:d.discTitle];
+        }
+        else {
+            [renameOrBreakOutField setStringValue:d.movie.title];
+        }
+        
+        [NSApp beginSheet:renamePanel 
+           modalForWindow:[self window] 
+            modalDelegate:self 
+           didEndSelector:@selector(_removeFromSetSheetDidEnd:returnCode:contextInfo:) 
+              contextInfo:d];
+    }
+}
+
+
 #pragma mark Javascript Calls
 
 - (void) signalIsReady
@@ -268,46 +329,11 @@
     [self _setUpDiscLayers];
 }
 
-- (void) renameDisc:(NSString*)coreDataObjectId
-{
-    Disc* d = [self _discForManagedObjectID:coreDataObjectId];
-    if (d) {
-        [renamePanel prepareForDiscRename];
-        
-        if (d.discTitle) {
-            [renameOrBreakOutField setStringValue:d.discTitle];
-        }
-        else {
-            [renameOrBreakOutField setStringValue:[NSString stringWithFormat:@"Disc %d", [d.number intValue]]];
-        }
-        
-        [NSApp beginSheet:renamePanel 
-           modalForWindow:[self window] 
-            modalDelegate:self 
-           didEndSelector:@selector(_renameDiscDidEnd:returnCode:contextInfo:) 
-              contextInfo:d];
-    }
-}
 
-- (void) removeFromSet:(NSString*)coreDataObjectId
+- (void) setCurrentCoreDataObjectID:(NSString*)coreDataObjectId
 {
-    Disc* d = [self _discForManagedObjectID:coreDataObjectId];
-    if (d) {
-        [renamePanel prepareForRemoveFromSet];
-        
-        if (d.discTitle) {
-            [renameOrBreakOutField setStringValue:d.discTitle];
-        }
-        else {
-            [renameOrBreakOutField setStringValue:d.movie.title];
-        }
-        
-        [NSApp beginSheet:renamePanel 
-           modalForWindow:[self window] 
-            modalDelegate:self 
-           didEndSelector:@selector(_removeFromSetSheetDidEnd:returnCode:contextInfo:) 
-              contextInfo:d];
-    }
+    [currentCoreDataObjectID release], currentCoreDataObjectID = nil;
+    currentCoreDataObjectID = [coreDataObjectId retain];
 }
 
 #pragma mark WebFrameLoadDelegate Methods
@@ -338,7 +364,12 @@
 
 - (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems
 {
-    return [NSArray array];
+    if (currentCoreDataObjectID) {
+        return contextMenuItemsForRightClickOnDiscs;        
+    }
+    else {
+        return nil;
+    }
 }
 
 @end

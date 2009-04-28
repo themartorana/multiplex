@@ -88,6 +88,7 @@
 		5574AD130F1E968400D4AA81 /* tooltip-pointer-right.png in Resources */ = {isa = PBXBuildFile; fileRef = 5574AD120F1E968400D4AA81 /* tooltip-pointer-right.png */; };
 		557B69460E4CCD3F0009919E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 557B69450E4CCD3F0009919E /* MainMenu.xib */; };
 		55845F5D0FA205B400CD0B13 /* jquery-ui.js in Resources */ = {isa = PBXBuildFile; fileRef = 55845F5B0FA2059000CD0B13 /* jquery-ui.js */; };
+		5584A5D40FA69BA6007B055E /* jquery.jeditable.js in Resources */ = {isa = PBXBuildFile; fileRef = 5584A5D30FA69B8D007B055E /* jquery.jeditable.js */; };
 		558D1B030E9D3F37000F67FA /* PageNumberLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1B020E9D3F37000F67FA /* PageNumberLayer.m */; };
 		558D1C3E0E9D5562000F67FA /* DiscPlayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1C3D0E9D5562000F67FA /* DiscPlayLayer.m */; };
 		558D1EB10E9E65A8000F67FA /* close-click128x128.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 558D1EAB0E9E65A8000F67FA /* close-click128x128.pdf */; };
@@ -581,6 +582,7 @@
 		557B66A20E4A2F4D0009919E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		557B69450E4CCD3F0009919E /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		55845F5B0FA2059000CD0B13 /* jquery-ui.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "jquery-ui.js"; sourceTree = "<group>"; };
+		5584A5D30FA69B8D007B055E /* jquery.jeditable.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jquery.jeditable.js; sourceTree = "<group>"; };
 		558D1AEE0E9D186B000F67FA /* MovieDetailDiscsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieDetailDiscsView.h; sourceTree = "<group>"; };
 		558D1AEF0E9D186B000F67FA /* MovieDetailDiscsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieDetailDiscsView.m; sourceTree = "<group>"; };
 		558D1B010E9D3F37000F67FA /* PageNumberLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageNumberLayer.h; sourceTree = "<group>"; };
@@ -973,6 +975,7 @@
 				55AB54C50F3CFDE400BED2B7 /* Preferences.xib */,
 				5503EA390F9D4BFA00396062 /* jquery.js */,
 				55845F5B0FA2059000CD0B13 /* jquery-ui.js */,
+				5584A5D30FA69B8D007B055E /* jquery.jeditable.js */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1787,6 +1790,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5584A5D40FA69BA6007B055E /* jquery.jeditable.js in Resources */,
 				55845F5D0FA205B400CD0B13 /* jquery-ui.js in Resources */,
 				5503EA3A0F9D4BFA00396062 /* jquery.js in Resources */,
 				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,

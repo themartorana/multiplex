@@ -69,12 +69,12 @@ body {
 
 /* MENU ICONS */
 .disc .play {
-	/*display: none;*/
+	/*display: none;*/ 
 	position: absolute;
-	bottom: 110px;
+	bottom: 80px;
 	right: 10px;
 	left: 10px;
-	height: 22px;
+	height: 33px;
 	font-size: 16px;
 	line-height: 22px;
 	-webkit-border-radius: 5px;

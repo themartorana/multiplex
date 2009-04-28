@@ -12,6 +12,8 @@
     <script type="text/javascript" src="multiplexresource://jquery.jeditable.js"></script>
     <script type="text/javascript">
     
+        var renamable = null;
+    
         function resetDiscs(movieJSONText) {
         
             // Clear out the discs li tags
@@ -22,6 +24,7 @@
             
             try {
                 var discs = movie.discs;
+                renamable = {};
 
                 $("#discs").sortable('option', 'helper', (discs.length > 3 ? 'clone' : 'original'));
 
@@ -50,6 +53,20 @@
 						mplex.playDisc(e.data.objectID);
 					});
                     
+                    // Add Play Button
+                    var playButton = jQuery("<img></img>").addClass('play').attr('src', 'multiplexresource://play-button-small.png');
+                    li.append(playButton);
+                    playButton.bind("mousedown", function() {
+                        $(this).attr('src', 'multiplexresource://play-button-small-dwn.png');
+                    }).css('cursor', 'pointer');
+                    playButton.bind("mouseup", disc, function(e) {
+                        $(this).attr('src', 'multiplexresource://play-button-small.png');
+                        mplex.playDisc(e.data.objectID);
+                    }).css('cursor', 'pointer');
+                    playButton.bind("mouseleave", function() {
+                        $(this).attr('src', 'multiplexresource://play-button-small.png');
+                    }).css('cursor', 'pointer');
+                    
                     // Append the title
                     var dTitle = null;
                     if (disc.title != "" && disc.title != null) {
@@ -76,14 +93,8 @@
                         name: disc.objectID,
                         cssclass : 'disc-edit'
                     });
+                    renamable[disc.objectID] = title;                    
                     
-                    // Add Play Button
-                    var playButton = jQuery("<div></div>").addClass("play").html("Play &gt;");
-                    li.append(playButton);
-                    playButton.bind("click", disc, function(e) {
-                        mplex.playDisc(e.data.objectID);
-                    }).css('cursor', 'pointer');
-					
                     // Add hover fade-in for certain items
                     li.bind("mouseenter", function() {
                         $(this).find('.fade').fadeIn('fast');
@@ -97,6 +108,11 @@
             catch (err) {
                 alert(err);
             }
+        }
+        
+        function simulateNameDoubleClick(objectID) {
+            var element = renamable[objectID];
+            element.dblclick();
         }
         
         jQuery(document).ready(function() {

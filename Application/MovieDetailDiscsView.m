@@ -26,7 +26,8 @@
     if (selector == @selector(signalIsReady) ||
         selector == @selector(playDisc:) ||
         selector == @selector(reorderDiscs:) ||
-        selector == @selector(setCurrentCoreDataObjectID:)) {
+        selector == @selector(setCurrentCoreDataObjectID:) ||
+        selector == @selector(renameDisc:toName:)) {
         return NO;
     }
     return YES;
@@ -41,6 +42,9 @@
     }
     if (sel == @selector(setCurrentCoreDataObjectID:)) {
         return @"setDisc";
+    }
+    if (sel == @selector(renameDisc:toName:)) {
+        return @"renameDisc";
     }
     return nil;
 }
@@ -205,7 +209,7 @@
     }
 }
 
-- (void) _renameDiscDidEnd:(NSWindow*)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
+/*- (void) _renameDiscDidEnd:(NSWindow*)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
     if (returnCode == NSRunStoppedResponse) {
         
@@ -224,16 +228,14 @@
             [self _setUpDiscLayers];
         }
     }
-}
+}*/
 
 - (void) _setUpContextMenuItems
 {
-    NSMenuItem* renameMenuItem = [[[NSMenuItem alloc] initWithTitle:@"Rename disc" action:@selector(_renameDisc:) keyEquivalent:@""] autorelease];
-    NSMenuItem* removeMenuItem = [[[NSMenuItem alloc] initWithTitle:@"Drop from set" action:@selector(_removeFromSet:) keyEquivalent:@""] autorelease];
-    NSMenuItem* sep = [NSMenuItem separatorItem];
-    NSMenuItem* deleteFromMultiplexItem = [[[NSMenuItem alloc] initWithTitle:@"Delete from Multiplex" action:nil keyEquivalent:@""] autorelease];
-    
-    contextMenuItemsForRightClickOnDiscs = [[NSArray arrayWithObjects:renameMenuItem, removeMenuItem, sep, deleteFromMultiplexItem, nil] retain];
+    renameMenuItem = [[NSMenuItem alloc] initWithTitle:@"Rename disc" action:@selector(_renameDisc:) keyEquivalent:@""];
+    removeMenuItem = [[NSMenuItem alloc] initWithTitle:@"Drop from set" action:@selector(_removeFromSet:) keyEquivalent:@""];
+    sepMenuItem = [[NSMenuItem separatorItem] retain];
+    deleteFromMultiplexItem = [[NSMenuItem alloc] initWithTitle:@"Delete from Multiplex" action:nil keyEquivalent:@""];
 }
 
 - (void) _renameDisc:(id)sender
@@ -242,23 +244,8 @@
         return;
     }
     
-    Disc* d = [self _discForManagedObjectID:currentCoreDataObjectID];
-    if (d) {
-        [renamePanel prepareForDiscRename];
-        
-        if (d.discTitle) {
-            [renameOrBreakOutField setStringValue:d.discTitle];
-        }
-        else {
-            [renameOrBreakOutField setStringValue:[NSString stringWithFormat:@"Disc %d", [d.number intValue]]];
-        }
-        
-        [NSApp beginSheet:renamePanel 
-           modalForWindow:[self window] 
-            modalDelegate:self 
-           didEndSelector:@selector(_renameDiscDidEnd:returnCode:contextInfo:) 
-              contextInfo:d];
-    }
+    id a = [webView windowScriptObject];
+    [a callWebScriptMethod:@"simulateNameDoubleClick" withArguments:[NSArray arrayWithObject:currentCoreDataObjectID]];
 }
 
 - (void) _removeFromSet:(id)sender
@@ -329,11 +316,25 @@
     [self _setUpDiscLayers];
 }
 
-
 - (void) setCurrentCoreDataObjectID:(NSString*)coreDataObjectId
 {
     [currentCoreDataObjectID release], currentCoreDataObjectID = nil;
     currentCoreDataObjectID = [coreDataObjectId retain];
+}
+
+- (void) renameDisc:(NSString*)coreDataObjectId toName:(NSString*)newName
+{
+    Disc* d  = [self _discForManagedObjectID:coreDataObjectId];
+    
+    if (d) {
+        d.discTitle = newName;
+        
+        NSError* error = nil;
+        [[d managedObjectContext] save:&error];
+        if (error) {
+            NSLog(@"Error renaming disc %@ to the new name '%@': %@", coreDataObjectId, newName, [error userInfo]);
+        }
+    }
 }
 
 #pragma mark WebFrameLoadDelegate Methods
@@ -365,7 +366,17 @@
 - (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems
 {
     if (currentCoreDataObjectID) {
-        return contextMenuItemsForRightClickOnDiscs;        
+        NSMutableArray* menuItems = [NSMutableArray array];
+        [menuItems addObject:renameMenuItem];
+       
+        if ([movie.allDiscs count] > 1) {
+            [menuItems addObject:removeMenuItem];
+        }
+
+        [menuItems addObject:sepMenuItem];
+        [menuItems addObject:deleteFromMultiplexItem];
+
+        return menuItems;
     }
     else {
         return nil;

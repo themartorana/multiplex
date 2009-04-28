@@ -20,6 +20,11 @@
     DiscDropView* dropView;
     
     NSString* currentCoreDataObjectID;
+    
+    NSMenuItem* renameMenuItem;
+    NSMenuItem* removeMenuItem;
+    NSMenuItem* sepMenuItem;
+    NSMenuItem* deleteFromMultiplexItem;
 }
 
 @property (retain) Movie* movie;

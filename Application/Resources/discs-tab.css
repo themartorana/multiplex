@@ -27,8 +27,8 @@ body {
 	display: inline-block;
 	vertical-align: top;
 	width: 177px;
-	height: 250px;
-	margin: 20px 10px 0 10px;
+	height: 260px;
+	margin: 10px 10px 0 10px;
 	-webkit-border-radius: 10px;
 	padding: 20px 0px 20px 0px;
 	color: rgb(255,255,255);
@@ -36,6 +36,7 @@ body {
 }
 
 /* DRAG HANDLE */
+/*
 .disc .drag {
 	display: none;
 	position: absolute;
@@ -51,14 +52,15 @@ body {
 .disc .drag:hover {
 	background: rgba(255,255,255,1);
 }
+*/
 .disc img {
 	display: inline-block;
 	width: 158px;
 	height: 158px;
 	border: 0;
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 }
-.disc .pos,
+.disc .title,
 .disc .desc {
 	display: block;
 	font-size: 18px;
@@ -66,15 +68,19 @@ body {
 }
 
 /* MENU ICONS */
-.disc .menu {
-	display: none;
+.disc .play {
+	/*display: none;*/
 	position: absolute;
 	bottom: 110px;
 	right: 10px;
 	left: 10px;
-	-webkit-border-radius: 10px;
-	background: rgba(0,0,0,.75);
+	height: 22px;
+	font-size: 16px;
+	line-height: 22px;
+	-webkit-border-radius: 5px;
+	background: rgba(230,111,51,1);
 }
+/*
 .disc .menu .options {
 	margin: 0;
 	padding: 4px;
@@ -96,6 +102,7 @@ body {
 	background: rgba(0,0,0,.95);
 	cursor: pointer;
 }
+*/
 
 /* SCROLLBARS */
 ::-webkit-scrollbar {

@@ -28,12 +28,6 @@
                     var li = jQuery("<li></li>").addClass("disc").attr("id", disc.objectID);
                     discsOL.append(li);
                     
-                    // Add Drag
-                    if (discs.length > 1) {
-						var drag = jQuery("<div></div>").addClass("drag").append("&larr;&nbsp;Drag&nbsp;&rarr;")
-                        li.append(drag);
-                    }
-                    
                     // Append the image
                     if (disc.isDVD == "YES") {
                         imgSrc = "multiplexresource://disc-dvd-sm.png";
@@ -56,40 +50,52 @@
                             dTitle = "Disc " + disc.number;
                         }
                     }
-                    li.append(jQuery("<div></div>").addClass("pos").append(dTitle));
+                    li.append(jQuery("<div></div>").addClass("title").append(dTitle));
+					
+					// Add Rename Button
+                    //var renameButton = jQuery("<span></span>").addClass("rename").text("R");
+                    //li.find('.title').prepend(renameButton);
+                    //renameButton.bind("click", disc, function(e) {
+                    //    mplex.renameDisc(e.data.objectID);
+                    //}).css('cursor', 'pointer');
+
 
                     // Append the menu
-                    var menu = jQuery("<div></div>").addClass("menu");
-                    var ul = jQuery("<ul></ul>").addClass("options");
-                    menu.append(ul);
-                    li.append(menu);
+                    //var menu = jQuery("<div></div>").addClass("menu");
+                    //var ul = jQuery("<ul></ul>").addClass("options");
+                    //menu.append(ul);
+                    //li.append(menu);
                     
 					// Add Rename Button
-                    var renameButton = jQuery("<li></li>").addClass("option rename").text("R").attr("title", "Rename Disc");
-                    ul.append(renameButton);
-                    renameButton.bind("click", disc, function(e) {
-                        mplex.renameDisc(e.data.objectID);
-                    }).css('cursor', 'pointer');
+                    //var renameButton = jQuery("<li></li>").addClass("option rename").text("R").attr("title", "Rename Disc");
+                    //ul.append(renameButton);
+                    //renameButton.bind("click", disc, function(e) {
+                    //    mplex.renameDisc(e.data.objectID);
+                    //}).css('cursor', 'pointer');
 					
                     // Add Remove From Set Button
-                    if (discs.length > 1) {
-                        var removeFromSetButton = jQuery("<li></li>").addClass("option remove").html("&ndash;").attr("title", "Detach From Set");
-                        ul.append(removeFromSetButton);
-                        removeFromSetButton.bind("click", disc, function(e) {
-                            mplex.removeFromSet(e.data.objectID);
-                        }).css('cursor', 'pointer');
-                    }
+                    //if (discs.length > 1) {
+                    //    var removeFromSetButton = jQuery("<li></li>").addClass("option remove").html("&ndash;").attr("title", "Detach From Set");
+                    //    ul.append(removeFromSetButton);
+                    //    removeFromSetButton.bind("click", disc, function(e) {
+                    //        mplex.removeFromSet(e.data.objectID);
+                    //    }).css('cursor', 'pointer');
+                    //}
 					
                     // Add Delete From Multiplex
-					var deleteFromAppButton = jQuery("<li></li>").addClass("option delete").text("X").attr("title", "Delete From Multiplex");
-                    ul.append(deleteFromAppButton);
-					deleteFromAppButton.bind("click", disc, function(e) {
+					//var deleteFromAppButton = jQuery("<li></li>").addClass("option delete").text("X").attr("title", "Delete From Multiplex");
+                    //ul.append(deleteFromAppButton);
+					//deleteFromAppButton.bind("click", disc, function(e) {
 						// mplex.deleteFromApp(e.data.objectID);
-					}).css('cursor', 'pointer');
+					//}).css('cursor', 'pointer');
                     
                     // Add Play Button
-                    var playButton = jQuery("<li></li>").addClass("option play").html("&gt;").attr("title", "Play");
-                    ul.append(playButton);
+                    //var playButton = jQuery("<li></li>").addClass("option play").html("&gt;").attr("title", "Play");
+                    //ul.append(playButton);
+					
+                    // Add Play Button
+                    var playButton = jQuery("<div></div>").addClass("play").html("Play &gt;");
+                    li.append(playButton);
                     playButton.bind("click", disc, function(e) {
                         mplex.playDisc(e.data.objectID);
                     }).css('cursor', 'pointer');
@@ -99,12 +105,12 @@
 						mplex.playDisc(e.data.objectID);
 					}).css('cursor', 'pointer');
 					
-                    // Add hover fade-in for menu
+                    // Add hover fade-in for certain items
                     li.bind("mouseenter", function() {
-                        $(this).find('.menu,.drag').fadeIn('fast');
+                        $(this).find('.fade').fadeIn('fast');
                     });
                     li.bind("mouseleave", function() {
-                        $(this).find('.menu,.drag').fadeOut('fast');
+                        $(this).find('.fade').fadeOut('fast');
                     });
                     
                 }
@@ -119,15 +125,17 @@
             
             // Sortable
             $("#discs").sortable({ 
-                handle : '.drag', 
+                //handle : '.disc', 
                 axis: 'x',
                 tolerance: 'pointer',
                 containment: '.set',
 				start: function (e,ui) {
-					$(ui.helper).find('.menu').fadeOut(50);
+					// fade out fadeable controls while dragging
+					$(ui.helper).find('.fade').fadeOut(50);
 				},
 				end: function (e,ui) {
-					$(ui.helper).find('.menu').fadeIn(50);
+					// fade in fadeable controls when dragging is done
+					$(ui.helper).find('.fade').fadeIn(50);
 				},
                 update : function () { 
 					var orderArray = $('#discs').sortable('toArray'); 
@@ -149,17 +157,9 @@
             <!--
             <li class="disc">
                 <img src="images/disc-dvd.png" width="158" height="158" />
-                <div class="pos">Disc 1</div>
+                <div class="title">Disc 1</div>
                 <div class="desc">Feature Presentation</div>
-                <div class="menu">
-                    <ul class="options">
-                        <li class="option play">Play</li>
-                        <li class="option">Drop From Set</li>
-                        <li class="option">Reveal in Finder</li>
-                        <li class="option">Send to Trash</li>
-                        <li class="option drag">&larr;&nbsp;Drag to Reorder&nbsp;&rarr;</li>
-                    </ul>
-                </div>
+                <div class="play">Play &gt;</div>
             </li>
             -->
         </ol>

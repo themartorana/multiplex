@@ -27,10 +27,10 @@
     NSString* objType = nil;
     
     if ([obj isKindOfClass:[Movie class]]) {
-        objType = @"Movie";
+        objType = @"movie";
     }
     else {
-        objType = @"Disc";
+        objType = @"disc";
     }
     
     if (num == 0) {
@@ -44,7 +44,7 @@
     else {
         [deleteAndSendToTrashButton setHidden:NO];
         NSString* deleteConfirm = [NSString stringWithFormat:
-                                   @"The %@ you are trying to delete has %d local media file(s) associated with it.\n\nWould you like to simply delete the %@ from the Multiplex database, or also move the associated media files to the trash?",
+                                   @"The %@ you are trying to delete has %d local media file(s) associated with it.\n\nWould you like to simply delete the %@ from the Multiplex database, or also move the associated media file(s) to the trash?",
                                    objType, num, objType];
         
         [confirmationLabel setStringValue:deleteConfirm];        

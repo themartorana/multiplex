@@ -3078,6 +3078,23 @@
 						<reference key="NSMixedImage" ref="908425081"/>
 						<string key="NSAction">_popUpItemAction:</string>
 					</object>
+					<object class="NSMenuItem" id="57274278">
+						<reference key="NSMenu" ref="559793092"/>
+						<string key="NSTitle">Reveal in Finder</string>
+						<string key="NSKeyEquiv"/>
+						<int key="NSMnemonicLoc">2147483647</int>
+						<reference key="NSOnImage" ref="756751024"/>
+						<reference key="NSMixedImage" ref="908425081"/>
+					</object>
+					<object class="NSMenuItem" id="920270125">
+						<reference key="NSMenu" ref="559793092"/>
+						<string key="NSTitle">Burn with Toast</string>
+						<string key="NSKeyEquiv"/>
+						<int key="NSMnemonicLoc">2147483647</int>
+						<reference key="NSOnImage" ref="756751024"/>
+						<reference key="NSMixedImage" ref="908425081"/>
+						<string key="NSAction">_popUpItemAction:</string>
+					</object>
 					<object class="NSMenuItem" id="984534712">
 						<reference key="NSMenu" ref="559793092"/>
 						<bool key="NSIsDisabled">YES</bool>
@@ -3088,26 +3105,9 @@
 						<reference key="NSOnImage" ref="756751024"/>
 						<reference key="NSMixedImage" ref="908425081"/>
 					</object>
-					<object class="NSMenuItem" id="57274278">
-						<reference key="NSMenu" ref="559793092"/>
-						<string key="NSTitle">Reveal in Finder</string>
-						<string key="NSKeyEquiv"/>
-						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="756751024"/>
-						<reference key="NSMixedImage" ref="908425081"/>
-					</object>
 					<object class="NSMenuItem" id="828871920">
 						<reference key="NSMenu" ref="559793092"/>
 						<string key="NSTitle">Delete movie from Multiplex</string>
-						<string key="NSKeyEquiv"/>
-						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="756751024"/>
-						<reference key="NSMixedImage" ref="908425081"/>
-						<string key="NSAction">_popUpItemAction:</string>
-					</object>
-					<object class="NSMenuItem" id="920270125">
-						<reference key="NSMenu" ref="559793092"/>
-						<string key="NSTitle">Burn with Toast</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
 						<reference key="NSOnImage" ref="756751024"/>
@@ -6212,7 +6212,6 @@
 						<reference key="object" ref="559793092"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="920270125"/>
 							<reference ref="984534712"/>
 							<reference ref="366890124"/>
 							<reference ref="828871920"/>
@@ -6220,6 +6219,7 @@
 							<reference ref="151175162"/>
 							<reference ref="627211334"/>
 							<reference ref="57274278"/>
+							<reference ref="920270125"/>
 						</object>
 						<reference key="parent" ref="1049"/>
 					</object>
@@ -7189,6 +7189,7 @@
 					<string>2416.IBPluginDependency</string>
 					<string>2417.IBPluginDependency</string>
 					<string>2418.IBPluginDependency</string>
+					<string>2419.IBPluginDependency</string>
 					<string>2448.IBPluginDependency</string>
 					<string>2450.IBPluginDependency</string>
 					<string>29.IBEditorWindowLastContentRect</string>
@@ -7564,6 +7565,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{{525, 802}, {197, 73}}</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

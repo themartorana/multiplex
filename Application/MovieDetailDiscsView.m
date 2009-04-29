@@ -424,8 +424,8 @@
             [menuItems addObject:removeMenuItem];
         }
 
-        [menuItems addObject:sepMenuItem];
         [menuItems addObject:revealInFinderItem];
+        [menuItems addObject:sepMenuItem];
         [menuItems addObject:deleteFromMultiplexItem];
 
         return menuItems;

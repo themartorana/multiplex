@@ -111,6 +111,8 @@
 - (IBAction) dontShowTooltipAgain:(id)sender;
 - (IBAction) resetToolTipAlerts:(id)sender;
 
+- (IBAction) revealInFinder:(id)sender;
+
 - (void) showMovieDetailAndSelectHomeTabForMovie:(Movie*)movie;
 - (void) showMovieDetailAndSelectDiscsTabMovie:(Movie*)movie;
 - (void) showMovieLookupForMovie:(Movie*)movie byTitle:(NSNumber*)byTitle;

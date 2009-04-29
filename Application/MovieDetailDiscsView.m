@@ -246,6 +246,7 @@
     renameMenuItem = [[NSMenuItem alloc] initWithTitle:@"Rename disc" action:@selector(_renameDisc:) keyEquivalent:@""];
     removeMenuItem = [[NSMenuItem alloc] initWithTitle:@"Drop from set" action:@selector(_removeFromSet:) keyEquivalent:@""];
     sepMenuItem = [[NSMenuItem separatorItem] retain];
+    revealInFinderItem = [[NSMenuItem alloc] initWithTitle:@"Reveal in Finder" action:@selector(_revealInFinder:) keyEquivalent:@""];
     deleteFromMultiplexItem = [[NSMenuItem alloc] initWithTitle:@"Delete from Multiplex" action:@selector(_deleteFromMultiplex:) keyEquivalent:@""];
 }
 
@@ -281,6 +282,23 @@
             modalDelegate:self 
            didEndSelector:@selector(_removeFromSetSheetDidEnd:returnCode:contextInfo:) 
               contextInfo:d];
+    }
+}
+
+- (void) _revealInFinder:(id)sender
+{
+    if (!currentCoreDataObjectID) {
+        return;
+    }
+    
+    Disc* d = [self _discForManagedObjectID:currentCoreDataObjectID];
+    if (d) {
+        for (Media* m in [d.allMedia allObjects]) {
+            if (m.isLocal && m.isAvailable) {
+                //[[NSWorkspace sharedWorkspace] selectFile:[[NSURL URLWithString:m.pathToFile] path] inFileViewerRootedAtPath:nil];
+                [[NSWorkspace sharedWorkspace] selectFile:m.pathToFile inFileViewerRootedAtPath:nil];
+            }
+        }
     }
 }
 
@@ -407,6 +425,7 @@
         }
 
         [menuItems addObject:sepMenuItem];
+        [menuItems addObject:revealInFinderItem];
         [menuItems addObject:deleteFromMultiplexItem];
 
         return menuItems;

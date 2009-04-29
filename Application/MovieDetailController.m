@@ -296,7 +296,7 @@
     [infoTabView selectTabViewItemAtIndex:index];
     
     // This will reset our first responder appropriately
-    [self selectTab:tabSelector];
+    //[self selectTab:tabSelector];
 }
 
 - (void) showDiscsTab
@@ -402,7 +402,11 @@
 				
 			// rating
 			if (movie.rating) {
-				[htmlString appendFormat:@"<div id=\"description_rating\">%@ %@</div>", @"Rating:", @"R"]; //[movie.rating stringValue]];
+                NSString* rating = movie.rating;
+                if ([movie.rating rangeOfString:@"("].location != NSNotFound) {
+                    rating = [movie.rating substringToIndex:[movie.rating rangeOfString:@"("].location];
+                }
+				[htmlString appendFormat:@"<div id=\"description_rating\">%@ %@</div>", @"Rating:", (movie.rating ? rating : @"N/A")];
 			}
 			
 			[htmlString appendString:@"</div>"];

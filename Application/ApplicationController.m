@@ -593,7 +593,9 @@ static NSArray* fileTypes = nil;
                 } else {
                     [drawerView setContentView:noMovieSelectedView];
                 }
-                [[self window] makeFirstResponder:mainView];
+                
+                // Was taking focus away from the UPC field
+                //[[self window] makeFirstResponder:mainView];
             } else {
                 cLayoutManager = NSClassFromString([[NSUserDefaults standardUserDefaults] objectForKey:kMultiplexDrawerIsClosedLayoutManagerClass]);
                 if (!cLayoutManager)
@@ -1104,6 +1106,18 @@ static NSArray* fileTypes = nil;
     // Reset all tooltip stuff
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ShowToolTipSearch"];
     
+}
+
+- (IBAction) revealInFinder:(id)sender
+{
+    Movie* m = [self _movieForAction];
+    for (Disc* d in [m.allDiscs allObjects]) {
+        for (Media* m in [d.allMedia allObjects]) {
+            if (m.isLocal && m.isAvailable) {
+                [[NSWorkspace sharedWorkspace] selectFile:m.pathToFile inFileViewerRootedAtPath:nil];
+            }
+        }
+    }
 }
 
 #pragma mark Private Methods

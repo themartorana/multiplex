@@ -22,6 +22,7 @@
     NSMenuItem* renameMenuItem;
     NSMenuItem* removeMenuItem;
     NSMenuItem* sepMenuItem;
+    NSMenuItem* revealInFinderItem;
     NSMenuItem* deleteFromMultiplexItem;
 }
 

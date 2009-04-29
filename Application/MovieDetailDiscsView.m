@@ -414,6 +414,11 @@
     return WebDragDestinationActionNone;
 }
 
+- (NSUInteger)webView:(WebView *)sender dragSourceActionMaskForPoint:(NSPoint)point
+{
+    return WebDragSourceActionNone;
+}
+
 - (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems
 {
     if (currentCoreDataObjectID) {

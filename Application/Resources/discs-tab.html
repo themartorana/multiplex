@@ -114,6 +114,13 @@
                         });
                         
                     }
+                    
+                    if (discs.length <= 1) {
+                        $("#discs").sortable('disable');
+                    }
+                    else {
+                        $("#discs").sortable('enable');
+                    }
                 } 
                 catch (err) {
                     alert(err);
@@ -126,8 +133,6 @@
             }
             
             jQuery(document).ready(function() {
-                mplex.signalIsReady();
-                
                 // Sortable
                 $("#discs").sortable({ 
                     //handle : '.disc', 
@@ -149,6 +154,8 @@
                         mplex.reorderDiscs(orderArray);
                     } 
                 });
+                
+                mplex.signalIsReady();
             });
 
 

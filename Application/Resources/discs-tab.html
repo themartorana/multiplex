@@ -105,6 +105,10 @@
                         });
                         renamable[disc.objectID] = title;                    
                         
+						// Append duplicate count
+						var duplicates = jQuery("<div></div>").addClass("duplicates").append("(duplicates found)");
+						li.append(duplicates);
+						
                         // Add hover fade-in for certain items
                         li.bind("mouseenter", function() {
                             $(this).find('.fade').fadeIn('fast');

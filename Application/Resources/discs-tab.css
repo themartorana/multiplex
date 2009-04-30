@@ -38,7 +38,7 @@ body {
 }
 
 /* DISC IMAGE */
-.disc img {
+.disc .disc-art {
 	display: inline-block;
 	width: 158px;
 	height: 158px;
@@ -48,7 +48,7 @@ body {
 /* TITLE AND DESCRIPTION */
 .disc .title {
 	display: block;
-	height: 80px;
+	max-height: 80px;
 	overflow: hidden;
 	font-size: 18px;
 	line-height: 20px;
@@ -60,11 +60,18 @@ body {
 }
 
 /* MENU ICONS */
-.disc .play {
+.disc .play,
+.disc .unplayable {
 	display: block;
 	width: 100px;
 	height: 22px;
 	margin: 0 auto 10px;
+}
+
+.disc .duplicates {
+	color: #666;
+	font-size: 12px;
+	line-height: 16px;
 }
 
 /*.disc-edit

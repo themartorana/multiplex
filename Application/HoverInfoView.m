@@ -103,7 +103,7 @@ NSString* const URL_PREFIX = @"multiplex://";
         NSPoint positionOfMouse = [[self superview] convertPoint:mousePoint fromView:nil];
         
 		int xoffset = 10;
-		int yoffset = -20;
+		int yoffset = -30;
 		
         int newx = positionOfMouse.x + xoffset;
         int newy = positionOfMouse.y + yoffset;

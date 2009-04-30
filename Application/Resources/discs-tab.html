@@ -106,8 +106,10 @@
                         renamable[disc.objectID] = title;                    
                         
 						// Append duplicate count
-						var duplicates = jQuery("<div></div>").addClass("duplicates").append("(duplicates found)");
-						li.append(duplicates);
+                        if (disc.localMediaCount > 1) {
+                            var duplicates = jQuery("<div></div>").addClass("duplicates").append("(duplicates found)");
+                            li.append(duplicates);
+                        }
 						
                         // Add hover fade-in for certain items
                         li.bind("mouseenter", function() {

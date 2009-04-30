@@ -737,7 +737,7 @@ static NSArray* fileTypes = nil;
         
         int localCount = 0;
         for (Media* media in allMedia) {
-            if (media.isLocal) {
+            if ([media.isLocal boolValue]) {
                 localCount ++;
             }
         }
@@ -781,18 +781,20 @@ static NSArray* fileTypes = nil;
         // Delete files?
         if (2 == returnCode) {
             for (Media* m in allMedia) {
-                if (![m.pathToFile isEqualToString:@"SAMPLE_DATA"]) {
-                    const char* filePath = [m.pathToFile cStringUsingEncoding:NSUTF8StringEncoding];
-                    OSStatus deleteError = FSPathMoveObjectToTrashSync(filePath, NULL, kFSFileOperationDefaultOptions);
-                    
-                    if (deleteError) {
-                        NSAlert* alert = [NSAlert alertWithMessageText:@"Could not delete the media" 
-                                                         defaultButton:@"Ok" 
-                                                       alternateButton:nil 
-                                                           otherButton:nil 
-                                             informativeTextWithFormat:[NSString stringWithFormat:@"Could not delete the media file\n%@\n\nPlease delete it manually.", m.pathToFile]];
-                        [alert beginSheetModalForWindow:[drawerView window] modalDelegate:nil didEndSelector:nil contextInfo:nil];
-                    }                
+                if ([m.isLocal boolValue]) {
+                    if (![m.pathToFile isEqualToString:@"SAMPLE_DATA"]) {
+                        const char* filePath = [m.pathToFile cStringUsingEncoding:NSUTF8StringEncoding];
+                        OSStatus deleteError = FSPathMoveObjectToTrashSync(filePath, NULL, kFSFileOperationDefaultOptions);
+                        
+                        if (deleteError) {
+                            NSAlert* alert = [NSAlert alertWithMessageText:@"Could not delete the media" 
+                                                             defaultButton:@"Ok" 
+                                                           alternateButton:nil 
+                                                               otherButton:nil 
+                                                 informativeTextWithFormat:[NSString stringWithFormat:@"Could not delete the media file\n%@\n\nPlease delete it manually.", m.pathToFile]];
+                            [alert beginSheetModalForWindow:[drawerView window] modalDelegate:nil didEndSelector:nil contextInfo:nil];
+                        }                
+                    }
                 }
             } 
         }

@@ -117,6 +117,7 @@
         for (Disc* disc in [movie discsInOrder]) {
             NSMutableDictionary* discDict = [NSMutableDictionary dictionary];
             [discDict setValue:disc.number forKey:@"number"];
+            [discDict setValue:disc.localMediaCount forKey:@"localMediaCount"];
             [discDict setValue:(disc.discTitle ? disc.discTitle : [NSString stringWithFormat:@"Disc %i", [disc.number intValue]]) forKey:@"title"];
             [discDict setValue:disc.synopsis forKey:@"synopsis"];
             [discDict setValue:[NSString stringWithFormat:@"%@", [[[disc objectID] URIRepresentation] absoluteURL]] forKey:@"objectID"];

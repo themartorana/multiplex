@@ -69,7 +69,7 @@ body {
 }
 #tooltip #tooltip-pointer {
 	position: absolute;
-	top: 0px;
+	bottom: 40px;
 	width: 19px;
 	height: 53px;
 	overflow: hidden;

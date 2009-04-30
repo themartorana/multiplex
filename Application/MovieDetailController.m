@@ -244,6 +244,31 @@
     [self _addParticipant:NO];
 }
 
+- (IBAction) effectFont:(id)sender
+{
+    NSButton* button = (NSButton*)sender;
+    NSFontManager* manager = [NSFontManager sharedFontManager];
+    
+    if ([button tag] == 1) {
+        if (![[manager selectedFont] supportsItalics]) {
+            return;
+        }
+    }
+    if ([button tag] == 2) {
+        if (![[manager selectedFont] supportsBold]) {
+            return;
+        }
+    }
+    
+    
+    if ([manager traitsOfFont:[manager selectedFont]] & [button tag]) {
+        [manager removeFontTrait:sender];
+    }
+    else {
+        [manager addFontTrait:sender];
+    }
+}
+
 - (void) _addParticipant:(BOOL)isActor
 {
     NSEntityDescription* participantEntity = [NSEntityDescription entityForName:@"Participant" inManagedObjectContext:[applicationController appManagedObjectContext]];

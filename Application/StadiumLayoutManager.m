@@ -274,12 +274,13 @@ static const CGFloat HS = 75.0;
         for (MovieLayer* sublayer in layersInOrder) {
             
             // Link shit
+            [sublayer clearMoveData];
             [(NSMutableArray*)[layerRows objectAtIndex:y - 1] addObject:sublayer];
             if (y < rows) {
                 MovieLayer* down = [(NSArray*)[layerRows objectAtIndex:y] objectAtIndex:x];
                 sublayer.downLayer = down;
                 down.upLayer = sublayer;
-            }            
+            }
             
             CGFloat chord = WS + (W / 2.0) + ((W + WS) * x);
             

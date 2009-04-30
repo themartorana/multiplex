@@ -80,6 +80,8 @@
 		556B15630EC0A8AC001B5E74 /* row-view.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 556B15620EC0A8AC001B5E74 /* row-view.pdf */; };
 		556BD78C0E9444ED00EC698A /* WorkingStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 556BD78B0E9444ED00EC698A /* WorkingStatusView.m */; };
 		556BD7900E94470600EC698A /* Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 556BD78F0E94470600EC698A /* Activity.m */; };
+		557401250FA96A09001FC560 /* NSFont+IndyHallLabs.h in Headers */ = {isa = PBXBuildFile; fileRef = 557401230FA96A09001FC560 /* NSFont+IndyHallLabs.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		557401260FA96A09001FC560 /* NSFont+IndyHallLabs.m in Sources */ = {isa = PBXBuildFile; fileRef = 557401240FA96A09001FC560 /* NSFont+IndyHallLabs.m */; };
 		55743F9E0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55743F9D0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.m */; };
 		557440660EABD786002E0B80 /* uservoice-hover.png in Resources */ = {isa = PBXBuildFile; fileRef = 557440640EABD786002E0B80 /* uservoice-hover.png */; };
 		557440670EABD786002E0B80 /* uservoice-normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 557440650EABD786002E0B80 /* uservoice-normal.png */; };
@@ -585,6 +587,8 @@
 		556BD78B0E9444ED00EC698A /* WorkingStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WorkingStatusView.m; sourceTree = "<group>"; };
 		556BD78E0E94470600EC698A /* Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Activity.h; sourceTree = "<group>"; };
 		556BD78F0E94470600EC698A /* Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Activity.m; sourceTree = "<group>"; };
+		557401230FA96A09001FC560 /* NSFont+IndyHallLabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFont+IndyHallLabs.h"; sourceTree = "<group>"; };
+		557401240FA96A09001FC560 /* NSFont+IndyHallLabs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFont+IndyHallLabs.m"; sourceTree = "<group>"; };
 		55743F9C0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserVoiceFeedbackPanel.h; sourceTree = "<group>"; };
 		55743F9D0EAB9B55002E0B80 /* UserVoiceFeedbackPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserVoiceFeedbackPanel.m; sourceTree = "<group>"; };
 		557440640EABD786002E0B80 /* uservoice-hover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "uservoice-hover.png"; sourceTree = "<group>"; };
@@ -1432,6 +1436,8 @@
 		F9CE81A10EA68BED00602750 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				557401230FA96A09001FC560 /* NSFont+IndyHallLabs.h */,
+				557401240FA96A09001FC560 /* NSFont+IndyHallLabs.m */,
 				55C943150F7191590071E03C /* NSData+IndyHallLabs.h */,
 				55C943170F71916D0071E03C /* NSData+IndyHallLabs.m */,
 				F9CE81A40EA68BED00602750 /* MessageProtocol.h */,
@@ -1546,6 +1552,7 @@
 				F9B8DB370EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.h in Headers */,
 				F9D4F92D0EB671E000B89FF4 /* NSBundle+IndyHallLabs.h in Headers */,
 				55B251E70F7086AF00477F96 /* NonDVDMediaSource.h in Headers */,
+				557401250FA96A09001FC560 /* NSFont+IndyHallLabs.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2148,6 +2155,7 @@
 				F9B8DB380EB17C98008589F3 /* NSValueTransformer+IndyHallLabs.m in Sources */,
 				F9D4F92E0EB671E000B89FF4 /* NSBundle+IndyHallLabs.m in Sources */,
 				55C943180F71916D0071E03C /* NSData+IndyHallLabs.m in Sources */,
+				557401260FA96A09001FC560 /* NSFont+IndyHallLabs.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

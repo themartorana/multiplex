@@ -389,8 +389,8 @@
 											<int key="NSCellFlags2">272760832</int>
 											<string type="base64-UTF8" key="NSContents">VGhpcyBvcHRpb24gd2lsbCBwdXNoIE11bHRpcGxleCBpbnRvIGZ1bGwgc2NyZWVuIG1vZGUgd2hlbiBp
 dCBpcyBsYXVuY2hlZC4gIEluIG9yZGVyIHRvIGdldCBvdXQgb2YgZnVsbCBzY3JlZW4gbW9kZSwgdXNl
-IHRoZSBFU0Mga2V5LCDijJgtRiwgb3IgdGhlIGZ1bGwtc2NyZWVuIGJ1dHRvbiBpbiB0aGUgbG93ZXIg
-cmlnaHQgb2YgdGhlIHNjcmVlbi4</string>
+IHRoZSBFU0Mga2V5LCDijJgtUmV0dXJuLCBvciB0aGUgZnVsbC1zY3JlZW4gYnV0dG9uIGluIHRoZSBs
+b3dlciByaWdodCBvZiB0aGUgc2NyZWVuLg</string>
 											<reference key="NSSupport" ref="26"/>
 											<reference key="NSControlView" ref="138244798"/>
 											<reference key="NSBackgroundColor" ref="340936208"/>
@@ -920,7 +920,7 @@ cmlnaHQgb2YgdGhlIHNjcmVlbi4</string>
 					<string>{580, 0}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{527, 377}, {580, 182}}</string>
+					<string>{{311, 377}, {580, 182}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSMutableArray">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1033,6 +1033,13 @@ cmlnaHQgb2YgdGhlIHNjcmVlbi4</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Frameworks/Toolkit/Source/MessageProtocol.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSWindow</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Application/ZoomableWindow.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

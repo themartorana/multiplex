@@ -70,6 +70,8 @@
 - (IBAction) addActor:(id)sender;
 - (IBAction) addCrewMember:(id)sender;
 
+- (IBAction) effectFont:(id)sender;
+
 - (NSString*) generateDescriptionHtmlString;
 
 - (void) showHomeTab;

@@ -199,8 +199,6 @@
     [discsView setMovie:movie];
     [self didChangeValueForKey:@"movie"];
     
-    NSString* noSynopsis = @"No description found. Replace this text to add one.";
-    [[descriptionWebView mainFrame] loadHTMLString:movie && movie.synopsis ? movie.synopsis : noSynopsis baseURL:[NSURL URLWithString:@""]];
     [[overviewWebView mainFrame] loadHTMLString:movie ? [self generateDescriptionHtmlString] : @"" baseURL:[NSURL URLWithString:@""]];
 }
 
@@ -285,6 +283,9 @@
     }
     
     [[overviewWebView mainFrame] loadHTMLString:[self generateDescriptionHtmlString] baseURL:[NSURL URLWithString:@""]];
+    
+    NSString* noSynopsis = @"No description found. Replace this text to add one.";
+    [[descriptionWebView mainFrame] loadHTMLString:(movie && movie.synopsis ? movie.synopsis : noSynopsis) baseURL:[NSURL URLWithString:@""]];
 }
 
 - (void) showHomeTab

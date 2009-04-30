@@ -247,6 +247,9 @@ static const CGFloat HS = 75.0;
      */
     CGFloat base = 0;
     CGFloat zBias = [listOfLayersInOrder count];
+    
+    NSMutableArray* layerRows = [NSMutableArray array];
+    
     for (NSArray* layersInOrder in listOfLayersInOrder) {
         int count = [layersInOrder count];
         lastWasEmpty = !count;
@@ -261,9 +264,23 @@ static const CGFloat HS = 75.0;
             base = height;
         }
         
+        // Make sure we have our rows array
+        while ([layerRows count] < columns) {
+            [layerRows addObject:[NSMutableArray array]];
+        }
+        
         int x = 0;
         int y = rows;
         for (MovieLayer* sublayer in layersInOrder) {
+            
+            // Link shit
+            [(NSMutableArray*)[layerRows objectAtIndex:y - 1] addObject:sublayer];
+            if (y < rows) {
+                MovieLayer* down = [(NSArray*)[layerRows objectAtIndex:y] objectAtIndex:x];
+                sublayer.downLayer = down;
+                down.upLayer = sublayer;
+            }            
+            
             CGFloat chord = WS + (W / 2.0) + ((W + WS) * x);
             
             /*  Starting with the base transform, translate the layer along the

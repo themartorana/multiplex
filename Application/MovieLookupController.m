@@ -432,12 +432,21 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
     NSString* upc = [self gtinToSearch];
     NSString* message = nil;
     
-    if (upc && [upc length]) {
+    if (upc && [upc length] && lastSearchWasByEAN) {
         message = [NSString stringWithFormat:@"No results were found for the UPC code (%@).", upc];
     } else {
         message = @"No results were found.";
     }
-    NSAlert* alert = [NSAlert alertWithMessageText:message defaultButton:@"Ok" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Please check your numbers and try again. Don't forget to include the single digits at the far left and far right."];
+    
+    NSString* descriptiveText = nil;
+    if (lastSearchWasByEAN) {
+        descriptiveText = @"Please check your numbers and try again. Don't forget to include the single digits at the far left and far right.";
+    }
+    else {
+        descriptiveText = @"Please check your movie title and try again.";
+    }
+    
+    NSAlert* alert = [NSAlert alertWithMessageText:message defaultButton:@"Ok" alternateButton:nil otherButton:nil informativeTextWithFormat:descriptiveText];
     [alert beginSheetModalForWindow:[drawerView window] modalDelegate:nil didEndSelector:nil contextInfo:nil];    
 }
 

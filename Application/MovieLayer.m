@@ -24,16 +24,16 @@ static void drawSetNumberLayer(CGContextRef context, NSRect inRect, int numberOf
 @dynamic upLayer;
 @dynamic downLayer;
 
-+ (id) layerWithMovie:(Movie*)movie
++ (id) layerWithMovie:(Movie*)_movie
 {
-    return [[[MovieLayer alloc] initWithMovie:movie] autorelease];
+    MovieLayer* layer = [[[MovieLayer alloc] init] autorelease];
+    layer.movie = _movie;
+    return layer;
 }
 
-- (MovieLayer*) initWithMovie:(Movie*)_movie
+- (MovieLayer*) init
 {    
-    NSAssert(_movie, @"wtf?");
     if (self = [super init]) {
-        movie = [_movie retain];
         self.layoutManager = [CAConstraintLayoutManager layoutManager];
         self.borderColor = [MultiplexColorFactory moveLayerBorderColor];
 
@@ -77,30 +77,45 @@ static void drawSetNumberLayer(CGContextRef context, NSRect inRect, int numberOf
         ];
         [self addSublayer:setIndicatorLayer];     
         
+    }
+    return self;
+}
+
+- (void) setMovie:(Movie*)m
+{
+    [self willChangeValueForKey:@"movie"];
+
+    [movie removeObserver:self forKeyPath:@"availableDiscCount"];
+    [movie removeObserver:self forKeyPath:@"allDiscs"];
+    [movie removeObserver:self forKeyPath:@"title"];
+    
+    @try {
+        [movie removeObserver:self forKeyPath:@"boxArt.imageData"];                    
+    }
+    @catch (NSException*) {
+        NSLog(@"Still having issues removing boxArt.imageData observer");
+    }
+
+
+    [movie release], movie = nil;
+    movie = [m retain];
+    
+    if (movie) {
         [movie addObserver:self forKeyPath:@"availableDiscCount" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
         [movie addObserver:self forKeyPath:@"allDiscs" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
         [movie addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
         [movie addObserver:self forKeyPath:@"boxArt.imageData" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial context:nil];
     }
-    return self;
+    
+    [self didChangeValueForKey:@"movie"];
 }
 
 - (void) dealloc
 {
-    if (movie) {
-        [movie removeObserver:self forKeyPath:@"availableDiscCount"];
-        [movie removeObserver:self forKeyPath:@"allDiscs"];
-        [movie removeObserver:self forKeyPath:@"title"];
-        
-        // TODO: FIX THIS FOR WHATEVER REASON
-        @try {
-            [movie removeObserver:self forKeyPath:@"boxArt.imageData"];            
-        }
-        @catch (NSException* ex) {
-            NSLog(@"Exception removing observer, %@", [ex userInfo]);
-        }
-    }
-
+    setIndicatorLayer.delegate = nil;
+    boxImageLayer.delegate = nil;
+    gradientLayer.delegate = nil;
+    
     [movie release];
     [boxArtImage release];
     [super dealloc];

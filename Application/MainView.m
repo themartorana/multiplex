@@ -601,7 +601,9 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
         //for (NSManagedObjectID* objectID in  
     }
     for (NSManagedObjectID* objectID in keysOfLayersToDelete) {
-        [[layersByID objectForKey:objectID] removeFromSuperlayer];
+        MovieLayer* layerToDelete = [layersByID objectForKey:objectID];
+        layerToDelete.movie = nil;
+        [layerToDelete removeFromSuperlayer];
         [layersByID removeObjectForKey:objectID];
     }
     

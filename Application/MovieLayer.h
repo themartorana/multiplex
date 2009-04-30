@@ -18,7 +18,7 @@
     NSString* movieTitle;
 }
 
-@property (readonly) Movie* movie;
+@property (retain) Movie* movie;
 @property (retain) id boxArtImage;
 
 @property (retain) MovieLayer* upLayer;
@@ -26,7 +26,6 @@
 
 + (id) layerWithMovie:(Movie*)movie;
 
-- (id) initWithMovie:(Movie*)movie;
 - (void) clearMoveData;
 
 @end

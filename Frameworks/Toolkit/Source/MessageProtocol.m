@@ -155,7 +155,7 @@
                 break;
             }
 
-            NSString* messageText = [[NSString alloc] initWithData:[buffer subdataWithRange:NSMakeRange(bp - bpBase, bytesToRead)] encoding:NSUTF8StringEncoding];
+            NSString* messageText = [[[NSString alloc] initWithData:[buffer subdataWithRange:NSMakeRange(bp - bpBase, bytesToRead)] encoding:NSUTF8StringEncoding] autorelease];
             [self _fireDidReceiveMessage:[NSDictionary dictionaryWithJSON:messageText]];
             
             NSData* oldCurrentBuffer = buffer;

@@ -934,7 +934,7 @@ static NSArray* fileTypes = nil;
     
     NSEntityDescription* discEntity = [NSEntityDescription entityForName:@"Disc" inManagedObjectContext:engineManagedObjectContext];
     NSEntityDescription* mediaEntity = [NSEntityDescription entityForName:@"Media" inManagedObjectContext:engineManagedObjectContext];
-    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    NSFetchRequest* fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
     [fetchRequest setEntity:discEntity];
     NSArray* discsToAddMediaTo = [engineManagedObjectContext executeFetchRequest:fetchRequest error:nil];
     

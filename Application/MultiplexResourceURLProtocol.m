@@ -25,7 +25,7 @@
     id<NSURLProtocolClient> client = [self client];
 	
     if (data) {
-		NSURLResponse* response = [[NSURLResponse alloc] initWithURL:url MIMEType:nil expectedContentLength:[data length] textEncodingName:nil];
+		NSURLResponse* response = [[[NSURLResponse alloc] initWithURL:url MIMEType:nil expectedContentLength:[data length] textEncodingName:nil] autorelease];
 		[client URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];
 		[client URLProtocol:self didLoadData:data];
 		[client URLProtocolDidFinishLoading:self];

@@ -66,7 +66,7 @@
         [listOfLayersInOrder release];
         listOfLayersInOrder = nil;
     }
-    listOfLayersInOrder = [_listOfLayersInOrder copy];
+    listOfLayersInOrder = [_listOfLayersInOrder retain];
 }
 
 - (void) setShouldShowSelectedMovieHighlight:(BOOL)show

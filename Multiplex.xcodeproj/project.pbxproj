@@ -65,6 +65,7 @@
 		5551FB9E0EB65F3C0022147A /* NoDiscsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5551FB9D0EB65F3C0022147A /* NoDiscsView.m */; };
 		555327790EB4103F0044B302 /* full-screen-icon-down.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 555327770EB4103F0044B302 /* full-screen-icon-down.pdf */; };
 		5553277A0EB4103F0044B302 /* full-screen-icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 555327780EB4103F0044B302 /* full-screen-icon.pdf */; };
+		55551D260FAA12E700933092 /* Credits.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 55551D250FAA12E700933092 /* Credits.rtfd */; };
 		5555AB8B0F71A5B600E1ADF2 /* NonDVDMedia.mediasource in Copy Files to Plugins */ = {isa = PBXBuildFile; fileRef = 55B252000F70872300477F96 /* NonDVDMedia.mediasource */; };
 		55570B990EB5A0970051D576 /* network-icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55570B930EB5A0970051D576 /* network-icon.pdf */; };
 		55570B9A0EB5A0970051D576 /* stadium-view.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 55570B940EB5A0970051D576 /* stadium-view.pdf */; };
@@ -171,7 +172,6 @@
 		96E3E5370FA9496B00B8FC78 /* fff_text_italic.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E3E52F0FA9496B00B8FC78 /* fff_text_italic.png */; };
 		96E3E53A0FA94C5500B8FC78 /* fff_font.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E3E5390FA94C5500B8FC78 /* fff_font.png */; };
 		96E4F59F0FA5291F00A7EEC0 /* vertical-thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E4F59E0FA5291F00A7EEC0 /* vertical-thumb.png */; };
-		F914C9C80EAD653300877991 /* plus-36x36.png in Resources */ = {isa = PBXBuildFile; fileRef = F914C9C70EAD653300877991 /* plus-36x36.png */; };
 		F914C9D00EAD657900877991 /* DrawerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F914C9CF0EAD657900877991 /* DrawerView.m */; };
 		F914CB100EAD7C8700877991 /* drawer-background-pattern-96x96.gif in Resources */ = {isa = PBXBuildFile; fileRef = F914CB0F0EAD7C8700877991 /* drawer-background-pattern-96x96.gif */; };
 		F917CCA80EBA53CF00B21587 /* Query.m in Sources */ = {isa = PBXBuildFile; fileRef = F917CCA70EBA53CF00B21587 /* Query.m */; };
@@ -571,6 +571,7 @@
 		5551FB9D0EB65F3C0022147A /* NoDiscsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoDiscsView.m; sourceTree = "<group>"; };
 		555327770EB4103F0044B302 /* full-screen-icon-down.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "full-screen-icon-down.pdf"; sourceTree = "<group>"; };
 		555327780EB4103F0044B302 /* full-screen-icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "full-screen-icon.pdf"; sourceTree = "<group>"; };
+		55551D250FAA12E700933092 /* Credits.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; path = Credits.rtfd; sourceTree = "<group>"; };
 		55570B930EB5A0970051D576 /* network-icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "network-icon.pdf"; sourceTree = "<group>"; };
 		55570B940EB5A0970051D576 /* stadium-view.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "stadium-view.pdf"; sourceTree = "<group>"; };
 		55570B950EB5A0970051D576 /* grid-view.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "grid-view.pdf"; sourceTree = "<group>"; };
@@ -994,6 +995,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				55551D250FAA12E700933092 /* Credits.rtfd */,
 				55A230AE0F47277200353AB1 /* SampleData.database */,
 				F9A91F5F0F0B163D005CAF9F /* license.plist */,
 				552A6F180EE4C2AD005B9873 /* Fonts */,
@@ -1873,7 +1875,6 @@
 				553477810EA3AD5100436A8C /* multiplex-mark01a.icns in Resources */,
 				557440670EABD786002E0B80 /* uservoice-normal.png in Resources */,
 				5574409D0EABDD54002E0B80 /* uservoice-feedback.css in Resources */,
-				F914C9C80EAD653300877991 /* plus-36x36.png in Resources */,
 				F914CB100EAD7C8700877991 /* drawer-background-pattern-96x96.gif in Resources */,
 				F966E6890EAFB38B001D0B3B /* drag-drop-no-image.pdf in Resources */,
 				554282C70EB3D69B00FF7E44 /* full-screen-icon.gif in Resources */,
@@ -1939,6 +1940,7 @@
 				96E3E5370FA9496B00B8FC78 /* fff_text_italic.png in Resources */,
 				96E3E53A0FA94C5500B8FC78 /* fff_font.png in Resources */,
 				558ACEEA0FA97B48002B443F /* uservoice-hover.png in Resources */,
+				55551D260FAA12E700933092 /* Credits.rtfd in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

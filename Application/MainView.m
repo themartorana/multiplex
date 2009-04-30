@@ -114,6 +114,7 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     if (layoutManager) {
         [layoutManager clearManagingLayerOfExtras];
     }
+    [layoutManager release], layoutManager = nil;
     layoutManager = [[class alloc] initWithManagingLayer:floorLayer];
     [floorLayer setNeedsLayout];
 }
@@ -567,7 +568,8 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
             }
             [newListOfMoviesInOrder removeLastObject];
         }
-        [newListOfMoviesInOrder addObject:[arrangedObjects copy]]; 
+        //[newListOfMoviesInOrder addObject:[arrangedObjects copy]];
+        [newListOfMoviesInOrder addObject:arrangedObjects];
         listOfMoviesInOrder = newListOfMoviesInOrder;
         [self setHoveredMovie:nil];
         

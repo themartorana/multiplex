@@ -23,6 +23,7 @@
 + (CGImageRef) fullScreenButtonDown;
 
 + (WebPreferences*) movieDescriptionWebPreferences;
++ (WebPreferences*) movieDescriptionEditWebPreferences;
 + (WebPreferences*) userVoiceWebPreferences;
 + (WebPreferences*) hoverViewWebPreferences;
 + (WebPreferences*) discsViewWebPreferences;

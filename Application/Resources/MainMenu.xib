@@ -8,6 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="29"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -238,15 +239,6 @@
 									<reference key="NSMenu" ref="789758025"/>
 									<string key="NSTitle">Get Movie Info</string>
 									<string key="NSKeyEquiv">i</string>
-									<int key="NSKeyEquivModMask">1048576</int>
-									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="756751024"/>
-									<reference key="NSMixedImage" ref="908425081"/>
-								</object>
-								<object class="NSMenuItem" id="182019752">
-									<reference key="NSMenu" ref="789758025"/>
-									<string key="NSTitle">Show In Finder</string>
-									<string key="NSKeyEquiv">r</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="756751024"/>
@@ -1041,15 +1033,6 @@
 									<reference key="NSOnImage" ref="756751024"/>
 									<reference key="NSMixedImage" ref="908425081"/>
 								</object>
-								<object class="NSMenuItem" id="534648085">
-									<reference key="NSMenu" ref="598179237"/>
-									<string key="NSTitle">Add Other Movie Files...</string>
-									<string key="NSKeyEquiv">o</string>
-									<int key="NSKeyEquivModMask">1048576</int>
-									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="756751024"/>
-									<reference key="NSMixedImage" ref="908425081"/>
-								</object>
 							</object>
 						</object>
 					</object>
@@ -1431,6 +1414,7 @@
 											</object>
 											<string key="NSFrameSize">{240, 240}</string>
 											<reference key="NSSuperview" ref="223232862"/>
+											<reference key="NSNextKeyView"/>
 											<string key="FrameName"/>
 											<string key="GroupName"/>
 											<object class="WebPreferences" key="Preferences" id="817572752">
@@ -4475,14 +4459,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">addNonDVDMovie:</string>
-						<reference key="source" ref="623785332"/>
-						<reference key="destination" ref="534648085"/>
-					</object>
-					<int key="connectionID">2325</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
 						<string key="label">playMovie:</string>
 						<reference key="source" ref="623785332"/>
 						<reference key="destination" ref="1005530015"/>
@@ -4958,7 +4934,6 @@
 							<reference ref="1005530015"/>
 							<reference ref="351924424"/>
 							<reference ref="381810854"/>
-							<reference ref="182019752"/>
 						</object>
 						<reference key="parent" ref="952259628"/>
 					</object>
@@ -6366,11 +6341,6 @@
 						<reference key="parent" ref="789758025"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">2318</int>
-						<reference key="object" ref="182019752"/>
-						<reference key="parent" ref="789758025"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">2320</int>
 						<reference key="object" ref="409973151"/>
 						<object class="NSMutableArray" key="children">
@@ -6384,15 +6354,9 @@
 						<reference key="object" ref="598179237"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="534648085"/>
 							<reference ref="1029891623"/>
 						</object>
 						<reference key="parent" ref="409973151"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">2322</int>
-						<reference key="object" ref="534648085"/>
-						<reference key="parent" ref="598179237"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">2323</int>
@@ -7105,11 +7069,9 @@
 					<string>2315.IBPluginDependency</string>
 					<string>2316.IBPluginDependency</string>
 					<string>2317.IBPluginDependency</string>
-					<string>2318.IBPluginDependency</string>
 					<string>2320.IBPluginDependency</string>
 					<string>2321.IBEditorWindowLastContentRect</string>
 					<string>2321.IBPluginDependency</string>
-					<string>2322.IBPluginDependency</string>
 					<string>2323.IBPluginDependency</string>
 					<string>2329.IBEditorWindowLastContentRect</string>
 					<string>2329.IBPluginDependency</string>
@@ -7450,7 +7412,7 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{221, 688}, {243, 123}}</string>
+					<string>{{221, 708}, {243, 103}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{{365, 632}, {243, 243}}</string>
@@ -7501,9 +7463,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{-1017, 609}, {242, 43}}</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>{{357, 788}, {100, 23}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{42, 999}, {156, 89}}</string>

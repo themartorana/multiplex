@@ -86,6 +86,7 @@
 		5574409D0EABDD54002E0B80 /* uservoice-feedback.css in Resources */ = {isa = PBXBuildFile; fileRef = 5574409C0EABDD54002E0B80 /* uservoice-feedback.css */; };
 		5574AA590F1E56A700D4AA81 /* StartupSpinnerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5574AA580F1E56A700D4AA81 /* StartupSpinnerView.m */; };
 		5574AD130F1E968400D4AA81 /* tooltip-pointer-right.png in Resources */ = {isa = PBXBuildFile; fileRef = 5574AD120F1E968400D4AA81 /* tooltip-pointer-right.png */; };
+		5574FDAB0FA92B0A001FC560 /* movie-description-edit.css in Resources */ = {isa = PBXBuildFile; fileRef = 5574FDAA0FA92B0A001FC560 /* movie-description-edit.css */; };
 		557B69460E4CCD3F0009919E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 557B69450E4CCD3F0009919E /* MainMenu.xib */; };
 		55845F5D0FA205B400CD0B13 /* jquery-ui.js in Resources */ = {isa = PBXBuildFile; fileRef = 55845F5B0FA2059000CD0B13 /* jquery-ui.js */; };
 		5584A5D40FA69BA6007B055E /* jquery.jeditable.js in Resources */ = {isa = PBXBuildFile; fileRef = 5584A5D30FA69B8D007B055E /* jquery.jeditable.js */; };
@@ -583,6 +584,7 @@
 		5574AA570F1E56A700D4AA81 /* StartupSpinnerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupSpinnerView.h; sourceTree = "<group>"; };
 		5574AA580F1E56A700D4AA81 /* StartupSpinnerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartupSpinnerView.m; sourceTree = "<group>"; };
 		5574AD120F1E968400D4AA81 /* tooltip-pointer-right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tooltip-pointer-right.png"; sourceTree = "<group>"; };
+		5574FDAA0FA92B0A001FC560 /* movie-description-edit.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = "movie-description-edit.css"; sourceTree = "<group>"; };
 		557AFD320F2A811C00C53801 /* ExecuteTokenProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExecuteTokenProtocol.h; sourceTree = "<group>"; };
 		557B66A20E4A2F4D0009919E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		557B69450E4CCD3F0009919E /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
@@ -1267,6 +1269,7 @@
 				55B81A480EA049D500775EAE /* movie-description.css */,
 				55DCCE830F15314700B3DF41 /* hoverview.css */,
 				96A02DB10F9D2CFA00DED204 /* discs-tab.css */,
+				5574FDAA0FA92B0A001FC560 /* movie-description-edit.css */,
 			);
 			name = CSS;
 			sourceTree = "<group>";
@@ -1890,6 +1893,7 @@
 				5584A6490FA7476E007B055E /* play-button-small-dwn.png in Resources */,
 				5584A64C0FA74778007B055E /* play-button-large-dwn.png in Resources */,
 				5584A64D0FA74778007B055E /* play-button-large.png in Resources */,
+				5574FDAB0FA92B0A001FC560 /* movie-description-edit.css in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

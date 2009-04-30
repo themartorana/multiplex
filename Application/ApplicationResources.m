@@ -228,6 +228,17 @@
     return prefs;
 }
 
++ (WebPreferences*) movieDescriptionEditWebPreferences
+{
+    WebPreferences* prefs = [[WebPreferences alloc] init];
+    [prefs setJavaEnabled:NO];
+    [prefs setJavaScriptEnabled:NO];
+    [prefs setPlugInsEnabled:NO];
+    [prefs setUserStyleSheetEnabled:YES];
+    [prefs setUserStyleSheetLocation:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"movie-description-edit" ofType:@"css"]]];   
+    return prefs;
+}
+
 + (WebPreferences*) hoverViewWebPreferences
 {
     WebPreferences* prefs = [[WebPreferences alloc] init];

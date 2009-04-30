@@ -63,7 +63,7 @@
     [descriptionWebView setFrameLoadDelegate:self];
     [descriptionWebView setEditable:YES];
     [descriptionWebView setDrawsBackground:YES];
-    //[descriptionWebView setPreferences:[ApplicationResources movieDescriptionWebPreferences]];
+    [descriptionWebView setPreferences:[ApplicationResources movieDescriptionEditWebPreferences]];
     
     [overviewWebView setFrameLoadDelegate:self];
     [overviewWebView setEditable:NO];

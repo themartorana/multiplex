@@ -36,10 +36,12 @@ body {
 #tooltip h3#title {
 	margin: 0;
 	padding: 0 10px;
+	overflow: hidden;
 	background-color: #F66A26;
 	color: #FFF;
 	font-size: 1.25em;
 	font-weight: bold;
+	text-overflow: ellipsis;
 }
 #tooltip #tooltip-title-bottom {
 	height: 8px;

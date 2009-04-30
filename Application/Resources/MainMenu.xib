@@ -8,6 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="2352"/>
 			<integer value="29"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -3172,7 +3173,7 @@
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSWindowTemplate" id="202925866">
-				<int key="NSWindowStyleMask">31</int>
+				<int key="NSWindowStyleMask">23</int>
 				<int key="NSWindowBacking">2</int>
 				<string key="NSWindowRect">{{196, 324}, {415, 186}}</string>
 				<int key="NSWTFlags">-1543503872</int>
@@ -3181,13 +3182,13 @@
 				<nil key="NSViewClass"/>
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<object class="NSView" key="NSWindowView" id="338681719">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSButton" id="691201609">
 							<reference key="NSNextResponder" ref="338681719"/>
-							<int key="NSvFlags">268</int>
+							<int key="NSvFlags">269</int>
 							<string key="NSFrame">{{209, 12}, {96, 32}}</string>
 							<reference key="NSSuperview" ref="338681719"/>
 							<bool key="NSEnabled">YES</bool>
@@ -3207,7 +3208,7 @@
 						</object>
 						<object class="NSButton" id="756594340">
 							<reference key="NSNextResponder" ref="338681719"/>
-							<int key="NSvFlags">268</int>
+							<int key="NSvFlags">269</int>
 							<string key="NSFrame">{{305, 12}, {96, 32}}</string>
 							<reference key="NSSuperview" ref="338681719"/>
 							<bool key="NSEnabled">YES</bool>
@@ -3227,7 +3228,7 @@
 						</object>
 						<object class="NSButton" id="448041827">
 							<reference key="NSNextResponder" ref="338681719"/>
-							<int key="NSvFlags">268</int>
+							<int key="NSvFlags">269</int>
 							<string key="NSFrame">{{14, 12}, {195, 32}}</string>
 							<reference key="NSSuperview" ref="338681719"/>
 							<bool key="NSEnabled">YES</bool>
@@ -3247,7 +3248,7 @@
 						</object>
 						<object class="NSTextField" id="323898471">
 							<reference key="NSNextResponder" ref="338681719"/>
-							<int key="NSvFlags">268</int>
+							<int key="NSvFlags">269</int>
 							<string key="NSFrame">{{121, 53}, {277, 113}}</string>
 							<reference key="NSSuperview" ref="338681719"/>
 							<bool key="NSEnabled">YES</bool>
@@ -3263,7 +3264,7 @@
 						</object>
 						<object class="NSImageView" id="864406320">
 							<reference key="NSNextResponder" ref="338681719"/>
-							<int key="NSvFlags">268</int>
+							<int key="NSvFlags">269</int>
 							<object class="NSMutableSet" key="NSDragTypes">
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSMutableArray" key="set.sortedObjects">
@@ -3295,6 +3296,7 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{415, 186}</string>
+					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1600, 1178}}</string>
 				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>

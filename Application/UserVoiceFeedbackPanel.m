@@ -25,7 +25,7 @@
 
 - (void) resetFeedbackPage
 {
-    [userVoiceFeedbackWebView setMainFrameURL:@"http://multiplex.uservoice.com/pages/beta/widgets/popin.html?referer=org.indyhall.labs.multiplex"];
+    [userVoiceFeedbackWebView setMainFrameURL:@"http://multiplex.uservoice.com/pages/4657-multiplex/widgets/popin.html?referer=org.indyhall.labs.multiplex"];
 }
 
 - (IBAction) closeSheet:(id)sender

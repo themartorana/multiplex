@@ -645,8 +645,10 @@ static NSArray* fileTypes = nil;
                     text = [NSString stringWithFormat:NSLocalizedString(@"%d days remaining", @""), (int)(timeRemainingForTrial / (24 * 60 * 60)) + 1];
                 }
                 [licensingAndVersionInfo setStringValue:[NSString stringWithFormat:@"%@ - %@", text, [[NSBundle mainBundle] version]]];
+                [purchaseMultiplexMenuItem setHidden:NO];
             } else {
                 [licensingAndVersionInfo setStringValue:[NSString stringWithFormat:@"Property of %@ - %@", [parameters objectForKey:@"Name"], [[NSBundle mainBundle] version]]];
+                [purchaseMultiplexMenuItem setHidden:YES];
             }
         }
         SUUpdater* updater = [SUUpdater sharedUpdater];
@@ -1120,6 +1122,11 @@ static NSArray* fileTypes = nil;
             }
         }
     }
+}
+
+- (IBAction) purchaseMultiplex:(id)sender
+{
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://buy.multiplexapp.com/"]];
 }
 
 #pragma mark Private Methods

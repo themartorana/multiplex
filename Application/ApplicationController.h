@@ -43,6 +43,7 @@
     IBOutlet NSMenu* movieContextMenu;
     IBOutlet NSMenuItem* buyFromAmazonMenuItem;
     IBOutlet NSMenuItem* burnWithToastMenuItem;
+    IBOutlet NSMenuItem* purchaseMultiplexMenuItem;
     
     IBOutlet DeleteConfirmationPanel* deletePanel;
     
@@ -112,6 +113,8 @@
 - (IBAction) resetToolTipAlerts:(id)sender;
 
 - (IBAction) revealInFinder:(id)sender;
+
+- (IBAction) purchaseMultiplex:(id)sender;
 
 - (void) showMovieDetailAndSelectHomeTabForMovie:(Movie*)movie;
 - (void) showMovieDetailAndSelectDiscsTabMovie:(Movie*)movie;

@@ -9,6 +9,9 @@
 
 - (NSString*) transformedValue:(NSNumber*)value {
     if (value) {
+        if ([value intValue] == 0) {
+            return @"";
+        }
         NSString* str = [value stringValue];
         return str;
     }

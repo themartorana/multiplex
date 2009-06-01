@@ -81,7 +81,7 @@ static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
         if (indexOfParen != NSNotFound) {
             title = [title substringToIndex:indexOfParen];
         }
-        int indexOfDash = [title rangeOfString:@"-"].location;
+        int indexOfDash = [title rangeOfString:@" - "].location;
         if (indexOfDash != NSNotFound) {
             title = [title substringToIndex:indexOfDash];
         }

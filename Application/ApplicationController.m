@@ -24,7 +24,7 @@
 #import "MultiplexResourceURLProtocol.h"
 
 #import "MAAttachedWindow.h"
-#import "ZoomableWindow.h"
+#import "IHLZoomableWindow.h"
 #import "DeleteConfirmationPanel.h"
 
 #import <QuartzCore/QuartzCore.h>
@@ -350,7 +350,11 @@ static NSArray* fileTypes = nil;
 
 - (void) applicationWillTerminate:(NSNotification*)notification
 {
-    [[self window] close];
+    IHLZoomableWindow* w = (IHLZoomableWindow*)[self window];
+    if ([w isInFullScreen]) {
+        [w toggleFullScreen];
+    }
+    [w close];
     [engineController shutdown];
 }
 
@@ -658,7 +662,7 @@ static NSArray* fileTypes = nil;
 
 - (BOOL) isInFullScreen
 {
-    return [[NSApp mainWindow] isBig];
+    return [(IHLZoomableWindow*)[NSApp mainWindow] isInFullScreen];
 }
 
 - (BOOL) isDrawerViewOpen

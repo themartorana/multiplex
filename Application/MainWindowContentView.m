@@ -1,5 +1,5 @@
 #import "MainWindowContentView.h"
-#import "ZoomableWindow.h"
+#import "IHLZoomableWindow.h"
 
 @implementation MainWindowContentView
 
@@ -48,15 +48,16 @@
 
 - (void) toggleFullScreen
 {
-    if ([[NSApp mainWindow] isBig]) {
+    IHLZoomableWindow* w = (IHLZoomableWindow*)[NSApp mainWindow];
+    
+    if ([w isInFullScreen]) {
         [toggleFullScreenButton setImage:[NSImage imageNamed:@"NSEnterFullScreenTemplate"]];
     }
     else {
         [toggleFullScreenButton setImage:[NSImage imageNamed:@"NSExitFullScreenTemplate"]];
     }
 
-    [NSWindow swizzleZoomerMethods];
-    [[NSApp keyWindow] toggleMegaZoom];
+    [w toggleFullScreen];
 }
 
 - (IBAction) toggleFullScreen:(id)sender

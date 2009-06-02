@@ -128,6 +128,14 @@ NSString* const URL_PREFIX = @"multiplex://";
             htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<!--[POINTER-ID]-->" withString:@"pointer-right"];
         }
         
+        if ([movie.allDiscs count] > 1) {
+            htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<!--[DISCS_HIDDEN]-->" withString:@"normal"];
+            htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<!--[DISCS_COUNT]-->" withString:[NSString stringWithFormat:@"%i", [movie.allDiscs count]]];
+        }
+        else {
+            htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<!--[DISCS_HIDDEN]-->" withString:@"none"];
+        }
+        
         if (movie.title) {
             htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<!--[TITLE]-->" withString:movie.title];
         }

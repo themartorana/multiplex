@@ -11,7 +11,7 @@
 #import <sys/param.h>
 #import <sys/mount.h>
 
-static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
+//static NSString* const kAmazonAccessKey = @"AKIAJSHOOPNUKV6DCQHA";
 
 @interface Engine (Private)
 

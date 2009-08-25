@@ -10,4 +10,17 @@
     return [UUID autorelease];
 }
 
+- (NSString*) urlEncodedString
+{
+	NSString* encodedValue = (NSString*)CFURLCreateStringByAddingPercentEscapes(
+							    NULL,
+								(CFStringRef)self,
+								NULL,
+								(CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",
+								kCFStringEncodingUTF8
+	);
+
+	return [encodedValue autorelease];
+}
+
 @end

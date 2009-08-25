@@ -122,7 +122,7 @@ static NSArray* fileTypes = nil;
             kCFBooleanTrue, @"ShowToolTipSearch",
             nil
         ]];
-        
+		
         // Add in our file types
         if (!fileTypes) {
             fileTypes = [[NSArray arrayWithObjects:
@@ -317,6 +317,15 @@ static NSArray* fileTypes = nil;
     // Register Pasteboard types
     [[self window] registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
     
+	// Set the appropriate selected view segment
+	Class cLayoutManager = NSClassFromString([[NSUserDefaults standardUserDefaults] stringForKey:@"MultiplexDrawerIsClosedLayoutManagerClass"]);
+	if (cLayoutManager == [StadiumLayoutManager class]) {
+		[self setSelectedSegment:0];
+	}
+	else if (cLayoutManager == [LinearLayoutManager class]) {
+		[self setSelectedSegment:1];
+	}	
+	
     // Filter?
     BOOL hide = [[NSUserDefaults standardUserDefaults] boolForKey:@"HideUnavailableMovies"];
     [self _setUnavailableMoviePredicate:hide];

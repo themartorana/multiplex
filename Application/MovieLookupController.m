@@ -19,7 +19,7 @@
 #import <Toolkit/Toolkit.h>
 #import <JSONKit/JSONKit.h>
 
-static NSString* const kAmazonAccessKey = @"01Y2NSCMDJ3VJXTCBTR2";
+static NSString* const kAmazonAccessKey = @"AKIAJSHOOPNUKV6DCQHA";
 
 @interface MovieLookupController (Private)
 - (void) showResultAtIndex:(int)index;

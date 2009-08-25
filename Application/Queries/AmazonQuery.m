@@ -1,5 +1,17 @@
 #import "AmazonQuery.h"
 #import "Query+Private.h"
+#import <CommonCrypto/CommonDigest.h>
+#import <CommonCrypto/CommonHMAC.h>
+#import <Toolkit/Toolkit.h>
+
+static const NSString* AWS_secret_key = @"4/WGvihQXVFsXSaHoxzsNnG5ehyFTOuKXb0sJb6q";
+
+@interface AmazonQuery (Private)
+
+- (NSString*) _amazonSignedStringWithMutableDictionaryOfValues:(NSMutableDictionary*)dict;
+- (NSString*) _utcTimestamp;
+
+@end
 
 #pragma mark -
 @implementation AmazonQuery
@@ -48,7 +60,7 @@
     NSAssert(_accessKey, @"accessKey must not be nil.");
     NSAssert(_ean, @"ean must not be nil.");
     NSAssert([_ean length] == 13, @"ean must not be exactly 13 digits long.");
-    NSString* url = [NSString stringWithFormat:
+    /*NSString* url = [NSString stringWithFormat:
        @"http://webservices.amazon.com/onca/xml?Service=AWSECommerceService" \
         "&SubscriptionId=%@" \
         "&Operation=ItemLookup" \
@@ -58,7 +70,24 @@
         "&ItemId=%@",
         _accessKey,
         _ean
-    ];
+    ];*/
+	
+	NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+								 @"webservices.amazon.com", @"url",
+								 @"/onca/xml", @"path", 
+								 @"AWSECommerceService", @"Service",
+								 _accessKey, @"AWSAccessKeyId", 
+								 @"ItemLookup", @"Operation",
+								 @"Small,ItemAttributes,Images,EditorialReview", @"ResponseGroup",
+								 @"EAN", @"IdType",
+								 @"DVD", @"SearchIndex",
+								 _ean, @"ItemId",
+								 [self _utcTimestamp], @"Timestamp",
+								 nil
+								 ];
+
+	NSString* url = [self _amazonSignedStringWithMutableDictionaryOfValues:dict];
+		
     if (self = [super initWithURL:[NSURL URLWithString:url]]) {
         accessKey = [_accessKey retain];
         ean = [_ean retain];
@@ -72,23 +101,71 @@
     
     NSAssert(_accessKey, @"accessKey must not be nil.");
     NSAssert(_titleKeywords, @"ean must not be nil.");
-    NSString* url = [NSString stringWithFormat:
-                     @"http://webservices.amazon.com/onca/xml?Service=AWSECommerceService" \
-                     "&SubscriptionId=%@" \
-                     "&Operation=ItemSearch" \
-                     "&ResponseGroup=Small,ItemAttributes,Images,EditorialReview" \
-                     "&IdType=EAN"\
-                     "&SearchIndex=DVD"\
-                     "&Keywords=%@",
-                     _accessKey,
-                     _titleKeywords
-                     ];
-    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    if (self = [super initWithURL:[NSURL URLWithString:url]]) {
+    NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+									@"webservices.amazon.com", @"url",
+									@"/onca/xml", @"path", 
+									@"AWSECommerceService", @"Service",
+									_accessKey, @"AWSAccessKeyId", 
+									@"ItemSearch", @"Operation",
+									@"Small,ItemAttributes,Images,EditorialReview", @"ResponseGroup", 
+									@"EAN", @"IdType",
+									@"DVD", @"SearchIndex",
+									_titleKeywords, @"Keywords",
+									[self _utcTimestamp], @"Timestamp",
+									nil
+								 ];
+	NSString* url = [self _amazonSignedStringWithMutableDictionaryOfValues:dict];
+    
+	if (self = [super initWithURL:[NSURL URLWithString:url]]) {
         accessKey = [_accessKey retain];
         titleKeywords = [_titleKeywords retain];
     }
     return self;
+}
+
+
+- (NSString*) _amazonSignedStringWithMutableDictionaryOfValues:(NSMutableDictionary*)dict
+{
+	NSString* url = [dict objectForKey:@"url"];
+	NSString* path = [dict objectForKey:@"path"];
+	
+	[dict removeObjectForKey:@"url"];
+	[dict removeObjectForKey:@"path"];
+	
+	NSSortDescriptor* alphaDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"description" ascending:YES] autorelease];
+	NSArray* keysInOrder = [[dict allKeys] sortedArrayUsingDescriptors:[NSArray arrayWithObject:alphaDescriptor]];
+	
+	NSMutableString* escapedQuerystring = [NSMutableString string];
+	for (NSString* key in keysInOrder) {
+		if ([escapedQuerystring length] > 0) {
+			[escapedQuerystring appendString:@"&"];
+		}
+		NSString* encodedValue = [(NSString*)[dict objectForKey:key] urlEncodedString];
+		[escapedQuerystring appendFormat:@"%@=%@", key, encodedValue];
+	}
+	
+	// Create the signing string
+	NSString* signingString = [NSString stringWithFormat:
+							  @"GET\n%@\n%@\n%@",
+							  url,
+							  path,
+							  escapedQuerystring
+							  ];
+
+	// Get signing string
+	// From http://stackoverflow.com/questions/756492/objective-c-sample-code-for-hmac-sha1
+	const char *cKey  = [AWS_secret_key cStringUsingEncoding:NSASCIIStringEncoding];
+	const char *cData = [signingString cStringUsingEncoding:NSASCIIStringEncoding];
+	
+	unsigned char cHMAC[CC_SHA256_DIGEST_LENGTH];
+	
+	CCHmac(kCCHmacAlgSHA256, cKey, strlen(cKey), cData, strlen(cData), cHMAC);
+	
+	NSData* HMAC = [[NSData alloc] initWithBytes:cHMAC length:sizeof(cHMAC)];
+	NSString* signature = [[[HMAC base64EncodedString] urlEncodedString] stringByReplacingOccurrencesOfString:@"%0A" withString:@""];
+	
+	// Recreate the url
+	return [NSString stringWithFormat:@"http://%@%@?%@&Signature=%@", url, path, escapedQuerystring, signature];
 }
 
 - (void) dealloc
@@ -96,6 +173,13 @@
     [accessKey release];
     [ean release];
     [super dealloc];
+}
+
+- (NSString *) _utcTimestamp {
+	NSDateFormatter *outputFormatter = [[[NSDateFormatter alloc] init] autorelease];
+	outputFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'";
+	outputFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+	return [outputFormatter stringFromDate:[NSDate date]];
 }
 
 - (void) _fireDidReceiveData:(NSData*)data ofType:(NSString*)type

@@ -62,12 +62,6 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     ];
     [rootLayer insertSublayer:floorLayer atIndex:0];
     
-    Class c = NSClassFromString([[NSUserDefaults standardUserDefaults] objectForKey:kMultiplexDrawerIsClosedLayoutManagerClass]);
-    if (!c) {
-        c = [StadiumLayoutManager class];        
-    }
-    [self setFloorLayerLayoutManagerClass:c];
-    
     layersByID = [[NSMutableDictionary alloc] init];
     
     [hoverInfoView bind:@"movie" toObject:self withKeyPath:@"hoveredMovie" options:nil];
@@ -76,7 +70,14 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     [drawerView addObserver:self forKeyPath:@"isOpen" options:NSKeyValueObservingOptionNew context:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playCatchUpToSelectedMovie:) name:@"MultiplexShowMovieDialog" object:nil];
-    
+
+	NSString* classString = [[NSUserDefaults standardUserDefaults] objectForKey:kMultiplexDrawerIsClosedLayoutManagerClass];
+    Class c = NSClassFromString(classString);
+    if (!c) {
+        c = [StadiumLayoutManager class];        
+    }
+    [self setFloorLayerLayoutManagerClass:c];
+	
     [self _restartMouseTracking];
 }
 
@@ -116,7 +117,7 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     }
     [layoutManager release], layoutManager = nil;
     layoutManager = [[class alloc] initWithManagingLayer:floorLayer];
-    [floorLayer setNeedsLayout];
+    //[floorLayer setNeedsLayout];
 }
 
 - (void) setContent:(id)_content

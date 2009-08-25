@@ -3,5 +3,6 @@
 @interface NSString (IndyHallLabs)
 
 + (id) stringWithUUID;
+- (NSString*) urlEncodedString;
 
 @end

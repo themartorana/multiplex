@@ -120,6 +120,10 @@ static const CGFloat HS = 75.0;
     }
     
     NSLog(@"laying out");
+	
+	if (![listOfLayersInOrder count]) {
+        return;
+    }
     
     [CATransaction begin];
     //[CATransaction setValue:[NSNumber numberWithDouble:([[NSApp currentEvent] modifierFlags] & NSShiftKeyMask) ? 3.0 : 0.3] forKey:kCATransactionAnimationDuration];
@@ -144,10 +148,6 @@ static const CGFloat HS = 75.0;
      */
     CATransform3D b = CATransform3DIdentity;
     b = CATransform3DTranslate(b, layoutLayer.bounds.size.width / 2.0, layoutLayer.bounds.size.height / 2.0, 0.0);
-    
-    if (![listOfLayersInOrder count]) {
-        return;
-    }
     
     NSArray* layersInOrder = [listOfLayersInOrder objectAtIndex:[listOfLayersInOrder count] - 1];
     CGSize const size = layoutLayer.bounds.size;

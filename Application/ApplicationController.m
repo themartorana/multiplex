@@ -252,6 +252,26 @@ static NSArray* fileTypes = nil;
 
 - (void) awakeFromNib
 {
+	// Make sure they have webkit 4.0
+	NSBundle* safariBundle = [NSBundle bundleWithIdentifierStringFromLS:@"com.apple.Safari"];
+	NSString* shortVersion = [safariBundle shortVersion];
+	int version = [shortVersion intValue];
+	if (version < 4) {
+		NSLog(@"Safari version, %d, is too low!", version);
+		
+		NSAlert* alert = [NSAlert alertWithMessageText:@"Your version of Safari is too old" 
+										 defaultButton:@"Ok" 
+									   alternateButton:nil 
+										   otherButton:nil 
+							 informativeTextWithFormat:@"Multiplex requires Safari version 4.0 or greater.\n\nPlease use the \"Software Update\" "\
+						  "menu item in the Apple menu to automatically download the latest release of Safari.  Once installed, you can run Multiplex again!\n\n"\
+						  "Multiplex will now exit."
+						  ];
+		
+		[alert runModal];
+		exit(EXIT_FAILURE);
+	}
+	
     NSView* contentView = self.window.contentView;
     contentView.layer.backgroundColor = [MultiplexColorFactory black];
     

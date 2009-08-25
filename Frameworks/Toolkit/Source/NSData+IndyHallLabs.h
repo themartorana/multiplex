@@ -3,6 +3,6 @@
 @interface NSData (IndyHallLabs) 
 
 - (NSString*) IHLFingerprint;
-- (NSString *) base64EncodedString;
+- (NSString*) base64EncodedString;
 
 @end

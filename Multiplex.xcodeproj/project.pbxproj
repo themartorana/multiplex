@@ -42,6 +42,7 @@
 		5503E8AE0F9D215000396062 /* MAAttachedWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5503E8AC0F9D215000396062 /* MAAttachedWindow.m */; };
 		5503E8E50F9D290700396062 /* MovieDetailDiscsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D1AEF0E9D186B000F67FA /* MovieDetailDiscsView.m */; };
 		5503EA3A0F9D4BFA00396062 /* jquery.js in Resources */ = {isa = PBXBuildFile; fileRef = 5503EA390F9D4BFA00396062 /* jquery.js */; };
+		5509EF271044C1A700516FD4 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5509EF261044C1A700516FD4 /* WebKit.framework */; };
 		550D082C0E9AE14E008F0275 /* MovieDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 550D082B0E9AE14E008F0275 /* MovieDetailController.m */; };
 		550D08700E9AFDF4008F0275 /* NSDescriptionValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 550D086F0E9AFDF4008F0275 /* NSDescriptionValueTransformer.m */; };
 		551554A00EA456C8006F2674 /* SoftEditTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5515549F0EA456C8006F2674 /* SoftEditTextFieldCell.m */; };
@@ -110,7 +111,6 @@
 		55A091720EBF9693008A27F2 /* bracket-additional-info.png in Resources */ = {isa = PBXBuildFile; fileRef = 55A091700EBF9693008A27F2 /* bracket-additional-info.png */; };
 		55A091730EBF9693008A27F2 /* bracket-movie-info.png in Resources */ = {isa = PBXBuildFile; fileRef = 55A091710EBF9693008A27F2 /* bracket-movie-info.png */; };
 		55A230AF0F47277200353AB1 /* SampleData.database in Resources */ = {isa = PBXBuildFile; fileRef = 55A230AE0F47277200353AB1 /* SampleData.database */; };
-		55A8E81D0E9BE18200DC9F35 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55A8E81C0E9BE18200DC9F35 /* WebKit.framework */; };
 		55AB54B70F3CF66B00BED2B7 /* PreferencesWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 55AB54B60F3CF66B00BED2B7 /* PreferencesWindow.m */; };
 		55AB54C60F3CFDE400BED2B7 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55AB54C50F3CFDE400BED2B7 /* Preferences.xib */; };
 		55AB54F10F3CFEF700BED2B7 /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55AB54F00F3CFEF700BED2B7 /* PreferencesWindowController.m */; };
@@ -535,6 +535,7 @@
 		5503E8AC0F9D215000396062 /* MAAttachedWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAAttachedWindow.m; sourceTree = "<group>"; };
 		5503E8AD0F9D215000396062 /* MAAttachedWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAAttachedWindow.h; sourceTree = "<group>"; };
 		5503EA390F9D4BFA00396062 /* jquery.js */ = {isa = PBXFileReference; explicitFileType = sourcecode.javascript; fileEncoding = 4; path = jquery.js; sourceTree = "<group>"; };
+		5509EF261044C1A700516FD4 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		550D082A0E9AE14E008F0275 /* MovieDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieDetailController.h; sourceTree = "<group>"; };
 		550D082B0E9AE14E008F0275 /* MovieDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieDetailController.m; sourceTree = "<group>"; };
 		550D086E0E9AFDF4008F0275 /* NSDescriptionValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDescriptionValueTransformer.h; sourceTree = "<group>"; };
@@ -627,7 +628,6 @@
 		55A091700EBF9693008A27F2 /* bracket-additional-info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bracket-additional-info.png"; sourceTree = "<group>"; };
 		55A091710EBF9693008A27F2 /* bracket-movie-info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bracket-movie-info.png"; sourceTree = "<group>"; };
 		55A230AE0F47277200353AB1 /* SampleData.database */ = {isa = PBXFileReference; lastKnownFileType = file; path = SampleData.database; sourceTree = "<group>"; };
-		55A8E81C0E9BE18200DC9F35 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		55AB54B50F3CF66B00BED2B7 /* PreferencesWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesWindow.h; sourceTree = "<group>"; };
 		55AB54B60F3CF66B00BED2B7 /* PreferencesWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesWindow.m; sourceTree = "<group>"; };
 		55AB54C50F3CFDE400BED2B7 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
@@ -841,10 +841,10 @@
 				F9D315240E7DDB9900D99DCA /* CoreData.framework in Frameworks */,
 				F9D315290E7DDBB200D99DCA /* Cocoa.framework in Frameworks */,
 				F967B0800E7E1F3100C12B92 /* QuartzCore.framework in Frameworks */,
-				55A8E81D0E9BE18200DC9F35 /* WebKit.framework in Frameworks */,
 				55FC9CA10EB8382000CE3F05 /* Security.framework in Frameworks */,
 				969ECC0E0F9D803F0056572D /* BWToolkitFramework.framework in Frameworks */,
 				55CD49100FA52DC80095791D /* Carbon.framework in Frameworks */,
+				5509EF271044C1A700516FD4 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -930,7 +930,6 @@
 				969ECC0D0F9D803F0056572D /* BWToolkitFramework.framework */,
 				55FC9CA00EB8382000CE3F05 /* Security.framework */,
 				F9B380DB0EAD029700FCAB1E /* SystemConfiguration.framework */,
-				55A8E81C0E9BE18200DC9F35 /* WebKit.framework */,
 				F9D313EC0E7DD8A100D99DCA /* AppKit.framework */,
 				F9D312A40E7DD88100D99DCA /* ApplicationServices.framework */,
 				F9D315280E7DDBB200D99DCA /* Cocoa.framework */,
@@ -939,6 +938,7 @@
 				F9D3129F0E7DD85200D99DCA /* Foundation.framework */,
 				F9D30D6F0E7DD69A00D99DCA /* IOKit.framework */,
 				F967B07F0E7E1F3100C12B92 /* QuartzCore.framework */,
+				5509EF261044C1A700516FD4 /* WebKit.framework */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";

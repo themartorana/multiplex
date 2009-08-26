@@ -627,7 +627,7 @@
 		55A091700EBF9693008A27F2 /* bracket-additional-info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bracket-additional-info.png"; sourceTree = "<group>"; };
 		55A091710EBF9693008A27F2 /* bracket-movie-info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bracket-movie-info.png"; sourceTree = "<group>"; };
 		55A230AE0F47277200353AB1 /* SampleData.database */ = {isa = PBXFileReference; lastKnownFileType = file; path = SampleData.database; sourceTree = "<group>"; };
-		55A8E81C0E9BE18200DC9F35 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
+		55A8E81C0E9BE18200DC9F35 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		55AB54B50F3CF66B00BED2B7 /* PreferencesWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesWindow.h; sourceTree = "<group>"; };
 		55AB54B60F3CF66B00BED2B7 /* PreferencesWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesWindow.m; sourceTree = "<group>"; };
 		55AB54C50F3CFDE400BED2B7 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };

@@ -142,6 +142,10 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
 
 - (void) layoutSublayersOfLayer:(CALayer*)layer
 {
+    // If statement added for Snow Leopard compatability
+    if (!floorLayer) {
+        return;
+    }
     NSAssert(layer == floorLayer, @"wtf?");
     [layoutManager setListOfLayersInOrder:[self _listOfLayersInOrder]];
     [layoutManager setSelectedMovieLayer:selectedMovieLayer];

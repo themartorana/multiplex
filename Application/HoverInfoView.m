@@ -28,6 +28,13 @@ NSString* const URL_PREFIX = @"multiplex://";
     inFlipPosition = NO;
 }
 
+- (void) drawRect:(NSRect)rect
+{
+    // SNOW LEOPARD HACK - just trying to get ANYTHING to show up...
+    [[NSColor greenColor] set];
+    [NSBezierPath fillRect:[self bounds]];
+}
+
 - (void) setMovie:(Movie*)_movie
 {
     [self willChangeValueForKey:@"movie"];

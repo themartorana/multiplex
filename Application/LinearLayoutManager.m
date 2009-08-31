@@ -120,7 +120,7 @@ static const CGFloat HS = 75.0;
     }
     
     NSLog(@"laying out");
-	
+    
 	if (![listOfLayersInOrder count]) {
         return;
     }

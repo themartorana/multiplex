@@ -42,13 +42,13 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
 
 - (void) awakeFromNib
 {    
-    CALayer* rootLayer = [self layer];
+    CALayer* rootLayer = [CALayer layer];
     rootLayer.anchorPoint = CGPointZero;
-    rootLayer.frame = [[self layer] frame];
+    rootLayer.frame = [[self layer] bounds]; //NSRectToCGRect([self frame]);
     rootLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
     rootLayer.delegate = self;
-    [self setLayer:rootLayer];
     [self setWantsLayer:YES];
+    [self setLayer:rootLayer];
     
     floorLayer = [CALayer layer];
     floorLayer.delegate = self;
@@ -157,11 +157,12 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
 - (void) restartHoverTimer
 {
     [self _cancelHoverTimer];
-    if (hoveredMovie && 
+    // SNOW LEOPARD HACK (TURNING THIS OFF)
+    /*if (hoveredMovie && 
         ![drawerView isOpen] && 
         [[[NSUserDefaults standardUserDefaults] objectForKey:@"HoverTooltipEnabled"] boolValue]) {
         hoverTimer = [[NSTimer scheduledTimerWithTimeInterval:0.75 target:self selector:@selector(_hoverTimerTicked:) userInfo:nil repeats:NO] retain];
-    }
+    }*/
 }
 
 - (void) setHoveredMovie:(Movie*)_hoveredMovie
@@ -184,17 +185,20 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     //[self restartHoverTimer];
 }
 
-- (void) setFrame:(NSRect)frame
+/*- (void) setFrame:(NSRect)frame
 {
     // SUPER HACK! Helps with full-screen
-    [super setFrame:frame];
+    NSLog(@"Set frame hack");
     [[self layer] setFrame:NSRectToCGRect(frame)];
-}
+    //[super setFrame:frame];
+}*/
 
 - (void) setFrameSize:(NSSize)frameSize
 {
     [super setFrameSize:frameSize];
     [self _restartMouseTracking];
+    
+    NSLog(@"Setting frame size");
 }
 
 - (MovieLayer*) movieLayerForPoint:(CGPoint)p
@@ -377,7 +381,7 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
     
     CGPoint position = NSPointToCGPoint([self convertPoint:[theEvent locationInWindow] fromView:nil]);
     MovieLayer* movieLayer = [self movieLayerForPoint:position];
-    NSLog(NSStringFromPoint(NSPointFromCGPoint(position)));
+
     if (movieLayer) {
         [layoutManager setShouldShowHoveredMovieHighlight:YES];
         self.hoveredMovie = movieLayer.movie;
@@ -634,8 +638,10 @@ NSString* const kMultiplexDrawerIsClosedLayoutManagerClass = @"MultiplexDrawerIs
         
         [CATransaction begin];
         [CATransaction setValue:[NSNumber numberWithFloat:0.25] forKey:kCATransactionAnimationDuration];
-        if ([hoverInfoView isHidden])
+        if ([hoverInfoView isHidden]) {
             [hoverInfoView setHidden:NO];
+        }
+             
         [CATransaction commit];
     }
 }

@@ -46,6 +46,12 @@
     return NO;
 }
 
+- (void) drawRect:(NSRect)rect
+{
+    [[NSColor blackColor] set];
+    [NSBezierPath fillRect:[self bounds]];
+}
+
 - (void) toggleFullScreen
 {
     IHLZoomableWindow* w = (IHLZoomableWindow*)[NSApp mainWindow];

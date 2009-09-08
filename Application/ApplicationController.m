@@ -369,13 +369,14 @@ static NSArray* fileTypes = nil;
         CIFilter* blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
         [blurFilter setDefaults];
         [blurFilter setValue:[NSNumber numberWithDouble:3.0] forKey:@"inputRadius"];
-        [[[self window] contentView] layer].filters = [NSArray arrayWithObject:blurFilter];
+        //[[[self window] contentView] layer].filters = [NSArray arrayWithObject:blurFilter];
+        [mainView layer].filters = [NSArray arrayWithObject:blurFilter];
         
         /*  There was an expiration date in the parameters, and it's 
          *  passed.  Let them know that they should pay up...  in a 
          *  nice way.
          */
-        NSAlert* alert = [NSAlert alertWithMessageText:NSLocalizedString(@"The trial period for Multiplex has ended.", @"") defaultButton:nil alternateButton:NSLocalizedString(@"No thanks.", "") otherButton:nil informativeTextWithFormat:NSLocalizedString(@"We hope you enjoyed Multiplex! Would you like to visit the Multiplex website now?", @"")];
+        NSAlert* alert = [NSAlert alertWithMessageText:NSLocalizedString(@"The trial period for Multiplex has ended.", @"") defaultButton:nil alternateButton:NSLocalizedString(@"No thanks.", "") otherButton:nil informativeTextWithFormat:NSLocalizedString(@"We hope you enjoyed Multiplex! Your movies will now appear blurry!\n\nWould you like to visit the Multiplex website now?", @"")];
         [alert setAlertStyle:NSCriticalAlertStyle];
         [alert beginSheetModalForWindow:[self window] modalDelegate:self didEndSelector:@selector(_licensingAlertDidEnd:returnCode:contextInfo:) contextInfo:nil];
     }

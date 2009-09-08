@@ -88,6 +88,7 @@ static NSArray* fileTypes = nil;
 - (void) _burnApproved:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (void) _setUnavailableMoviePredicate:(BOOL)hide;
 - (void) _prepareToolTipWindowWithView:(NSView*)view attachedToPoint:(NSPoint)point inWindow:(NSWindow*)window onSide:(MAWindowPosition)position atDistance:(CGFloat)distance;
+- (void) _checkDatabaseFolderPermissions;
 
 @end
 
@@ -197,6 +198,9 @@ static NSArray* fileTypes = nil;
             }
         }
 
+        // Check database permissions
+        [self _checkDatabaseFolderPermissions];
+        
         [self _loadDatabase:pathToDatabase isSampleData:NO];
         
         // Register our URL handler
@@ -1163,6 +1167,81 @@ static NSArray* fileTypes = nil;
 }
 
 #pragma mark Private Methods
+
+- (void) _checkDatabaseFolderPermissions
+{
+    NSString* baseFolder = @"/Library/Application Support/Multiplex";
+    NSString* pathToDatabase = [baseFolder stringByAppendingPathComponent:@"Movie.database"];
+ 
+    NSFileManager* manager = [NSFileManager defaultManager];
+    if ([manager isWritableFileAtPath:baseFolder] && [manager isWritableFileAtPath:pathToDatabase]) {
+        return;
+    }
+    
+    NSAlert* alert = [NSAlert alertWithMessageText:@"Multiplex needs to repair its database permissions." 
+                                     defaultButton:@"Ok" 
+                                   alternateButton:nil 
+                                       otherButton:nil 
+                         informativeTextWithFormat:@"There is an issue with the permissions on the Multiplex database.  This can be caused by a couple of things, including updating OS X.\n\nMultiplex will now attempt to repair the permissions.  You may be asked for your password."];
+    [alert runModal];
+    
+    AuthorizationItem myItems[1];
+    myItems[0].name = "system.finder.folder.repair_permissions";
+    myItems[0].valueLength = 0;
+    myItems[0].value = NULL;
+    myItems[0].flags = 0;
+    
+    AuthorizationRights authSet;
+    authSet.count = 1;
+    authSet.items = myItems;
+    
+    AuthorizationFlags authFlags = kAuthorizationFlagDefaults | 
+    kAuthorizationFlagInteractionAllowed |
+    kAuthorizationFlagExtendRights;
+    
+    AuthorizationRef myAuthorizationRef;
+    OSStatus myStatus;
+    
+    myStatus = AuthorizationCreate(&authSet, 
+                                   kAuthorizationEmptyEnvironment, 
+                                   authFlags, 
+                                   &myAuthorizationRef);
+    
+    
+    // Try something here
+    const char* installPath = [baseFolder fileSystemRepresentation];
+    char myToolPath[] = "/bin/chmod";
+    char *myArguments[] = { "-R", "777", (char*)installPath, NULL };
+    FILE *myCommunicationsPipe = NULL;
+    
+    authFlags = kAuthorizationFlagDefaults; 
+    myStatus = AuthorizationExecuteWithPrivileges(myAuthorizationRef, 
+                                                  myToolPath, 
+                                                  authFlags, 
+                                                  myArguments,
+                                                  &myCommunicationsPipe);
+    
+    if (myStatus != 0) {
+        NSAlert* cantFixAlert = [NSAlert alertWithMessageText:@"Unable to fix database permissions."
+                                                defaultButton:@"Quit" 
+                                              alternateButton:@"Continue anyway" 
+                                                  otherButton:nil 
+                                    informativeTextWithFormat:@"Multiplex was unable to fix its database permissions, which may cause issues.  You can continue, or quit and run Multiplex again to attempt to fix the permissions again."];
+        if ([cantFixAlert runModal] == NSAlertDefaultReturn) {
+            exit(0);
+        }
+    }
+    else {
+        NSAlert* fixAlert = [NSAlert alertWithMessageText:@"Success!"
+                                            defaultButton:@"Let's go!" 
+                                          alternateButton:nil 
+                                              otherButton:nil 
+                                informativeTextWithFormat:@"Multiplex was able to fix its database permissions.  You can now continue."];
+        [fixAlert runModal];
+    }
+    
+    AuthorizationFree(myAuthorizationRef, kAuthorizationFlagDestroyRights);    
+}
 
 - (Movie*) _movieForAction
 {
